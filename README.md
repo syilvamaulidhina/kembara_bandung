@@ -3,7 +3,7 @@
 ## Cara Setup
 
 1. Clone repo
-   git clone https://github.com/bintangpreciosa/kembara_bandung.git
+   git clone https://github.com/syilvamaulidhina/kembara_bandung.git
    cd kembara_bandung
 
 2. Install dependencies
