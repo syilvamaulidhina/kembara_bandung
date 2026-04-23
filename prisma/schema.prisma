@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  PENGELOLA
+  WISATAWAN
+}
+
+enum Gender {
+  LAKI_LAKI
+  PEREMPUAN
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+
+  role      Role?
+
+  gender    Gender?  // diisi nanti di edit profile
+  domisili  String?
+  photo     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
