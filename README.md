@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -34,3 +35,46 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+=======
+# Kembara Bandung
+
+## Cara Setup
+
+1. Clone repo
+   git clone https://github.com/syilvamaulidhina/kembara_bandung.git
+   cd kembara_bandung
+
+2. Install dependencies
+   npm install
+
+3. Setup environment
+
+- Copy .env.example ke .env
+- Ganti YOUR_PASSWORD dengan password PostgreSQL kamu
+- Buat database bernama kembara_bandung di pgAdmin
+
+4. Setup database
+   npx prisma generate
+   npx prisma migrate dev
+
+5. Jalankan project
+   npm run dev
+
+6. Buka browser
+   http://localhost:3000
+
+## Struktur Route
+
+- /login → halaman login
+- /register → halaman register
+- /select-role → pilih role setelah register
+- /pengunjung → halaman wisatawan
+- /pengelola → halaman pengelola
+- /admin → halaman admin
+
+## Role
+
+- WISATAWAN → akses /pengunjung
+- PENGELOLA → akses /pengelola
+- ADMIN → akses /admin
+>>>>>>> origin/master
