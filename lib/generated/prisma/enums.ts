@@ -9,6 +9,23 @@
 * 🟢 You can import this file directly.
 */
 
+export const Role = {
+  ADMIN: 'ADMIN',
+  PENGELOLA: 'PENGELOLA',
+  WISATAWAN: 'WISATAWAN'
+} as const
+
+export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const Gender = {
+  LAKI_LAKI: 'LAKI_LAKI',
+  PEREMPUAN: 'PEREMPUAN'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
 export const DestinationStatus = {
   pending: 'pending',
   aktif: 'aktif',
