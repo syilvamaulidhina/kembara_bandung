@@ -26,8 +26,8 @@ export default function Navbar() {
           <Link href="/pengelola/destinasi" className="text-gray-700 hover:text-blue-600">
             Kelola Wisata
           </Link>
-          <Link href="/pengelola/destinasi/tambah" className="text-gray-700 hover:text-blue-600">
-            Tambah Wisata
+          <Link href="/pengelola/event" className="text-gray-700 hover:text-blue-600">
+            Kelola Event
           </Link>
 
           <button className="text-gray-700">Profile ▼</button>

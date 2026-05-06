@@ -15,6 +15,7 @@ model Destination {
   contact     String?
   latitude    Float
   longitude   Float
+  imageUrl    String? // ✅ TAMBAHAN
   status      DestinationStatus @default(pending)
   isDeleted   Boolean @default(false)
   deletedAt   DateTime?

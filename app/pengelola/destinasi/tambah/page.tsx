@@ -26,6 +26,7 @@ export default function TambahDestinasiPage() {
     longitude: "",
   });
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [isAreaValid, setIsAreaValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -81,17 +82,39 @@ export default function TambahDestinasiPage() {
     try {
       setIsSubmitting(true);
 
+      let imageUrl = "";
+
+      if (imageFile) {
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", imageFile);
+
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadFormData,
+        });
+
+        const uploadData = await uploadResponse.json();
+
+        if (!uploadResponse.ok) {
+          alert(uploadData.message || "Gagal upload gambar.");
+          return;
+        }
+
+        imageUrl = uploadData.imageUrl;
+      }
+
       const response = await fetch("/api/destinations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          imageUrl,
+        }),
       });
 
       const data = await response.json();
-
-      console.log("RESPONSE API:", data);
 
       if (!response.ok) {
         alert(data.message || "Gagal menyimpan wisata.");
@@ -202,7 +225,14 @@ export default function TambahDestinasiPage() {
 
                 <input
                   type="file"
-                  multiple
+                  accept="image/*"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+
+                    if (file) {
+                      setImageFile(file);
+                    }
+                  }}
                   className="block w-full text-sm text-white file:mr-4 file:rounded-xl file:border-0 file:bg-white file:px-4 file:py-2 file:font-medium file:text-[#285260]"
                 />
 

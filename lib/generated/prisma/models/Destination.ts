@@ -46,6 +46,7 @@ export type DestinationMinAggregateOutputType = {
   contact: string | null
   latitude: number | null
   longitude: number | null
+  imageUrl: string | null
   status: $Enums.DestinationStatus | null
   isDeleted: boolean | null
   deletedAt: Date | null
@@ -61,6 +62,7 @@ export type DestinationMaxAggregateOutputType = {
   contact: string | null
   latitude: number | null
   longitude: number | null
+  imageUrl: string | null
   status: $Enums.DestinationStatus | null
   isDeleted: boolean | null
   deletedAt: Date | null
@@ -76,6 +78,7 @@ export type DestinationCountAggregateOutputType = {
   contact: number
   latitude: number
   longitude: number
+  imageUrl: number
   status: number
   isDeleted: number
   deletedAt: number
@@ -105,6 +108,7 @@ export type DestinationMinAggregateInputType = {
   contact?: true
   latitude?: true
   longitude?: true
+  imageUrl?: true
   status?: true
   isDeleted?: true
   deletedAt?: true
@@ -120,6 +124,7 @@ export type DestinationMaxAggregateInputType = {
   contact?: true
   latitude?: true
   longitude?: true
+  imageUrl?: true
   status?: true
   isDeleted?: true
   deletedAt?: true
@@ -135,6 +140,7 @@ export type DestinationCountAggregateInputType = {
   contact?: true
   latitude?: true
   longitude?: true
+  imageUrl?: true
   status?: true
   isDeleted?: true
   deletedAt?: true
@@ -237,6 +243,7 @@ export type DestinationGroupByOutputType = {
   contact: string | null
   latitude: number
   longitude: number
+  imageUrl: string | null
   status: $Enums.DestinationStatus
   isDeleted: boolean
   deletedAt: Date | null
@@ -275,6 +282,7 @@ export type DestinationWhereInput = {
   contact?: Prisma.StringNullableFilter<"Destination"> | string | null
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
+  imageUrl?: Prisma.StringNullableFilter<"Destination"> | string | null
   status?: Prisma.EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFilter<"Destination"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Destination"> | Date | string | null
@@ -291,6 +299,7 @@ export type DestinationOrderByWithRelationInput = {
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -310,6 +319,7 @@ export type DestinationWhereUniqueInput = Prisma.AtLeast<{
   contact?: Prisma.StringNullableFilter<"Destination"> | string | null
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
+  imageUrl?: Prisma.StringNullableFilter<"Destination"> | string | null
   status?: Prisma.EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFilter<"Destination"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Destination"> | Date | string | null
@@ -326,6 +336,7 @@ export type DestinationOrderByWithAggregationInput = {
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -349,6 +360,7 @@ export type DestinationScalarWhereWithAggregatesInput = {
   contact?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
   latitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
   longitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
   status?: Prisma.EnumDestinationStatusWithAggregatesFilter<"Destination"> | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolWithAggregatesFilter<"Destination"> | boolean
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Destination"> | Date | string | null
@@ -363,6 +375,7 @@ export type DestinationCreateInput = {
   contact?: string | null
   latitude: number
   longitude: number
+  imageUrl?: string | null
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -379,6 +392,7 @@ export type DestinationUncheckedCreateInput = {
   contact?: string | null
   latitude: number
   longitude: number
+  imageUrl?: string | null
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -394,6 +408,7 @@ export type DestinationUpdateInput = {
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -410,6 +425,7 @@ export type DestinationUncheckedUpdateInput = {
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -426,6 +442,7 @@ export type DestinationCreateManyInput = {
   contact?: string | null
   latitude: number
   longitude: number
+  imageUrl?: string | null
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -440,6 +457,7 @@ export type DestinationUpdateManyMutationInput = {
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -455,6 +473,7 @@ export type DestinationUncheckedUpdateManyInput = {
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -470,6 +489,7 @@ export type DestinationCountOrderByAggregateInput = {
   contact?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -491,6 +511,7 @@ export type DestinationMaxOrderByAggregateInput = {
   contact?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -506,6 +527,7 @@ export type DestinationMinOrderByAggregateInput = {
   contact?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -585,6 +607,7 @@ export type DestinationCreateWithoutCategoriesInput = {
   contact?: string | null
   latitude: number
   longitude: number
+  imageUrl?: string | null
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -600,6 +623,7 @@ export type DestinationUncheckedCreateWithoutCategoriesInput = {
   contact?: string | null
   latitude: number
   longitude: number
+  imageUrl?: string | null
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -630,6 +654,7 @@ export type DestinationUpdateWithoutCategoriesInput = {
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -645,6 +670,7 @@ export type DestinationUncheckedUpdateWithoutCategoriesInput = {
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -691,6 +717,7 @@ export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
+  imageUrl?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -708,6 +735,7 @@ export type DestinationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
+  imageUrl?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -723,6 +751,7 @@ export type DestinationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
+  imageUrl?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -738,6 +767,7 @@ export type DestinationSelectScalar = {
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
+  imageUrl?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -745,7 +775,7 @@ export type DestinationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
 export type DestinationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
   _count?: boolean | Prisma.DestinationCountOutputTypeDefaultArgs<ExtArgs>
@@ -766,6 +796,7 @@ export type $DestinationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     contact: string | null
     latitude: number
     longitude: number
+    imageUrl: string | null
     status: $Enums.DestinationStatus
     isDeleted: boolean
     deletedAt: Date | null
@@ -1202,6 +1233,7 @@ export interface DestinationFieldRefs {
   readonly contact: Prisma.FieldRef<"Destination", 'String'>
   readonly latitude: Prisma.FieldRef<"Destination", 'Float'>
   readonly longitude: Prisma.FieldRef<"Destination", 'Float'>
+  readonly imageUrl: Prisma.FieldRef<"Destination", 'String'>
   readonly status: Prisma.FieldRef<"Destination", 'DestinationStatus'>
   readonly isDeleted: Prisma.FieldRef<"Destination", 'Boolean'>
   readonly deletedAt: Prisma.FieldRef<"Destination", 'DateTime'>

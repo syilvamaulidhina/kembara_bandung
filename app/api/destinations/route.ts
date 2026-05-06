@@ -1,6 +1,34 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+export async function GET() {
+  try {
+    const destinations = await prisma.destination.findMany({
+      where: {
+        isDeleted: false,
+      },
+      include: {
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(destinations);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Gagal mengambil data destinasi" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -21,6 +49,7 @@ export async function POST(req: Request) {
         contact: body.contact,
         latitude: Number(body.latitude),
         longitude: Number(body.longitude),
+        imageUrl: body.imageUrl,
         status: "pending",
 
         categories: {

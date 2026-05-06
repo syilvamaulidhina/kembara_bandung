@@ -80,6 +80,7 @@ export const DestinationScalarFieldEnum = {
   contact: 'contact',
   latitude: 'latitude',
   longitude: 'longitude',
+  imageUrl: 'imageUrl',
   status: 'status',
   isDeleted: 'isDeleted',
   deletedAt: 'deletedAt',
