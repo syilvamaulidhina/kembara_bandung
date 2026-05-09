@@ -5,15 +5,22 @@ import DestinationListMap from "@/components/destination-list-map";
 import { useRouter } from "next/navigation";
 
 type Destination = {
-    id: number;
-    name: string;
-    description: string;
-    address: string;
-    contact: string | null;
-    status: string;
-    imageUrl: string | null;
-    latitude: number;
-    longitude: number;
+  id: number;
+  name: string;
+  description: string;
+  address: string;
+  contact: string | null;
+  status: string;
+  imageUrl: string | null;
+  latitude: number;
+  longitude: number;
+
+  categories: {
+    category: {
+      id: number;
+      name: string;
+    };
+  }[];
 };
 
 export default function DestinasiPage() {
@@ -21,11 +28,12 @@ export default function DestinasiPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const router = useRouter();
+    const [category, setCategory] = useState("all");
 
     useEffect(() => {
         async function fetchDestinations() {
         try {
-            const res = await fetch("/api/destinations");
+            const res = await fetch("/api/pengelola/destinations");
 
         if (!res.ok) {
             throw new Error("Gagal mengambil data destinasi");
@@ -45,14 +53,41 @@ export default function DestinasiPage() {
   }, []);
 
   const filteredDestinations = useMemo(() => {
-    return destinations.filter((item) =>
-      item.name.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [destinations, search]);
+      return destinations.filter((item) => {
+        const matchSearch = item.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
-  const totalWisata = destinations.length;
-  const wisataAktif = destinations.filter(
-    (item) => item.status === "active" || item.status === "approved"
+        const matchCategory =
+          category === "all" ||
+          item.categories.some(
+            (cat) => cat.category.name === category
+          );
+
+        return matchSearch && matchCategory;
+      });
+    }, [destinations, search, category]);
+
+  const categories = Array.from(
+      new Set(
+          destinations.flatMap((item) =>
+              item.categories.map((cat) => cat.category.name)
+          )
+      )
+  );  
+
+  const totalWisata = filteredDestinations.length;
+
+  const pendingReview = filteredDestinations.filter(
+    (item) => item.status === "pending"
+  ).length;
+
+  const wisataAktif = filteredDestinations.filter(
+    (item) => item.status === "aktif"
+  ).length;
+
+  const butuhPerbaikan = filteredDestinations.filter(
+    (item) => item.status === "butuh_perbaikan"
   ).length;
 
   return (
@@ -86,7 +121,7 @@ export default function DestinasiPage() {
                     Loading map...
                     </div>
                 ) : (
-                    <DestinationListMap destinations={destinations} />
+                    <DestinationListMap destinations={filteredDestinations} />
                 )}
                 </div>
 
@@ -180,43 +215,52 @@ export default function DestinasiPage() {
                 className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#285260]/20"
               />
 
-              <select className="mt-3 w-full border border-gray-200 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#285260]/20">
-                <option>Semua Kategori</option>
-                <option>Wisata Alam</option>
-                <option>Wisata Budaya</option>
-                <option>Wisata Kuliner</option>
-              </select>
+              <select
+                  value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="mt-3 w-full border border-gray-200 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#285260]/20"
+                >
+                  <option value="all">Semua Kategori</option>
+
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
               <h3 className="font-bold text-[#285260] mb-4">Ringkasan</h3>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-100 rounded-lg p-3 text-center">
-                  <p className="text-xs text-gray-600">Total Wisata</p>
-                  <p className="text-lg font-bold text-[#285260]">
-                    {totalWisata}
-                  </p>
-                </div>
+                  <div className="bg-gray-100 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-600">Total Wisata</p>
+                      <p className="text-lg font-bold text-[#285260]">
+                          {totalWisata}
+                      </p>
+                  </div>
+                
+                  <div className="bg-yellow-100 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-600">Pending Review</p>
+                      <p className="text-lg font-bold text-yellow-600">
+                          {pendingReview}
+                      </p>
+                  </div>
 
-                <div className="bg-green-100 rounded-lg p-3 text-center">
-                  <p className="text-xs text-gray-600">Data Konsisten</p>
-                  <p className="text-lg font-bold text-green-600">
-                    {totalWisata}
-                  </p>
-                </div>
+                  <div className="bg-red-100 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-600">Butuh Perbaikan</p>
+                      <p className="text-lg font-bold text-red-500">
+                        {butuhPerbaikan}
+                      </p>
+                  </div>
 
-                <div className="bg-red-100 rounded-lg p-3 text-center">
-                  <p className="text-xs text-gray-600">Butuh Perbaikan</p>
-                  <p className="text-lg font-bold text-red-500">0</p>
-                </div>
-
-                <div className="bg-blue-100 rounded-lg p-3 text-center">
-                  <p className="text-xs text-gray-600">Wisata Aktif</p>
-                  <p className="text-lg font-bold text-blue-600">
-                    {wisataAktif}
-                  </p>
-                </div>
+                  <div className="bg-blue-100 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-600">Wisata Aktif</p>
+                      <p className="text-lg font-bold text-blue-600">
+                          {wisataAktif}
+                      </p>
+                  </div>
               </div>
             </div>
 

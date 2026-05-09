@@ -28,6 +28,7 @@ export default function DestinationMap({
   onAddressChange,
   onAreaValidChange,
 }: DestinationMapProps) {
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
   const leafletRef = useRef<any>(null);
@@ -105,6 +106,22 @@ export default function DestinationMap({
     onAreaValidChange(isPointInsideBandungRaya(lat, lng));
   }
 
+  async function getAddressFromLatLng(lat: number, lng: number) {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
+      );
+
+      const data = await response.json();
+
+      if (data?.display_name) {
+        onAddressChange(data.display_name);
+      }
+    } catch (error) {
+      console.error("Reverse geocoding gagal:", error);
+    }
+  }
+
   async function searchAddress() {
     const trimmedAddress = address.trim();
 
@@ -140,24 +157,27 @@ export default function DestinationMap({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!mapContainerRef.current) return;
     if (mapRef.current) return;
 
     async function initMap() {
-        const leaflet = await import("leaflet");
-        leafletRef.current = leaflet;
+      const leaflet = await import("leaflet");
+      leafletRef.current = leaflet;
 
-        delete (leaflet.Icon.Default.prototype as any)._getIconUrl;
+      delete (leaflet.Icon.Default.prototype as any)._getIconUrl;
 
-        leaflet.Icon.Default.mergeOptions({
+      leaflet.Icon.Default.mergeOptions({
         iconRetinaUrl:
-            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
         iconUrl:
-            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
         shadowUrl:
-            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-        });
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+      });
 
-      const map = leaflet.map("destination-map").setView(
+      if (!mapContainerRef.current) return;
+
+      const map = leaflet.map(mapContainerRef.current).setView(
         [-6.9175, 107.6191],
         10
       );
@@ -205,6 +225,10 @@ export default function DestinationMap({
             padding: [20, 20],
           });
 
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 300);
+
           if (latitude && longitude) {
             setMarkerAndInputs(Number(latitude), Number(longitude));
           }
@@ -213,13 +237,13 @@ export default function DestinationMap({
         }
       }
 
-      map.on("click", (event: any) => {
-        setMarkerAndInputs(event.latlng.lat, event.latlng.lng);
-      });
+      map.on("click", async (event: any) => {
+        const lat = event.latlng.lat;
+        const lng = event.latlng.lng;
 
-      setTimeout(() => {
-        map.invalidateSize();
-      }, 200);
+        setMarkerAndInputs(lat, lng);
+        await getAddressFromLatLng(lat, lng);
+      });
 
       loadGeoJson();
     }
@@ -230,6 +254,7 @@ export default function DestinationMap({
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
+        markerRef.current = null;
       }
     };
   }, []);
@@ -245,7 +270,7 @@ export default function DestinationMap({
       </button>
 
       <div className="min-h-[520px] flex-1 overflow-hidden rounded-2xl bg-gray-200">
-        <div id="destination-map" className="h-full w-full" />
+        <div ref={mapContainerRef} className="h-full w-full" />
       </div>
     </div>
   );

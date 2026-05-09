@@ -8,7 +8,9 @@ export default function PengelolaLayout({
   return (
     <div className="min-h-screen bg-[#F5F7FB] font-sans">
       <Navbar />
-      {children}
+      <main className="pt-24">
+        {children}
+      </main>
     </div>
   );
 }

@@ -88,7 +88,7 @@ export default function TambahDestinasiPage() {
         const uploadFormData = new FormData();
         uploadFormData.append("file", imageFile);
 
-        const uploadResponse = await fetch("/api/upload", {
+        const uploadResponse = await fetch("/api/pengelola/upload", {
           method: "POST",
           body: uploadFormData,
         });
@@ -103,7 +103,7 @@ export default function TambahDestinasiPage() {
         imageUrl = uploadData.imageUrl;
       }
 
-      const response = await fetch("/api/destinations", {
+      const response = await fetch("/api/pengelola/destinations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
