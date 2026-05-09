@@ -3,15 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DestinationMap from "@/components/destination-map";
-
-const categories = [
-  { id: 1, name: "Wisata Alam" },
-  { id: 2, name: "Wisata Budaya" },
-  { id: 3, name: "Wisata Kuliner" },
-  { id: 4, name: "Wisata Edukasi" },
-  { id: 5, name: "Wisata Hiburan" },
-  { id: 6, name: "Wisata Belanja" },
-];
+import { useEffect } from "react";
 
 export default function TambahDestinasiPage() {
   const router = useRouter();
@@ -29,6 +21,25 @@ export default function TambahDestinasiPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isAreaValid, setIsAreaValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [categories, setCategories] = useState<
+    { id: number; name: string }[]
+  >([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const res = await fetch("/api/pengelola/categories");
+        const data = await res.json();
+
+        setCategories(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
 
   function updateForm(field: string, value: string) {
     setForm((prev) => ({
