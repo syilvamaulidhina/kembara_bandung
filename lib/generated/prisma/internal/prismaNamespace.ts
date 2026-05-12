@@ -387,7 +387,8 @@ export const ModelName = {
   User: 'User',
   Destination: 'Destination',
   Category: 'Category',
-  DestinationCategory: 'DestinationCategory'
+  DestinationCategory: 'DestinationCategory',
+  CategoryKeyword: 'CategoryKeyword'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "destination" | "category" | "destinationCategory"
+    modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CategoryKeyword: {
+      payload: Prisma.$CategoryKeywordPayload<ExtArgs>
+      fields: Prisma.CategoryKeywordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CategoryKeywordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CategoryKeywordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>
+        }
+        findFirst: {
+          args: Prisma.CategoryKeywordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CategoryKeywordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>
+        }
+        findMany: {
+          args: Prisma.CategoryKeywordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>[]
+        }
+        create: {
+          args: Prisma.CategoryKeywordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>
+        }
+        createMany: {
+          args: Prisma.CategoryKeywordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CategoryKeywordCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>[]
+        }
+        delete: {
+          args: Prisma.CategoryKeywordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>
+        }
+        update: {
+          args: Prisma.CategoryKeywordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>
+        }
+        deleteMany: {
+          args: Prisma.CategoryKeywordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CategoryKeywordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CategoryKeywordUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>[]
+        }
+        upsert: {
+          args: Prisma.CategoryKeywordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryKeywordPayload>
+        }
+        aggregate: {
+          args: Prisma.CategoryKeywordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCategoryKeyword>
+        }
+        groupBy: {
+          args: Prisma.CategoryKeywordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CategoryKeywordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CategoryKeywordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CategoryKeywordCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -793,6 +868,16 @@ export const DestinationCategoryScalarFieldEnum = {
 } as const
 
 export type DestinationCategoryScalarFieldEnum = (typeof DestinationCategoryScalarFieldEnum)[keyof typeof DestinationCategoryScalarFieldEnum]
+
+
+export const CategoryKeywordScalarFieldEnum = {
+  id: 'id',
+  keyword: 'keyword',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt'
+} as const
+
+export type CategoryKeywordScalarFieldEnum = (typeof CategoryKeywordScalarFieldEnum)[keyof typeof CategoryKeywordScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1043,6 +1128,7 @@ export type GlobalOmitConfig = {
   destination?: Prisma.DestinationOmit
   category?: Prisma.CategoryOmit
   destinationCategory?: Prisma.DestinationCategoryOmit
+  categoryKeyword?: Prisma.CategoryKeywordOmit
 }
 
 /* Types for Logging */

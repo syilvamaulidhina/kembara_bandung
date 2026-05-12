@@ -61,3 +61,8 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type DestinationCategory = Prisma.DestinationCategoryModel
+/**
+ * Model CategoryKeyword
+ * 
+ */
+export type CategoryKeyword = Prisma.CategoryKeywordModel

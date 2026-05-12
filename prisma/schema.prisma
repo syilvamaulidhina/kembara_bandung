@@ -65,6 +65,7 @@ model Category {
   createdAt DateTime @default(now())
 
   destinations DestinationCategory[]
+  keywords CategoryKeyword[]
 }
 
 model DestinationCategory {
@@ -76,4 +77,15 @@ model DestinationCategory {
   category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([destinationId, categoryId])
+}
+
+model CategoryKeyword {
+  id         Int      @id @default(autoincrement())
+  keyword    String
+  categoryId Int
+  createdAt  DateTime @default(now())
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, keyword])
 }

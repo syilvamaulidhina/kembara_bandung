@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Destination: 'Destination',
   Category: 'Category',
-  DestinationCategory: 'DestinationCategory'
+  DestinationCategory: 'DestinationCategory',
+  CategoryKeyword: 'CategoryKeyword'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -124,6 +125,16 @@ export const DestinationCategoryScalarFieldEnum = {
 } as const
 
 export type DestinationCategoryScalarFieldEnum = (typeof DestinationCategoryScalarFieldEnum)[keyof typeof DestinationCategoryScalarFieldEnum]
+
+
+export const CategoryKeywordScalarFieldEnum = {
+  id: 'id',
+  keyword: 'keyword',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt'
+} as const
+
+export type CategoryKeywordScalarFieldEnum = (typeof CategoryKeywordScalarFieldEnum)[keyof typeof CategoryKeywordScalarFieldEnum]
 
 
 export const SortOrder = {
