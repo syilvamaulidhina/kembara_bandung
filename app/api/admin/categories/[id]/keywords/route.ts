@@ -5,42 +5,60 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  try {
+    const { id } = await params;
 
-  const keywords = await prisma.categoryKeyword.findMany({
-    where: {
-      categoryId: Number(id),
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+    const keywords = await prisma.categoryKeyword.findMany({
+      where: {
+        categoryId: Number(id),
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-  return NextResponse.json(keywords);
+    return NextResponse.json(keywords);
+  } catch (error) {
+    console.error("GET CATEGORY KEYWORDS ERROR:", error);
+
+    return NextResponse.json(
+      { message: "Gagal mengambil keyword kategori" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
-  const body = await req.json();
+  try {
+    const { id } = await params;
+    const body = await req.json();
 
-  const keyword = String(body.keyword || "").trim().toLowerCase();
+    const keyword = String(body.keyword || "").trim().toLowerCase();
 
-  if (!keyword) {
+    if (!keyword) {
+      return NextResponse.json(
+        { message: "Keyword wajib diisi" },
+        { status: 400 }
+      );
+    }
+
+    const newKeyword = await prisma.categoryKeyword.create({
+      data: {
+        keyword,
+        categoryId: Number(id),
+      },
+    });
+
+    return NextResponse.json(newKeyword, { status: 201 });
+  } catch (error) {
+    console.error("POST CATEGORY KEYWORD ERROR:", error);
+
     return NextResponse.json(
-      { message: "Keyword wajib diisi" },
-      { status: 400 }
+      { message: "Gagal menambahkan keyword" },
+      { status: 500 }
     );
   }
-
-  const newKeyword = await prisma.categoryKeyword.create({
-    data: {
-      keyword,
-      categoryId: Number(id),
-    },
-  });
-
-  return NextResponse.json(newKeyword, { status: 201 });
 }

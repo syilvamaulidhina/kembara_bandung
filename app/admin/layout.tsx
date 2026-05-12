@@ -13,6 +13,7 @@ import {
   X,
   ChevronRight,
   AlertTriangle,
+  Tags,
 } from "lucide-react";
 
 const menuItems = [
@@ -20,6 +21,7 @@ const menuItems = [
   { href: "/admin/kelola-wisata", label: "Manajemen Wisata", icon: MapPin },
   { href: "/admin/kelola-pengguna", label: "Kelola Pengguna", icon: Users },
   { href: "/admin/ai-insight", label: "AI Insight", icon: Sparkles },
+  { href: "/admin/kategori", label: "Kelola Kategori", icon: Tags },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -140,7 +142,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   active
-                    ? "bg-primary text-white shadow-sm"
+                    ? "bg-blue-50 text-blue-600 font-semibold"
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-800"
                 }`}
               >
