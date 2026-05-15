@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DestinationMap from "@/components/destination-map";
-import { useEffect } from "react";
 
 type CategoryAnalysis = {
   categoryId: number;
@@ -27,6 +26,7 @@ type AnalysisResult = {
 
 export default function TambahDestinasiPage() {
   const router = useRouter();
+  const MIN_AI_SCORE = 60;
 
   const [form, setForm] = useState({
     name: "",
@@ -38,20 +38,23 @@ export default function TambahDestinasiPage() {
     longitude: "",
   });
 
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isAreaValid, setIsAreaValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [categories, setCategories] = useState<
-    { id: number; name: string }[]
-  >([]);
+  const [isCheckingAI, setIsCheckingAI] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
+    null
+  );
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
         const res = await fetch("/api/pengelola/categories");
         const data = await res.json();
-
         setCategories(data);
       } catch (error) {
         console.error(error);
@@ -60,10 +63,6 @@ export default function TambahDestinasiPage() {
 
     fetchCategories();
   }, []);
-
-    const [isCheckingAI, setIsCheckingAI] = useState(false);
-    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-    const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
   function updateForm(field: string, value: string) {
     setForm((prev) => ({
@@ -79,6 +78,8 @@ export default function TambahDestinasiPage() {
         ? prev.categoryIds.filter((id) => id !== categoryId)
         : [...prev.categoryIds, categoryId],
     }));
+
+    setAnalysisResult(null);
   }
 
   async function handleCheckAI() {
@@ -129,8 +130,16 @@ export default function TambahDestinasiPage() {
     }
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function submitDestination() {
+    if (!analysisResult) {
+      alert("Lakukan Check AI terlebih dahulu.");
+      return;
+    }
+
+    if (analysisResult.score < MIN_AI_SCORE) {
+      alert(`Skor minimal untuk submit adalah ${MIN_AI_SCORE}/100.`);
+      return;
+    }
 
     if (!form.name.trim()) {
       alert("Nama wisata wajib diisi.");
@@ -214,9 +223,14 @@ export default function TambahDestinasiPage() {
     }
   }
 
+  const selectedKeywords =
+    analysisResult?.selectedCategories.flatMap(
+      (category) => category.matchedKeywords
+    ) || [];
+
   return (
     <>
-      <header className="bg-white border-b border-gray-200">
+      <header className="border-b border-gray-200 bg-white">
         <div className="w-full px-10 py-8">
           <h1 className="text-3xl font-extrabold text-[#285260]">
             Tambah Wisata
@@ -229,7 +243,7 @@ export default function TambahDestinasiPage() {
 
       <main className="bg-[#F5F7FB] px-10 py-8">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={(event) => event.preventDefault()}
           className="min-h-[690px] rounded-[28px] bg-[#285260] p-4 md:p-5"
         >
           <div className="grid min-h-[650px] grid-cols-1 gap-4 lg:grid-cols-2">
@@ -237,7 +251,10 @@ export default function TambahDestinasiPage() {
               <input
                 type="text"
                 value={form.name}
-                onChange={(event) => updateForm("name", event.target.value)}
+                onChange={(event) => {
+                  updateForm("name", event.target.value);
+                  setAnalysisResult(null);
+                }}
                 placeholder="Nama Wisata"
                 className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
               />
@@ -272,9 +289,10 @@ export default function TambahDestinasiPage() {
               <textarea
                 rows={5}
                 value={form.description}
-                onChange={(event) =>
-                  updateForm("description", event.target.value)
-                }
+                onChange={(event) => {
+                  updateForm("description", event.target.value);
+                  setAnalysisResult(null);
+                }}
                 placeholder="Deskripsi"
                 className="w-full resize-none rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
               />
@@ -311,10 +329,7 @@ export default function TambahDestinasiPage() {
                   accept="image/*"
                   onChange={(event) => {
                     const file = event.target.files?.[0];
-
-                    if (file) {
-                      setImageFile(file);
-                    }
+                    if (file) setImageFile(file);
                   }}
                   className="block w-full text-sm text-white file:mr-4 file:rounded-xl file:border-0 file:bg-white file:px-4 file:py-2 file:font-medium file:text-[#285260]"
                 />
@@ -353,11 +368,11 @@ export default function TambahDestinasiPage() {
                 </button>
 
                 <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="min-w-[120px] rounded-2xl bg-white px-6 py-3 font-semibold text-[#285260] shadow-sm hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                  type="button"
+                  onClick={() => router.push("/pengelola/destinasi")}
+                  className="min-w-[120px] rounded-2xl bg-white px-6 py-3 font-semibold text-[#285260] shadow-sm hover:opacity-90"
                 >
-                  {isSubmitting ? "Submitting..." : "Submit"}
+                  Cancel
                 </button>
               </div>
             </div>
@@ -380,58 +395,58 @@ export default function TambahDestinasiPage() {
       </main>
 
       {showAnalysisModal && analysisResult && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 px-4 py-6">
-            <div className="relative w-full max-w-2xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
-              
-              <div className="grid md:grid-cols-[1fr_320px]">
-                
-                {/* LEFT */}
-                <div className="bg-[#285260] p-6 text-white">
-                  <div className="mb-6 flex items-start justify-between">
-                    <div>
-                      <p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
-                        Hasil Analisis Domain Knowledge
-                      </p>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
+          <div className="relative w-full max-w-2xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
+            <div className="grid md:grid-cols-[1fr_320px]">
+              <div className="bg-[#285260] p-6 text-white">
+                <div className="mb-6 flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
+                      Hasil Analisis Domain Knowledge
+                    </p>
 
-                      <h2 className="mt-2 text-3xl font-extrabold leading-tight">
-                        {analysisResult.status === "konsisten"
-                          ? "Data Cukup Selaras"
-                          : "Perlu Perbaikan"}
-                      </h2>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowAnalysisModal(false)}
-                      className="rounded-full bg-white/10 px-3 py-1 text-xl font-bold hover:bg-white/20"
-                    >
-                      ×
-                    </button>
+                    <h2 className="mt-2 text-3xl font-extrabold leading-tight">
+                      {analysisResult.status === "konsisten"
+                        ? "Data Cukup Selaras"
+                        : "Perlu Perbaikan"}
+                    </h2>
                   </div>
 
-                  <div className="rounded-3xl bg-white/10 p-5">
-                    <div className="mb-5">
-                      <div className="mb-2 flex items-center justify-between">
-                        <p className="text-sm font-semibold text-white/80">
-                          Skor Kecocokan
-                        </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowAnalysisModal(false)}
+                    className="rounded-full bg-white/10 px-3 py-1 text-xl font-bold hover:bg-white/20"
+                  >
+                    ×
+                  </button>
+                </div>
 
-                        <p className="text-2xl font-extrabold">
-                          {analysisResult.score}/100
-                        </p>
-                      </div>
+                <div className="rounded-3xl bg-white/10 p-5">
+                  <div className="mb-5">
+                    <div className="mb-2 flex items-center justify-between">
+                      <p className="text-sm font-semibold text-white/80">
+                        Skor Kecocokan
+                      </p>
 
-                      <div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
-                        <div
-                          className="h-full rounded-full bg-[#F09A43]"
-                          style={{ width: `${analysisResult.score}%` }}
-                        />
-                      </div>
+                      <p className="text-2xl font-extrabold">
+                        {analysisResult.score}/100
+                      </p>
                     </div>
 
-                    <div className="space-y-5">
-                      
-                      {/* Selected */}
+                    <div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
+                      <div
+                        className="h-full rounded-full bg-[#F09A43]"
+                        style={{ width: `${analysisResult.score}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-5">
+                    <div>
+                      <p className="text-sm font-semibold text-white/70">
+                        Kategori Dipilih
+                      </p>
+
                       <h3 className="mt-1 text-xl font-bold">
                         {analysisResult.selectedCategories
                           .map((category) => category.categoryName)
@@ -439,110 +454,123 @@ export default function TambahDestinasiPage() {
                       </h3>
 
                       <div className="mt-3 flex flex-wrap gap-2">
-                        {analysisResult.selectedCategories.flatMap((category) => category.matchedKeywords).length > 0 ? (
-                          analysisResult.selectedCategories
-                            .flatMap((category) => category.matchedKeywords)
-                            .map((keyword) => (
-                              <span
-                                key={keyword}
-                                className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold"
-                              >
-                                {keyword}
-                              </span>
-                            ))
+                        {selectedKeywords.length > 0 ? (
+                          selectedKeywords.map((keyword) => (
+                            <span
+                              key={keyword}
+                              className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold"
+                            >
+                              {keyword}
+                            </span>
+                          ))
                         ) : (
                           <span className="text-sm text-white/60">
                             Tidak ada keyword cocok
                           </span>
                         )}
                       </div>
+                    </div>
 
-                      {/* Strongest */}
-                      <div>
-                        <p className="text-sm font-semibold text-white/70">
-                          Kategori Terdeteksi
-                        </p>
+                    <div>
+                      <p className="text-sm font-semibold text-white/70">
+                        Kategori Terdeteksi
+                      </p>
 
-                        <h3 className="mt-1 text-xl font-bold text-[#F09A43]">
-                          {analysisResult.strongestCategory.categoryName}
-                        </h3>
+                      <h3 className="mt-1 text-xl font-bold text-[#F09A43]">
+                        {analysisResult.strongestCategory.categoryName}
+                      </h3>
 
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {analysisResult.strongestCategory.matchedKeywords.length >
-                          0 ? (
-                            analysisResult.strongestCategory.matchedKeywords.map(
-                              (keyword) => (
-                                <span
-                                  key={keyword}
-                                  className="rounded-full bg-[#F09A43]/20 px-3 py-1 text-xs font-semibold text-[#FFD7A8]"
-                                >
-                                  {keyword}
-                                </span>
-                              )
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {analysisResult.strongestCategory.matchedKeywords
+                          .length > 0 ? (
+                          analysisResult.strongestCategory.matchedKeywords.map(
+                            (keyword) => (
+                              <span
+                                key={keyword}
+                                className="rounded-full bg-[#F09A43]/20 px-3 py-1 text-xs font-semibold text-[#FFD7A8]"
+                              >
+                                {keyword}
+                              </span>
                             )
-                          ) : (
-                            <span className="text-sm text-white/60">
-                              Tidak ada keyword terdeteksi
-                            </span>
-                          )}
-                        </div>
+                          )
+                        ) : (
+                          <span className="text-sm text-white/60">
+                            Tidak ada keyword terdeteksi
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* RIGHT */}
-                <div className="flex flex-col justify-between bg-[#F8F8F8] p-6">
-                  <div>
-                    <div className="mb-5 flex flex-col items-center text-center">
-                      <div className="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-[#285260] text-4xl">
-                        ⚠️
+              <div className="flex flex-col justify-between bg-[#F8F8F8] p-6">
+                <div>
+                  <div className="mb-5 flex flex-col items-center text-center">
+                    <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#285260]">
+                        {analysisResult.score >= MIN_AI_SCORE ? (
+                          <span className="text-5xl font-black leading-none text-[#4ADE80]">
+                            ✓
+                          </span>
+                        ) : (
+                          <span className="text-5xl font-black leading-none text-[#F09A43]">
+                            !
+                          </span>
+                        )}
                       </div>
 
-                      <p className="text-xl font-extrabold text-[#F09A43]">
-                        {analysisResult.status === "konsisten"
-                          ? "Data Selaras"
-                          : "Perlu Perbaikan"}
-                      </p>
+                    <p className="text-xl font-extrabold text-[#F09A43]">
+                      {analysisResult.score >= MIN_AI_SCORE
+                        ? "Bisa Disubmit"
+                        : "Perlu Perbaikan"}
+                    </p>
 
-                      <p className="mt-1 text-lg font-bold text-[#285260]">
-                        Skor: {analysisResult.score}/100
-                      </p>
-                    </div>
-
-                    <div className="rounded-3xl bg-[#285260] p-5 text-center text-white">
-                      <p className="text-lg font-semibold leading-relaxed">
-                        {analysisResult.message}
-                      </p>
-
-                      <p className="mt-4 text-xs text-white/60">
-                        Reasoning AI berbasis LLM akan ditambahkan pada tahap berikutnya.
-                      </p>
-                    </div>
+                    <p className="mt-1 text-lg font-bold text-[#285260]">
+                      Skor: {analysisResult.score}/100
+                    </p>
                   </div>
 
-                  <div className="mt-6 flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setShowAnalysisModal(false)}
-                      className="flex-1 rounded-2xl bg-[#F09A43] px-5 py-3 font-bold text-white transition hover:opacity-90"
-                    >
-                      Tutup
-                    </button>
+                  <div className="rounded-3xl bg-[#285260] p-5 text-center text-white">
+                    <p className="text-lg font-semibold leading-relaxed">
+                      {analysisResult.message}
+                    </p>
 
-                    <button
-                      type="button"
-                      onClick={() => setShowAnalysisModal(false)}
-                      className="flex-1 rounded-2xl bg-[#C45454] px-5 py-3 font-bold text-white transition hover:opacity-90"
-                    >
-                      Perbaiki
-                    </button>
+                    <p className="mt-4 text-xs text-white/60">
+                      Minimal skor submit adalah {MIN_AI_SCORE}/100.
+                    </p>
                   </div>
+
+                  {analysisResult.score < MIN_AI_SCORE && (
+                    <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+                      Skor belum memenuhi batas minimal. Silakan perbaiki data
+                      terlebih dahulu.
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-6 flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowAnalysisModal(false)}
+                    className="flex-1 rounded-2xl bg-[#C45454] px-5 py-3 font-bold text-white transition hover:opacity-90"
+                  >
+                    Perbaiki
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={analysisResult.score < MIN_AI_SCORE || isSubmitting}
+                    onClick={submitDestination}
+                    className="flex-1 rounded-2xl bg-[#F09A43] px-5 py-3 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit"}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </>
   );
 }

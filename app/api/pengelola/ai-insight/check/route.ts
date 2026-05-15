@@ -2,13 +2,34 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 function normalizeText(text: string) {
-  return text.toLowerCase().trim();
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function escapeRegex(text: string) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function findMatches(text: string, keywords: string[]) {
-  return keywords.filter((keyword) =>
-    text.includes(keyword.toLowerCase())
-  );
+  return keywords.filter((keyword) => {
+    const normalizedKeyword = normalizeText(keyword);
+
+    if (!normalizedKeyword) return false;
+
+    const pattern = new RegExp(
+      `(^|\\s)${escapeRegex(normalizedKeyword)}(\\s|$)`,
+      "i"
+    );
+
+    return pattern.test(text);
+  });
+}
+
+function roundScore(value: number) {
+  return Math.round(value);
 }
 
 export async function POST(req: NextRequest) {
@@ -69,42 +90,66 @@ export async function POST(req: NextRequest) {
       (item) => !item.isSelected && item.matchCount > 0
     );
 
-    const allSelectedHaveMatches = selectedWithoutMatches.length === 0;
+    const totalSelectedCategories = selectedAnalysis.length;
+    const totalSelectedWithMatches = selectedWithMatches.length;
 
-    const strongestIsSelected = strongestCategory
-      ? categoryIds.includes(strongestCategory.categoryId)
-      : false;
+    const selectedMatchCount = selectedAnalysis.reduce(
+      (total, item) => total + item.matchCount,
+      0
+    );
 
-    const isConsistent =
-      allSelectedHaveMatches &&
-      selectedWithMatches.length > 0 &&
-      strongestIsSelected;
+    const totalMatchCount = analysis.reduce(
+      (total, item) => total + item.matchCount,
+      0
+    );
 
-    const isPartial =
-      selectedWithMatches.length > 0 &&
-      (!allSelectedHaveMatches || !strongestIsSelected);
+    const coverageScore =
+      totalSelectedCategories > 0
+        ? (totalSelectedWithMatches / totalSelectedCategories) * 100
+        : 0;
 
-    const status = isConsistent
-      ? "konsisten"
-      : isPartial
-      ? "perlu_perbaikan"
-      : "inkonsisten";
+    const dominanceScore =
+      totalMatchCount > 0 ? (selectedMatchCount / totalMatchCount) * 100 : 0;
 
-    const score = isConsistent ? 85 : isPartial ? 60 : 40;
+    const strongestAlignmentScore =
+      strongestCategory && categoryIds.includes(strongestCategory.categoryId)
+        ? 100
+        : 0;
 
-    const message = isConsistent
-      ? "Nama dan deskripsi cukup selaras dengan kategori wisata yang dipilih."
-      : isPartial
-      ? `Sebagian kategori sudah sesuai, tetapi ada kategori yang belum memiliki kecocokan semantik${
-          unselectedStrongMatches.length > 0
-            ? ` dan konten juga mengarah ke ${unselectedStrongMatches[0].categoryName}`
-            : ""
-        }.`
-      : `Data belum menunjukkan kecocokan dengan kategori yang dipilih. Konten lebih mengarah ke ${strongestCategory.categoryName}.`;
+    const score = roundScore(
+      coverageScore * 0.5 +
+        dominanceScore * 0.3 +
+        strongestAlignmentScore * 0.2
+    );
+
+    const status =
+      score >= 75 ? "konsisten" : score >= 60 ? "perlu_perbaikan" : "inkonsisten";
+
+    const message =
+      status === "konsisten"
+        ? "Nama dan deskripsi cukup selaras dengan kategori wisata yang dipilih."
+        : status === "perlu_perbaikan"
+        ? `Sebagian kategori sudah sesuai, tetapi masih ada kategori yang belum memiliki kecocokan semantik${
+            unselectedStrongMatches.length > 0
+              ? ` dan konten juga mengarah ke ${unselectedStrongMatches[0].categoryName}`
+              : ""
+          }.`
+        : `Data belum cukup selaras dengan kategori yang dipilih${
+            strongestCategory?.matchCount > 0
+              ? `. Konten lebih mengarah ke ${strongestCategory.categoryName}`
+              : ""
+          }.`;
 
     return NextResponse.json({
       status,
       score,
+      scoringDetail: {
+        coverageScore: roundScore(coverageScore),
+        dominanceScore: roundScore(dominanceScore),
+        strongestAlignmentScore,
+        formula:
+          "score = (coverageScore * 0.5) + (dominanceScore * 0.3) + (strongestAlignmentScore * 0.2)",
+      },
       selectedCategories: selectedAnalysis,
       selectedWithMatches,
       selectedWithoutMatches,
