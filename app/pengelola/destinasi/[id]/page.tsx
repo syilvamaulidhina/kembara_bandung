@@ -35,6 +35,7 @@ type Destination = {
 	latestAnalysis?: {
 		score: number;
 		status: string;
+		message: string;
 		strongestCategory: CategoryAnalysis;
 		selectedCategories: CategoryAnalysis[];
 	} | null;
@@ -97,6 +98,41 @@ export default function DetailDestinasiPage() {
 		);
 	}
 
+	async function handleDelete() {
+		if (!destination) return;
+
+		const confirmDelete = confirm(
+			"Yakin ingin menghapus wisata ini?"
+		);
+
+		if (!confirmDelete) return;
+
+		try {
+			const res = await fetch(
+				`/api/pengelola/destinations/${destination.id}`,
+				{
+					method: "DELETE",
+				}
+			);
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				alert(data.message || "Gagal menghapus wisata.");
+				return;
+			}
+
+			alert("Wisata berhasil dihapus.");
+
+			router.push("/pengelola/destinasi");
+			router.refresh();
+		} catch (error) {
+			console.error("DELETE ERROR:", error);
+
+			alert("Terjadi kesalahan saat menghapus wisata.");
+		}
+	}
+
 	const analysis = destination.latestAnalysis;
 
 	const isNeedRevision = destination.status
@@ -113,7 +149,9 @@ export default function DetailDestinasiPage() {
 				<div className="w-full px-10 py-8">
 					<button
 						type="button"
-						onClick={() => router.push("/pengelola/destinasi")}
+						onClick={() =>
+							router.push("/pengelola/destinasi")
+						}
 						className="mb-4 text-sm font-semibold text-[#285260] hover:underline"
 					>
 						← Kembali ke Kelola Wisata
@@ -158,9 +196,7 @@ export default function DetailDestinasiPage() {
 
 			<main className="min-h-screen bg-[#F5F7FB] px-10 py-8">
 				<div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
-					{/* LEFT */}
 					<div className="space-y-6">
-						{/* HERO */}
 						<div className="overflow-hidden rounded-[32px] border border-gray-200 bg-white shadow-sm">
 							{destination.imageUrl ? (
 								<img
@@ -185,15 +221,14 @@ export default function DetailDestinasiPage() {
 							</div>
 						</div>
 
-						{/* MAP */}
 						<div className="rounded-[32px] border border-gray-200 bg-white p-5 shadow-sm">
 							<h2 className="text-2xl font-extrabold text-[#285260]">
 								Lokasi Wisata
 							</h2>
 
 							<p className="mt-2 text-sm text-gray-500">
-								Lokasi wisata berdasarkan koordinat yang telah
-								didaftarkan.
+								Lokasi wisata berdasarkan koordinat
+								yang telah didaftarkan.
 							</p>
 
 							<div className="mt-5 overflow-hidden rounded-3xl">
@@ -203,15 +238,16 @@ export default function DetailDestinasiPage() {
 											id: destination.id,
 											name: destination.name,
 											address: destination.address,
-											latitude: destination.latitude,
-											longitude: destination.longitude,
+											latitude:
+												destination.latitude,
+											longitude:
+												destination.longitude,
 										},
 									]}
 								/>
 							</div>
 						</div>
 
-						{/* ADMIN FEEDBACK */}
 						{destination.adminFeedback && (
 							<div className="rounded-[32px] border border-red-100 bg-white p-6 shadow-sm">
 								<p className="text-sm font-bold uppercase tracking-wide text-red-500">
@@ -225,9 +261,7 @@ export default function DetailDestinasiPage() {
 						)}
 					</div>
 
-					{/* RIGHT */}
 					<aside className="space-y-6">
-						{/* AI ANALYSIS */}
 						<div className="rounded-[32px] bg-[#285260] p-6 text-white shadow-sm">
 							<div className="flex items-start justify-between">
 								<div>
@@ -267,12 +301,14 @@ export default function DetailDestinasiPage() {
 									<div className="mt-6 space-y-5">
 										<div>
 											<p className="text-sm font-semibold text-white/70">
-												Kategori Terdeteksi Terkuat
+												Kategori Terdeteksi
+												Terkuat
 											</p>
 
 											<p className="mt-1 text-lg font-bold text-[#F09A43]">
 												{
-													analysis.strongestCategory
+													analysis
+														.strongestCategory
 														.categoryName
 												}
 											</p>
@@ -287,12 +323,18 @@ export default function DetailDestinasiPage() {
 												{analysis.selectedCategories.flatMap(
 													(category) =>
 														category.matchedKeywords.map(
-															(keyword) => (
+															(
+																keyword
+															) => (
 																<span
-																	key={keyword}
+																	key={
+																		keyword
+																	}
 																	className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold"
 																>
-																	{keyword}
+																	{
+																		keyword
+																	}
 																</span>
 															)
 														)
@@ -308,7 +350,6 @@ export default function DetailDestinasiPage() {
 							)}
 						</div>
 
-						{/* INFO */}
 						<div className="rounded-[32px] border border-gray-200 bg-white p-6 shadow-sm">
 							<h2 className="text-2xl font-extrabold text-[#285260]">
 								Informasi Wisata
@@ -357,7 +398,6 @@ export default function DetailDestinasiPage() {
 							</div>
 						</div>
 
-						{/* ACTION */}
 						<div className="rounded-[32px] border border-gray-200 bg-white p-6 shadow-sm">
 							<h2 className="text-2xl font-extrabold text-[#285260]">
 								Aksi
@@ -378,6 +418,7 @@ export default function DetailDestinasiPage() {
 
 								<button
 									type="button"
+									onClick={handleDelete}
 									className="w-full rounded-2xl bg-red-100 px-5 py-3 font-semibold text-red-500 hover:bg-red-200"
 								>
 									Hapus Wisata

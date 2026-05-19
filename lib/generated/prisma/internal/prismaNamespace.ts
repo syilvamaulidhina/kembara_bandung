@@ -388,7 +388,8 @@ export const ModelName = {
   Destination: 'Destination',
   Category: 'Category',
   DestinationCategory: 'DestinationCategory',
-  CategoryKeyword: 'CategoryKeyword'
+  CategoryKeyword: 'CategoryKeyword',
+  AiAnalysis: 'AiAnalysis'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword"
+    modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AiAnalysis: {
+      payload: Prisma.$AiAnalysisPayload<ExtArgs>
+      fields: Prisma.AiAnalysisFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiAnalysisFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiAnalysisFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+        }
+        findFirst: {
+          args: Prisma.AiAnalysisFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiAnalysisFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+        }
+        findMany: {
+          args: Prisma.AiAnalysisFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>[]
+        }
+        create: {
+          args: Prisma.AiAnalysisCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+        }
+        createMany: {
+          args: Prisma.AiAnalysisCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiAnalysisCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>[]
+        }
+        delete: {
+          args: Prisma.AiAnalysisDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+        }
+        update: {
+          args: Prisma.AiAnalysisUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiAnalysisDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiAnalysisUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiAnalysisUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiAnalysisUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+        }
+        aggregate: {
+          args: Prisma.AiAnalysisAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiAnalysis>
+        }
+        groupBy: {
+          args: Prisma.AiAnalysisGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiAnalysisGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiAnalysisCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiAnalysisCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -880,12 +955,32 @@ export const CategoryKeywordScalarFieldEnum = {
 export type CategoryKeywordScalarFieldEnum = (typeof CategoryKeywordScalarFieldEnum)[keyof typeof CategoryKeywordScalarFieldEnum]
 
 
+export const AiAnalysisScalarFieldEnum = {
+  id: 'id',
+  destinationId: 'destinationId',
+  score: 'score',
+  status: 'status',
+  message: 'message',
+  rawResult: 'rawResult',
+  createdAt: 'createdAt'
+} as const
+
+export type AiAnalysisScalarFieldEnum = (typeof AiAnalysisScalarFieldEnum)[keyof typeof AiAnalysisScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -902,6 +997,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1012,6 +1116,20 @@ export type ListEnumDestinationStatusFieldRefInput<$PrismaModel> = FieldRefInput
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 /**
@@ -1129,6 +1247,7 @@ export type GlobalOmitConfig = {
   category?: Prisma.CategoryOmit
   destinationCategory?: Prisma.DestinationCategoryOmit
   categoryKeyword?: Prisma.CategoryKeywordOmit
+  aiAnalysis?: Prisma.AiAnalysisOmit
 }
 
 /* Types for Logging */

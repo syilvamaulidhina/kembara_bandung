@@ -66,3 +66,8 @@ export type DestinationCategory = Prisma.DestinationCategoryModel
  * 
  */
 export type CategoryKeyword = Prisma.CategoryKeywordModel
+/**
+ * Model AiAnalysis
+ * 
+ */
+export type AiAnalysis = Prisma.AiAnalysisModel

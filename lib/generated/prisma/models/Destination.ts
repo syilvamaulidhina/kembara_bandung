@@ -289,6 +289,7 @@ export type DestinationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   categories?: Prisma.DestinationCategoryListRelationFilter
+  aiAnalyses?: Prisma.AiAnalysisListRelationFilter
 }
 
 export type DestinationOrderByWithRelationInput = {
@@ -306,6 +307,7 @@ export type DestinationOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   categories?: Prisma.DestinationCategoryOrderByRelationAggregateInput
+  aiAnalyses?: Prisma.AiAnalysisOrderByRelationAggregateInput
 }
 
 export type DestinationWhereUniqueInput = Prisma.AtLeast<{
@@ -326,6 +328,7 @@ export type DestinationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   categories?: Prisma.DestinationCategoryListRelationFilter
+  aiAnalyses?: Prisma.AiAnalysisListRelationFilter
 }, "id">
 
 export type DestinationOrderByWithAggregationInput = {
@@ -382,6 +385,7 @@ export type DestinationCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationUncheckedCreateInput = {
@@ -399,6 +403,7 @@ export type DestinationUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationUpdateInput = {
@@ -415,6 +420,7 @@ export type DestinationUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationUncheckedUpdateInput = {
@@ -432,6 +438,7 @@ export type DestinationUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationCreateManyInput = {
@@ -580,6 +587,20 @@ export type DestinationUpdateOneRequiredWithoutCategoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutCategoriesInput, Prisma.DestinationUpdateWithoutCategoriesInput>, Prisma.DestinationUncheckedUpdateWithoutCategoriesInput>
 }
 
+export type DestinationCreateNestedOneWithoutAiAnalysesInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutAiAnalysesInput, Prisma.DestinationUncheckedCreateWithoutAiAnalysesInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutAiAnalysesInput
+  connect?: Prisma.DestinationWhereUniqueInput
+}
+
+export type DestinationUpdateOneRequiredWithoutAiAnalysesNestedInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutAiAnalysesInput, Prisma.DestinationUncheckedCreateWithoutAiAnalysesInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutAiAnalysesInput
+  upsert?: Prisma.DestinationUpsertWithoutAiAnalysesInput
+  connect?: Prisma.DestinationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutAiAnalysesInput, Prisma.DestinationUpdateWithoutAiAnalysesInput>, Prisma.DestinationUncheckedUpdateWithoutAiAnalysesInput>
+}
+
 export type DestinationCreateWithoutCategoriesInput = {
   name: string
   description: string
@@ -593,6 +614,7 @@ export type DestinationCreateWithoutCategoriesInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationUncheckedCreateWithoutCategoriesInput = {
@@ -609,6 +631,7 @@ export type DestinationUncheckedCreateWithoutCategoriesInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationCreateOrConnectWithoutCategoriesInput = {
@@ -640,6 +663,7 @@ export type DestinationUpdateWithoutCategoriesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationUncheckedUpdateWithoutCategoriesInput = {
@@ -656,6 +680,89 @@ export type DestinationUncheckedUpdateWithoutCategoriesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationCreateWithoutAiAnalysesInput = {
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
+  id?: number
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationCreateOrConnectWithoutAiAnalysesInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutAiAnalysesInput, Prisma.DestinationUncheckedCreateWithoutAiAnalysesInput>
+}
+
+export type DestinationUpsertWithoutAiAnalysesInput = {
+  update: Prisma.XOR<Prisma.DestinationUpdateWithoutAiAnalysesInput, Prisma.DestinationUncheckedUpdateWithoutAiAnalysesInput>
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutAiAnalysesInput, Prisma.DestinationUncheckedCreateWithoutAiAnalysesInput>
+  where?: Prisma.DestinationWhereInput
+}
+
+export type DestinationUpdateToOneWithWhereWithoutAiAnalysesInput = {
+  where?: Prisma.DestinationWhereInput
+  data: Prisma.XOR<Prisma.DestinationUpdateWithoutAiAnalysesInput, Prisma.DestinationUncheckedUpdateWithoutAiAnalysesInput>
+}
+
+export type DestinationUpdateWithoutAiAnalysesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
 }
 
 
@@ -665,10 +772,12 @@ export type DestinationUncheckedUpdateWithoutCategoriesInput = {
 
 export type DestinationCountOutputType = {
   categories: number
+  aiAnalyses: number
 }
 
 export type DestinationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | DestinationCountOutputTypeCountCategoriesArgs
+  aiAnalyses?: boolean | DestinationCountOutputTypeCountAiAnalysesArgs
 }
 
 /**
@@ -688,6 +797,13 @@ export type DestinationCountOutputTypeCountCategoriesArgs<ExtArgs extends runtim
   where?: Prisma.DestinationCategoryWhereInput
 }
 
+/**
+ * DestinationCountOutputType without action
+ */
+export type DestinationCountOutputTypeCountAiAnalysesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiAnalysisWhereInput
+}
+
 
 export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -704,6 +820,7 @@ export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   createdAt?: boolean
   updatedAt?: boolean
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
+  aiAnalyses?: boolean | Prisma.Destination$aiAnalysesArgs<ExtArgs>
   _count?: boolean | Prisma.DestinationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["destination"]>
 
@@ -758,6 +875,7 @@ export type DestinationSelectScalar = {
 export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
 export type DestinationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
+  aiAnalyses?: boolean | Prisma.Destination$aiAnalysesArgs<ExtArgs>
   _count?: boolean | Prisma.DestinationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DestinationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -767,6 +885,7 @@ export type $DestinationPayload<ExtArgs extends runtime.Types.Extensions.Interna
   name: "Destination"
   objects: {
     categories: Prisma.$DestinationCategoryPayload<ExtArgs>[]
+    aiAnalyses: Prisma.$AiAnalysisPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1177,6 +1296,7 @@ readonly fields: DestinationFieldRefs;
 export interface Prisma__DestinationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   categories<T extends Prisma.Destination$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiAnalyses<T extends Prisma.Destination$aiAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$aiAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1633,6 +1753,30 @@ export type Destination$categoriesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.DestinationCategoryScalarFieldEnum | Prisma.DestinationCategoryScalarFieldEnum[]
+}
+
+/**
+ * Destination.aiAnalyses
+ */
+export type Destination$aiAnalysesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiAnalysis
+   */
+  select?: Prisma.AiAnalysisSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiAnalysis
+   */
+  omit?: Prisma.AiAnalysisOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiAnalysisInclude<ExtArgs> | null
+  where?: Prisma.AiAnalysisWhereInput
+  orderBy?: Prisma.AiAnalysisOrderByWithRelationInput | Prisma.AiAnalysisOrderByWithRelationInput[]
+  cursor?: Prisma.AiAnalysisWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiAnalysisScalarFieldEnum | Prisma.AiAnalysisScalarFieldEnum[]
 }
 
 /**

@@ -57,6 +57,8 @@ model Destination {
   updatedAt   DateTime @updatedAt
 
   categories DestinationCategory[]
+
+  aiAnalyses AiAnalysis[]
 }
 
 model Category {
@@ -88,4 +90,16 @@ model CategoryKeyword {
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, keyword])
+}
+
+model AiAnalysis {
+	id            Int      @id @default(autoincrement())
+	destinationId Int
+	score         Int
+	status        String
+	message       String
+	rawResult     Json
+	createdAt     DateTime @default(now())
+
+	destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 }
