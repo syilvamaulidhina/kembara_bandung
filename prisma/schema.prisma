@@ -1,11 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../lib/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -54,13 +53,15 @@ model Destination {
   latitude    Float
   longitude   Float
   imageUrl    String?
-  // Field tambahan dari pengelola (opsional, bisa ditambah nanti)
-  openTime    String?           // format "08:00"
-  closeTime   String?           // format "17:00"
-  ticketPrice Int?              // harga tiket dalam rupiah (bisa null = gratis)
-  maxPrice    Int?              // harga maksimal (untuk range harga)
+
+  // Field tambahan dari pengelola
+  openTime    String?
+  closeTime   String?
+  ticketPrice Int?
+  maxPrice    Int?
   website     String?
   visitCount  Int               @default(0)
+
   status      DestinationStatus @default(pending)
   isDeleted   Boolean           @default(false)
   deletedAt   DateTime?
@@ -68,6 +69,7 @@ model Destination {
   updatedAt   DateTime          @updatedAt
 
   categories        DestinationCategory[]
+  aiAnalyses        AiAnalysis[]
   savedBy           SavedDestination[]
   itineraryItems    ItineraryItem[]
   reviews           Review[]
@@ -105,11 +107,22 @@ model CategoryKeyword {
   @@unique([categoryId, keyword])
 }
 
+model AiAnalysis {
+  id            Int      @id @default(autoincrement())
+  destinationId Int
+  score         Int
+  status        String
+  message       String
+  rawResult     Json
+  createdAt     DateTime @default(now())
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+}
+
 // ============================================================
 // TABEL BARU UNTUK FITUR WISATAWAN
 // ============================================================
 
-// Destinasi yang disimpan oleh wisatawan
 model SavedDestination {
   id            Int      @id @default(autoincrement())
   userId        Int
@@ -122,29 +135,27 @@ model SavedDestination {
   @@unique([userId, destinationId])
 }
 
-// Rencana perjalanan wisatawan
 model Itinerary {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  title       String   @default("Rencana Perjalananku")
-  totalDistance Float? // dalam km
-  estimatedTime Int?   // dalam menit
-  estimatedCost Int?   // dalam rupiah
-  isAiGenerated Boolean @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  title           String   @default("Rencana Perjalananku")
+  totalDistance   Float?
+  estimatedTime   Int?
+  estimatedCost   Int?
+  isAiGenerated   Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   items ItineraryItem[]
 }
 
-// Item dalam rencana perjalanan (urutan destinasi)
 model ItineraryItem {
   id            Int      @id @default(autoincrement())
   itineraryId   Int
   destinationId Int
-  order         Int      // urutan kunjungan (1, 2, 3, ...)
-  visitTime     String?  // jam kunjungan yang direkomendasikan "09:00"
+  order         Int
+  visitTime     String?
   createdAt     DateTime @default(now())
 
   itinerary   Itinerary   @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
@@ -153,12 +164,11 @@ model ItineraryItem {
   @@unique([itineraryId, order])
 }
 
-// Ulasan wisatawan
 model Review {
   id            Int      @id @default(autoincrement())
   userId        Int
   destinationId Int
-  rating        Int      // 1–5
+  rating        Int
   comment       String?
   photoUrl      String?
   helpfulCount  Int      @default(0)
@@ -168,16 +178,15 @@ model Review {
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, destinationId]) // 1 user 1 review per destinasi
+  @@unique([userId, destinationId])
 }
 
-// Destinasi yang pernah dikunjungi (untuk fitur ulasan + geofencing)
 model VisitedPlace {
   id            Int      @id @default(autoincrement())
   userId        Int
   destinationId Int
   visitedAt     DateTime @default(now())
-  checkedIn     Boolean  @default(false) // geofencing auto check-in
+  checkedIn     Boolean  @default(false)
 
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)

@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
 
 import { Poppins, Plus_Jakarta_Sans } from "next/font/google";
@@ -24,12 +24,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.className} ${jakarta.variable} font-sans`}>
+    <html lang="id">
+      <body
+        className={`${poppins.className} ${jakarta.variable} font-sans min-h-screen`}
+      >
         {children}
       </body>
     </html>
