@@ -6,9 +6,18 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-jakarta)", "sans-serif"],
+      },
+
       colors: {
         primary: "#130F6A",
         selected: "#FFEBF5",
+
+        // Warna brand
+        navy: "#130f6a",
+        orange: "#ec8d41",
+        dark: "#020038",
       },
     },
   },

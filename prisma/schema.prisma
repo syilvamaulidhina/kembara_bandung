@@ -5,6 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -30,19 +31,22 @@ model User {
   name      String
   email     String   @unique
   password  String
-
   role      Role?
-
   gender    Gender?
   domisili  String?
   photo     String?
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relasi baru untuk fitur wisatawan
+  savedDestinations SavedDestination[]
+  itineraries       Itinerary[]
+  reviews           Review[]
+  visitedPlaces     VisitedPlace[]
 }
 
 model Destination {
-  id          Int      @id @default(autoincrement())
+  id          Int               @id @default(autoincrement())
   name        String
   description String
   address     String
@@ -50,15 +54,27 @@ model Destination {
   latitude    Float
   longitude   Float
   imageUrl    String?
+
+  // Field tambahan dari pengelola
+  openTime    String?
+  closeTime   String?
+  ticketPrice Int?
+  maxPrice    Int?
+  website     String?
+  visitCount  Int               @default(0)
+
   status      DestinationStatus @default(pending)
-  isDeleted   Boolean @default(false)
+  isDeleted   Boolean           @default(false)
   deletedAt   DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 
-  categories DestinationCategory[]
-
-  aiAnalyses AiAnalysis[]
+  categories        DestinationCategory[]
+  aiAnalyses        AiAnalysis[]
+  savedBy           SavedDestination[]
+  itineraryItems    ItineraryItem[]
+  reviews           Review[]
+  visitedBy         VisitedPlace[]
 }
 
 model Category {
@@ -67,7 +83,7 @@ model Category {
   createdAt DateTime @default(now())
 
   destinations DestinationCategory[]
-  keywords CategoryKeyword[]
+  keywords     CategoryKeyword[]
 }
 
 model DestinationCategory {
@@ -93,13 +109,88 @@ model CategoryKeyword {
 }
 
 model AiAnalysis {
-	id            Int      @id @default(autoincrement())
-	destinationId Int
-	score         Int
-	status        String
-	message       String
-	rawResult     Json
-	createdAt     DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  destinationId Int
+  score         Int
+  status        String
+  message       String
+  rawResult     Json
+  createdAt     DateTime @default(now())
 
-	destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+}
+
+// ============================================================
+// TABEL BARU UNTUK FITUR WISATAWAN
+// ============================================================
+
+model SavedDestination {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model Itinerary {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  title           String   @default("Rencana Perjalananku")
+  totalDistance   Float?
+  estimatedTime   Int?
+  estimatedCost   Int?
+  isAiGenerated   Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ItineraryItem[]
+}
+
+model ItineraryItem {
+  id            Int      @id @default(autoincrement())
+  itineraryId   Int
+  destinationId Int
+  order         Int
+  visitTime     String?
+  createdAt     DateTime @default(now())
+
+  itinerary   Itinerary   @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([itineraryId, order])
+}
+
+model Review {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  rating        Int
+  comment       String?
+  photoUrl      String?
+  helpfulCount  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model VisitedPlace {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  visitedAt     DateTime @default(now())
+  checkedIn     Boolean  @default(false)
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
 }
