@@ -56,7 +56,12 @@ export const ModelName = {
   Category: 'Category',
   DestinationCategory: 'DestinationCategory',
   CategoryKeyword: 'CategoryKeyword',
-  AiAnalysis: 'AiAnalysis'
+  AiAnalysis: 'AiAnalysis',
+  SavedDestination: 'SavedDestination',
+  Itinerary: 'Itinerary',
+  ItineraryItem: 'ItineraryItem',
+  Review: 'Review',
+  VisitedPlace: 'VisitedPlace'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -100,6 +105,12 @@ export const DestinationScalarFieldEnum = {
   latitude: 'latitude',
   longitude: 'longitude',
   imageUrl: 'imageUrl',
+  openTime: 'openTime',
+  closeTime: 'closeTime',
+  ticketPrice: 'ticketPrice',
+  maxPrice: 'maxPrice',
+  website: 'website',
+  visitCount: 'visitCount',
   status: 'status',
   isDeleted: 'isDeleted',
   deletedAt: 'deletedAt',
@@ -149,6 +160,69 @@ export const AiAnalysisScalarFieldEnum = {
 } as const
 
 export type AiAnalysisScalarFieldEnum = (typeof AiAnalysisScalarFieldEnum)[keyof typeof AiAnalysisScalarFieldEnum]
+
+
+export const SavedDestinationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  destinationId: 'destinationId',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedDestinationScalarFieldEnum = (typeof SavedDestinationScalarFieldEnum)[keyof typeof SavedDestinationScalarFieldEnum]
+
+
+export const ItineraryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  totalDistance: 'totalDistance',
+  estimatedTime: 'estimatedTime',
+  estimatedCost: 'estimatedCost',
+  isAiGenerated: 'isAiGenerated',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ItineraryScalarFieldEnum = (typeof ItineraryScalarFieldEnum)[keyof typeof ItineraryScalarFieldEnum]
+
+
+export const ItineraryItemScalarFieldEnum = {
+  id: 'id',
+  itineraryId: 'itineraryId',
+  destinationId: 'destinationId',
+  order: 'order',
+  visitTime: 'visitTime',
+  createdAt: 'createdAt'
+} as const
+
+export type ItineraryItemScalarFieldEnum = (typeof ItineraryItemScalarFieldEnum)[keyof typeof ItineraryItemScalarFieldEnum]
+
+
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  destinationId: 'destinationId',
+  rating: 'rating',
+  comment: 'comment',
+  photoUrl: 'photoUrl',
+  helpfulCount: 'helpfulCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const VisitedPlaceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  destinationId: 'destinationId',
+  visitedAt: 'visitedAt',
+  checkedIn: 'checkedIn'
+} as const
+
+export type VisitedPlaceScalarFieldEnum = (typeof VisitedPlaceScalarFieldEnum)[keyof typeof VisitedPlaceScalarFieldEnum]
 
 
 export const SortOrder = {

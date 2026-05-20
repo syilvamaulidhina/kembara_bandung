@@ -30,12 +30,18 @@ export type DestinationAvgAggregateOutputType = {
   id: number | null
   latitude: number | null
   longitude: number | null
+  ticketPrice: number | null
+  maxPrice: number | null
+  visitCount: number | null
 }
 
 export type DestinationSumAggregateOutputType = {
   id: number | null
   latitude: number | null
   longitude: number | null
+  ticketPrice: number | null
+  maxPrice: number | null
+  visitCount: number | null
 }
 
 export type DestinationMinAggregateOutputType = {
@@ -47,6 +53,12 @@ export type DestinationMinAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   imageUrl: string | null
+  openTime: string | null
+  closeTime: string | null
+  ticketPrice: number | null
+  maxPrice: number | null
+  website: string | null
+  visitCount: number | null
   status: $Enums.DestinationStatus | null
   isDeleted: boolean | null
   deletedAt: Date | null
@@ -63,6 +75,12 @@ export type DestinationMaxAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   imageUrl: string | null
+  openTime: string | null
+  closeTime: string | null
+  ticketPrice: number | null
+  maxPrice: number | null
+  website: string | null
+  visitCount: number | null
   status: $Enums.DestinationStatus | null
   isDeleted: boolean | null
   deletedAt: Date | null
@@ -79,6 +97,12 @@ export type DestinationCountAggregateOutputType = {
   latitude: number
   longitude: number
   imageUrl: number
+  openTime: number
+  closeTime: number
+  ticketPrice: number
+  maxPrice: number
+  website: number
+  visitCount: number
   status: number
   isDeleted: number
   deletedAt: number
@@ -92,12 +116,18 @@ export type DestinationAvgAggregateInputType = {
   id?: true
   latitude?: true
   longitude?: true
+  ticketPrice?: true
+  maxPrice?: true
+  visitCount?: true
 }
 
 export type DestinationSumAggregateInputType = {
   id?: true
   latitude?: true
   longitude?: true
+  ticketPrice?: true
+  maxPrice?: true
+  visitCount?: true
 }
 
 export type DestinationMinAggregateInputType = {
@@ -109,6 +139,12 @@ export type DestinationMinAggregateInputType = {
   latitude?: true
   longitude?: true
   imageUrl?: true
+  openTime?: true
+  closeTime?: true
+  ticketPrice?: true
+  maxPrice?: true
+  website?: true
+  visitCount?: true
   status?: true
   isDeleted?: true
   deletedAt?: true
@@ -125,6 +161,12 @@ export type DestinationMaxAggregateInputType = {
   latitude?: true
   longitude?: true
   imageUrl?: true
+  openTime?: true
+  closeTime?: true
+  ticketPrice?: true
+  maxPrice?: true
+  website?: true
+  visitCount?: true
   status?: true
   isDeleted?: true
   deletedAt?: true
@@ -141,6 +183,12 @@ export type DestinationCountAggregateInputType = {
   latitude?: true
   longitude?: true
   imageUrl?: true
+  openTime?: true
+  closeTime?: true
+  ticketPrice?: true
+  maxPrice?: true
+  website?: true
+  visitCount?: true
   status?: true
   isDeleted?: true
   deletedAt?: true
@@ -244,6 +292,12 @@ export type DestinationGroupByOutputType = {
   latitude: number
   longitude: number
   imageUrl: string | null
+  openTime: string | null
+  closeTime: string | null
+  ticketPrice: number | null
+  maxPrice: number | null
+  website: string | null
+  visitCount: number
   status: $Enums.DestinationStatus
   isDeleted: boolean
   deletedAt: Date | null
@@ -283,6 +337,12 @@ export type DestinationWhereInput = {
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
   imageUrl?: Prisma.StringNullableFilter<"Destination"> | string | null
+  openTime?: Prisma.StringNullableFilter<"Destination"> | string | null
+  closeTime?: Prisma.StringNullableFilter<"Destination"> | string | null
+  ticketPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
+  maxPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
+  website?: Prisma.StringNullableFilter<"Destination"> | string | null
+  visitCount?: Prisma.IntFilter<"Destination"> | number
   status?: Prisma.EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFilter<"Destination"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Destination"> | Date | string | null
@@ -290,6 +350,10 @@ export type DestinationWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   categories?: Prisma.DestinationCategoryListRelationFilter
   aiAnalyses?: Prisma.AiAnalysisListRelationFilter
+  savedBy?: Prisma.SavedDestinationListRelationFilter
+  itineraryItems?: Prisma.ItineraryItemListRelationFilter
+  reviews?: Prisma.ReviewListRelationFilter
+  visitedBy?: Prisma.VisitedPlaceListRelationFilter
 }
 
 export type DestinationOrderByWithRelationInput = {
@@ -301,6 +365,12 @@ export type DestinationOrderByWithRelationInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  openTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  closeTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  ticketPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  maxPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  visitCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -308,6 +378,10 @@ export type DestinationOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   categories?: Prisma.DestinationCategoryOrderByRelationAggregateInput
   aiAnalyses?: Prisma.AiAnalysisOrderByRelationAggregateInput
+  savedBy?: Prisma.SavedDestinationOrderByRelationAggregateInput
+  itineraryItems?: Prisma.ItineraryItemOrderByRelationAggregateInput
+  reviews?: Prisma.ReviewOrderByRelationAggregateInput
+  visitedBy?: Prisma.VisitedPlaceOrderByRelationAggregateInput
 }
 
 export type DestinationWhereUniqueInput = Prisma.AtLeast<{
@@ -322,6 +396,12 @@ export type DestinationWhereUniqueInput = Prisma.AtLeast<{
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
   imageUrl?: Prisma.StringNullableFilter<"Destination"> | string | null
+  openTime?: Prisma.StringNullableFilter<"Destination"> | string | null
+  closeTime?: Prisma.StringNullableFilter<"Destination"> | string | null
+  ticketPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
+  maxPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
+  website?: Prisma.StringNullableFilter<"Destination"> | string | null
+  visitCount?: Prisma.IntFilter<"Destination"> | number
   status?: Prisma.EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFilter<"Destination"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Destination"> | Date | string | null
@@ -329,6 +409,10 @@ export type DestinationWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   categories?: Prisma.DestinationCategoryListRelationFilter
   aiAnalyses?: Prisma.AiAnalysisListRelationFilter
+  savedBy?: Prisma.SavedDestinationListRelationFilter
+  itineraryItems?: Prisma.ItineraryItemListRelationFilter
+  reviews?: Prisma.ReviewListRelationFilter
+  visitedBy?: Prisma.VisitedPlaceListRelationFilter
 }, "id">
 
 export type DestinationOrderByWithAggregationInput = {
@@ -340,6 +424,12 @@ export type DestinationOrderByWithAggregationInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  openTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  closeTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  ticketPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  maxPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  visitCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -364,6 +454,12 @@ export type DestinationScalarWhereWithAggregatesInput = {
   latitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
   longitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  openTime?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  closeTime?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  ticketPrice?: Prisma.IntNullableWithAggregatesFilter<"Destination"> | number | null
+  maxPrice?: Prisma.IntNullableWithAggregatesFilter<"Destination"> | number | null
+  website?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  visitCount?: Prisma.IntWithAggregatesFilter<"Destination"> | number
   status?: Prisma.EnumDestinationStatusWithAggregatesFilter<"Destination"> | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolWithAggregatesFilter<"Destination"> | boolean
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Destination"> | Date | string | null
@@ -379,6 +475,12 @@ export type DestinationCreateInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -386,6 +488,10 @@ export type DestinationCreateInput = {
   updatedAt?: Date | string
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationUncheckedCreateInput = {
@@ -397,6 +503,12 @@ export type DestinationUncheckedCreateInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -404,6 +516,10 @@ export type DestinationUncheckedCreateInput = {
   updatedAt?: Date | string
   categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
   aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationUpdateInput = {
@@ -414,6 +530,12 @@ export type DestinationUpdateInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -421,6 +543,10 @@ export type DestinationUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationUncheckedUpdateInput = {
@@ -432,6 +558,12 @@ export type DestinationUncheckedUpdateInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -439,6 +571,10 @@ export type DestinationUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
   aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationCreateManyInput = {
@@ -450,6 +586,12 @@ export type DestinationCreateManyInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
@@ -465,6 +607,12 @@ export type DestinationUpdateManyMutationInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481,6 +629,12 @@ export type DestinationUncheckedUpdateManyInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -497,6 +651,12 @@ export type DestinationCountOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  openTime?: Prisma.SortOrder
+  closeTime?: Prisma.SortOrder
+  ticketPrice?: Prisma.SortOrder
+  maxPrice?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  visitCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -508,6 +668,9 @@ export type DestinationAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  ticketPrice?: Prisma.SortOrder
+  maxPrice?: Prisma.SortOrder
+  visitCount?: Prisma.SortOrder
 }
 
 export type DestinationMaxOrderByAggregateInput = {
@@ -519,6 +682,12 @@ export type DestinationMaxOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  openTime?: Prisma.SortOrder
+  closeTime?: Prisma.SortOrder
+  ticketPrice?: Prisma.SortOrder
+  maxPrice?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  visitCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -535,6 +704,12 @@ export type DestinationMinOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  openTime?: Prisma.SortOrder
+  closeTime?: Prisma.SortOrder
+  ticketPrice?: Prisma.SortOrder
+  maxPrice?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  visitCount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -546,6 +721,9 @@ export type DestinationSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  ticketPrice?: Prisma.SortOrder
+  maxPrice?: Prisma.SortOrder
+  visitCount?: Prisma.SortOrder
 }
 
 export type DestinationScalarRelationFilter = {
@@ -555,6 +733,14 @@ export type DestinationScalarRelationFilter = {
 
 export type FloatFieldUpdateOperationsInput = {
   set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -601,6 +787,62 @@ export type DestinationUpdateOneRequiredWithoutAiAnalysesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutAiAnalysesInput, Prisma.DestinationUpdateWithoutAiAnalysesInput>, Prisma.DestinationUncheckedUpdateWithoutAiAnalysesInput>
 }
 
+export type DestinationCreateNestedOneWithoutSavedByInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutSavedByInput, Prisma.DestinationUncheckedCreateWithoutSavedByInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutSavedByInput
+  connect?: Prisma.DestinationWhereUniqueInput
+}
+
+export type DestinationUpdateOneRequiredWithoutSavedByNestedInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutSavedByInput, Prisma.DestinationUncheckedCreateWithoutSavedByInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutSavedByInput
+  upsert?: Prisma.DestinationUpsertWithoutSavedByInput
+  connect?: Prisma.DestinationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutSavedByInput, Prisma.DestinationUpdateWithoutSavedByInput>, Prisma.DestinationUncheckedUpdateWithoutSavedByInput>
+}
+
+export type DestinationCreateNestedOneWithoutItineraryItemsInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutItineraryItemsInput, Prisma.DestinationUncheckedCreateWithoutItineraryItemsInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutItineraryItemsInput
+  connect?: Prisma.DestinationWhereUniqueInput
+}
+
+export type DestinationUpdateOneRequiredWithoutItineraryItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutItineraryItemsInput, Prisma.DestinationUncheckedCreateWithoutItineraryItemsInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutItineraryItemsInput
+  upsert?: Prisma.DestinationUpsertWithoutItineraryItemsInput
+  connect?: Prisma.DestinationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutItineraryItemsInput, Prisma.DestinationUpdateWithoutItineraryItemsInput>, Prisma.DestinationUncheckedUpdateWithoutItineraryItemsInput>
+}
+
+export type DestinationCreateNestedOneWithoutReviewsInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutReviewsInput, Prisma.DestinationUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutReviewsInput
+  connect?: Prisma.DestinationWhereUniqueInput
+}
+
+export type DestinationUpdateOneRequiredWithoutReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutReviewsInput, Prisma.DestinationUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutReviewsInput
+  upsert?: Prisma.DestinationUpsertWithoutReviewsInput
+  connect?: Prisma.DestinationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutReviewsInput, Prisma.DestinationUpdateWithoutReviewsInput>, Prisma.DestinationUncheckedUpdateWithoutReviewsInput>
+}
+
+export type DestinationCreateNestedOneWithoutVisitedByInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutVisitedByInput, Prisma.DestinationUncheckedCreateWithoutVisitedByInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutVisitedByInput
+  connect?: Prisma.DestinationWhereUniqueInput
+}
+
+export type DestinationUpdateOneRequiredWithoutVisitedByNestedInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutVisitedByInput, Prisma.DestinationUncheckedCreateWithoutVisitedByInput>
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutVisitedByInput
+  upsert?: Prisma.DestinationUpsertWithoutVisitedByInput
+  connect?: Prisma.DestinationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutVisitedByInput, Prisma.DestinationUpdateWithoutVisitedByInput>, Prisma.DestinationUncheckedUpdateWithoutVisitedByInput>
+}
+
 export type DestinationCreateWithoutCategoriesInput = {
   name: string
   description: string
@@ -609,12 +851,22 @@ export type DestinationCreateWithoutCategoriesInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationUncheckedCreateWithoutCategoriesInput = {
@@ -626,12 +878,22 @@ export type DestinationUncheckedCreateWithoutCategoriesInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationCreateOrConnectWithoutCategoriesInput = {
@@ -658,12 +920,22 @@ export type DestinationUpdateWithoutCategoriesInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationUncheckedUpdateWithoutCategoriesInput = {
@@ -675,12 +947,22 @@ export type DestinationUncheckedUpdateWithoutCategoriesInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationCreateWithoutAiAnalysesInput = {
@@ -691,12 +973,22 @@ export type DestinationCreateWithoutAiAnalysesInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
@@ -708,12 +1000,22 @@ export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
   status?: $Enums.DestinationStatus
   isDeleted?: boolean
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
 }
 
 export type DestinationCreateOrConnectWithoutAiAnalysesInput = {
@@ -740,12 +1042,22 @@ export type DestinationUpdateWithoutAiAnalysesInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUpdateManyWithoutDestinationNestedInput
 }
 
 export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
@@ -757,12 +1069,510 @@ export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationCreateWithoutSavedByInput = {
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationUncheckedCreateWithoutSavedByInput = {
+  id?: number
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationCreateOrConnectWithoutSavedByInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutSavedByInput, Prisma.DestinationUncheckedCreateWithoutSavedByInput>
+}
+
+export type DestinationUpsertWithoutSavedByInput = {
+  update: Prisma.XOR<Prisma.DestinationUpdateWithoutSavedByInput, Prisma.DestinationUncheckedUpdateWithoutSavedByInput>
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutSavedByInput, Prisma.DestinationUncheckedCreateWithoutSavedByInput>
+  where?: Prisma.DestinationWhereInput
+}
+
+export type DestinationUpdateToOneWithWhereWithoutSavedByInput = {
+  where?: Prisma.DestinationWhereInput
+  data: Prisma.XOR<Prisma.DestinationUpdateWithoutSavedByInput, Prisma.DestinationUncheckedUpdateWithoutSavedByInput>
+}
+
+export type DestinationUpdateWithoutSavedByInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationUncheckedUpdateWithoutSavedByInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationCreateWithoutItineraryItemsInput = {
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationUncheckedCreateWithoutItineraryItemsInput = {
+  id?: number
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationCreateOrConnectWithoutItineraryItemsInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutItineraryItemsInput, Prisma.DestinationUncheckedCreateWithoutItineraryItemsInput>
+}
+
+export type DestinationUpsertWithoutItineraryItemsInput = {
+  update: Prisma.XOR<Prisma.DestinationUpdateWithoutItineraryItemsInput, Prisma.DestinationUncheckedUpdateWithoutItineraryItemsInput>
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutItineraryItemsInput, Prisma.DestinationUncheckedCreateWithoutItineraryItemsInput>
+  where?: Prisma.DestinationWhereInput
+}
+
+export type DestinationUpdateToOneWithWhereWithoutItineraryItemsInput = {
+  where?: Prisma.DestinationWhereInput
+  data: Prisma.XOR<Prisma.DestinationUpdateWithoutItineraryItemsInput, Prisma.DestinationUncheckedUpdateWithoutItineraryItemsInput>
+}
+
+export type DestinationUpdateWithoutItineraryItemsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationUncheckedUpdateWithoutItineraryItemsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationCreateWithoutReviewsInput = {
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationUncheckedCreateWithoutReviewsInput = {
+  id?: number
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationCreateOrConnectWithoutReviewsInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutReviewsInput, Prisma.DestinationUncheckedCreateWithoutReviewsInput>
+}
+
+export type DestinationUpsertWithoutReviewsInput = {
+  update: Prisma.XOR<Prisma.DestinationUpdateWithoutReviewsInput, Prisma.DestinationUncheckedUpdateWithoutReviewsInput>
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutReviewsInput, Prisma.DestinationUncheckedCreateWithoutReviewsInput>
+  where?: Prisma.DestinationWhereInput
+}
+
+export type DestinationUpdateToOneWithWhereWithoutReviewsInput = {
+  where?: Prisma.DestinationWhereInput
+  data: Prisma.XOR<Prisma.DestinationUpdateWithoutReviewsInput, Prisma.DestinationUncheckedUpdateWithoutReviewsInput>
+}
+
+export type DestinationUpdateWithoutReviewsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationUncheckedUpdateWithoutReviewsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationCreateWithoutVisitedByInput = {
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationUncheckedCreateWithoutVisitedByInput = {
+  id?: number
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationCreateOrConnectWithoutVisitedByInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutVisitedByInput, Prisma.DestinationUncheckedCreateWithoutVisitedByInput>
+}
+
+export type DestinationUpsertWithoutVisitedByInput = {
+  update: Prisma.XOR<Prisma.DestinationUpdateWithoutVisitedByInput, Prisma.DestinationUncheckedUpdateWithoutVisitedByInput>
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutVisitedByInput, Prisma.DestinationUncheckedCreateWithoutVisitedByInput>
+  where?: Prisma.DestinationWhereInput
+}
+
+export type DestinationUpdateToOneWithWhereWithoutVisitedByInput = {
+  where?: Prisma.DestinationWhereInput
+  data: Prisma.XOR<Prisma.DestinationUpdateWithoutVisitedByInput, Prisma.DestinationUncheckedUpdateWithoutVisitedByInput>
+}
+
+export type DestinationUpdateWithoutVisitedByInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationUncheckedUpdateWithoutVisitedByInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
 }
 
 
@@ -773,11 +1583,19 @@ export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
 export type DestinationCountOutputType = {
   categories: number
   aiAnalyses: number
+  savedBy: number
+  itineraryItems: number
+  reviews: number
+  visitedBy: number
 }
 
 export type DestinationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | DestinationCountOutputTypeCountCategoriesArgs
   aiAnalyses?: boolean | DestinationCountOutputTypeCountAiAnalysesArgs
+  savedBy?: boolean | DestinationCountOutputTypeCountSavedByArgs
+  itineraryItems?: boolean | DestinationCountOutputTypeCountItineraryItemsArgs
+  reviews?: boolean | DestinationCountOutputTypeCountReviewsArgs
+  visitedBy?: boolean | DestinationCountOutputTypeCountVisitedByArgs
 }
 
 /**
@@ -804,6 +1622,34 @@ export type DestinationCountOutputTypeCountAiAnalysesArgs<ExtArgs extends runtim
   where?: Prisma.AiAnalysisWhereInput
 }
 
+/**
+ * DestinationCountOutputType without action
+ */
+export type DestinationCountOutputTypeCountSavedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedDestinationWhereInput
+}
+
+/**
+ * DestinationCountOutputType without action
+ */
+export type DestinationCountOutputTypeCountItineraryItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ItineraryItemWhereInput
+}
+
+/**
+ * DestinationCountOutputType without action
+ */
+export type DestinationCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewWhereInput
+}
+
+/**
+ * DestinationCountOutputType without action
+ */
+export type DestinationCountOutputTypeCountVisitedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VisitedPlaceWhereInput
+}
+
 
 export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -814,6 +1660,12 @@ export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  openTime?: boolean
+  closeTime?: boolean
+  ticketPrice?: boolean
+  maxPrice?: boolean
+  website?: boolean
+  visitCount?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -821,6 +1673,10 @@ export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   updatedAt?: boolean
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
   aiAnalyses?: boolean | Prisma.Destination$aiAnalysesArgs<ExtArgs>
+  savedBy?: boolean | Prisma.Destination$savedByArgs<ExtArgs>
+  itineraryItems?: boolean | Prisma.Destination$itineraryItemsArgs<ExtArgs>
+  reviews?: boolean | Prisma.Destination$reviewsArgs<ExtArgs>
+  visitedBy?: boolean | Prisma.Destination$visitedByArgs<ExtArgs>
   _count?: boolean | Prisma.DestinationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["destination"]>
 
@@ -833,6 +1689,12 @@ export type DestinationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  openTime?: boolean
+  closeTime?: boolean
+  ticketPrice?: boolean
+  maxPrice?: boolean
+  website?: boolean
+  visitCount?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -849,6 +1711,12 @@ export type DestinationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  openTime?: boolean
+  closeTime?: boolean
+  ticketPrice?: boolean
+  maxPrice?: boolean
+  website?: boolean
+  visitCount?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -865,6 +1733,12 @@ export type DestinationSelectScalar = {
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  openTime?: boolean
+  closeTime?: boolean
+  ticketPrice?: boolean
+  maxPrice?: boolean
+  website?: boolean
+  visitCount?: boolean
   status?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
@@ -872,10 +1746,14 @@ export type DestinationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
 export type DestinationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
   aiAnalyses?: boolean | Prisma.Destination$aiAnalysesArgs<ExtArgs>
+  savedBy?: boolean | Prisma.Destination$savedByArgs<ExtArgs>
+  itineraryItems?: boolean | Prisma.Destination$itineraryItemsArgs<ExtArgs>
+  reviews?: boolean | Prisma.Destination$reviewsArgs<ExtArgs>
+  visitedBy?: boolean | Prisma.Destination$visitedByArgs<ExtArgs>
   _count?: boolean | Prisma.DestinationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DestinationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -886,6 +1764,10 @@ export type $DestinationPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     categories: Prisma.$DestinationCategoryPayload<ExtArgs>[]
     aiAnalyses: Prisma.$AiAnalysisPayload<ExtArgs>[]
+    savedBy: Prisma.$SavedDestinationPayload<ExtArgs>[]
+    itineraryItems: Prisma.$ItineraryItemPayload<ExtArgs>[]
+    reviews: Prisma.$ReviewPayload<ExtArgs>[]
+    visitedBy: Prisma.$VisitedPlacePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -896,6 +1778,12 @@ export type $DestinationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     latitude: number
     longitude: number
     imageUrl: string | null
+    openTime: string | null
+    closeTime: string | null
+    ticketPrice: number | null
+    maxPrice: number | null
+    website: string | null
+    visitCount: number
     status: $Enums.DestinationStatus
     isDeleted: boolean
     deletedAt: Date | null
@@ -1297,6 +2185,10 @@ export interface Prisma__DestinationClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   categories<T extends Prisma.Destination$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiAnalyses<T extends Prisma.Destination$aiAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$aiAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedBy<T extends Prisma.Destination$savedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  itineraryItems<T extends Prisma.Destination$itineraryItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$itineraryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItineraryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviews<T extends Prisma.Destination$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  visitedBy<T extends Prisma.Destination$visitedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$visitedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1334,6 +2226,12 @@ export interface DestinationFieldRefs {
   readonly latitude: Prisma.FieldRef<"Destination", 'Float'>
   readonly longitude: Prisma.FieldRef<"Destination", 'Float'>
   readonly imageUrl: Prisma.FieldRef<"Destination", 'String'>
+  readonly openTime: Prisma.FieldRef<"Destination", 'String'>
+  readonly closeTime: Prisma.FieldRef<"Destination", 'String'>
+  readonly ticketPrice: Prisma.FieldRef<"Destination", 'Int'>
+  readonly maxPrice: Prisma.FieldRef<"Destination", 'Int'>
+  readonly website: Prisma.FieldRef<"Destination", 'String'>
+  readonly visitCount: Prisma.FieldRef<"Destination", 'Int'>
   readonly status: Prisma.FieldRef<"Destination", 'DestinationStatus'>
   readonly isDeleted: Prisma.FieldRef<"Destination", 'Boolean'>
   readonly deletedAt: Prisma.FieldRef<"Destination", 'DateTime'>
@@ -1777,6 +2675,102 @@ export type Destination$aiAnalysesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.AiAnalysisScalarFieldEnum | Prisma.AiAnalysisScalarFieldEnum[]
+}
+
+/**
+ * Destination.savedBy
+ */
+export type Destination$savedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedDestination
+   */
+  select?: Prisma.SavedDestinationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedDestination
+   */
+  omit?: Prisma.SavedDestinationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedDestinationInclude<ExtArgs> | null
+  where?: Prisma.SavedDestinationWhereInput
+  orderBy?: Prisma.SavedDestinationOrderByWithRelationInput | Prisma.SavedDestinationOrderByWithRelationInput[]
+  cursor?: Prisma.SavedDestinationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedDestinationScalarFieldEnum | Prisma.SavedDestinationScalarFieldEnum[]
+}
+
+/**
+ * Destination.itineraryItems
+ */
+export type Destination$itineraryItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ItineraryItem
+   */
+  select?: Prisma.ItineraryItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ItineraryItem
+   */
+  omit?: Prisma.ItineraryItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ItineraryItemInclude<ExtArgs> | null
+  where?: Prisma.ItineraryItemWhereInput
+  orderBy?: Prisma.ItineraryItemOrderByWithRelationInput | Prisma.ItineraryItemOrderByWithRelationInput[]
+  cursor?: Prisma.ItineraryItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ItineraryItemScalarFieldEnum | Prisma.ItineraryItemScalarFieldEnum[]
+}
+
+/**
+ * Destination.reviews
+ */
+export type Destination$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Review
+   */
+  select?: Prisma.ReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Review
+   */
+  omit?: Prisma.ReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewInclude<ExtArgs> | null
+  where?: Prisma.ReviewWhereInput
+  orderBy?: Prisma.ReviewOrderByWithRelationInput | Prisma.ReviewOrderByWithRelationInput[]
+  cursor?: Prisma.ReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
+}
+
+/**
+ * Destination.visitedBy
+ */
+export type Destination$visitedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VisitedPlace
+   */
+  select?: Prisma.VisitedPlaceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VisitedPlace
+   */
+  omit?: Prisma.VisitedPlaceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VisitedPlaceInclude<ExtArgs> | null
+  where?: Prisma.VisitedPlaceWhereInput
+  orderBy?: Prisma.VisitedPlaceOrderByWithRelationInput | Prisma.VisitedPlaceOrderByWithRelationInput[]
+  cursor?: Prisma.VisitedPlaceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VisitedPlaceScalarFieldEnum | Prisma.VisitedPlaceScalarFieldEnum[]
 }
 
 /**

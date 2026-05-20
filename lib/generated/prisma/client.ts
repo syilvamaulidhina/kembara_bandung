@@ -71,3 +71,28 @@ export type CategoryKeyword = Prisma.CategoryKeywordModel
  * 
  */
 export type AiAnalysis = Prisma.AiAnalysisModel
+/**
+ * Model SavedDestination
+ * 
+ */
+export type SavedDestination = Prisma.SavedDestinationModel
+/**
+ * Model Itinerary
+ * 
+ */
+export type Itinerary = Prisma.ItineraryModel
+/**
+ * Model ItineraryItem
+ * 
+ */
+export type ItineraryItem = Prisma.ItineraryItemModel
+/**
+ * Model Review
+ * 
+ */
+export type Review = Prisma.ReviewModel
+/**
+ * Model VisitedPlace
+ * 
+ */
+export type VisitedPlace = Prisma.VisitedPlaceModel

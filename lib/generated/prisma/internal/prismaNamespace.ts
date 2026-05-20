@@ -389,7 +389,12 @@ export const ModelName = {
   Category: 'Category',
   DestinationCategory: 'DestinationCategory',
   CategoryKeyword: 'CategoryKeyword',
-  AiAnalysis: 'AiAnalysis'
+  AiAnalysis: 'AiAnalysis',
+  SavedDestination: 'SavedDestination',
+  Itinerary: 'Itinerary',
+  ItineraryItem: 'ItineraryItem',
+  Review: 'Review',
+  VisitedPlace: 'VisitedPlace'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis"
+    modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis" | "savedDestination" | "itinerary" | "itineraryItem" | "review" | "visitedPlace"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +858,376 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SavedDestination: {
+      payload: Prisma.$SavedDestinationPayload<ExtArgs>
+      fields: Prisma.SavedDestinationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SavedDestinationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SavedDestinationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>
+        }
+        findFirst: {
+          args: Prisma.SavedDestinationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SavedDestinationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>
+        }
+        findMany: {
+          args: Prisma.SavedDestinationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>[]
+        }
+        create: {
+          args: Prisma.SavedDestinationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>
+        }
+        createMany: {
+          args: Prisma.SavedDestinationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SavedDestinationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>[]
+        }
+        delete: {
+          args: Prisma.SavedDestinationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>
+        }
+        update: {
+          args: Prisma.SavedDestinationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>
+        }
+        deleteMany: {
+          args: Prisma.SavedDestinationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SavedDestinationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SavedDestinationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>[]
+        }
+        upsert: {
+          args: Prisma.SavedDestinationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedDestinationPayload>
+        }
+        aggregate: {
+          args: Prisma.SavedDestinationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSavedDestination>
+        }
+        groupBy: {
+          args: Prisma.SavedDestinationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedDestinationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SavedDestinationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedDestinationCountAggregateOutputType> | number
+        }
+      }
+    }
+    Itinerary: {
+      payload: Prisma.$ItineraryPayload<ExtArgs>
+      fields: Prisma.ItineraryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ItineraryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ItineraryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>
+        }
+        findFirst: {
+          args: Prisma.ItineraryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ItineraryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>
+        }
+        findMany: {
+          args: Prisma.ItineraryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>[]
+        }
+        create: {
+          args: Prisma.ItineraryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>
+        }
+        createMany: {
+          args: Prisma.ItineraryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ItineraryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>[]
+        }
+        delete: {
+          args: Prisma.ItineraryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>
+        }
+        update: {
+          args: Prisma.ItineraryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>
+        }
+        deleteMany: {
+          args: Prisma.ItineraryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ItineraryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ItineraryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>[]
+        }
+        upsert: {
+          args: Prisma.ItineraryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryPayload>
+        }
+        aggregate: {
+          args: Prisma.ItineraryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateItinerary>
+        }
+        groupBy: {
+          args: Prisma.ItineraryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItineraryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ItineraryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItineraryCountAggregateOutputType> | number
+        }
+      }
+    }
+    ItineraryItem: {
+      payload: Prisma.$ItineraryItemPayload<ExtArgs>
+      fields: Prisma.ItineraryItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ItineraryItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ItineraryItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>
+        }
+        findFirst: {
+          args: Prisma.ItineraryItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ItineraryItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>
+        }
+        findMany: {
+          args: Prisma.ItineraryItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>[]
+        }
+        create: {
+          args: Prisma.ItineraryItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>
+        }
+        createMany: {
+          args: Prisma.ItineraryItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ItineraryItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>[]
+        }
+        delete: {
+          args: Prisma.ItineraryItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>
+        }
+        update: {
+          args: Prisma.ItineraryItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.ItineraryItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ItineraryItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ItineraryItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.ItineraryItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryItemPayload>
+        }
+        aggregate: {
+          args: Prisma.ItineraryItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateItineraryItem>
+        }
+        groupBy: {
+          args: Prisma.ItineraryItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItineraryItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ItineraryItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItineraryItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    Review: {
+      payload: Prisma.$ReviewPayload<ExtArgs>
+      fields: Prisma.ReviewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReviewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReviewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        findFirst: {
+          args: Prisma.ReviewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReviewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        findMany: {
+          args: Prisma.ReviewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>[]
+        }
+        create: {
+          args: Prisma.ReviewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        createMany: {
+          args: Prisma.ReviewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReviewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>[]
+        }
+        delete: {
+          args: Prisma.ReviewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        update: {
+          args: Prisma.ReviewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReviewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReviewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReviewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReviewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        aggregate: {
+          args: Prisma.ReviewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReview>
+        }
+        groupBy: {
+          args: Prisma.ReviewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReviewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReviewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReviewCountAggregateOutputType> | number
+        }
+      }
+    }
+    VisitedPlace: {
+      payload: Prisma.$VisitedPlacePayload<ExtArgs>
+      fields: Prisma.VisitedPlaceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VisitedPlaceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VisitedPlaceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>
+        }
+        findFirst: {
+          args: Prisma.VisitedPlaceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VisitedPlaceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>
+        }
+        findMany: {
+          args: Prisma.VisitedPlaceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>[]
+        }
+        create: {
+          args: Prisma.VisitedPlaceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>
+        }
+        createMany: {
+          args: Prisma.VisitedPlaceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VisitedPlaceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>[]
+        }
+        delete: {
+          args: Prisma.VisitedPlaceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>
+        }
+        update: {
+          args: Prisma.VisitedPlaceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>
+        }
+        deleteMany: {
+          args: Prisma.VisitedPlaceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VisitedPlaceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VisitedPlaceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>[]
+        }
+        upsert: {
+          args: Prisma.VisitedPlaceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VisitedPlacePayload>
+        }
+        aggregate: {
+          args: Prisma.VisitedPlaceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVisitedPlace>
+        }
+        groupBy: {
+          args: Prisma.VisitedPlaceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VisitedPlaceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VisitedPlaceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VisitedPlaceCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -917,6 +1292,12 @@ export const DestinationScalarFieldEnum = {
   latitude: 'latitude',
   longitude: 'longitude',
   imageUrl: 'imageUrl',
+  openTime: 'openTime',
+  closeTime: 'closeTime',
+  ticketPrice: 'ticketPrice',
+  maxPrice: 'maxPrice',
+  website: 'website',
+  visitCount: 'visitCount',
   status: 'status',
   isDeleted: 'isDeleted',
   deletedAt: 'deletedAt',
@@ -966,6 +1347,69 @@ export const AiAnalysisScalarFieldEnum = {
 } as const
 
 export type AiAnalysisScalarFieldEnum = (typeof AiAnalysisScalarFieldEnum)[keyof typeof AiAnalysisScalarFieldEnum]
+
+
+export const SavedDestinationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  destinationId: 'destinationId',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedDestinationScalarFieldEnum = (typeof SavedDestinationScalarFieldEnum)[keyof typeof SavedDestinationScalarFieldEnum]
+
+
+export const ItineraryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  totalDistance: 'totalDistance',
+  estimatedTime: 'estimatedTime',
+  estimatedCost: 'estimatedCost',
+  isAiGenerated: 'isAiGenerated',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ItineraryScalarFieldEnum = (typeof ItineraryScalarFieldEnum)[keyof typeof ItineraryScalarFieldEnum]
+
+
+export const ItineraryItemScalarFieldEnum = {
+  id: 'id',
+  itineraryId: 'itineraryId',
+  destinationId: 'destinationId',
+  order: 'order',
+  visitTime: 'visitTime',
+  createdAt: 'createdAt'
+} as const
+
+export type ItineraryItemScalarFieldEnum = (typeof ItineraryItemScalarFieldEnum)[keyof typeof ItineraryItemScalarFieldEnum]
+
+
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  destinationId: 'destinationId',
+  rating: 'rating',
+  comment: 'comment',
+  photoUrl: 'photoUrl',
+  helpfulCount: 'helpfulCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const VisitedPlaceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  destinationId: 'destinationId',
+  visitedAt: 'visitedAt',
+  checkedIn: 'checkedIn'
+} as const
+
+export type VisitedPlaceScalarFieldEnum = (typeof VisitedPlaceScalarFieldEnum)[keyof typeof VisitedPlaceScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1248,6 +1692,11 @@ export type GlobalOmitConfig = {
   destinationCategory?: Prisma.DestinationCategoryOmit
   categoryKeyword?: Prisma.CategoryKeywordOmit
   aiAnalysis?: Prisma.AiAnalysisOmit
+  savedDestination?: Prisma.SavedDestinationOmit
+  itinerary?: Prisma.ItineraryOmit
+  itineraryItem?: Prisma.ItineraryItemOmit
+  review?: Prisma.ReviewOmit
+  visitedPlace?: Prisma.VisitedPlaceOmit
 }
 
 /* Types for Logging */
