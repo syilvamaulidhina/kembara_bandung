@@ -18,7 +18,7 @@ type AnalysisResult = {
 	selectedCategories: CategoryAnalysis[];
 	selectedWithMatches: CategoryAnalysis[];
 	selectedWithoutMatches: CategoryAnalysis[];
-	strongestCategory: CategoryAnalysis;
+	strongestCategory: CategoryAnalysis | null;
 	unselectedStrongMatches: CategoryAnalysis[];
 	allCategoryAnalysis: CategoryAnalysis[];
 	message: string;
@@ -46,10 +46,8 @@ export default function TambahDestinasiPage() {
 	const [isAreaValid, setIsAreaValid] = useState(true);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isCheckingAI, setIsCheckingAI] = useState(false);
-
 	const [analysisResult, setAnalysisResult] =
 		useState<AnalysisResult | null>(null);
-
 	const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
 	useEffect(() => {
@@ -524,12 +522,13 @@ export default function TambahDestinasiPage() {
 											</p>
 
 											<h3 className="mt-1 text-xl font-bold text-[#F09A43]">
-												{analysisResult.strongestCategory.categoryName}
+												{analysisResult.strongestCategory
+													?.categoryName ?? "Tidak Terdeteksi"}
 											</h3>
 
 											<div className="mt-3 flex flex-wrap gap-2">
 												{analysisResult.strongestCategory
-													.matchedKeywords.length > 0 ? (
+													?.matchedKeywords?.length ? (
 													analysisResult.strongestCategory.matchedKeywords.map(
 														(keyword) => (
 															<span
