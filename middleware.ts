@@ -1,17 +1,23 @@
-import { NextRequest, NextResponse } from "next/server"; 
+import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  // PUBLIC ROUTES
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/images") ||
+    pathname.startsWith("/uploads") || // TAMBAHAN BARU
     pathname === "/favicon.ico" ||
     pathname === "/login" ||
     pathname === "/register" ||
     pathname === "/select-role" ||
-    pathname === "/unauthorized"
+    pathname === "/unauthorized" ||
+
+    // TAMBAHAN BARU:
+    // semua halaman pengunjung bisa diakses tanpa login
+    pathname.startsWith("/pengunjung")
   ) {
     return NextResponse.next();
   }
@@ -22,7 +28,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const user = JSON.parse(userCookie.value);
+  // TAMBAHAN BARU:
+  // supaya aman kalau cookie rusak / bukan JSON
+  let user;
+
+  try {
+    user = JSON.parse(userCookie.value);
+  } catch (error) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   const { role } = user;
 
   if (!role || role === null) {
@@ -41,6 +56,9 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // BAGIAN LAMA TETAP ADA
+  // tapi sekarang /pengunjung sudah publik,
+  // jadi blok ini sebenarnya tidak akan terpanggil
   if (pathname.startsWith("/pengunjung")) {
     if (role !== "WISATAWAN") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));

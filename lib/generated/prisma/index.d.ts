@@ -3,7 +3,7 @@
  * Client
 **/
 
-import * as runtime from './runtime/library.js';
+import * as runtime from './runtime/client.js';
 import $Types = runtime.Types // general types
 import $Public = runtime.Types.Public
 import $Utils = runtime.Types.Utils
@@ -39,10 +39,20 @@ export type DestinationCategory = $Result.DefaultSelection<Prisma.$DestinationCa
  */
 export type CategoryKeyword = $Result.DefaultSelection<Prisma.$CategoryKeywordPayload>
 /**
+ * Model AiAnalysis
+ * 
+ */
+export type AiAnalysis = $Result.DefaultSelection<Prisma.$AiAnalysisPayload>
+/**
  * Model SavedDestination
  * 
  */
 export type SavedDestination = $Result.DefaultSelection<Prisma.$SavedDestinationPayload>
+/**
+ * Model ItineraryQueue
+ * 
+ */
+export type ItineraryQueue = $Result.DefaultSelection<Prisma.$ItineraryQueuePayload>
 /**
  * Model Itinerary
  * 
@@ -114,13 +124,15 @@ export const DestinationStatus: typeof $Enums.DestinationStatus
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
- * const prisma = new PrismaClient()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
  * // Fetch zero or more Users
  * const users = await prisma.user.findMany()
  * ```
  *
  *
- * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+ * Read more in our [docs](https://pris.ly/d/client).
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
@@ -135,13 +147,15 @@ export class PrismaClient<
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
-   * const prisma = new PrismaClient()
+   * const prisma = new PrismaClient({
+   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * })
    * // Fetch zero or more Users
    * const users = await prisma.user.findMany()
    * ```
    *
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+   * Read more in our [docs](https://pris.ly/d/client).
    */
 
   constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
@@ -164,7 +178,7 @@ export class PrismaClient<
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -176,7 +190,7 @@ export class PrismaClient<
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -187,7 +201,7 @@ export class PrismaClient<
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -199,7 +213,7 @@ export class PrismaClient<
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -215,12 +229,11 @@ export class PrismaClient<
    * ])
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
+   * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
    */
-  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
+  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
-
 
   $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
     extArgs: ExtArgs
@@ -277,6 +290,16 @@ export class PrismaClient<
   get categoryKeyword(): Prisma.CategoryKeywordDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.aiAnalysis`: Exposes CRUD operations for the **AiAnalysis** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AiAnalyses
+    * const aiAnalyses = await prisma.aiAnalysis.findMany()
+    * ```
+    */
+  get aiAnalysis(): Prisma.AiAnalysisDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.savedDestination`: Exposes CRUD operations for the **SavedDestination** model.
     * Example usage:
     * ```ts
@@ -285,6 +308,16 @@ export class PrismaClient<
     * ```
     */
   get savedDestination(): Prisma.SavedDestinationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.itineraryQueue`: Exposes CRUD operations for the **ItineraryQueue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ItineraryQueues
+    * const itineraryQueues = await prisma.itineraryQueue.findMany()
+    * ```
+    */
+  get itineraryQueue(): Prisma.ItineraryQueueDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.itinerary`: Exposes CRUD operations for the **Itinerary** model.
@@ -365,14 +398,6 @@ export namespace Prisma {
   export type DecimalJsLike = runtime.DecimalJsLike
 
   /**
-   * Metrics
-   */
-  export type Metrics = runtime.Metrics
-  export type Metric<T> = runtime.Metric<T>
-  export type MetricHistogram = runtime.MetricHistogram
-  export type MetricHistogramBucket = runtime.MetricHistogramBucket
-
-  /**
   * Extensions
   */
   export import Extension = $Extensions.UserArgs
@@ -383,11 +408,12 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.2
-   * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
+   * Prisma Client JS version: 7.8.0
+   * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
    */
   export type PrismaVersion = {
     client: string
+    engine: string
   }
 
   export const prismaVersion: PrismaVersion
@@ -397,6 +423,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -770,7 +797,9 @@ export namespace Prisma {
     Category: 'Category',
     DestinationCategory: 'DestinationCategory',
     CategoryKeyword: 'CategoryKeyword',
+    AiAnalysis: 'AiAnalysis',
     SavedDestination: 'SavedDestination',
+    ItineraryQueue: 'ItineraryQueue',
     Itinerary: 'Itinerary',
     ItineraryItem: 'ItineraryItem',
     Review: 'Review',
@@ -780,9 +809,6 @@ export namespace Prisma {
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
 
 
-  export type Datasources = {
-    db?: Datasource
-  }
 
   interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
     returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
@@ -793,7 +819,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "savedDestination" | "itinerary" | "itineraryItem" | "review" | "visitedPlace"
+      modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis" | "savedDestination" | "itineraryQueue" | "itinerary" | "itineraryItem" | "review" | "visitedPlace"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1167,6 +1193,80 @@ export namespace Prisma {
           }
         }
       }
+      AiAnalysis: {
+        payload: Prisma.$AiAnalysisPayload<ExtArgs>
+        fields: Prisma.AiAnalysisFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AiAnalysisFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AiAnalysisFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+          }
+          findFirst: {
+            args: Prisma.AiAnalysisFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AiAnalysisFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+          }
+          findMany: {
+            args: Prisma.AiAnalysisFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>[]
+          }
+          create: {
+            args: Prisma.AiAnalysisCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+          }
+          createMany: {
+            args: Prisma.AiAnalysisCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AiAnalysisCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>[]
+          }
+          delete: {
+            args: Prisma.AiAnalysisDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+          }
+          update: {
+            args: Prisma.AiAnalysisUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+          }
+          deleteMany: {
+            args: Prisma.AiAnalysisDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AiAnalysisUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AiAnalysisUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>[]
+          }
+          upsert: {
+            args: Prisma.AiAnalysisUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AiAnalysisPayload>
+          }
+          aggregate: {
+            args: Prisma.AiAnalysisAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAiAnalysis>
+          }
+          groupBy: {
+            args: Prisma.AiAnalysisGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AiAnalysisGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AiAnalysisCountArgs<ExtArgs>
+            result: $Utils.Optional<AiAnalysisCountAggregateOutputType> | number
+          }
+        }
+      }
       SavedDestination: {
         payload: Prisma.$SavedDestinationPayload<ExtArgs>
         fields: Prisma.SavedDestinationFieldRefs
@@ -1238,6 +1338,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SavedDestinationCountArgs<ExtArgs>
             result: $Utils.Optional<SavedDestinationCountAggregateOutputType> | number
+          }
+        }
+      }
+      ItineraryQueue: {
+        payload: Prisma.$ItineraryQueuePayload<ExtArgs>
+        fields: Prisma.ItineraryQueueFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ItineraryQueueFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ItineraryQueueFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>
+          }
+          findFirst: {
+            args: Prisma.ItineraryQueueFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ItineraryQueueFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>
+          }
+          findMany: {
+            args: Prisma.ItineraryQueueFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>[]
+          }
+          create: {
+            args: Prisma.ItineraryQueueCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>
+          }
+          createMany: {
+            args: Prisma.ItineraryQueueCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ItineraryQueueCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>[]
+          }
+          delete: {
+            args: Prisma.ItineraryQueueDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>
+          }
+          update: {
+            args: Prisma.ItineraryQueueUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>
+          }
+          deleteMany: {
+            args: Prisma.ItineraryQueueDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ItineraryQueueUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ItineraryQueueUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>[]
+          }
+          upsert: {
+            args: Prisma.ItineraryQueueUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItineraryQueuePayload>
+          }
+          aggregate: {
+            args: Prisma.ItineraryQueueAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateItineraryQueue>
+          }
+          groupBy: {
+            args: Prisma.ItineraryQueueGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ItineraryQueueGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ItineraryQueueCountArgs<ExtArgs>
+            result: $Utils.Optional<ItineraryQueueCountAggregateOutputType> | number
           }
         }
       }
@@ -1566,14 +1740,6 @@ export namespace Prisma {
   export type ErrorFormat = 'pretty' | 'colorless' | 'minimal'
   export interface PrismaClientOptions {
     /**
-     * Overwrites the datasource url from your schema.prisma file
-     */
-    datasources?: Datasources
-    /**
-     * Overwrites the datasource url from your schema.prisma file
-     */
-    datasourceUrl?: string
-    /**
      * @default "colorless"
      */
     errorFormat?: ErrorFormat
@@ -1599,7 +1765,7 @@ export namespace Prisma {
      *  { emit: 'stdout', level: 'error' }
      * 
      * ```
-     * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
+     * Read more in our [docs](https://pris.ly/d/logging).
      */
     log?: (LogLevel | LogDefinition)[]
     /**
@@ -1615,7 +1781,11 @@ export namespace Prisma {
     /**
      * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
      */
-    adapter?: runtime.SqlDriverAdapterFactory | null
+    adapter?: runtime.SqlDriverAdapterFactory
+    /**
+     * Prisma Accelerate URL allowing the client to connect through Accelerate instead of a direct database.
+     */
+    accelerateUrl?: string
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -1631,6 +1801,22 @@ export namespace Prisma {
      * ```
      */
     omit?: Prisma.GlobalOmitConfig
+    /**
+     * SQL commenter plugins that add metadata to SQL queries as comments.
+     * Comments follow the sqlcommenter format: https://google.github.io/sqlcommenter/
+     * 
+     * @example
+     * ```
+     * const prisma = new PrismaClient({
+     *   adapter,
+     *   comments: [
+     *     traceContext(),
+     *     queryInsights(),
+     *   ],
+     * })
+     * ```
+     */
+    comments?: runtime.SqlCommenterPlugin[]
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
@@ -1638,7 +1824,9 @@ export namespace Prisma {
     category?: CategoryOmit
     destinationCategory?: DestinationCategoryOmit
     categoryKeyword?: CategoryKeywordOmit
+    aiAnalysis?: AiAnalysisOmit
     savedDestination?: SavedDestinationOmit
+    itineraryQueue?: ItineraryQueueOmit
     itinerary?: ItineraryOmit
     itineraryItem?: ItineraryItemOmit
     review?: ReviewOmit
@@ -1727,6 +1915,7 @@ export namespace Prisma {
     itineraries: number
     reviews: number
     visitedPlaces: number
+    itineraryQueue: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1734,6 +1923,7 @@ export namespace Prisma {
     itineraries?: boolean | UserCountOutputTypeCountItinerariesArgs
     reviews?: boolean | UserCountOutputTypeCountReviewsArgs
     visitedPlaces?: boolean | UserCountOutputTypeCountVisitedPlacesArgs
+    itineraryQueue?: boolean | UserCountOutputTypeCountItineraryQueueArgs
   }
 
   // Custom InputTypes
@@ -1775,6 +1965,13 @@ export namespace Prisma {
     where?: VisitedPlaceWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountItineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItineraryQueueWhereInput
+  }
+
 
   /**
    * Count Type DestinationCountOutputType
@@ -1782,18 +1979,22 @@ export namespace Prisma {
 
   export type DestinationCountOutputType = {
     categories: number
+    aiAnalyses: number
     savedBy: number
     itineraryItems: number
     reviews: number
     visitedBy: number
+    itineraryQueue: number
   }
 
   export type DestinationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     categories?: boolean | DestinationCountOutputTypeCountCategoriesArgs
+    aiAnalyses?: boolean | DestinationCountOutputTypeCountAiAnalysesArgs
     savedBy?: boolean | DestinationCountOutputTypeCountSavedByArgs
     itineraryItems?: boolean | DestinationCountOutputTypeCountItineraryItemsArgs
     reviews?: boolean | DestinationCountOutputTypeCountReviewsArgs
     visitedBy?: boolean | DestinationCountOutputTypeCountVisitedByArgs
+    itineraryQueue?: boolean | DestinationCountOutputTypeCountItineraryQueueArgs
   }
 
   // Custom InputTypes
@@ -1812,6 +2013,13 @@ export namespace Prisma {
    */
   export type DestinationCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DestinationCategoryWhereInput
+  }
+
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountAiAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AiAnalysisWhereInput
   }
 
   /**
@@ -1840,6 +2048,13 @@ export namespace Prisma {
    */
   export type DestinationCountOutputTypeCountVisitedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: VisitedPlaceWhereInput
+  }
+
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountItineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItineraryQueueWhereInput
   }
 
 
@@ -2160,6 +2375,7 @@ export namespace Prisma {
     itineraries?: boolean | User$itinerariesArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
+    itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2208,6 +2424,7 @@ export namespace Prisma {
     itineraries?: boolean | User$itinerariesArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
+    itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2220,6 +2437,7 @@ export namespace Prisma {
       itineraries: Prisma.$ItineraryPayload<ExtArgs>[]
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
       visitedPlaces: Prisma.$VisitedPlacePayload<ExtArgs>[]
+      itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2630,6 +2848,7 @@ export namespace Prisma {
     itineraries<T extends User$itinerariesArgs<ExtArgs> = {}>(args?: Subset<T, User$itinerariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     visitedPlaces<T extends User$visitedPlacesArgs<ExtArgs> = {}>(args?: Subset<T, User$visitedPlacesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itineraryQueue<T extends User$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, User$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2865,6 +3084,11 @@ export namespace Prisma {
      * Skip the first `n` Users.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Users.
+     */
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
@@ -3150,6 +3374,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VisitedPlaceScalarFieldEnum | VisitedPlaceScalarFieldEnum[]
+  }
+
+  /**
+   * User.itineraryQueue
+   */
+  export type User$itineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    where?: ItineraryQueueWhereInput
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    cursor?: ItineraryQueueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
   }
 
   /**
@@ -3502,10 +3750,12 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
+    aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
     savedBy?: boolean | Destination$savedByArgs<ExtArgs>
     itineraryItems?: boolean | Destination$itineraryItemsArgs<ExtArgs>
     reviews?: boolean | Destination$reviewsArgs<ExtArgs>
     visitedBy?: boolean | Destination$visitedByArgs<ExtArgs>
+    itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
     _count?: boolean | DestinationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
@@ -3578,10 +3828,12 @@ export namespace Prisma {
   export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
   export type DestinationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
+    aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
     savedBy?: boolean | Destination$savedByArgs<ExtArgs>
     itineraryItems?: boolean | Destination$itineraryItemsArgs<ExtArgs>
     reviews?: boolean | Destination$reviewsArgs<ExtArgs>
     visitedBy?: boolean | Destination$visitedByArgs<ExtArgs>
+    itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
     _count?: boolean | DestinationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DestinationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3591,10 +3843,12 @@ export namespace Prisma {
     name: "Destination"
     objects: {
       categories: Prisma.$DestinationCategoryPayload<ExtArgs>[]
+      aiAnalyses: Prisma.$AiAnalysisPayload<ExtArgs>[]
       savedBy: Prisma.$SavedDestinationPayload<ExtArgs>[]
       itineraryItems: Prisma.$ItineraryItemPayload<ExtArgs>[]
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
       visitedBy: Prisma.$VisitedPlacePayload<ExtArgs>[]
+      itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4011,10 +4265,12 @@ export namespace Prisma {
   export interface Prisma__DestinationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     categories<T extends Destination$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    aiAnalyses<T extends Destination$aiAnalysesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$aiAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     savedBy<T extends Destination$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Destination$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     itineraryItems<T extends Destination$itineraryItemsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$itineraryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviews<T extends Destination$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     visitedBy<T extends Destination$visitedByArgs<ExtArgs> = {}>(args?: Subset<T, Destination$visitedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itineraryQueue<T extends Destination$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, Destination$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4259,6 +4515,11 @@ export namespace Prisma {
      * Skip the first `n` Destinations.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Destinations.
+     */
     distinct?: DestinationScalarFieldEnum | DestinationScalarFieldEnum[]
   }
 
@@ -4475,6 +4736,30 @@ export namespace Prisma {
   }
 
   /**
+   * Destination.aiAnalyses
+   */
+  export type Destination$aiAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    where?: AiAnalysisWhereInput
+    orderBy?: AiAnalysisOrderByWithRelationInput | AiAnalysisOrderByWithRelationInput[]
+    cursor?: AiAnalysisWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AiAnalysisScalarFieldEnum | AiAnalysisScalarFieldEnum[]
+  }
+
+  /**
    * Destination.savedBy
    */
   export type Destination$savedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4568,6 +4853,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VisitedPlaceScalarFieldEnum | VisitedPlaceScalarFieldEnum[]
+  }
+
+  /**
+   * Destination.itineraryQueue
+   */
+  export type Destination$itineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    where?: ItineraryQueueWhereInput
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    cursor?: ItineraryQueueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
   }
 
   /**
@@ -5437,6 +5746,11 @@ export namespace Prisma {
      * Skip the first `n` Categories.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categories.
+     */
     distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
   }
 
@@ -6559,6 +6873,11 @@ export namespace Prisma {
      * Skip the first `n` DestinationCategories.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DestinationCategories.
+     */
     distinct?: DestinationCategoryScalarFieldEnum | DestinationCategoryScalarFieldEnum[]
   }
 
@@ -7642,6 +7961,11 @@ export namespace Prisma {
      * Skip the first `n` CategoryKeywords.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CategoryKeywords.
+     */
     distinct?: CategoryKeywordScalarFieldEnum | CategoryKeywordScalarFieldEnum[]
   }
 
@@ -7857,6 +8181,1133 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CategoryKeywordInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AiAnalysis
+   */
+
+  export type AggregateAiAnalysis = {
+    _count: AiAnalysisCountAggregateOutputType | null
+    _avg: AiAnalysisAvgAggregateOutputType | null
+    _sum: AiAnalysisSumAggregateOutputType | null
+    _min: AiAnalysisMinAggregateOutputType | null
+    _max: AiAnalysisMaxAggregateOutputType | null
+  }
+
+  export type AiAnalysisAvgAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+    score: number | null
+  }
+
+  export type AiAnalysisSumAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+    score: number | null
+  }
+
+  export type AiAnalysisMinAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+    score: number | null
+    status: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type AiAnalysisMaxAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+    score: number | null
+    status: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type AiAnalysisCountAggregateOutputType = {
+    id: number
+    destinationId: number
+    score: number
+    status: number
+    message: number
+    rawResult: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AiAnalysisAvgAggregateInputType = {
+    id?: true
+    destinationId?: true
+    score?: true
+  }
+
+  export type AiAnalysisSumAggregateInputType = {
+    id?: true
+    destinationId?: true
+    score?: true
+  }
+
+  export type AiAnalysisMinAggregateInputType = {
+    id?: true
+    destinationId?: true
+    score?: true
+    status?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type AiAnalysisMaxAggregateInputType = {
+    id?: true
+    destinationId?: true
+    score?: true
+    status?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type AiAnalysisCountAggregateInputType = {
+    id?: true
+    destinationId?: true
+    score?: true
+    status?: true
+    message?: true
+    rawResult?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AiAnalysisAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiAnalysis to aggregate.
+     */
+    where?: AiAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiAnalyses to fetch.
+     */
+    orderBy?: AiAnalysisOrderByWithRelationInput | AiAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AiAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AiAnalyses
+    **/
+    _count?: true | AiAnalysisCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AiAnalysisAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AiAnalysisSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AiAnalysisMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AiAnalysisMaxAggregateInputType
+  }
+
+  export type GetAiAnalysisAggregateType<T extends AiAnalysisAggregateArgs> = {
+        [P in keyof T & keyof AggregateAiAnalysis]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAiAnalysis[P]>
+      : GetScalarType<T[P], AggregateAiAnalysis[P]>
+  }
+
+
+
+
+  export type AiAnalysisGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AiAnalysisWhereInput
+    orderBy?: AiAnalysisOrderByWithAggregationInput | AiAnalysisOrderByWithAggregationInput[]
+    by: AiAnalysisScalarFieldEnum[] | AiAnalysisScalarFieldEnum
+    having?: AiAnalysisScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AiAnalysisCountAggregateInputType | true
+    _avg?: AiAnalysisAvgAggregateInputType
+    _sum?: AiAnalysisSumAggregateInputType
+    _min?: AiAnalysisMinAggregateInputType
+    _max?: AiAnalysisMaxAggregateInputType
+  }
+
+  export type AiAnalysisGroupByOutputType = {
+    id: number
+    destinationId: number
+    score: number
+    status: string
+    message: string
+    rawResult: JsonValue
+    createdAt: Date
+    _count: AiAnalysisCountAggregateOutputType | null
+    _avg: AiAnalysisAvgAggregateOutputType | null
+    _sum: AiAnalysisSumAggregateOutputType | null
+    _min: AiAnalysisMinAggregateOutputType | null
+    _max: AiAnalysisMaxAggregateOutputType | null
+  }
+
+  type GetAiAnalysisGroupByPayload<T extends AiAnalysisGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AiAnalysisGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AiAnalysisGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AiAnalysisGroupByOutputType[P]>
+            : GetScalarType<T[P], AiAnalysisGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AiAnalysisSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    destinationId?: boolean
+    score?: boolean
+    status?: boolean
+    message?: boolean
+    rawResult?: boolean
+    createdAt?: boolean
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["aiAnalysis"]>
+
+  export type AiAnalysisSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    destinationId?: boolean
+    score?: boolean
+    status?: boolean
+    message?: boolean
+    rawResult?: boolean
+    createdAt?: boolean
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["aiAnalysis"]>
+
+  export type AiAnalysisSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    destinationId?: boolean
+    score?: boolean
+    status?: boolean
+    message?: boolean
+    rawResult?: boolean
+    createdAt?: boolean
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["aiAnalysis"]>
+
+  export type AiAnalysisSelectScalar = {
+    id?: boolean
+    destinationId?: boolean
+    score?: boolean
+    status?: boolean
+    message?: boolean
+    rawResult?: boolean
+    createdAt?: boolean
+  }
+
+  export type AiAnalysisOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "destinationId" | "score" | "status" | "message" | "rawResult" | "createdAt", ExtArgs["result"]["aiAnalysis"]>
+  export type AiAnalysisInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+  export type AiAnalysisIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+  export type AiAnalysisIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+
+  export type $AiAnalysisPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AiAnalysis"
+    objects: {
+      destination: Prisma.$DestinationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      destinationId: number
+      score: number
+      status: string
+      message: string
+      rawResult: Prisma.JsonValue
+      createdAt: Date
+    }, ExtArgs["result"]["aiAnalysis"]>
+    composites: {}
+  }
+
+  type AiAnalysisGetPayload<S extends boolean | null | undefined | AiAnalysisDefaultArgs> = $Result.GetResult<Prisma.$AiAnalysisPayload, S>
+
+  type AiAnalysisCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AiAnalysisFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AiAnalysisCountAggregateInputType | true
+    }
+
+  export interface AiAnalysisDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AiAnalysis'], meta: { name: 'AiAnalysis' } }
+    /**
+     * Find zero or one AiAnalysis that matches the filter.
+     * @param {AiAnalysisFindUniqueArgs} args - Arguments to find a AiAnalysis
+     * @example
+     * // Get one AiAnalysis
+     * const aiAnalysis = await prisma.aiAnalysis.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AiAnalysisFindUniqueArgs>(args: SelectSubset<T, AiAnalysisFindUniqueArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AiAnalysis that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AiAnalysisFindUniqueOrThrowArgs} args - Arguments to find a AiAnalysis
+     * @example
+     * // Get one AiAnalysis
+     * const aiAnalysis = await prisma.aiAnalysis.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AiAnalysisFindUniqueOrThrowArgs>(args: SelectSubset<T, AiAnalysisFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AiAnalysis that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiAnalysisFindFirstArgs} args - Arguments to find a AiAnalysis
+     * @example
+     * // Get one AiAnalysis
+     * const aiAnalysis = await prisma.aiAnalysis.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AiAnalysisFindFirstArgs>(args?: SelectSubset<T, AiAnalysisFindFirstArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AiAnalysis that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiAnalysisFindFirstOrThrowArgs} args - Arguments to find a AiAnalysis
+     * @example
+     * // Get one AiAnalysis
+     * const aiAnalysis = await prisma.aiAnalysis.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AiAnalysisFindFirstOrThrowArgs>(args?: SelectSubset<T, AiAnalysisFindFirstOrThrowArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AiAnalyses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiAnalysisFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AiAnalyses
+     * const aiAnalyses = await prisma.aiAnalysis.findMany()
+     * 
+     * // Get first 10 AiAnalyses
+     * const aiAnalyses = await prisma.aiAnalysis.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const aiAnalysisWithIdOnly = await prisma.aiAnalysis.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AiAnalysisFindManyArgs>(args?: SelectSubset<T, AiAnalysisFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AiAnalysis.
+     * @param {AiAnalysisCreateArgs} args - Arguments to create a AiAnalysis.
+     * @example
+     * // Create one AiAnalysis
+     * const AiAnalysis = await prisma.aiAnalysis.create({
+     *   data: {
+     *     // ... data to create a AiAnalysis
+     *   }
+     * })
+     * 
+     */
+    create<T extends AiAnalysisCreateArgs>(args: SelectSubset<T, AiAnalysisCreateArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AiAnalyses.
+     * @param {AiAnalysisCreateManyArgs} args - Arguments to create many AiAnalyses.
+     * @example
+     * // Create many AiAnalyses
+     * const aiAnalysis = await prisma.aiAnalysis.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AiAnalysisCreateManyArgs>(args?: SelectSubset<T, AiAnalysisCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AiAnalyses and returns the data saved in the database.
+     * @param {AiAnalysisCreateManyAndReturnArgs} args - Arguments to create many AiAnalyses.
+     * @example
+     * // Create many AiAnalyses
+     * const aiAnalysis = await prisma.aiAnalysis.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AiAnalyses and only return the `id`
+     * const aiAnalysisWithIdOnly = await prisma.aiAnalysis.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AiAnalysisCreateManyAndReturnArgs>(args?: SelectSubset<T, AiAnalysisCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AiAnalysis.
+     * @param {AiAnalysisDeleteArgs} args - Arguments to delete one AiAnalysis.
+     * @example
+     * // Delete one AiAnalysis
+     * const AiAnalysis = await prisma.aiAnalysis.delete({
+     *   where: {
+     *     // ... filter to delete one AiAnalysis
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AiAnalysisDeleteArgs>(args: SelectSubset<T, AiAnalysisDeleteArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AiAnalysis.
+     * @param {AiAnalysisUpdateArgs} args - Arguments to update one AiAnalysis.
+     * @example
+     * // Update one AiAnalysis
+     * const aiAnalysis = await prisma.aiAnalysis.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AiAnalysisUpdateArgs>(args: SelectSubset<T, AiAnalysisUpdateArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AiAnalyses.
+     * @param {AiAnalysisDeleteManyArgs} args - Arguments to filter AiAnalyses to delete.
+     * @example
+     * // Delete a few AiAnalyses
+     * const { count } = await prisma.aiAnalysis.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AiAnalysisDeleteManyArgs>(args?: SelectSubset<T, AiAnalysisDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AiAnalyses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiAnalysisUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AiAnalyses
+     * const aiAnalysis = await prisma.aiAnalysis.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AiAnalysisUpdateManyArgs>(args: SelectSubset<T, AiAnalysisUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AiAnalyses and returns the data updated in the database.
+     * @param {AiAnalysisUpdateManyAndReturnArgs} args - Arguments to update many AiAnalyses.
+     * @example
+     * // Update many AiAnalyses
+     * const aiAnalysis = await prisma.aiAnalysis.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AiAnalyses and only return the `id`
+     * const aiAnalysisWithIdOnly = await prisma.aiAnalysis.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AiAnalysisUpdateManyAndReturnArgs>(args: SelectSubset<T, AiAnalysisUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AiAnalysis.
+     * @param {AiAnalysisUpsertArgs} args - Arguments to update or create a AiAnalysis.
+     * @example
+     * // Update or create a AiAnalysis
+     * const aiAnalysis = await prisma.aiAnalysis.upsert({
+     *   create: {
+     *     // ... data to create a AiAnalysis
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AiAnalysis we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AiAnalysisUpsertArgs>(args: SelectSubset<T, AiAnalysisUpsertArgs<ExtArgs>>): Prisma__AiAnalysisClient<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AiAnalyses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiAnalysisCountArgs} args - Arguments to filter AiAnalyses to count.
+     * @example
+     * // Count the number of AiAnalyses
+     * const count = await prisma.aiAnalysis.count({
+     *   where: {
+     *     // ... the filter for the AiAnalyses we want to count
+     *   }
+     * })
+    **/
+    count<T extends AiAnalysisCountArgs>(
+      args?: Subset<T, AiAnalysisCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AiAnalysisCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AiAnalysis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiAnalysisAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AiAnalysisAggregateArgs>(args: Subset<T, AiAnalysisAggregateArgs>): Prisma.PrismaPromise<GetAiAnalysisAggregateType<T>>
+
+    /**
+     * Group by AiAnalysis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AiAnalysisGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AiAnalysisGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AiAnalysisGroupByArgs['orderBy'] }
+        : { orderBy?: AiAnalysisGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AiAnalysisGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAiAnalysisGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AiAnalysis model
+   */
+  readonly fields: AiAnalysisFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AiAnalysis.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AiAnalysisClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AiAnalysis model
+   */
+  interface AiAnalysisFieldRefs {
+    readonly id: FieldRef<"AiAnalysis", 'Int'>
+    readonly destinationId: FieldRef<"AiAnalysis", 'Int'>
+    readonly score: FieldRef<"AiAnalysis", 'Int'>
+    readonly status: FieldRef<"AiAnalysis", 'String'>
+    readonly message: FieldRef<"AiAnalysis", 'String'>
+    readonly rawResult: FieldRef<"AiAnalysis", 'Json'>
+    readonly createdAt: FieldRef<"AiAnalysis", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AiAnalysis findUnique
+   */
+  export type AiAnalysisFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which AiAnalysis to fetch.
+     */
+    where: AiAnalysisWhereUniqueInput
+  }
+
+  /**
+   * AiAnalysis findUniqueOrThrow
+   */
+  export type AiAnalysisFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which AiAnalysis to fetch.
+     */
+    where: AiAnalysisWhereUniqueInput
+  }
+
+  /**
+   * AiAnalysis findFirst
+   */
+  export type AiAnalysisFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which AiAnalysis to fetch.
+     */
+    where?: AiAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiAnalyses to fetch.
+     */
+    orderBy?: AiAnalysisOrderByWithRelationInput | AiAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiAnalyses.
+     */
+    cursor?: AiAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiAnalyses.
+     */
+    distinct?: AiAnalysisScalarFieldEnum | AiAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * AiAnalysis findFirstOrThrow
+   */
+  export type AiAnalysisFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which AiAnalysis to fetch.
+     */
+    where?: AiAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiAnalyses to fetch.
+     */
+    orderBy?: AiAnalysisOrderByWithRelationInput | AiAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AiAnalyses.
+     */
+    cursor?: AiAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiAnalyses.
+     */
+    distinct?: AiAnalysisScalarFieldEnum | AiAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * AiAnalysis findMany
+   */
+  export type AiAnalysisFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which AiAnalyses to fetch.
+     */
+    where?: AiAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AiAnalyses to fetch.
+     */
+    orderBy?: AiAnalysisOrderByWithRelationInput | AiAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AiAnalyses.
+     */
+    cursor?: AiAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AiAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AiAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AiAnalyses.
+     */
+    distinct?: AiAnalysisScalarFieldEnum | AiAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * AiAnalysis create
+   */
+  export type AiAnalysisCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AiAnalysis.
+     */
+    data: XOR<AiAnalysisCreateInput, AiAnalysisUncheckedCreateInput>
+  }
+
+  /**
+   * AiAnalysis createMany
+   */
+  export type AiAnalysisCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AiAnalyses.
+     */
+    data: AiAnalysisCreateManyInput | AiAnalysisCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AiAnalysis createManyAndReturn
+   */
+  export type AiAnalysisCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * The data used to create many AiAnalyses.
+     */
+    data: AiAnalysisCreateManyInput | AiAnalysisCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AiAnalysis update
+   */
+  export type AiAnalysisUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AiAnalysis.
+     */
+    data: XOR<AiAnalysisUpdateInput, AiAnalysisUncheckedUpdateInput>
+    /**
+     * Choose, which AiAnalysis to update.
+     */
+    where: AiAnalysisWhereUniqueInput
+  }
+
+  /**
+   * AiAnalysis updateMany
+   */
+  export type AiAnalysisUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AiAnalyses.
+     */
+    data: XOR<AiAnalysisUpdateManyMutationInput, AiAnalysisUncheckedUpdateManyInput>
+    /**
+     * Filter which AiAnalyses to update
+     */
+    where?: AiAnalysisWhereInput
+    /**
+     * Limit how many AiAnalyses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AiAnalysis updateManyAndReturn
+   */
+  export type AiAnalysisUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * The data used to update AiAnalyses.
+     */
+    data: XOR<AiAnalysisUpdateManyMutationInput, AiAnalysisUncheckedUpdateManyInput>
+    /**
+     * Filter which AiAnalyses to update
+     */
+    where?: AiAnalysisWhereInput
+    /**
+     * Limit how many AiAnalyses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AiAnalysis upsert
+   */
+  export type AiAnalysisUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AiAnalysis to update in case it exists.
+     */
+    where: AiAnalysisWhereUniqueInput
+    /**
+     * In case the AiAnalysis found by the `where` argument doesn't exist, create a new AiAnalysis with this data.
+     */
+    create: XOR<AiAnalysisCreateInput, AiAnalysisUncheckedCreateInput>
+    /**
+     * In case the AiAnalysis was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AiAnalysisUpdateInput, AiAnalysisUncheckedUpdateInput>
+  }
+
+  /**
+   * AiAnalysis delete
+   */
+  export type AiAnalysisDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter which AiAnalysis to delete.
+     */
+    where: AiAnalysisWhereUniqueInput
+  }
+
+  /**
+   * AiAnalysis deleteMany
+   */
+  export type AiAnalysisDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AiAnalyses to delete
+     */
+    where?: AiAnalysisWhereInput
+    /**
+     * Limit how many AiAnalyses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AiAnalysis without action
+   */
+  export type AiAnalysisDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
   }
 
 
@@ -8737,6 +10188,11 @@ export namespace Prisma {
      * Skip the first `n` SavedDestinations.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SavedDestinations.
+     */
     distinct?: SavedDestinationScalarFieldEnum | SavedDestinationScalarFieldEnum[]
   }
 
@@ -8952,6 +10408,1106 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SavedDestinationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ItineraryQueue
+   */
+
+  export type AggregateItineraryQueue = {
+    _count: ItineraryQueueCountAggregateOutputType | null
+    _avg: ItineraryQueueAvgAggregateOutputType | null
+    _sum: ItineraryQueueSumAggregateOutputType | null
+    _min: ItineraryQueueMinAggregateOutputType | null
+    _max: ItineraryQueueMaxAggregateOutputType | null
+  }
+
+  export type ItineraryQueueAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    destinationId: number | null
+  }
+
+  export type ItineraryQueueSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    destinationId: number | null
+  }
+
+  export type ItineraryQueueMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    destinationId: number | null
+    createdAt: Date | null
+  }
+
+  export type ItineraryQueueMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    destinationId: number | null
+    createdAt: Date | null
+  }
+
+  export type ItineraryQueueCountAggregateOutputType = {
+    id: number
+    userId: number
+    destinationId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ItineraryQueueAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    destinationId?: true
+  }
+
+  export type ItineraryQueueSumAggregateInputType = {
+    id?: true
+    userId?: true
+    destinationId?: true
+  }
+
+  export type ItineraryQueueMinAggregateInputType = {
+    id?: true
+    userId?: true
+    destinationId?: true
+    createdAt?: true
+  }
+
+  export type ItineraryQueueMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    destinationId?: true
+    createdAt?: true
+  }
+
+  export type ItineraryQueueCountAggregateInputType = {
+    id?: true
+    userId?: true
+    destinationId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ItineraryQueueAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ItineraryQueue to aggregate.
+     */
+    where?: ItineraryQueueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItineraryQueues to fetch.
+     */
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ItineraryQueueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItineraryQueues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItineraryQueues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ItineraryQueues
+    **/
+    _count?: true | ItineraryQueueCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ItineraryQueueAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ItineraryQueueSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ItineraryQueueMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ItineraryQueueMaxAggregateInputType
+  }
+
+  export type GetItineraryQueueAggregateType<T extends ItineraryQueueAggregateArgs> = {
+        [P in keyof T & keyof AggregateItineraryQueue]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateItineraryQueue[P]>
+      : GetScalarType<T[P], AggregateItineraryQueue[P]>
+  }
+
+
+
+
+  export type ItineraryQueueGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItineraryQueueWhereInput
+    orderBy?: ItineraryQueueOrderByWithAggregationInput | ItineraryQueueOrderByWithAggregationInput[]
+    by: ItineraryQueueScalarFieldEnum[] | ItineraryQueueScalarFieldEnum
+    having?: ItineraryQueueScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ItineraryQueueCountAggregateInputType | true
+    _avg?: ItineraryQueueAvgAggregateInputType
+    _sum?: ItineraryQueueSumAggregateInputType
+    _min?: ItineraryQueueMinAggregateInputType
+    _max?: ItineraryQueueMaxAggregateInputType
+  }
+
+  export type ItineraryQueueGroupByOutputType = {
+    id: number
+    userId: number
+    destinationId: number
+    createdAt: Date
+    _count: ItineraryQueueCountAggregateOutputType | null
+    _avg: ItineraryQueueAvgAggregateOutputType | null
+    _sum: ItineraryQueueSumAggregateOutputType | null
+    _min: ItineraryQueueMinAggregateOutputType | null
+    _max: ItineraryQueueMaxAggregateOutputType | null
+  }
+
+  type GetItineraryQueueGroupByPayload<T extends ItineraryQueueGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ItineraryQueueGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ItineraryQueueGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ItineraryQueueGroupByOutputType[P]>
+            : GetScalarType<T[P], ItineraryQueueGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ItineraryQueueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    destinationId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["itineraryQueue"]>
+
+  export type ItineraryQueueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    destinationId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["itineraryQueue"]>
+
+  export type ItineraryQueueSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    destinationId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["itineraryQueue"]>
+
+  export type ItineraryQueueSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    destinationId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ItineraryQueueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destinationId" | "createdAt", ExtArgs["result"]["itineraryQueue"]>
+  export type ItineraryQueueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+  export type ItineraryQueueIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+  export type ItineraryQueueIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+
+  export type $ItineraryQueuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ItineraryQueue"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      destination: Prisma.$DestinationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      destinationId: number
+      createdAt: Date
+    }, ExtArgs["result"]["itineraryQueue"]>
+    composites: {}
+  }
+
+  type ItineraryQueueGetPayload<S extends boolean | null | undefined | ItineraryQueueDefaultArgs> = $Result.GetResult<Prisma.$ItineraryQueuePayload, S>
+
+  type ItineraryQueueCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ItineraryQueueFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ItineraryQueueCountAggregateInputType | true
+    }
+
+  export interface ItineraryQueueDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ItineraryQueue'], meta: { name: 'ItineraryQueue' } }
+    /**
+     * Find zero or one ItineraryQueue that matches the filter.
+     * @param {ItineraryQueueFindUniqueArgs} args - Arguments to find a ItineraryQueue
+     * @example
+     * // Get one ItineraryQueue
+     * const itineraryQueue = await prisma.itineraryQueue.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ItineraryQueueFindUniqueArgs>(args: SelectSubset<T, ItineraryQueueFindUniqueArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ItineraryQueue that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ItineraryQueueFindUniqueOrThrowArgs} args - Arguments to find a ItineraryQueue
+     * @example
+     * // Get one ItineraryQueue
+     * const itineraryQueue = await prisma.itineraryQueue.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ItineraryQueueFindUniqueOrThrowArgs>(args: SelectSubset<T, ItineraryQueueFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ItineraryQueue that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItineraryQueueFindFirstArgs} args - Arguments to find a ItineraryQueue
+     * @example
+     * // Get one ItineraryQueue
+     * const itineraryQueue = await prisma.itineraryQueue.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ItineraryQueueFindFirstArgs>(args?: SelectSubset<T, ItineraryQueueFindFirstArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ItineraryQueue that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItineraryQueueFindFirstOrThrowArgs} args - Arguments to find a ItineraryQueue
+     * @example
+     * // Get one ItineraryQueue
+     * const itineraryQueue = await prisma.itineraryQueue.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ItineraryQueueFindFirstOrThrowArgs>(args?: SelectSubset<T, ItineraryQueueFindFirstOrThrowArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ItineraryQueues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItineraryQueueFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ItineraryQueues
+     * const itineraryQueues = await prisma.itineraryQueue.findMany()
+     * 
+     * // Get first 10 ItineraryQueues
+     * const itineraryQueues = await prisma.itineraryQueue.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const itineraryQueueWithIdOnly = await prisma.itineraryQueue.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ItineraryQueueFindManyArgs>(args?: SelectSubset<T, ItineraryQueueFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ItineraryQueue.
+     * @param {ItineraryQueueCreateArgs} args - Arguments to create a ItineraryQueue.
+     * @example
+     * // Create one ItineraryQueue
+     * const ItineraryQueue = await prisma.itineraryQueue.create({
+     *   data: {
+     *     // ... data to create a ItineraryQueue
+     *   }
+     * })
+     * 
+     */
+    create<T extends ItineraryQueueCreateArgs>(args: SelectSubset<T, ItineraryQueueCreateArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ItineraryQueues.
+     * @param {ItineraryQueueCreateManyArgs} args - Arguments to create many ItineraryQueues.
+     * @example
+     * // Create many ItineraryQueues
+     * const itineraryQueue = await prisma.itineraryQueue.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ItineraryQueueCreateManyArgs>(args?: SelectSubset<T, ItineraryQueueCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ItineraryQueues and returns the data saved in the database.
+     * @param {ItineraryQueueCreateManyAndReturnArgs} args - Arguments to create many ItineraryQueues.
+     * @example
+     * // Create many ItineraryQueues
+     * const itineraryQueue = await prisma.itineraryQueue.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ItineraryQueues and only return the `id`
+     * const itineraryQueueWithIdOnly = await prisma.itineraryQueue.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ItineraryQueueCreateManyAndReturnArgs>(args?: SelectSubset<T, ItineraryQueueCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ItineraryQueue.
+     * @param {ItineraryQueueDeleteArgs} args - Arguments to delete one ItineraryQueue.
+     * @example
+     * // Delete one ItineraryQueue
+     * const ItineraryQueue = await prisma.itineraryQueue.delete({
+     *   where: {
+     *     // ... filter to delete one ItineraryQueue
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ItineraryQueueDeleteArgs>(args: SelectSubset<T, ItineraryQueueDeleteArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ItineraryQueue.
+     * @param {ItineraryQueueUpdateArgs} args - Arguments to update one ItineraryQueue.
+     * @example
+     * // Update one ItineraryQueue
+     * const itineraryQueue = await prisma.itineraryQueue.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ItineraryQueueUpdateArgs>(args: SelectSubset<T, ItineraryQueueUpdateArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ItineraryQueues.
+     * @param {ItineraryQueueDeleteManyArgs} args - Arguments to filter ItineraryQueues to delete.
+     * @example
+     * // Delete a few ItineraryQueues
+     * const { count } = await prisma.itineraryQueue.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ItineraryQueueDeleteManyArgs>(args?: SelectSubset<T, ItineraryQueueDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ItineraryQueues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItineraryQueueUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ItineraryQueues
+     * const itineraryQueue = await prisma.itineraryQueue.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ItineraryQueueUpdateManyArgs>(args: SelectSubset<T, ItineraryQueueUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ItineraryQueues and returns the data updated in the database.
+     * @param {ItineraryQueueUpdateManyAndReturnArgs} args - Arguments to update many ItineraryQueues.
+     * @example
+     * // Update many ItineraryQueues
+     * const itineraryQueue = await prisma.itineraryQueue.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ItineraryQueues and only return the `id`
+     * const itineraryQueueWithIdOnly = await prisma.itineraryQueue.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ItineraryQueueUpdateManyAndReturnArgs>(args: SelectSubset<T, ItineraryQueueUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ItineraryQueue.
+     * @param {ItineraryQueueUpsertArgs} args - Arguments to update or create a ItineraryQueue.
+     * @example
+     * // Update or create a ItineraryQueue
+     * const itineraryQueue = await prisma.itineraryQueue.upsert({
+     *   create: {
+     *     // ... data to create a ItineraryQueue
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ItineraryQueue we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ItineraryQueueUpsertArgs>(args: SelectSubset<T, ItineraryQueueUpsertArgs<ExtArgs>>): Prisma__ItineraryQueueClient<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ItineraryQueues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItineraryQueueCountArgs} args - Arguments to filter ItineraryQueues to count.
+     * @example
+     * // Count the number of ItineraryQueues
+     * const count = await prisma.itineraryQueue.count({
+     *   where: {
+     *     // ... the filter for the ItineraryQueues we want to count
+     *   }
+     * })
+    **/
+    count<T extends ItineraryQueueCountArgs>(
+      args?: Subset<T, ItineraryQueueCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ItineraryQueueCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ItineraryQueue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItineraryQueueAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ItineraryQueueAggregateArgs>(args: Subset<T, ItineraryQueueAggregateArgs>): Prisma.PrismaPromise<GetItineraryQueueAggregateType<T>>
+
+    /**
+     * Group by ItineraryQueue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItineraryQueueGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ItineraryQueueGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ItineraryQueueGroupByArgs['orderBy'] }
+        : { orderBy?: ItineraryQueueGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ItineraryQueueGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItineraryQueueGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ItineraryQueue model
+   */
+  readonly fields: ItineraryQueueFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ItineraryQueue.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ItineraryQueueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ItineraryQueue model
+   */
+  interface ItineraryQueueFieldRefs {
+    readonly id: FieldRef<"ItineraryQueue", 'Int'>
+    readonly userId: FieldRef<"ItineraryQueue", 'Int'>
+    readonly destinationId: FieldRef<"ItineraryQueue", 'Int'>
+    readonly createdAt: FieldRef<"ItineraryQueue", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ItineraryQueue findUnique
+   */
+  export type ItineraryQueueFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * Filter, which ItineraryQueue to fetch.
+     */
+    where: ItineraryQueueWhereUniqueInput
+  }
+
+  /**
+   * ItineraryQueue findUniqueOrThrow
+   */
+  export type ItineraryQueueFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * Filter, which ItineraryQueue to fetch.
+     */
+    where: ItineraryQueueWhereUniqueInput
+  }
+
+  /**
+   * ItineraryQueue findFirst
+   */
+  export type ItineraryQueueFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * Filter, which ItineraryQueue to fetch.
+     */
+    where?: ItineraryQueueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItineraryQueues to fetch.
+     */
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ItineraryQueues.
+     */
+    cursor?: ItineraryQueueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItineraryQueues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItineraryQueues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ItineraryQueues.
+     */
+    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
+  }
+
+  /**
+   * ItineraryQueue findFirstOrThrow
+   */
+  export type ItineraryQueueFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * Filter, which ItineraryQueue to fetch.
+     */
+    where?: ItineraryQueueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItineraryQueues to fetch.
+     */
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ItineraryQueues.
+     */
+    cursor?: ItineraryQueueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItineraryQueues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItineraryQueues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ItineraryQueues.
+     */
+    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
+  }
+
+  /**
+   * ItineraryQueue findMany
+   */
+  export type ItineraryQueueFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * Filter, which ItineraryQueues to fetch.
+     */
+    where?: ItineraryQueueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItineraryQueues to fetch.
+     */
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ItineraryQueues.
+     */
+    cursor?: ItineraryQueueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItineraryQueues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItineraryQueues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ItineraryQueues.
+     */
+    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
+  }
+
+  /**
+   * ItineraryQueue create
+   */
+  export type ItineraryQueueCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ItineraryQueue.
+     */
+    data: XOR<ItineraryQueueCreateInput, ItineraryQueueUncheckedCreateInput>
+  }
+
+  /**
+   * ItineraryQueue createMany
+   */
+  export type ItineraryQueueCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ItineraryQueues.
+     */
+    data: ItineraryQueueCreateManyInput | ItineraryQueueCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ItineraryQueue createManyAndReturn
+   */
+  export type ItineraryQueueCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * The data used to create many ItineraryQueues.
+     */
+    data: ItineraryQueueCreateManyInput | ItineraryQueueCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ItineraryQueue update
+   */
+  export type ItineraryQueueUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ItineraryQueue.
+     */
+    data: XOR<ItineraryQueueUpdateInput, ItineraryQueueUncheckedUpdateInput>
+    /**
+     * Choose, which ItineraryQueue to update.
+     */
+    where: ItineraryQueueWhereUniqueInput
+  }
+
+  /**
+   * ItineraryQueue updateMany
+   */
+  export type ItineraryQueueUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ItineraryQueues.
+     */
+    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyInput>
+    /**
+     * Filter which ItineraryQueues to update
+     */
+    where?: ItineraryQueueWhereInput
+    /**
+     * Limit how many ItineraryQueues to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ItineraryQueue updateManyAndReturn
+   */
+  export type ItineraryQueueUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * The data used to update ItineraryQueues.
+     */
+    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyInput>
+    /**
+     * Filter which ItineraryQueues to update
+     */
+    where?: ItineraryQueueWhereInput
+    /**
+     * Limit how many ItineraryQueues to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ItineraryQueue upsert
+   */
+  export type ItineraryQueueUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ItineraryQueue to update in case it exists.
+     */
+    where: ItineraryQueueWhereUniqueInput
+    /**
+     * In case the ItineraryQueue found by the `where` argument doesn't exist, create a new ItineraryQueue with this data.
+     */
+    create: XOR<ItineraryQueueCreateInput, ItineraryQueueUncheckedCreateInput>
+    /**
+     * In case the ItineraryQueue was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ItineraryQueueUpdateInput, ItineraryQueueUncheckedUpdateInput>
+  }
+
+  /**
+   * ItineraryQueue delete
+   */
+  export type ItineraryQueueDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    /**
+     * Filter which ItineraryQueue to delete.
+     */
+    where: ItineraryQueueWhereUniqueInput
+  }
+
+  /**
+   * ItineraryQueue deleteMany
+   */
+  export type ItineraryQueueDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ItineraryQueues to delete
+     */
+    where?: ItineraryQueueWhereInput
+    /**
+     * Limit how many ItineraryQueues to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ItineraryQueue without action
+   */
+  export type ItineraryQueueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
   }
 
 
@@ -9903,6 +12459,11 @@ export namespace Prisma {
      * Skip the first `n` Itineraries.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Itineraries.
+     */
     distinct?: ItineraryScalarFieldEnum | ItineraryScalarFieldEnum[]
   }
 
@@ -11052,6 +13613,11 @@ export namespace Prisma {
      * Skip the first `n` ItineraryItems.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ItineraryItems.
+     */
     distinct?: ItineraryItemScalarFieldEnum | ItineraryItemScalarFieldEnum[]
   }
 
@@ -11305,6 +13871,7 @@ export namespace Prisma {
     rating: number | null
     comment: string | null
     photoUrl: string | null
+    videoUrl: string | null
     helpfulCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -11317,6 +13884,7 @@ export namespace Prisma {
     rating: number | null
     comment: string | null
     photoUrl: string | null
+    videoUrl: string | null
     helpfulCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -11329,6 +13897,7 @@ export namespace Prisma {
     rating: number
     comment: number
     photoUrl: number
+    videoUrl: number
     helpfulCount: number
     createdAt: number
     updatedAt: number
@@ -11359,6 +13928,7 @@ export namespace Prisma {
     rating?: true
     comment?: true
     photoUrl?: true
+    videoUrl?: true
     helpfulCount?: true
     createdAt?: true
     updatedAt?: true
@@ -11371,6 +13941,7 @@ export namespace Prisma {
     rating?: true
     comment?: true
     photoUrl?: true
+    videoUrl?: true
     helpfulCount?: true
     createdAt?: true
     updatedAt?: true
@@ -11383,6 +13954,7 @@ export namespace Prisma {
     rating?: true
     comment?: true
     photoUrl?: true
+    videoUrl?: true
     helpfulCount?: true
     createdAt?: true
     updatedAt?: true
@@ -11482,6 +14054,7 @@ export namespace Prisma {
     rating: number
     comment: string | null
     photoUrl: string | null
+    videoUrl: string | null
     helpfulCount: number
     createdAt: Date
     updatedAt: Date
@@ -11513,6 +14086,7 @@ export namespace Prisma {
     rating?: boolean
     comment?: boolean
     photoUrl?: boolean
+    videoUrl?: boolean
     helpfulCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -11527,6 +14101,7 @@ export namespace Prisma {
     rating?: boolean
     comment?: boolean
     photoUrl?: boolean
+    videoUrl?: boolean
     helpfulCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -11541,6 +14116,7 @@ export namespace Prisma {
     rating?: boolean
     comment?: boolean
     photoUrl?: boolean
+    videoUrl?: boolean
     helpfulCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -11555,12 +14131,13 @@ export namespace Prisma {
     rating?: boolean
     comment?: boolean
     photoUrl?: boolean
+    videoUrl?: boolean
     helpfulCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destinationId" | "rating" | "comment" | "photoUrl" | "helpfulCount" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
+  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destinationId" | "rating" | "comment" | "photoUrl" | "videoUrl" | "helpfulCount" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
@@ -11587,6 +14164,7 @@ export namespace Prisma {
       rating: number
       comment: string | null
       photoUrl: string | null
+      videoUrl: string | null
       helpfulCount: number
       createdAt: Date
       updatedAt: Date
@@ -12021,6 +14599,7 @@ export namespace Prisma {
     readonly rating: FieldRef<"Review", 'Int'>
     readonly comment: FieldRef<"Review", 'String'>
     readonly photoUrl: FieldRef<"Review", 'String'>
+    readonly videoUrl: FieldRef<"Review", 'String'>
     readonly helpfulCount: FieldRef<"Review", 'Int'>
     readonly createdAt: FieldRef<"Review", 'DateTime'>
     readonly updatedAt: FieldRef<"Review", 'DateTime'>
@@ -12220,6 +14799,11 @@ export namespace Prisma {
      * Skip the first `n` Reviews.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reviews.
+     */
     distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
   }
 
@@ -13328,6 +15912,11 @@ export namespace Prisma {
      * Skip the first `n` VisitedPlaces.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VisitedPlaces.
+     */
     distinct?: VisitedPlaceScalarFieldEnum | VisitedPlaceScalarFieldEnum[]
   }
 
@@ -13629,6 +16218,19 @@ export namespace Prisma {
   export type CategoryKeywordScalarFieldEnum = (typeof CategoryKeywordScalarFieldEnum)[keyof typeof CategoryKeywordScalarFieldEnum]
 
 
+  export const AiAnalysisScalarFieldEnum: {
+    id: 'id',
+    destinationId: 'destinationId',
+    score: 'score',
+    status: 'status',
+    message: 'message',
+    rawResult: 'rawResult',
+    createdAt: 'createdAt'
+  };
+
+  export type AiAnalysisScalarFieldEnum = (typeof AiAnalysisScalarFieldEnum)[keyof typeof AiAnalysisScalarFieldEnum]
+
+
   export const SavedDestinationScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -13637,6 +16239,16 @@ export namespace Prisma {
   };
 
   export type SavedDestinationScalarFieldEnum = (typeof SavedDestinationScalarFieldEnum)[keyof typeof SavedDestinationScalarFieldEnum]
+
+
+  export const ItineraryQueueScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    destinationId: 'destinationId',
+    createdAt: 'createdAt'
+  };
+
+  export type ItineraryQueueScalarFieldEnum = (typeof ItineraryQueueScalarFieldEnum)[keyof typeof ItineraryQueueScalarFieldEnum]
 
 
   export const ItineraryScalarFieldEnum: {
@@ -13673,6 +16285,7 @@ export namespace Prisma {
     rating: 'rating',
     comment: 'comment',
     photoUrl: 'photoUrl',
+    videoUrl: 'videoUrl',
     helpfulCount: 'helpfulCount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -13700,6 +16313,13 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -13714,6 +16334,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -13824,6 +16453,20 @@ export namespace Prisma {
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
   /**
    * Deep Input Types
    */
@@ -13847,6 +16490,7 @@ export namespace Prisma {
     itineraries?: ItineraryListRelationFilter
     reviews?: ReviewListRelationFilter
     visitedPlaces?: VisitedPlaceListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -13864,6 +16508,7 @@ export namespace Prisma {
     itineraries?: ItineraryOrderByRelationAggregateInput
     reviews?: ReviewOrderByRelationAggregateInput
     visitedPlaces?: VisitedPlaceOrderByRelationAggregateInput
+    itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -13884,6 +16529,7 @@ export namespace Prisma {
     itineraries?: ItineraryListRelationFilter
     reviews?: ReviewListRelationFilter
     visitedPlaces?: VisitedPlaceListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -13944,10 +16590,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
     categories?: DestinationCategoryListRelationFilter
+    aiAnalyses?: AiAnalysisListRelationFilter
     savedBy?: SavedDestinationListRelationFilter
     itineraryItems?: ItineraryItemListRelationFilter
     reviews?: ReviewListRelationFilter
     visitedBy?: VisitedPlaceListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
   }
 
   export type DestinationOrderByWithRelationInput = {
@@ -13971,10 +16619,12 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categories?: DestinationCategoryOrderByRelationAggregateInput
+    aiAnalyses?: AiAnalysisOrderByRelationAggregateInput
     savedBy?: SavedDestinationOrderByRelationAggregateInput
     itineraryItems?: ItineraryItemOrderByRelationAggregateInput
     reviews?: ReviewOrderByRelationAggregateInput
     visitedBy?: VisitedPlaceOrderByRelationAggregateInput
+    itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
   }
 
   export type DestinationWhereUniqueInput = Prisma.AtLeast<{
@@ -14001,10 +16651,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
     categories?: DestinationCategoryListRelationFilter
+    aiAnalyses?: AiAnalysisListRelationFilter
     savedBy?: SavedDestinationListRelationFilter
     itineraryItems?: ItineraryItemListRelationFilter
     reviews?: ReviewListRelationFilter
     visitedBy?: VisitedPlaceListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
   }, "id">
 
   export type DestinationOrderByWithAggregationInput = {
@@ -14213,6 +16865,73 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"CategoryKeyword"> | Date | string
   }
 
+  export type AiAnalysisWhereInput = {
+    AND?: AiAnalysisWhereInput | AiAnalysisWhereInput[]
+    OR?: AiAnalysisWhereInput[]
+    NOT?: AiAnalysisWhereInput | AiAnalysisWhereInput[]
+    id?: IntFilter<"AiAnalysis"> | number
+    destinationId?: IntFilter<"AiAnalysis"> | number
+    score?: IntFilter<"AiAnalysis"> | number
+    status?: StringFilter<"AiAnalysis"> | string
+    message?: StringFilter<"AiAnalysis"> | string
+    rawResult?: JsonFilter<"AiAnalysis">
+    createdAt?: DateTimeFilter<"AiAnalysis"> | Date | string
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+  }
+
+  export type AiAnalysisOrderByWithRelationInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    score?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    rawResult?: SortOrder
+    createdAt?: SortOrder
+    destination?: DestinationOrderByWithRelationInput
+  }
+
+  export type AiAnalysisWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AiAnalysisWhereInput | AiAnalysisWhereInput[]
+    OR?: AiAnalysisWhereInput[]
+    NOT?: AiAnalysisWhereInput | AiAnalysisWhereInput[]
+    destinationId?: IntFilter<"AiAnalysis"> | number
+    score?: IntFilter<"AiAnalysis"> | number
+    status?: StringFilter<"AiAnalysis"> | string
+    message?: StringFilter<"AiAnalysis"> | string
+    rawResult?: JsonFilter<"AiAnalysis">
+    createdAt?: DateTimeFilter<"AiAnalysis"> | Date | string
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+  }, "id">
+
+  export type AiAnalysisOrderByWithAggregationInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    score?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    rawResult?: SortOrder
+    createdAt?: SortOrder
+    _count?: AiAnalysisCountOrderByAggregateInput
+    _avg?: AiAnalysisAvgOrderByAggregateInput
+    _max?: AiAnalysisMaxOrderByAggregateInput
+    _min?: AiAnalysisMinOrderByAggregateInput
+    _sum?: AiAnalysisSumOrderByAggregateInput
+  }
+
+  export type AiAnalysisScalarWhereWithAggregatesInput = {
+    AND?: AiAnalysisScalarWhereWithAggregatesInput | AiAnalysisScalarWhereWithAggregatesInput[]
+    OR?: AiAnalysisScalarWhereWithAggregatesInput[]
+    NOT?: AiAnalysisScalarWhereWithAggregatesInput | AiAnalysisScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AiAnalysis"> | number
+    destinationId?: IntWithAggregatesFilter<"AiAnalysis"> | number
+    score?: IntWithAggregatesFilter<"AiAnalysis"> | number
+    status?: StringWithAggregatesFilter<"AiAnalysis"> | string
+    message?: StringWithAggregatesFilter<"AiAnalysis"> | string
+    rawResult?: JsonWithAggregatesFilter<"AiAnalysis">
+    createdAt?: DateTimeWithAggregatesFilter<"AiAnalysis"> | Date | string
+  }
+
   export type SavedDestinationWhereInput = {
     AND?: SavedDestinationWhereInput | SavedDestinationWhereInput[]
     OR?: SavedDestinationWhereInput[]
@@ -14267,6 +16986,62 @@ export namespace Prisma {
     userId?: IntWithAggregatesFilter<"SavedDestination"> | number
     destinationId?: IntWithAggregatesFilter<"SavedDestination"> | number
     createdAt?: DateTimeWithAggregatesFilter<"SavedDestination"> | Date | string
+  }
+
+  export type ItineraryQueueWhereInput = {
+    AND?: ItineraryQueueWhereInput | ItineraryQueueWhereInput[]
+    OR?: ItineraryQueueWhereInput[]
+    NOT?: ItineraryQueueWhereInput | ItineraryQueueWhereInput[]
+    id?: IntFilter<"ItineraryQueue"> | number
+    userId?: IntFilter<"ItineraryQueue"> | number
+    destinationId?: IntFilter<"ItineraryQueue"> | number
+    createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+  }
+
+  export type ItineraryQueueOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    destinationId?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    destination?: DestinationOrderByWithRelationInput
+  }
+
+  export type ItineraryQueueWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId_destinationId?: ItineraryQueueUserIdDestinationIdCompoundUniqueInput
+    AND?: ItineraryQueueWhereInput | ItineraryQueueWhereInput[]
+    OR?: ItineraryQueueWhereInput[]
+    NOT?: ItineraryQueueWhereInput | ItineraryQueueWhereInput[]
+    userId?: IntFilter<"ItineraryQueue"> | number
+    destinationId?: IntFilter<"ItineraryQueue"> | number
+    createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+  }, "id" | "userId_destinationId">
+
+  export type ItineraryQueueOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    destinationId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ItineraryQueueCountOrderByAggregateInput
+    _avg?: ItineraryQueueAvgOrderByAggregateInput
+    _max?: ItineraryQueueMaxOrderByAggregateInput
+    _min?: ItineraryQueueMinOrderByAggregateInput
+    _sum?: ItineraryQueueSumOrderByAggregateInput
+  }
+
+  export type ItineraryQueueScalarWhereWithAggregatesInput = {
+    AND?: ItineraryQueueScalarWhereWithAggregatesInput | ItineraryQueueScalarWhereWithAggregatesInput[]
+    OR?: ItineraryQueueScalarWhereWithAggregatesInput[]
+    NOT?: ItineraryQueueScalarWhereWithAggregatesInput | ItineraryQueueScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ItineraryQueue"> | number
+    userId?: IntWithAggregatesFilter<"ItineraryQueue"> | number
+    destinationId?: IntWithAggregatesFilter<"ItineraryQueue"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ItineraryQueue"> | Date | string
   }
 
   export type ItineraryWhereInput = {
@@ -14425,6 +17200,7 @@ export namespace Prisma {
     rating?: IntFilter<"Review"> | number
     comment?: StringNullableFilter<"Review"> | string | null
     photoUrl?: StringNullableFilter<"Review"> | string | null
+    videoUrl?: StringNullableFilter<"Review"> | string | null
     helpfulCount?: IntFilter<"Review"> | number
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
@@ -14439,6 +17215,7 @@ export namespace Prisma {
     rating?: SortOrder
     comment?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     helpfulCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14457,6 +17234,7 @@ export namespace Prisma {
     rating?: IntFilter<"Review"> | number
     comment?: StringNullableFilter<"Review"> | string | null
     photoUrl?: StringNullableFilter<"Review"> | string | null
+    videoUrl?: StringNullableFilter<"Review"> | string | null
     helpfulCount?: IntFilter<"Review"> | number
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
@@ -14471,6 +17249,7 @@ export namespace Prisma {
     rating?: SortOrder
     comment?: SortOrderInput | SortOrder
     photoUrl?: SortOrderInput | SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     helpfulCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14491,6 +17270,7 @@ export namespace Prisma {
     rating?: IntWithAggregatesFilter<"Review"> | number
     comment?: StringNullableWithAggregatesFilter<"Review"> | string | null
     photoUrl?: StringNullableWithAggregatesFilter<"Review"> | string | null
+    videoUrl?: StringNullableWithAggregatesFilter<"Review"> | string | null
     helpfulCount?: IntWithAggregatesFilter<"Review"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
@@ -14571,6 +17351,7 @@ export namespace Prisma {
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -14588,6 +17369,7 @@ export namespace Prisma {
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -14604,6 +17386,7 @@ export namespace Prisma {
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -14621,6 +17404,7 @@ export namespace Prisma {
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -14681,10 +17465,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
     reviews?: ReviewCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateInput = {
@@ -14708,10 +17494,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUpdateInput = {
@@ -14734,10 +17522,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateInput = {
@@ -14761,10 +17551,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationCreateManyInput = {
@@ -14962,6 +17754,72 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AiAnalysisCreateInput = {
+    score: number
+    status: string
+    message: string
+    rawResult: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    destination: DestinationCreateNestedOneWithoutAiAnalysesInput
+  }
+
+  export type AiAnalysisUncheckedCreateInput = {
+    id?: number
+    destinationId: number
+    score: number
+    status: string
+    message: string
+    rawResult: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AiAnalysisUpdateInput = {
+    score?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rawResult?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    destination?: DestinationUpdateOneRequiredWithoutAiAnalysesNestedInput
+  }
+
+  export type AiAnalysisUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    score?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rawResult?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiAnalysisCreateManyInput = {
+    id?: number
+    destinationId: number
+    score: number
+    status: string
+    message: string
+    rawResult: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AiAnalysisUpdateManyMutationInput = {
+    score?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rawResult?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiAnalysisUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    score?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rawResult?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SavedDestinationCreateInput = {
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutSavedDestinationsInput
@@ -15000,6 +17858,50 @@ export namespace Prisma {
   }
 
   export type SavedDestinationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItineraryQueueCreateInput = {
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutItineraryQueueInput
+    destination: DestinationCreateNestedOneWithoutItineraryQueueInput
+  }
+
+  export type ItineraryQueueUncheckedCreateInput = {
+    id?: number
+    userId: number
+    destinationId: number
+    createdAt?: Date | string
+  }
+
+  export type ItineraryQueueUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutItineraryQueueNestedInput
+    destination?: DestinationUpdateOneRequiredWithoutItineraryQueueNestedInput
+  }
+
+  export type ItineraryQueueUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItineraryQueueCreateManyInput = {
+    id?: number
+    userId: number
+    destinationId: number
+    createdAt?: Date | string
+  }
+
+  export type ItineraryQueueUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     destinationId?: IntFieldUpdateOperationsInput | number
@@ -15152,6 +18054,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15166,6 +18069,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15175,6 +18079,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15189,6 +18094,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15201,6 +18107,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15210,6 +18117,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15222,6 +18130,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15368,6 +18277,12 @@ export namespace Prisma {
     none?: VisitedPlaceWhereInput
   }
 
+  export type ItineraryQueueListRelationFilter = {
+    every?: ItineraryQueueWhereInput
+    some?: ItineraryQueueWhereInput
+    none?: ItineraryQueueWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -15386,6 +18301,10 @@ export namespace Prisma {
   }
 
   export type VisitedPlaceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ItineraryQueueOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15573,6 +18492,12 @@ export namespace Prisma {
     none?: DestinationCategoryWhereInput
   }
 
+  export type AiAnalysisListRelationFilter = {
+    every?: AiAnalysisWhereInput
+    some?: AiAnalysisWhereInput
+    none?: AiAnalysisWhereInput
+  }
+
   export type ItineraryItemListRelationFilter = {
     every?: ItineraryItemWhereInput
     some?: ItineraryItemWhereInput
@@ -15580,6 +18505,10 @@ export namespace Prisma {
   }
 
   export type DestinationCategoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AiAnalysisOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15851,6 +18780,95 @@ export namespace Prisma {
     id?: SortOrder
     categoryId?: SortOrder
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type AiAnalysisCountOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    score?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    rawResult?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiAnalysisAvgOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    score?: SortOrder
+  }
+
+  export type AiAnalysisMaxOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    score?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiAnalysisMinOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    score?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AiAnalysisSumOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    score?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
 
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
@@ -15890,6 +18908,44 @@ export namespace Prisma {
   }
 
   export type SavedDestinationSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    destinationId?: SortOrder
+  }
+
+  export type ItineraryQueueUserIdDestinationIdCompoundUniqueInput = {
+    userId: number
+    destinationId: number
+  }
+
+  export type ItineraryQueueCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    destinationId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ItineraryQueueAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    destinationId?: SortOrder
+  }
+
+  export type ItineraryQueueMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    destinationId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ItineraryQueueMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    destinationId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ItineraryQueueSumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     destinationId?: SortOrder
@@ -16037,6 +19093,7 @@ export namespace Prisma {
     rating?: SortOrder
     comment?: SortOrder
     photoUrl?: SortOrder
+    videoUrl?: SortOrder
     helpfulCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16057,6 +19114,7 @@ export namespace Prisma {
     rating?: SortOrder
     comment?: SortOrder
     photoUrl?: SortOrder
+    videoUrl?: SortOrder
     helpfulCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16069,6 +19127,7 @@ export namespace Prisma {
     rating?: SortOrder
     comment?: SortOrder
     photoUrl?: SortOrder
+    videoUrl?: SortOrder
     helpfulCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16151,6 +19210,13 @@ export namespace Prisma {
     connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
   }
 
+  export type ItineraryQueueCreateNestedManyWithoutUserInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+  }
+
   export type SavedDestinationUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
@@ -16177,6 +19243,13 @@ export namespace Prisma {
     connectOrCreate?: VisitedPlaceCreateOrConnectWithoutUserInput | VisitedPlaceCreateOrConnectWithoutUserInput[]
     createMany?: VisitedPlaceCreateManyUserInputEnvelope
     connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+  }
+
+  export type ItineraryQueueUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -16255,6 +19328,20 @@ export namespace Prisma {
     deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
   }
 
+  export type ItineraryQueueUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutUserInput | ItineraryQueueUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -16319,11 +19406,32 @@ export namespace Prisma {
     deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
   }
 
+  export type ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutUserInput | ItineraryQueueUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
   export type DestinationCategoryCreateNestedManyWithoutDestinationInput = {
     create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
     createMany?: DestinationCategoryCreateManyDestinationInputEnvelope
     connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+  }
+
+  export type AiAnalysisCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
+    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
+    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
   }
 
   export type SavedDestinationCreateNestedManyWithoutDestinationInput = {
@@ -16354,11 +19462,25 @@ export namespace Prisma {
     connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
   }
 
+  export type ItineraryQueueCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+  }
+
   export type DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput = {
     create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
     createMany?: DestinationCategoryCreateManyDestinationInputEnvelope
     connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+  }
+
+  export type AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
+    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
+    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
   }
 
   export type SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput = {
@@ -16387,6 +19509,13 @@ export namespace Prisma {
     connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
     createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
     connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+  }
+
+  export type ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -16429,6 +19558,20 @@ export namespace Prisma {
     update?: DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput | DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput[]
     updateMany?: DestinationCategoryUpdateManyWithWhereWithoutDestinationInput | DestinationCategoryUpdateManyWithWhereWithoutDestinationInput[]
     deleteMany?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
+  }
+
+  export type AiAnalysisUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
+    upsert?: AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput | AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
+    set?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    disconnect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    delete?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    update?: AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput | AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: AiAnalysisUpdateManyWithWhereWithoutDestinationInput | AiAnalysisUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: AiAnalysisScalarWhereInput | AiAnalysisScalarWhereInput[]
   }
 
   export type SavedDestinationUpdateManyWithoutDestinationNestedInput = {
@@ -16487,6 +19630,20 @@ export namespace Prisma {
     deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
   }
 
+  export type ItineraryQueueUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutDestinationInput | ItineraryQueueUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
   export type DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput = {
     create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
@@ -16499,6 +19656,20 @@ export namespace Prisma {
     update?: DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput | DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput[]
     updateMany?: DestinationCategoryUpdateManyWithWhereWithoutDestinationInput | DestinationCategoryUpdateManyWithWhereWithoutDestinationInput[]
     deleteMany?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
+  }
+
+  export type AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
+    upsert?: AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput | AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
+    set?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    disconnect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    delete?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    update?: AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput | AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: AiAnalysisUpdateManyWithWhereWithoutDestinationInput | AiAnalysisUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: AiAnalysisScalarWhereInput | AiAnalysisScalarWhereInput[]
   }
 
   export type SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput = {
@@ -16555,6 +19726,20 @@ export namespace Prisma {
     update?: VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput[]
     updateMany?: VisitedPlaceUpdateManyWithWhereWithoutDestinationInput | VisitedPlaceUpdateManyWithWhereWithoutDestinationInput[]
     deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutDestinationInput | ItineraryQueueUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
   }
 
   export type DestinationCategoryCreateNestedManyWithoutCategoryInput = {
@@ -16683,6 +19868,20 @@ export namespace Prisma {
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutKeywordsInput, CategoryUpdateWithoutKeywordsInput>, CategoryUncheckedUpdateWithoutKeywordsInput>
   }
 
+  export type DestinationCreateNestedOneWithoutAiAnalysesInput = {
+    create?: XOR<DestinationCreateWithoutAiAnalysesInput, DestinationUncheckedCreateWithoutAiAnalysesInput>
+    connectOrCreate?: DestinationCreateOrConnectWithoutAiAnalysesInput
+    connect?: DestinationWhereUniqueInput
+  }
+
+  export type DestinationUpdateOneRequiredWithoutAiAnalysesNestedInput = {
+    create?: XOR<DestinationCreateWithoutAiAnalysesInput, DestinationUncheckedCreateWithoutAiAnalysesInput>
+    connectOrCreate?: DestinationCreateOrConnectWithoutAiAnalysesInput
+    upsert?: DestinationUpsertWithoutAiAnalysesInput
+    connect?: DestinationWhereUniqueInput
+    update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutAiAnalysesInput, DestinationUpdateWithoutAiAnalysesInput>, DestinationUncheckedUpdateWithoutAiAnalysesInput>
+  }
+
   export type UserCreateNestedOneWithoutSavedDestinationsInput = {
     create?: XOR<UserCreateWithoutSavedDestinationsInput, UserUncheckedCreateWithoutSavedDestinationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutSavedDestinationsInput
@@ -16709,6 +19908,34 @@ export namespace Prisma {
     upsert?: DestinationUpsertWithoutSavedByInput
     connect?: DestinationWhereUniqueInput
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutSavedByInput, DestinationUpdateWithoutSavedByInput>, DestinationUncheckedUpdateWithoutSavedByInput>
+  }
+
+  export type UserCreateNestedOneWithoutItineraryQueueInput = {
+    create?: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
+    connectOrCreate?: UserCreateOrConnectWithoutItineraryQueueInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DestinationCreateNestedOneWithoutItineraryQueueInput = {
+    create?: XOR<DestinationCreateWithoutItineraryQueueInput, DestinationUncheckedCreateWithoutItineraryQueueInput>
+    connectOrCreate?: DestinationCreateOrConnectWithoutItineraryQueueInput
+    connect?: DestinationWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutItineraryQueueNestedInput = {
+    create?: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
+    connectOrCreate?: UserCreateOrConnectWithoutItineraryQueueInput
+    upsert?: UserUpsertWithoutItineraryQueueInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutItineraryQueueInput, UserUpdateWithoutItineraryQueueInput>, UserUncheckedUpdateWithoutItineraryQueueInput>
+  }
+
+  export type DestinationUpdateOneRequiredWithoutItineraryQueueNestedInput = {
+    create?: XOR<DestinationCreateWithoutItineraryQueueInput, DestinationUncheckedCreateWithoutItineraryQueueInput>
+    connectOrCreate?: DestinationCreateOrConnectWithoutItineraryQueueInput
+    upsert?: DestinationUpsertWithoutItineraryQueueInput
+    connect?: DestinationWhereUniqueInput
+    update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutItineraryQueueInput, DestinationUpdateWithoutItineraryQueueInput>, DestinationUncheckedUpdateWithoutItineraryQueueInput>
   }
 
   export type UserCreateNestedOneWithoutItinerariesInput = {
@@ -17126,6 +20353,29 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
@@ -17201,6 +20451,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17213,6 +20464,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17248,6 +20500,27 @@ export namespace Prisma {
 
   export type VisitedPlaceCreateManyUserInputEnvelope = {
     data: VisitedPlaceCreateManyUserInput | VisitedPlaceCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ItineraryQueueCreateWithoutUserInput = {
+    createdAt?: Date | string
+    destination: DestinationCreateNestedOneWithoutItineraryQueueInput
+  }
+
+  export type ItineraryQueueUncheckedCreateWithoutUserInput = {
+    id?: number
+    destinationId: number
+    createdAt?: Date | string
+  }
+
+  export type ItineraryQueueCreateOrConnectWithoutUserInput = {
+    where: ItineraryQueueWhereUniqueInput
+    create: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput>
+  }
+
+  export type ItineraryQueueCreateManyUserInputEnvelope = {
+    data: ItineraryQueueCreateManyUserInput | ItineraryQueueCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -17334,6 +20607,7 @@ export namespace Prisma {
     rating?: IntFilter<"Review"> | number
     comment?: StringNullableFilter<"Review"> | string | null
     photoUrl?: StringNullableFilter<"Review"> | string | null
+    videoUrl?: StringNullableFilter<"Review"> | string | null
     helpfulCount?: IntFilter<"Review"> | number
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
@@ -17366,6 +20640,32 @@ export namespace Prisma {
     checkedIn?: BoolFilter<"VisitedPlace"> | boolean
   }
 
+  export type ItineraryQueueUpsertWithWhereUniqueWithoutUserInput = {
+    where: ItineraryQueueWhereUniqueInput
+    update: XOR<ItineraryQueueUpdateWithoutUserInput, ItineraryQueueUncheckedUpdateWithoutUserInput>
+    create: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput>
+  }
+
+  export type ItineraryQueueUpdateWithWhereUniqueWithoutUserInput = {
+    where: ItineraryQueueWhereUniqueInput
+    data: XOR<ItineraryQueueUpdateWithoutUserInput, ItineraryQueueUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ItineraryQueueUpdateManyWithWhereWithoutUserInput = {
+    where: ItineraryQueueScalarWhereInput
+    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ItineraryQueueScalarWhereInput = {
+    AND?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+    OR?: ItineraryQueueScalarWhereInput[]
+    NOT?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+    id?: IntFilter<"ItineraryQueue"> | number
+    userId?: IntFilter<"ItineraryQueue"> | number
+    destinationId?: IntFilter<"ItineraryQueue"> | number
+    createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
+  }
+
   export type DestinationCategoryCreateWithoutDestinationInput = {
     category: CategoryCreateNestedOneWithoutDestinationsInput
   }
@@ -17382,6 +20682,33 @@ export namespace Prisma {
 
   export type DestinationCategoryCreateManyDestinationInputEnvelope = {
     data: DestinationCategoryCreateManyDestinationInput | DestinationCategoryCreateManyDestinationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AiAnalysisCreateWithoutDestinationInput = {
+    score: number
+    status: string
+    message: string
+    rawResult: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AiAnalysisUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    score: number
+    status: string
+    message: string
+    rawResult: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AiAnalysisCreateOrConnectWithoutDestinationInput = {
+    where: AiAnalysisWhereUniqueInput
+    create: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type AiAnalysisCreateManyDestinationInputEnvelope = {
+    data: AiAnalysisCreateManyDestinationInput | AiAnalysisCreateManyDestinationInput[]
     skipDuplicates?: boolean
   }
 
@@ -17435,6 +20762,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17447,6 +20775,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17485,6 +20814,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ItineraryQueueCreateWithoutDestinationInput = {
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutItineraryQueueInput
+  }
+
+  export type ItineraryQueueUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    userId: number
+    createdAt?: Date | string
+  }
+
+  export type ItineraryQueueCreateOrConnectWithoutDestinationInput = {
+    where: ItineraryQueueWhereUniqueInput
+    create: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type ItineraryQueueCreateManyDestinationInputEnvelope = {
+    data: ItineraryQueueCreateManyDestinationInput | ItineraryQueueCreateManyDestinationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput = {
     where: DestinationCategoryWhereUniqueInput
     update: XOR<DestinationCategoryUpdateWithoutDestinationInput, DestinationCategoryUncheckedUpdateWithoutDestinationInput>
@@ -17508,6 +20858,35 @@ export namespace Prisma {
     id?: IntFilter<"DestinationCategory"> | number
     destinationId?: IntFilter<"DestinationCategory"> | number
     categoryId?: IntFilter<"DestinationCategory"> | number
+  }
+
+  export type AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: AiAnalysisWhereUniqueInput
+    update: XOR<AiAnalysisUpdateWithoutDestinationInput, AiAnalysisUncheckedUpdateWithoutDestinationInput>
+    create: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: AiAnalysisWhereUniqueInput
+    data: XOR<AiAnalysisUpdateWithoutDestinationInput, AiAnalysisUncheckedUpdateWithoutDestinationInput>
+  }
+
+  export type AiAnalysisUpdateManyWithWhereWithoutDestinationInput = {
+    where: AiAnalysisScalarWhereInput
+    data: XOR<AiAnalysisUpdateManyMutationInput, AiAnalysisUncheckedUpdateManyWithoutDestinationInput>
+  }
+
+  export type AiAnalysisScalarWhereInput = {
+    AND?: AiAnalysisScalarWhereInput | AiAnalysisScalarWhereInput[]
+    OR?: AiAnalysisScalarWhereInput[]
+    NOT?: AiAnalysisScalarWhereInput | AiAnalysisScalarWhereInput[]
+    id?: IntFilter<"AiAnalysis"> | number
+    destinationId?: IntFilter<"AiAnalysis"> | number
+    score?: IntFilter<"AiAnalysis"> | number
+    status?: StringFilter<"AiAnalysis"> | string
+    message?: StringFilter<"AiAnalysis"> | string
+    rawResult?: JsonFilter<"AiAnalysis">
+    createdAt?: DateTimeFilter<"AiAnalysis"> | Date | string
   }
 
   export type SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput = {
@@ -17584,6 +20963,22 @@ export namespace Prisma {
   export type VisitedPlaceUpdateManyWithWhereWithoutDestinationInput = {
     where: VisitedPlaceScalarWhereInput
     data: XOR<VisitedPlaceUpdateManyMutationInput, VisitedPlaceUncheckedUpdateManyWithoutDestinationInput>
+  }
+
+  export type ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: ItineraryQueueWhereUniqueInput
+    update: XOR<ItineraryQueueUpdateWithoutDestinationInput, ItineraryQueueUncheckedUpdateWithoutDestinationInput>
+    create: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: ItineraryQueueWhereUniqueInput
+    data: XOR<ItineraryQueueUpdateWithoutDestinationInput, ItineraryQueueUncheckedUpdateWithoutDestinationInput>
+  }
+
+  export type ItineraryQueueUpdateManyWithWhereWithoutDestinationInput = {
+    where: ItineraryQueueScalarWhereInput
+    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyWithoutDestinationInput>
   }
 
   export type DestinationCategoryCreateWithoutCategoryInput = {
@@ -17687,10 +21082,12 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
     reviews?: ReviewCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutCategoriesInput = {
@@ -17713,10 +21110,12 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutCategoriesInput = {
@@ -17772,10 +21171,12 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutCategoriesInput = {
@@ -17798,10 +21199,12 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type CategoryUpsertWithoutDestinationsInput = {
@@ -17870,6 +21273,132 @@ export namespace Prisma {
     destinations?: DestinationCategoryUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
+  export type DestinationCreateWithoutAiAnalysesInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutAiAnalysesInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutAiAnalysesInput, DestinationUncheckedCreateWithoutAiAnalysesInput>
+  }
+
+  export type DestinationUpsertWithoutAiAnalysesInput = {
+    update: XOR<DestinationUpdateWithoutAiAnalysesInput, DestinationUncheckedUpdateWithoutAiAnalysesInput>
+    create: XOR<DestinationCreateWithoutAiAnalysesInput, DestinationUncheckedCreateWithoutAiAnalysesInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutAiAnalysesInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutAiAnalysesInput, DestinationUncheckedUpdateWithoutAiAnalysesInput>
+  }
+
+  export type DestinationUpdateWithoutAiAnalysesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+  }
+
   export type UserCreateWithoutSavedDestinationsInput = {
     name: string
     email: string
@@ -17883,6 +21412,7 @@ export namespace Prisma {
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSavedDestinationsInput = {
@@ -17899,6 +21429,7 @@ export namespace Prisma {
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSavedDestinationsInput = {
@@ -17926,9 +21457,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
     reviews?: ReviewCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutSavedByInput = {
@@ -17952,9 +21485,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutSavedByInput = {
@@ -17986,6 +21521,7 @@ export namespace Prisma {
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSavedDestinationsInput = {
@@ -18002,6 +21538,7 @@ export namespace Prisma {
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DestinationUpsertWithoutSavedByInput = {
@@ -18035,9 +21572,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutSavedByInput = {
@@ -18061,6 +21600,216 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type UserCreateWithoutItineraryQueueInput = {
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutItineraryQueueInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutItineraryQueueInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
+  }
+
+  export type DestinationCreateWithoutItineraryQueueInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutItineraryQueueInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutItineraryQueueInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutItineraryQueueInput, DestinationUncheckedCreateWithoutItineraryQueueInput>
+  }
+
+  export type UserUpsertWithoutItineraryQueueInput = {
+    update: XOR<UserUpdateWithoutItineraryQueueInput, UserUncheckedUpdateWithoutItineraryQueueInput>
+    create: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutItineraryQueueInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutItineraryQueueInput, UserUncheckedUpdateWithoutItineraryQueueInput>
+  }
+
+  export type UserUpdateWithoutItineraryQueueInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutItineraryQueueInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type DestinationUpsertWithoutItineraryQueueInput = {
+    update: XOR<DestinationUpdateWithoutItineraryQueueInput, DestinationUncheckedUpdateWithoutItineraryQueueInput>
+    create: XOR<DestinationCreateWithoutItineraryQueueInput, DestinationUncheckedCreateWithoutItineraryQueueInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutItineraryQueueInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutItineraryQueueInput, DestinationUncheckedUpdateWithoutItineraryQueueInput>
+  }
+
+  export type DestinationUpdateWithoutItineraryQueueInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutItineraryQueueInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
@@ -18079,6 +21828,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutItinerariesInput = {
@@ -18095,6 +21845,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutItinerariesInput = {
@@ -18151,6 +21902,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutItinerariesInput = {
@@ -18167,6 +21919,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ItineraryItemUpsertWithWhereUniqueWithoutItineraryInput = {
@@ -18233,9 +21986,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
     reviews?: ReviewCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutItineraryItemsInput = {
@@ -18259,9 +22014,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutItineraryItemsInput = {
@@ -18334,9 +22091,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutItineraryItemsInput = {
@@ -18360,9 +22119,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutReviewsInput = {
@@ -18378,6 +22139,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -18394,6 +22156,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -18421,9 +22184,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutReviewsInput = {
@@ -18447,9 +22212,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutReviewsInput = {
@@ -18481,6 +22248,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -18497,6 +22265,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DestinationUpsertWithoutReviewsInput = {
@@ -18530,9 +22299,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutReviewsInput = {
@@ -18556,9 +22327,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutVisitedPlacesInput = {
@@ -18574,6 +22347,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitedPlacesInput = {
@@ -18590,6 +22364,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitedPlacesInput = {
@@ -18617,9 +22392,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
     reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutVisitedByInput = {
@@ -18643,9 +22420,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutVisitedByInput = {
@@ -18677,6 +22456,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitedPlacesInput = {
@@ -18693,6 +22473,7 @@ export namespace Prisma {
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DestinationUpsertWithoutVisitedByInput = {
@@ -18726,9 +22507,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutVisitedByInput = {
@@ -18752,9 +22535,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type SavedDestinationCreateManyUserInput = {
@@ -18780,6 +22565,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18790,6 +22576,12 @@ export namespace Prisma {
     destinationId: number
     visitedAt?: Date | string
     checkedIn?: boolean
+  }
+
+  export type ItineraryQueueCreateManyUserInput = {
+    id?: number
+    destinationId: number
+    createdAt?: Date | string
   }
 
   export type SavedDestinationUpdateWithoutUserInput = {
@@ -18847,6 +22639,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18859,6 +22652,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18870,6 +22664,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18895,9 +22690,35 @@ export namespace Prisma {
     checkedIn?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type ItineraryQueueUpdateWithoutUserInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    destination?: DestinationUpdateOneRequiredWithoutItineraryQueueNestedInput
+  }
+
+  export type ItineraryQueueUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type DestinationCategoryCreateManyDestinationInput = {
     id?: number
     categoryId: number
+  }
+
+  export type AiAnalysisCreateManyDestinationInput = {
+    id?: number
+    score: number
+    status: string
+    message: string
+    rawResult: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
   }
 
   export type SavedDestinationCreateManyDestinationInput = {
@@ -18920,6 +22741,7 @@ export namespace Prisma {
     rating: number
     comment?: string | null
     photoUrl?: string | null
+    videoUrl?: string | null
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18930,6 +22752,12 @@ export namespace Prisma {
     userId: number
     visitedAt?: Date | string
     checkedIn?: boolean
+  }
+
+  export type ItineraryQueueCreateManyDestinationInput = {
+    id?: number
+    userId: number
+    createdAt?: Date | string
   }
 
   export type DestinationCategoryUpdateWithoutDestinationInput = {
@@ -18944,6 +22772,32 @@ export namespace Prisma {
   export type DestinationCategoryUncheckedUpdateManyWithoutDestinationInput = {
     id?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type AiAnalysisUpdateWithoutDestinationInput = {
+    score?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rawResult?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiAnalysisUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    score?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rawResult?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AiAnalysisUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    score?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rawResult?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SavedDestinationUpdateWithoutDestinationInput = {
@@ -18990,6 +22844,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19002,6 +22857,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19013,6 +22869,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19036,6 +22893,23 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     checkedIn?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type ItineraryQueueUpdateWithoutDestinationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutItineraryQueueNestedInput
+  }
+
+  export type ItineraryQueueUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DestinationCategoryCreateManyCategoryInput = {

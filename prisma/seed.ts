@@ -1,8 +1,9 @@
 // prisma/seed.ts
 // Data dummy untuk development. Hapus/ganti dengan data asli dari pengelola.
 // Jalankan dengan: npx prisma db seed
+import "dotenv/config";
 
-import { PrismaClient, DestinationStatus } from "../lib/generated/prisma";
+import { PrismaClient, DestinationStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
