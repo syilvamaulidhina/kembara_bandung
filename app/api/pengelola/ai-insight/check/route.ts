@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+type CategoryAnalysis = {
+  categoryId: number;
+  categoryName: string;
+  isSelected: boolean;
+  matchedKeywords: string[];
+  matchCount: number;
+};
+
 function normalizeText(text: string) {
   return text
     .toLowerCase()
@@ -58,25 +66,29 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const analysis = categories.map((category) => {
+    const analysis: CategoryAnalysis[] = categories.map((category) => {
       const keywords = category.keywords.map((item) => item.keyword);
-      const matches = findMatches(text, keywords);
-      const isSelected = categoryIds.includes(category.id);
+      const matchedKeywords = findMatches(text, keywords);
 
       return {
         categoryId: category.id,
         categoryName: category.name,
-        isSelected,
-        matchedKeywords: matches,
-        matchCount: matches.length,
+        isSelected: categoryIds.includes(category.id),
+        matchedKeywords,
+        matchCount: matchedKeywords.length,
       };
     });
 
     const selectedAnalysis = analysis.filter((item) => item.isSelected);
 
-    const strongestCategory = [...analysis].sort(
+    const sortedAnalysis = [...analysis].sort(
       (a, b) => b.matchCount - a.matchCount
-    )[0];
+    );
+
+    const strongestCategory: CategoryAnalysis | null =
+      sortedAnalysis[0] && sortedAnalysis[0].matchCount > 0
+        ? sortedAnalysis[0]
+        : null;
 
     const selectedWithMatches = selectedAnalysis.filter(
       (item) => item.matchCount > 0
@@ -123,7 +135,11 @@ export async function POST(req: NextRequest) {
     );
 
     const status =
-      score >= 75 ? "konsisten" : score >= 60 ? "perlu_perbaikan" : "inkonsisten";
+      score >= 75
+        ? "konsisten"
+        : score >= 60
+        ? "perlu_perbaikan"
+        : "inkonsisten";
 
     const message =
       status === "konsisten"
@@ -134,11 +150,9 @@ export async function POST(req: NextRequest) {
               ? ` dan konten juga mengarah ke ${unselectedStrongMatches[0].categoryName}`
               : ""
           }.`
-        : `Data belum cukup selaras dengan kategori yang dipilih${
-            strongestCategory?.matchCount > 0
-              ? `. Konten lebih mengarah ke ${strongestCategory.categoryName}`
-              : ""
-          }.`;
+        : strongestCategory
+        ? `Data belum cukup selaras dengan kategori yang dipilih. Konten lebih mengarah ke ${strongestCategory.categoryName}.`
+        : "Data belum cukup selaras dengan kategori yang dipilih.";
 
     return NextResponse.json({
       status,
