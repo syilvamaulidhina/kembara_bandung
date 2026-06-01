@@ -83,23 +83,67 @@ export async function POST(req: Request) {
 			);
 		}
 
+    if (!body.isFree) {
+      if (body.ticketPrice === "" || body.ticketPrice === undefined) {
+        return NextResponse.json(
+          { message: "Harga tiket mulai wajib diisi." },
+          { status: 400 }
+        );
+      }
+
+      if (body.maxPrice === "" || body.maxPrice === undefined) {
+        return NextResponse.json(
+          { message: "Harga tiket maksimal wajib diisi." },
+          { status: 400 }
+        );
+      }
+
+      if (Number(body.ticketPrice) < 0 || Number(body.maxPrice) < 0) {
+        return NextResponse.json(
+          { message: "Harga tiket tidak boleh negatif." },
+          { status: 400 }
+        );
+      }
+
+      if (Number(body.maxPrice) < Number(body.ticketPrice)) {
+        return NextResponse.json(
+          { message: "Harga maksimal tidak boleh lebih kecil dari harga mulai." },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (!body.openTime || !body.closeTime) {
+      return NextResponse.json(
+        { message: "Jam buka dan jam tutup wajib diisi." },
+        { status: 400 }
+      );
+    }
+
 		const destination = await prisma.destination.create({
 			data: {
-				name: body.name,
-				description: body.description,
-				address: body.address,
-				contact: body.contact || null,
-				latitude: Number(body.latitude),
-				longitude: Number(body.longitude),
-				imageUrl: body.imageUrl || null,
-				status: "pending",
+        name: body.name,
+        description: body.description,
+        address: body.address,
+        contact: body.contact || null,
+        latitude: Number(body.latitude),
+        longitude: Number(body.longitude),
+        imageUrl: body.imageUrl || null,
 
-				categories: {
-					create: categoryIds.map((id: number) => ({
-						categoryId: id,
-					})),
-				},
-			},
+        openTime: body.openTime || null,
+        closeTime: body.closeTime || null,
+        ticketPrice: body.isFree ? 0 : Number(body.ticketPrice),
+        maxPrice: body.isFree ? 0 : Number(body.maxPrice),
+        website: body.website || null,
+
+        status: "pending",
+
+        categories: {
+          create: categoryIds.map((id: number) => ({
+            categoryId: id,
+          })),
+        },
+      },
 			include: {
 				categories: {
 					include: {
