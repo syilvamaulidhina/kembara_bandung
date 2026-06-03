@@ -29,14 +29,21 @@ export default function TambahDestinasiPage() {
 	const MIN_AI_SCORE = 60;
 
 	const [form, setForm] = useState({
-		name: "",
-		categoryIds: [] as number[],
-		description: "",
-		contact: "",
-		address: "",
-		latitude: "",
-		longitude: "",
-	});
+      name: "",
+      categoryIds: [] as number[],
+      description: "",
+      contact: "",
+      address: "",
+      latitude: "",
+      longitude: "",
+
+      isFree: false,
+      ticketPrice: "",
+      maxPrice: "",
+      openTime: "",
+      closeTime: "",
+      website: "",
+  });
 
 	const [categories, setCategories] = useState<{ id: number; name: string }[]>(
 		[]
@@ -77,14 +84,19 @@ export default function TambahDestinasiPage() {
 		}));
 
 		if (
-			field === "name" ||
-			field === "description" ||
-			field === "address" ||
-			field === "latitude" ||
-			field === "longitude"
-		) {
-			resetAnalysis();
-		}
+      field === "name" ||
+      field === "description" ||
+      field === "address" ||
+      field === "latitude" ||
+      field === "longitude" ||
+      field === "ticketPrice" ||
+      field === "maxPrice" ||
+      field === "openTime" ||
+      field === "closeTime" ||
+      field === "website"
+    ) {
+      resetAnalysis();
+    }
 	}
 
 	function toggleCategory(categoryId: number) {
@@ -128,6 +140,33 @@ export default function TambahDestinasiPage() {
 			alert("Lokasi berada di luar area Bandung Raya.");
 			return;
 		}
+
+    if (!form.isFree) {
+      if (!form.ticketPrice) {
+        alert("Harga tiket mulai wajib diisi sebelum analisis.");
+        return;
+      }
+
+      if (!form.maxPrice) {
+        alert("Harga tiket maksimal wajib diisi sebelum analisis.");
+        return;
+      }
+
+      if (Number(form.maxPrice) < Number(form.ticketPrice)) {
+        alert("Harga maksimal tidak boleh lebih kecil dari harga mulai.");
+        return;
+      }
+    }
+
+    if (!form.openTime) {
+      alert("Jam buka wajib diisi sebelum analisis.");
+      return;
+    }
+
+    if (!form.closeTime) {
+      alert("Jam tutup wajib diisi sebelum analisis.");
+      return;
+    }
 
 		try {
 			setIsCheckingAI(true);
@@ -201,6 +240,33 @@ export default function TambahDestinasiPage() {
 			alert("Lokasi berada di luar area Bandung Raya.");
 			return;
 		}
+
+    if (!form.isFree) {
+        if (!form.ticketPrice) {
+          alert("Harga tiket mulai wajib diisi.");
+          return;
+        }
+
+        if (!form.maxPrice) {
+          alert("Harga tiket maksimal wajib diisi.");
+          return;
+        }
+
+        if (Number(form.maxPrice) < Number(form.ticketPrice)) {
+          alert("Harga maksimal tidak boleh lebih kecil dari harga mulai.");
+          return;
+        }
+    }
+
+    if (!form.openTime) {
+        alert("Jam buka wajib diisi.");
+        return;
+    }
+
+    if (!form.closeTime) {
+        alert("Jam tutup wajib diisi.");
+        return;
+    }
 
 		try {
 			setIsSubmitting(true);
@@ -356,6 +422,87 @@ export default function TambahDestinasiPage() {
 									Lokasi yang dipilih berada di luar area Bandung Raya.
 								</div>
 							)}
+
+              <div className="rounded-2xl bg-white p-4">
+                <p className="mb-4 font-semibold text-[#285260]">
+                  	Informasi Tambahan
+                </p>
+
+                <label className="mb-4 flex items-center gap-3 text-sm font-semibold text-[#285260]">
+                  <input
+                    type="checkbox"
+                    checked={form.isFree}
+                    onChange={(event) => {
+                      const checked = event.target.checked;
+
+                      setForm((prev) => ({
+                        ...prev,
+                        isFree: checked,
+                        ticketPrice: checked ? "0" : "",
+                        maxPrice: checked ? "0" : "",
+                      }));
+
+                      resetAnalysis();
+                    }}
+                    className="h-4 w-4 accent-[#F09A43]"
+                  />
+                  Wisata gratis
+                </label>
+
+                {!form.isFree && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="number"
+                      value={form.ticketPrice}
+                      onChange={(event) =>
+                        updateForm("ticketPrice", event.target.value)
+                      }
+                      placeholder="Harga Tiket Mulai"
+                      className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[#285260]"
+                    />
+
+                    <input
+                      type="number"
+                      value={form.maxPrice}
+                      onChange={(event) =>
+                        updateForm("maxPrice", event.target.value)
+                      }
+                      placeholder="Harga Tiket Maksimal"
+                      className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[#285260]"
+                    />
+                  </div>
+                )}
+
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  <input
+                    type="time"
+                    value={form.openTime}
+                    onChange={(event) =>
+                      updateForm("openTime", event.target.value)
+                    }
+                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[#285260]"
+                  />
+
+                  <input
+                    type="time"
+                    value={form.closeTime}
+                    onChange={(event) =>
+                      updateForm("closeTime", event.target.value)
+                    }
+                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[#285260]"
+                  />
+                </div>
+
+                <input
+                  type="url"
+                  value={form.website}
+                  onChange={(event) =>
+                    updateForm("website", event.target.value)
+                  }
+                  placeholder="Website (Opsional)"
+                  className="mt-3 w-full rounded-xl border border-gray-200 px-4 py-3 text-[#285260]"
+                />
+              </div>
 
 							<div>
 								<label className="mb-2 block text-sm font-semibold text-white">
