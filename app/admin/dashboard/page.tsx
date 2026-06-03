@@ -227,7 +227,6 @@ export default function DashboardPage() {
   const [user, setUser] = useState<{ name: string } | null>(null);
   const [period, setPeriod] = useState("6 Bulan Terakhir");
 
-  // ✅ Stats dari DB
   const [dbStats, setDbStats] = useState({
     totalWisata: 0,
     totalPengguna: 0,
@@ -241,7 +240,6 @@ export default function DashboardPage() {
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
-  // ✅ Fetch stats dashboard dari API
   useEffect(() => {
     fetch("/api/admin/dashboard")
       .then((res) => res.json())
@@ -259,7 +257,6 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
@@ -281,7 +278,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Stats dari DB */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl p-5 shadow-sm">
           <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-3">
@@ -322,9 +318,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Bar Chart - masih dummy */}
         <div className="bg-white rounded-2xl p-5 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -354,7 +348,6 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* Pie Chart - dari DB */}
         <div className="bg-white rounded-2xl p-5 shadow-sm">
           <h2 className="font-bold text-gray-800 mb-4">Kategori Wisata</h2>
           {loadingStats ? (
@@ -366,14 +359,14 @@ export default function DashboardPage() {
               <ResponsiveContainer width="55%" height={200}>
                 <PieChart>
                   <Pie data={kategoriData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
-                    {kategoriData.map((entry, index) => (
+                    {kategoriData.map((entry: any, index: number) => (
                       <Cell key={index} fill={entry.color} />
                     ))}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-2 flex-1">
-                {kategoriData.map((item) => (
+                {kategoriData.map((item: any) => (
                   <div key={item.name} className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
                     <span className="text-xs text-gray-600">{item.value}% {item.name}</span>
@@ -385,10 +378,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Peta SIG */}
       <SIGMap />
-
-    
     </div>
   );
 }
