@@ -1277,7 +1277,10 @@ export const UserScalarFieldEnum = {
   domisili: 'domisili',
   photo: 'photo',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  verificationStatus: 'verificationStatus',
+  verificationDocument: 'verificationDocument',
+  rejectionReason: 'rejectionReason'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1292,6 +1295,7 @@ export const DestinationScalarFieldEnum = {
   latitude: 'latitude',
   longitude: 'longitude',
   imageUrl: 'imageUrl',
+  ownerId: 'ownerId',
   openTime: 'openTime',
   closeTime: 'closeTime',
   ticketPrice: 'ticketPrice',
@@ -1525,6 +1529,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'VerificationStatus'
+ */
+export type EnumVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VerificationStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'VerificationStatus[]'
+ */
+export type ListEnumVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VerificationStatus[]'>
     
 
 

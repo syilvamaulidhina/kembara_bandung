@@ -162,7 +162,7 @@ export default function DestinasiPage() {
                     key={item.id}
                     className="bg-[#F4F4F4] rounded-[22px] border border-gray-200 p-3 shadow-sm"
                   >
-                    <div className="grid grid-cols-1 xl:grid-cols-[220px_1fr_220px] gap-3 items-stretch">
+                    <div className="grid grid-cols-1 xl:grid-cols-[220px_minmax(0,1fr)_360px] gap-3 items-stretch">
                       {/* IMAGE */}
                       <div className="h-full">
                         {item.imageUrl ? (
@@ -241,124 +241,80 @@ export default function DestinasiPage() {
                         </div>
                       </div>
 
-                      {/* AI ANALYSIS */}
-                      <div className="h-full bg-[#285260] rounded-[20px] p-3 text-white flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-base font-bold mb-3 text-center">
-                            Analisis Sistem
-                          </h3>
+                      {/* LLM REASONING PLACEHOLDER */}
+                      <div className="rounded-[20px] bg-[#285260] p-4 text-white">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                          LLM Reasoning
+                        </p>
 
-                          <div className="space-y-2.5 text-xs">
-                            <div className="flex items-start gap-2.5">
-                              <div className="w-5 h-5 rounded-full bg-orange-400 flex items-center justify-center font-bold text-[10px] shrink-0">
-                                ✓
-                              </div>
+                        <h3 className="mt-1 text-lg font-extrabold leading-tight">
+                          Insight Sistem
+                        </h3>
 
-                              <div>
-                                <p className="font-semibold text-[11px]">
-                                  Nama Wisata
-                                </p>
+                        <div className="mt-3 grid grid-cols-2 gap-2">
+                          <div className="rounded-2xl bg-white/10 p-3">
+                            <p className="text-[10px] font-bold text-white">
+                              Ringkasan
+                            </p>
 
-                                <p className="text-white/70 text-[10px] mt-0.5 leading-snug">
-                                  Sistem berhasil mengenali nama wisata.
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="flex items-start gap-2.5">
-                              <div
-                                className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] shrink-0 ${
-                                  isNeedRevision
-                                    ? "bg-red-500"
-                                    : "bg-orange-400"
-                                }`}
-                              >
-                                {isNeedRevision ? "✕" : "✓"}
-                              </div>
-
-                              <div>
-                                <p className="font-semibold text-[11px]">
-                                  Deskripsi
-                                </p>
-
-                                <p className="text-white/70 text-[10px] mt-0.5 leading-snug">
-                                  {isNeedRevision
-                                    ? "Deskripsi kurang relevan."
-                                    : "Deskripsi sesuai kategori."}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="flex items-start gap-2.5">
-                              <div className="w-5 h-5 rounded-full bg-orange-400 flex items-center justify-center font-bold text-[10px] shrink-0">
-                                ✓
-                              </div>
-
-                              <div>
-                                <p className="font-semibold text-[11px]">
-                                  Kategori
-                                </p>
-
-                                <p className="text-white/70 text-[10px] mt-0.5 leading-snug">
-                                  AI mengenali kategori wisata.
-                                </p>
-                              </div>
-                            </div>
+                            <p className="mt-1 text-[10px] leading-relaxed text-white/75">
+                              Data telah lolos validasi awal berdasarkan nama,
+                              deskripsi, dan kategori.
+                            </p>
                           </div>
 
-                          {isNeedRevision && (
-                            <div className="mt-3 bg-white rounded-xl p-2 text-[#285260]">
-                              <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-500 font-bold text-xs">
-                                  !
-                                </div>
+                          <div className="rounded-2xl bg-white/10 p-3">
+                            <p className="text-[10px] font-bold text-white">
+                              Reasoning
+                            </p>
 
-                                <div>
-                                  <p className="font-semibold text-[11px]">
-                                    Perlu Perbaikan
-                                  </p>
-
-                                  <p className="text-[9px] text-gray-500 mt-0.5">
-                                    Deskripsi kurang relevan.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                            <p className="mt-1 text-[10px] leading-relaxed text-white/75">
+                              Kategori dinilai relevan karena konten memuat
+                              aktivitas dan karakteristik wisata yang sesuai.
+                            </p>
+                          </div>
                         </div>
 
-                        {/* STATUS + BUTTON */}
-                        <div className="mt-3">
-                          <div
-                            className={`rounded-lg px-3 py-1.5 text-[11px] font-semibold text-center mb-2 capitalize ${
+                        {isNeedRevision && (
+                          <div className="mt-3 rounded-2xl bg-red-50 p-3 text-red-700">
+                            <p className="text-[10px] font-bold">Catatan Revisi</p>
+                            <p className="mt-1 text-[10px] leading-relaxed">
+                              Admin meminta pengelola memperbaiki data sebelum diajukan ulang.
+                            </p>
+                          </div>
+                        )}
+
+                        <div
+                          className={`mt-3 rounded-lg px-3 py-1.5 text-center text-[11px] font-semibold capitalize ${
+                            isNeedRevision
+                              ? "bg-red-500 text-white"
+                              : isPending
+                              ? "bg-yellow-400 text-black"
+                              : "bg-green-500 text-white"
+                          }`}
+                        >
+                          {item.status.replaceAll("_", " ")}
+                        </div>
+
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          <button
+                            onClick={() => router.push(`/pengelola/destinasi/${item.id}/edit`)}
+                            className={`rounded-full py-1.5 text-[11px] font-semibold transition hover:opacity-90 ${
                               isNeedRevision
                                 ? "bg-red-500 text-white"
-                                : isPending
-                                ? "bg-yellow-400 text-black"
-                                : "bg-green-500 text-white"
+                                : "bg-[#F29B4B] text-white"
                             }`}
                           >
-                            {item.status.replaceAll("_", " ")}
-                          </div>
+                            {isNeedRevision ? "Perbaiki" : "Edit"}
+                          </button>
 
-                          <div className="grid grid-cols-2 gap-2">
-                            <button
-                              onClick={() => router.push(`/pengelola/destinasi/${item.id}/edit`)}
-                              className="bg-[#F29B4B] text-white py-1.5 rounded-full text-[11px] font-semibold hover:opacity-90 transition"
-                            >
-                              Edit
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    router.push(`/pengelola/destinasi/${item.id}`)
-                                }
-                                className="bg-white text-[#285260] py-1.5 rounded-full text-[11px] font-semibold hover:bg-gray-100 transition"
-                              >
-                                Detail
-                              </button>
-                          </div>
+                          <button
+                            type="button"
+                            onClick={() => router.push(`/pengelola/destinasi/${item.id}`)}
+                            className="rounded-full bg-white py-1.5 text-[11px] font-semibold text-[#285260] transition hover:bg-gray-100"
+                          >
+                            Detail
+                          </button>
                         </div>
                       </div>
                     </div>

@@ -1,36 +1,73 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+function getUserFromCookie(req: NextRequest) {
+	const userCookie = req.cookies.get("user");
+
+	if (!userCookie) {
+		return null;
+	}
+
 	try {
+		return JSON.parse(userCookie.value);
+	} catch {
+		return null;
+	}
+}
+
+export async function GET(req: NextRequest) {
+	try {
+		const user = getUserFromCookie(req);
+
+		if (!user) {
+			return NextResponse.json(
+				{ message: "User belum login." },
+				{ status: 401 }
+			);
+		}
+
+		if (user.role !== "PENGELOLA") {
+			return NextResponse.json(
+				{ message: "Akses ditolak." },
+				{ status: 403 }
+			);
+		}
+
+		const ownerFilter = {
+			ownerId: Number(user.id),
+			isDeleted: false,
+		};
+
 		const totalDestinations = await prisma.destination.count({
-			where: { isDeleted: false },
+			where: ownerFilter,
 		});
 
 		const activeDestinations = await prisma.destination.count({
 			where: {
-				isDeleted: false,
+				...ownerFilter,
 				status: "aktif",
 			},
 		});
 
 		const pendingDestinations = await prisma.destination.count({
 			where: {
-				isDeleted: false,
+				...ownerFilter,
 				status: "pending",
 			},
 		});
 
 		const revisionDestinations = await prisma.destination.count({
 			where: {
-				isDeleted: false,
+				...ownerFilter,
 				status: "butuh_perbaikan",
 			},
 		});
 
 		const recentDestinations = await prisma.destination.findMany({
-			where: { isDeleted: false },
-			orderBy: { createdAt: "desc" },
+			where: ownerFilter,
+			orderBy: {
+				createdAt: "desc",
+			},
 			take: 5,
 			select: {
 				id: true,

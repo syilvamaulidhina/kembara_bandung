@@ -50,6 +50,7 @@ export default function LoginPage() {
       }
 
       const role = data.user.role;
+      const verificationStatus = data.user.verificationStatus;
 
       // Simpan user ke localStorage
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -58,11 +59,14 @@ export default function LoginPage() {
       if (role === "ADMIN") {
         window.location.href = "/admin/dashboard";
       } else if (role === "PENGELOLA") {
-        window.location.href = "/pengelola";
+        if (verificationStatus === "APPROVED") {
+          window.location.href = "/pengelola/dashboard";
+        } else {
+          window.location.href = "/pengelola/verifikasi";
+        }
       } else if (role === "WISATAWAN") {
         window.location.href = "/pengunjung";
       } else {
-        // role null → belum pilih role
         window.location.href = "/select-role";
       }
 

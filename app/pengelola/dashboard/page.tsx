@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import StatCard from "@/components/dashboard/stat-card";
@@ -21,47 +22,22 @@ type DashboardData = {
 	recentDestinations: Destination[];
 };
 
-function getActivityText(status: string) {
-	if (status === "aktif") {
-		return "sudah aktif dan tampil ke pengunjung.";
-	}
-
-	if (status === "pending") {
-		return "sedang menunggu review admin.";
-	}
-
-	if (status === "butuh_perbaikan") {
-		return "memerlukan perbaikan data.";
-	}
-
-	if (status === "canceled") {
-		return "dibatalkan oleh admin.";
-	}
-
-	return "memiliki perubahan status terbaru.";
-}
-
-function getActivityStyle(status: string) {
-	if (status === "aktif") return "bg-green-500";
-	if (status === "pending") return "bg-[#F29B4B]";
-	if (status === "butuh_perbaikan") return "bg-red-500";
-	return "bg-gray-400";
+function formatDate(date: string) {
+	return new Date(date).toLocaleDateString("id-ID", {
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+	});
 }
 
 export default function DashboardPage() {
-	const [data, setData] =
-		useState<DashboardData | null>(null);
-
-	const [isLoading, setIsLoading] =
-		useState(true);
+	const [data, setData] = useState<DashboardData | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		async function fetchDashboard() {
 			try {
-				const res = await fetch(
-					"/api/pengelola/dashboard"
-				);
-
+				const res = await fetch("/api/pengelola/dashboard");
 				const result = await res.json();
 
 				setData(result);
@@ -81,11 +57,10 @@ export default function DashboardPage() {
 				<div className="animate-pulse space-y-6">
 					<div className="h-40 rounded-[28px] bg-white" />
 
-					<div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-						<div className="h-44 rounded-[24px] bg-white" />
-						<div className="h-44 rounded-[24px] bg-white" />
-						<div className="h-44 rounded-[24px] bg-white" />
-						<div className="h-44 rounded-[24px] bg-white" />
+					<div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+						<div className="h-36 rounded-[24px] bg-white" />
+						<div className="h-36 rounded-[24px] bg-white" />
+						<div className="h-36 rounded-[24px] bg-white" />
 					</div>
 
 					<div className="h-96 rounded-[24px] bg-white" />
@@ -104,126 +79,292 @@ export default function DashboardPage() {
 		);
 	}
 
+	const attentionTotal =
+		data.pendingDestinations + data.revisionDestinations;
+
+	const revisionDestination = data.recentDestinations.find(
+		(destination) => destination.status === "butuh_perbaikan"
+	);
+
 	return (
-	<div className="min-h-screen bg-[#F5F7FB] p-6">
-		<div className="space-y-6">
-			<section className="relative overflow-hidden rounded-[28px] bg-[#285260] p-8 text-white shadow-sm">
-				<div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#F29B4B]/20 blur-3xl" />
-				<div className="absolute bottom-0 right-80 h-48 w-48 rounded-full bg-green-400/10 blur-3xl" />
+		<div className="min-h-screen bg-[#F5F7FB] p-6">
+			<div className="space-y-6">
+				<section className="relative overflow-hidden rounded-[28px] bg-[#285260] p-8 text-white shadow-sm">
+					<div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#F29B4B]/20 blur-3xl" />
+					<div className="absolute bottom-0 right-80 h-48 w-48 rounded-full bg-green-400/10 blur-3xl" />
 
-				<div className="relative flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
-					<div className="max-w-2xl">
-						<p className="text-sm font-bold uppercase tracking-[0.2em] text-[#F29B4B]">
-							Kembara Bandung
-						</p>
-
-						<h1 className="mt-3 text-4xl font-bold">
-							Selamat datang, Pengelola!
-						</h1>
-
-						<p className="mt-3 text-sm leading-6 text-white/75">
-							Pantau kondisi wisata yang kamu kelola, mulai dari
-							destinasi aktif, pengajuan yang sedang direview,
-							hingga data yang perlu diperbaiki sebelum tampil ke
-							pengunjung.
-						</p>
-					</div>
-
-					<div className="w-full rounded-[24px] bg-white p-6 text-[#1F2937] shadow-sm lg:w-[360px]">
-						<p className="text-sm font-bold text-[#285260]">
-							Fokus Hari Ini
-						</p>
-
-						<div className="mt-4 flex items-end gap-3">
-							<p className="text-6xl font-bold">
-								{data.pendingDestinations +
-									data.revisionDestinations}
+					<div className="relative grid gap-8 xl:grid-cols-[1fr_360px] xl:items-center">
+						<div>
+							<p className="text-sm font-bold uppercase tracking-[0.2em] text-[#F29B4B]">
+								Kembara Bandung
 							</p>
 
-							<p className="pb-2 text-sm font-medium text-gray-500">
-								wisata
+							<h1 className="mt-3 text-4xl font-bold">
+								Ringkasan Hari Ini
+							</h1>
+
+							<p className="mt-3 max-w-2xl text-sm leading-6 text-white/75">
+								Pantau status destinasi wisata yang kamu kelola,
+								mulai dari data aktif, pengajuan yang menunggu
+								review admin, hingga data yang perlu diperbaiki.
 							</p>
+
+							<div className="mt-6 flex flex-wrap gap-3">
+								<Link
+									href="/pengelola/destinasi/tambah"
+									className="rounded-full bg-[#F29B4B] px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
+								>
+									+ Tambah Wisata
+								</Link>
+
+								<Link
+									href="/pengelola/destinasi"
+									className="rounded-full bg-white px-5 py-3 text-sm font-bold text-[#285260] transition hover:bg-gray-100"
+								>
+									Kelola Wisata
+								</Link>
+							</div>
 						</div>
 
-						<p className="mt-3 text-sm leading-6 text-gray-500">
-							masih membutuhkan perhatian, baik karena menunggu
-							review admin maupun perlu perbaikan data.
-						</p>
+						<div className="rounded-[24px] bg-white p-6 text-[#1F2937] shadow-sm">
+							<p className="text-sm font-bold text-[#285260]">
+								Fokus Hari Ini
+							</p>
+
+							<div className="mt-4 flex items-end gap-3">
+								<p className="text-6xl font-bold">
+									{attentionTotal}
+								</p>
+
+								<p className="pb-2 text-sm font-medium text-gray-500">
+									wisata
+								</p>
+							</div>
+
+							<div className="mt-5 space-y-3">
+								<div className="flex items-center justify-between rounded-2xl bg-yellow-50 px-4 py-3">
+									<span className="text-sm font-semibold text-yellow-800">
+										Menunggu Review
+									</span>
+									<span className="text-lg font-bold text-yellow-700">
+										{data.pendingDestinations}
+									</span>
+								</div>
+
+								<div className="flex items-center justify-between rounded-2xl bg-red-50 px-4 py-3">
+									<span className="text-sm font-semibold text-red-700">
+										Butuh Perbaikan
+									</span>
+									<span className="text-lg font-bold text-red-600">
+										{data.revisionDestinations}
+									</span>
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</section>
+				</section>
 
-			<section className="grid grid-cols-1 gap-5 md:grid-cols-3">
-				<StatCard
-					title="Wisata Aktif"
-					value={data.activeDestinations}
-					description="Destinasi yang sudah tampil ke pengunjung."
-					variant="active"
-				/>
+				<section className="grid grid-cols-1 gap-5 md:grid-cols-3">
+					<StatCard
+						title="Wisata Aktif"
+						value={data.activeDestinations}
+						description="Destinasi yang sudah tampil ke pengunjung."
+						variant="active"
+					/>
 
-				<StatCard
-					title="Menunggu Review"
-					value={data.pendingDestinations}
-					description="Destinasi yang sedang divalidasi admin."
-					variant="pending"
-				/>
+					<StatCard
+						title="Menunggu Review"
+						value={data.pendingDestinations}
+						description="Destinasi yang sedang divalidasi admin."
+						variant="pending"
+					/>
 
-				<StatCard
-					title="Butuh Perbaikan"
-					value={data.revisionDestinations}
-					description="Destinasi yang perlu direvisi pengelola."
-					variant="revision"
-				/>
-			</section>
+					<StatCard
+						title="Butuh Perbaikan"
+						value={data.revisionDestinations}
+						description="Destinasi yang perlu direvisi pengelola."
+						variant="revision"
+					/>
+				</section>
 
-			<section className="grid grid-cols-1 gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-				<RecentDestinations
-					destinations={data.recentDestinations}
-				/>
+				{data.revisionDestinations > 0 && (
+					<section className="rounded-[24px] border border-red-100 bg-red-50 p-6 shadow-sm">
+						<div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+							<div>
+								<p className="text-sm font-bold uppercase tracking-[0.18em] text-red-500">
+									Perlu Tindakan
+								</p>
 
-				<div className="rounded-[24px] border border-gray-200 bg-white p-6 shadow-sm">
-					<h2 className="text-xl font-bold text-[#1F2937]">
-						Aktivitas Terbaru
-					</h2>
+								<h2 className="mt-2 text-2xl font-extrabold text-red-700">
+									{data.revisionDestinations} destinasi perlu
+									diperbaiki
+								</h2>
 
-					<p className="mt-1 text-sm text-gray-500">
-						Update terakhir dari wisata yang kamu kelola.
-					</p>
+								<p className="mt-2 text-sm leading-6 text-red-700/80">
+									Admin mengembalikan beberapa data wisata
+									untuk diperbaiki sebelum dapat diajukan ulang.
+								</p>
 
-					<div className="mt-6 space-y-5">
-						{data.recentDestinations.map((destination) => (
-							<div key={destination.id} className="flex gap-3">
-								<div
-									className={`mt-1 h-3 w-3 rounded-full ${getActivityStyle(
-										destination.status
-									)}`}
-								/>
-
-								<div>
-									<p className="text-sm font-bold text-gray-900">
-										{destination.name}
+								{revisionDestination && (
+									<p className="mt-3 text-sm font-semibold text-red-700">
+										Contoh: {revisionDestination.name}
 									</p>
+								)}
+							</div>
 
-									<p className="mt-1 text-sm leading-6 text-gray-500">
-										{getActivityText(destination.status)}
+							<Link
+								href="/pengelola/destinasi"
+								className="rounded-full bg-red-500 px-5 py-3 text-center text-sm font-bold text-white transition hover:bg-red-600"
+							>
+								Lihat Perbaikan
+							</Link>
+						</div>
+					</section>
+				)}
+
+				<section className="grid grid-cols-1 gap-6 xl:grid-cols-[1.25fr_0.75fr]">
+					<RecentDestinations
+						destinations={data.recentDestinations}
+					/>
+
+					<div className="space-y-6">
+						<div className="rounded-[24px] border border-gray-200 bg-white p-6 shadow-sm">
+							<p className="text-sm font-bold uppercase tracking-[0.18em] text-[#F29B4B]">
+								AI Insight
+							</p>
+
+							<h2 className="mt-2 text-2xl font-extrabold text-[#285260]">
+								Insight Sistem
+							</h2>
+
+							<p className="mt-3 text-sm leading-6 text-gray-500">
+								Sebagian besar destinasi yang kamu kelola sedang
+								berada pada tahap review admin. Sistem AI
+								digunakan sebagai validasi awal sebelum data
+								diajukan ke admin. (hardcoded untuk demo)
+							</p>
+
+							<div className="mt-5 grid grid-cols-2 gap-3">
+								<div className="rounded-2xl bg-[#F5F7FB] p-4">
+									<p className="text-xs font-semibold text-gray-500">
+										Total Wisata
 									</p>
+									<p className="mt-2 text-3xl font-extrabold text-[#285260]">
+										{data.totalDestinations}
+									</p>
+								</div>
 
-									<p className="mt-1 text-xs text-gray-400">
-										{new Date(
-											destination.createdAt
-										).toLocaleDateString("id-ID", {
-											day: "numeric",
-											month: "long",
-											year: "numeric",
-										})}
+								<div className="rounded-2xl bg-yellow-50 p-4">
+									<p className="text-xs font-semibold text-yellow-700">
+										Menunggu Review
+									</p>
+									<p className="mt-2 text-3xl font-extrabold text-yellow-700">
+										{data.pendingDestinations}
+									</p>
+								</div>
+
+								<div className="rounded-2xl bg-red-50 p-4">
+									<p className="text-xs font-semibold text-red-700">
+										Perlu Perbaikan
+									</p>
+									<p className="mt-2 text-3xl font-extrabold text-red-600">
+										{data.revisionDestinations}
+									</p>
+								</div>
+
+								<div className="rounded-2xl bg-green-50 p-4">
+									<p className="text-xs font-semibold text-green-700">
+										Aktif
+									</p>
+									<p className="mt-2 text-3xl font-extrabold text-green-600">
+										{data.activeDestinations}
 									</p>
 								</div>
 							</div>
-						))}
+						</div>
+
+						<div className="rounded-[24px] bg-[#285260] p-6 text-white shadow-sm">
+							<p className="text-sm font-bold uppercase tracking-[0.18em] text-[#F29B4B]">
+								Rekomendasi Sistem
+							</p>
+
+							<h2 className="mt-2 text-2xl font-extrabold">
+								Prioritas Pengelolaan
+							</h2>
+
+							<div className="mt-5 space-y-4">
+								<div className="rounded-2xl bg-white/10 p-4">
+									<p className="text-sm font-bold">
+										1. Periksa status revisi
+									</p>
+									<p className="mt-1 text-sm leading-6 text-white/70">
+										Destinasi berstatus butuh perbaikan perlu
+										diperbarui sesuai catatan admin.
+									</p>
+								</div>
+
+								<div className="rounded-2xl bg-white/10 p-4">
+									<p className="text-sm font-bold">
+										2. Pantau pengajuan pending
+									</p>
+									<p className="mt-1 text-sm leading-6 text-white/70">
+										Destinasi pending sedang menunggu validasi
+										admin sebelum tampil ke pengunjung.
+									</p>
+								</div>
+
+								<div className="rounded-2xl bg-white/10 p-4">
+									<p className="text-sm font-bold">
+										3. Lengkapi informasi wisata
+									</p>
+									<p className="mt-1 text-sm leading-6 text-white/70">
+										Pastikan nama, kategori, deskripsi, kontak,
+										alamat, dan gambar wisata sudah sesuai.
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div className="rounded-[24px] border border-gray-200 bg-white p-6 shadow-sm">
+							<h2 className="text-xl font-bold text-[#1F2937]">
+								Update Terakhir
+							</h2>
+
+							<p className="mt-1 text-sm text-gray-500">
+								Destinasi terbaru yang masuk ke sistem.
+							</p>
+
+							<div className="mt-5 space-y-4">
+								{data.recentDestinations
+									.slice(0, 3)
+									.map((destination) => (
+										<div
+											key={destination.id}
+											className="rounded-2xl bg-[#F5F7FB] p-4"
+										>
+											<p className="text-sm font-bold text-gray-900">
+												{destination.name}
+											</p>
+
+											<p className="mt-1 text-xs capitalize text-gray-500">
+												{destination.status.replaceAll(
+													"_",
+													" "
+												)}
+											</p>
+
+											<p className="mt-1 text-xs text-gray-400">
+												{formatDate(
+													destination.createdAt
+												)}
+											</p>
+										</div>
+									))}
+							</div>
+						</div>
 					</div>
-				</div>
-			</section>
+				</section>
+			</div>
 		</div>
-	</div>
-);
+	);
 }

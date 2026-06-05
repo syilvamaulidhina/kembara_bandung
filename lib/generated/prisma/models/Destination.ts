@@ -30,6 +30,7 @@ export type DestinationAvgAggregateOutputType = {
   id: number | null
   latitude: number | null
   longitude: number | null
+  ownerId: number | null
   ticketPrice: number | null
   maxPrice: number | null
   visitCount: number | null
@@ -39,6 +40,7 @@ export type DestinationSumAggregateOutputType = {
   id: number | null
   latitude: number | null
   longitude: number | null
+  ownerId: number | null
   ticketPrice: number | null
   maxPrice: number | null
   visitCount: number | null
@@ -53,6 +55,7 @@ export type DestinationMinAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   imageUrl: string | null
+  ownerId: number | null
   openTime: string | null
   closeTime: string | null
   ticketPrice: number | null
@@ -75,6 +78,7 @@ export type DestinationMaxAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   imageUrl: string | null
+  ownerId: number | null
   openTime: string | null
   closeTime: string | null
   ticketPrice: number | null
@@ -97,6 +101,7 @@ export type DestinationCountAggregateOutputType = {
   latitude: number
   longitude: number
   imageUrl: number
+  ownerId: number
   openTime: number
   closeTime: number
   ticketPrice: number
@@ -116,6 +121,7 @@ export type DestinationAvgAggregateInputType = {
   id?: true
   latitude?: true
   longitude?: true
+  ownerId?: true
   ticketPrice?: true
   maxPrice?: true
   visitCount?: true
@@ -125,6 +131,7 @@ export type DestinationSumAggregateInputType = {
   id?: true
   latitude?: true
   longitude?: true
+  ownerId?: true
   ticketPrice?: true
   maxPrice?: true
   visitCount?: true
@@ -139,6 +146,7 @@ export type DestinationMinAggregateInputType = {
   latitude?: true
   longitude?: true
   imageUrl?: true
+  ownerId?: true
   openTime?: true
   closeTime?: true
   ticketPrice?: true
@@ -161,6 +169,7 @@ export type DestinationMaxAggregateInputType = {
   latitude?: true
   longitude?: true
   imageUrl?: true
+  ownerId?: true
   openTime?: true
   closeTime?: true
   ticketPrice?: true
@@ -183,6 +192,7 @@ export type DestinationCountAggregateInputType = {
   latitude?: true
   longitude?: true
   imageUrl?: true
+  ownerId?: true
   openTime?: true
   closeTime?: true
   ticketPrice?: true
@@ -292,6 +302,7 @@ export type DestinationGroupByOutputType = {
   latitude: number
   longitude: number
   imageUrl: string | null
+  ownerId: number | null
   openTime: string | null
   closeTime: string | null
   ticketPrice: number | null
@@ -337,6 +348,7 @@ export type DestinationWhereInput = {
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
   imageUrl?: Prisma.StringNullableFilter<"Destination"> | string | null
+  ownerId?: Prisma.IntNullableFilter<"Destination"> | number | null
   openTime?: Prisma.StringNullableFilter<"Destination"> | string | null
   closeTime?: Prisma.StringNullableFilter<"Destination"> | string | null
   ticketPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
@@ -348,6 +360,7 @@ export type DestinationWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"Destination"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   categories?: Prisma.DestinationCategoryListRelationFilter
   aiAnalyses?: Prisma.AiAnalysisListRelationFilter
   savedBy?: Prisma.SavedDestinationListRelationFilter
@@ -365,6 +378,7 @@ export type DestinationOrderByWithRelationInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  ownerId?: Prisma.SortOrderInput | Prisma.SortOrder
   openTime?: Prisma.SortOrderInput | Prisma.SortOrder
   closeTime?: Prisma.SortOrderInput | Prisma.SortOrder
   ticketPrice?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -376,6 +390,7 @@ export type DestinationOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  owner?: Prisma.UserOrderByWithRelationInput
   categories?: Prisma.DestinationCategoryOrderByRelationAggregateInput
   aiAnalyses?: Prisma.AiAnalysisOrderByRelationAggregateInput
   savedBy?: Prisma.SavedDestinationOrderByRelationAggregateInput
@@ -396,6 +411,7 @@ export type DestinationWhereUniqueInput = Prisma.AtLeast<{
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
   imageUrl?: Prisma.StringNullableFilter<"Destination"> | string | null
+  ownerId?: Prisma.IntNullableFilter<"Destination"> | number | null
   openTime?: Prisma.StringNullableFilter<"Destination"> | string | null
   closeTime?: Prisma.StringNullableFilter<"Destination"> | string | null
   ticketPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
@@ -407,6 +423,7 @@ export type DestinationWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"Destination"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   categories?: Prisma.DestinationCategoryListRelationFilter
   aiAnalyses?: Prisma.AiAnalysisListRelationFilter
   savedBy?: Prisma.SavedDestinationListRelationFilter
@@ -424,6 +441,7 @@ export type DestinationOrderByWithAggregationInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  ownerId?: Prisma.SortOrderInput | Prisma.SortOrder
   openTime?: Prisma.SortOrderInput | Prisma.SortOrder
   closeTime?: Prisma.SortOrderInput | Prisma.SortOrder
   ticketPrice?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -454,6 +472,7 @@ export type DestinationScalarWhereWithAggregatesInput = {
   latitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
   longitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  ownerId?: Prisma.IntNullableWithAggregatesFilter<"Destination"> | number | null
   openTime?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
   closeTime?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
   ticketPrice?: Prisma.IntNullableWithAggregatesFilter<"Destination"> | number | null
@@ -486,6 +505,7 @@ export type DestinationCreateInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutDestinationsInput
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
   savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -503,6 +523,7 @@ export type DestinationUncheckedCreateInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -541,6 +562,7 @@ export type DestinationUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutDestinationsNestedInput
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
   savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -558,6 +580,7 @@ export type DestinationUncheckedUpdateInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -586,6 +609,7 @@ export type DestinationCreateManyInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -629,6 +653,7 @@ export type DestinationUncheckedUpdateManyInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -642,6 +667,16 @@ export type DestinationUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type DestinationListRelationFilter = {
+  every?: Prisma.DestinationWhereInput
+  some?: Prisma.DestinationWhereInput
+  none?: Prisma.DestinationWhereInput
+}
+
+export type DestinationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type DestinationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -651,6 +686,7 @@ export type DestinationCountOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   openTime?: Prisma.SortOrder
   closeTime?: Prisma.SortOrder
   ticketPrice?: Prisma.SortOrder
@@ -668,6 +704,7 @@ export type DestinationAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   ticketPrice?: Prisma.SortOrder
   maxPrice?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
@@ -682,6 +719,7 @@ export type DestinationMaxOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   openTime?: Prisma.SortOrder
   closeTime?: Prisma.SortOrder
   ticketPrice?: Prisma.SortOrder
@@ -704,6 +742,7 @@ export type DestinationMinOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   openTime?: Prisma.SortOrder
   closeTime?: Prisma.SortOrder
   ticketPrice?: Prisma.SortOrder
@@ -721,6 +760,7 @@ export type DestinationSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
+  ownerId?: Prisma.SortOrder
   ticketPrice?: Prisma.SortOrder
   maxPrice?: Prisma.SortOrder
   visitCount?: Prisma.SortOrder
@@ -729,6 +769,48 @@ export type DestinationSumOrderByAggregateInput = {
 export type DestinationScalarRelationFilter = {
   is?: Prisma.DestinationWhereInput
   isNot?: Prisma.DestinationWhereInput
+}
+
+export type DestinationCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutOwnerInput, Prisma.DestinationUncheckedCreateWithoutOwnerInput> | Prisma.DestinationCreateWithoutOwnerInput[] | Prisma.DestinationUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutOwnerInput | Prisma.DestinationCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.DestinationCreateManyOwnerInputEnvelope
+  connect?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+}
+
+export type DestinationUncheckedCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutOwnerInput, Prisma.DestinationUncheckedCreateWithoutOwnerInput> | Prisma.DestinationCreateWithoutOwnerInput[] | Prisma.DestinationUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutOwnerInput | Prisma.DestinationCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.DestinationCreateManyOwnerInputEnvelope
+  connect?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+}
+
+export type DestinationUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutOwnerInput, Prisma.DestinationUncheckedCreateWithoutOwnerInput> | Prisma.DestinationCreateWithoutOwnerInput[] | Prisma.DestinationUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutOwnerInput | Prisma.DestinationCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.DestinationUpsertWithWhereUniqueWithoutOwnerInput | Prisma.DestinationUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.DestinationCreateManyOwnerInputEnvelope
+  set?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  disconnect?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  delete?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  connect?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  update?: Prisma.DestinationUpdateWithWhereUniqueWithoutOwnerInput | Prisma.DestinationUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.DestinationUpdateManyWithWhereWithoutOwnerInput | Prisma.DestinationUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.DestinationScalarWhereInput | Prisma.DestinationScalarWhereInput[]
+}
+
+export type DestinationUncheckedUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.DestinationCreateWithoutOwnerInput, Prisma.DestinationUncheckedCreateWithoutOwnerInput> | Prisma.DestinationCreateWithoutOwnerInput[] | Prisma.DestinationUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.DestinationCreateOrConnectWithoutOwnerInput | Prisma.DestinationCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.DestinationUpsertWithWhereUniqueWithoutOwnerInput | Prisma.DestinationUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.DestinationCreateManyOwnerInputEnvelope
+  set?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  disconnect?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  delete?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  connect?: Prisma.DestinationWhereUniqueInput | Prisma.DestinationWhereUniqueInput[]
+  update?: Prisma.DestinationUpdateWithWhereUniqueWithoutOwnerInput | Prisma.DestinationUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.DestinationUpdateManyWithWhereWithoutOwnerInput | Prisma.DestinationUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.DestinationScalarWhereInput | Prisma.DestinationScalarWhereInput[]
 }
 
 export type FloatFieldUpdateOperationsInput = {
@@ -843,6 +925,113 @@ export type DestinationUpdateOneRequiredWithoutVisitedByNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DestinationUpdateToOneWithWhereWithoutVisitedByInput, Prisma.DestinationUpdateWithoutVisitedByInput>, Prisma.DestinationUncheckedUpdateWithoutVisitedByInput>
 }
 
+export type DestinationCreateWithoutOwnerInput = {
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationUncheckedCreateWithoutOwnerInput = {
+  id?: number
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+  savedBy?: Prisma.SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDestinationInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+}
+
+export type DestinationCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutOwnerInput, Prisma.DestinationUncheckedCreateWithoutOwnerInput>
+}
+
+export type DestinationCreateManyOwnerInputEnvelope = {
+  data: Prisma.DestinationCreateManyOwnerInput | Prisma.DestinationCreateManyOwnerInput[]
+  skipDuplicates?: boolean
+}
+
+export type DestinationUpsertWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  update: Prisma.XOR<Prisma.DestinationUpdateWithoutOwnerInput, Prisma.DestinationUncheckedUpdateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.DestinationCreateWithoutOwnerInput, Prisma.DestinationUncheckedCreateWithoutOwnerInput>
+}
+
+export type DestinationUpdateWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.DestinationWhereUniqueInput
+  data: Prisma.XOR<Prisma.DestinationUpdateWithoutOwnerInput, Prisma.DestinationUncheckedUpdateWithoutOwnerInput>
+}
+
+export type DestinationUpdateManyWithWhereWithoutOwnerInput = {
+  where: Prisma.DestinationScalarWhereInput
+  data: Prisma.XOR<Prisma.DestinationUpdateManyMutationInput, Prisma.DestinationUncheckedUpdateManyWithoutOwnerInput>
+}
+
+export type DestinationScalarWhereInput = {
+  AND?: Prisma.DestinationScalarWhereInput | Prisma.DestinationScalarWhereInput[]
+  OR?: Prisma.DestinationScalarWhereInput[]
+  NOT?: Prisma.DestinationScalarWhereInput | Prisma.DestinationScalarWhereInput[]
+  id?: Prisma.IntFilter<"Destination"> | number
+  name?: Prisma.StringFilter<"Destination"> | string
+  description?: Prisma.StringFilter<"Destination"> | string
+  address?: Prisma.StringFilter<"Destination"> | string
+  contact?: Prisma.StringNullableFilter<"Destination"> | string | null
+  latitude?: Prisma.FloatFilter<"Destination"> | number
+  longitude?: Prisma.FloatFilter<"Destination"> | number
+  imageUrl?: Prisma.StringNullableFilter<"Destination"> | string | null
+  ownerId?: Prisma.IntNullableFilter<"Destination"> | number | null
+  openTime?: Prisma.StringNullableFilter<"Destination"> | string | null
+  closeTime?: Prisma.StringNullableFilter<"Destination"> | string | null
+  ticketPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
+  maxPrice?: Prisma.IntNullableFilter<"Destination"> | number | null
+  website?: Prisma.StringNullableFilter<"Destination"> | string | null
+  visitCount?: Prisma.IntFilter<"Destination"> | number
+  status?: Prisma.EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFilter<"Destination"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Destination"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Destination"> | Date | string
+}
+
 export type DestinationCreateWithoutCategoriesInput = {
   name: string
   description: string
@@ -862,6 +1051,7 @@ export type DestinationCreateWithoutCategoriesInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutDestinationsInput
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
   savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
   itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
@@ -878,6 +1068,7 @@ export type DestinationUncheckedCreateWithoutCategoriesInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -931,6 +1122,7 @@ export type DestinationUpdateWithoutCategoriesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutDestinationsNestedInput
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
   savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
   itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
@@ -947,6 +1139,7 @@ export type DestinationUncheckedUpdateWithoutCategoriesInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -984,6 +1177,7 @@ export type DestinationCreateWithoutAiAnalysesInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutDestinationsInput
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
   savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
   itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
@@ -1000,6 +1194,7 @@ export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -1053,6 +1248,7 @@ export type DestinationUpdateWithoutAiAnalysesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutDestinationsNestedInput
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
   savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
   itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
@@ -1069,6 +1265,7 @@ export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1106,6 +1303,7 @@ export type DestinationCreateWithoutSavedByInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutDestinationsInput
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
   itineraryItems?: Prisma.ItineraryItemCreateNestedManyWithoutDestinationInput
@@ -1122,6 +1320,7 @@ export type DestinationUncheckedCreateWithoutSavedByInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -1175,6 +1374,7 @@ export type DestinationUpdateWithoutSavedByInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutDestinationsNestedInput
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
   itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
@@ -1191,6 +1391,7 @@ export type DestinationUncheckedUpdateWithoutSavedByInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1228,6 +1429,7 @@ export type DestinationCreateWithoutItineraryItemsInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutDestinationsInput
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
   savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -1244,6 +1446,7 @@ export type DestinationUncheckedCreateWithoutItineraryItemsInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -1297,6 +1500,7 @@ export type DestinationUpdateWithoutItineraryItemsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutDestinationsNestedInput
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
   savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -1313,6 +1517,7 @@ export type DestinationUncheckedUpdateWithoutItineraryItemsInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1350,6 +1555,7 @@ export type DestinationCreateWithoutReviewsInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutDestinationsInput
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
   savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -1366,6 +1572,7 @@ export type DestinationUncheckedCreateWithoutReviewsInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -1419,6 +1626,7 @@ export type DestinationUpdateWithoutReviewsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutDestinationsNestedInput
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
   savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -1435,6 +1643,7 @@ export type DestinationUncheckedUpdateWithoutReviewsInput = {
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1472,6 +1681,7 @@ export type DestinationCreateWithoutVisitedByInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner?: Prisma.UserCreateNestedOneWithoutDestinationsInput
   categories?: Prisma.DestinationCategoryCreateNestedManyWithoutDestinationInput
   aiAnalyses?: Prisma.AiAnalysisCreateNestedManyWithoutDestinationInput
   savedBy?: Prisma.SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -1488,6 +1698,7 @@ export type DestinationUncheckedCreateWithoutVisitedByInput = {
   latitude: number
   longitude: number
   imageUrl?: string | null
+  ownerId?: number | null
   openTime?: string | null
   closeTime?: string | null
   ticketPrice?: number | null
@@ -1541,6 +1752,7 @@ export type DestinationUpdateWithoutVisitedByInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneWithoutDestinationsNestedInput
   categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
   aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
   savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -1549,6 +1761,83 @@ export type DestinationUpdateWithoutVisitedByInput = {
 }
 
 export type DestinationUncheckedUpdateWithoutVisitedByInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationCreateManyOwnerInput = {
+  id?: number
+  name: string
+  description: string
+  address: string
+  contact?: string | null
+  latitude: number
+  longitude: number
+  imageUrl?: string | null
+  openTime?: string | null
+  closeTime?: string | null
+  ticketPrice?: number | null
+  maxPrice?: number | null
+  website?: string | null
+  visitCount?: number
+  status?: $Enums.DestinationStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DestinationUpdateWithoutOwnerInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.DestinationCategoryUpdateManyWithoutDestinationNestedInput
+  aiAnalyses?: Prisma.AiAnalysisUpdateManyWithoutDestinationNestedInput
+  savedBy?: Prisma.SavedDestinationUpdateManyWithoutDestinationNestedInput
+  itineraryItems?: Prisma.ItineraryItemUpdateManyWithoutDestinationNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1573,6 +1862,29 @@ export type DestinationUncheckedUpdateWithoutVisitedByInput = {
   savedBy?: Prisma.SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
   itineraryItems?: Prisma.ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+  visitedBy?: Prisma.VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+}
+
+export type DestinationUncheckedUpdateManyWithoutOwnerInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  closeTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitCount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1660,6 +1972,7 @@ export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  ownerId?: boolean
   openTime?: boolean
   closeTime?: boolean
   ticketPrice?: boolean
@@ -1671,6 +1984,7 @@ export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.Destination$ownerArgs<ExtArgs>
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
   aiAnalyses?: boolean | Prisma.Destination$aiAnalysesArgs<ExtArgs>
   savedBy?: boolean | Prisma.Destination$savedByArgs<ExtArgs>
@@ -1689,6 +2003,7 @@ export type DestinationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  ownerId?: boolean
   openTime?: boolean
   closeTime?: boolean
   ticketPrice?: boolean
@@ -1700,6 +2015,7 @@ export type DestinationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.Destination$ownerArgs<ExtArgs>
 }, ExtArgs["result"]["destination"]>
 
 export type DestinationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1711,6 +2027,7 @@ export type DestinationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  ownerId?: boolean
   openTime?: boolean
   closeTime?: boolean
   ticketPrice?: boolean
@@ -1722,6 +2039,7 @@ export type DestinationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.Destination$ownerArgs<ExtArgs>
 }, ExtArgs["result"]["destination"]>
 
 export type DestinationSelectScalar = {
@@ -1733,6 +2051,7 @@ export type DestinationSelectScalar = {
   latitude?: boolean
   longitude?: boolean
   imageUrl?: boolean
+  ownerId?: boolean
   openTime?: boolean
   closeTime?: boolean
   ticketPrice?: boolean
@@ -1746,8 +2065,9 @@ export type DestinationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
 export type DestinationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Destination$ownerArgs<ExtArgs>
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
   aiAnalyses?: boolean | Prisma.Destination$aiAnalysesArgs<ExtArgs>
   savedBy?: boolean | Prisma.Destination$savedByArgs<ExtArgs>
@@ -1756,12 +2076,17 @@ export type DestinationInclude<ExtArgs extends runtime.Types.Extensions.Internal
   visitedBy?: boolean | Prisma.Destination$visitedByArgs<ExtArgs>
   _count?: boolean | Prisma.DestinationCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type DestinationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type DestinationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type DestinationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Destination$ownerArgs<ExtArgs>
+}
+export type DestinationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Destination$ownerArgs<ExtArgs>
+}
 
 export type $DestinationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Destination"
   objects: {
+    owner: Prisma.$UserPayload<ExtArgs> | null
     categories: Prisma.$DestinationCategoryPayload<ExtArgs>[]
     aiAnalyses: Prisma.$AiAnalysisPayload<ExtArgs>[]
     savedBy: Prisma.$SavedDestinationPayload<ExtArgs>[]
@@ -1778,6 +2103,7 @@ export type $DestinationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     latitude: number
     longitude: number
     imageUrl: string | null
+    ownerId: number | null
     openTime: string | null
     closeTime: string | null
     ticketPrice: number | null
@@ -2183,6 +2509,7 @@ readonly fields: DestinationFieldRefs;
  */
 export interface Prisma__DestinationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  owner<T extends Prisma.Destination$ownerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$ownerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   categories<T extends Prisma.Destination$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiAnalyses<T extends Prisma.Destination$aiAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$aiAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   savedBy<T extends Prisma.Destination$savedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Destination$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2226,6 +2553,7 @@ export interface DestinationFieldRefs {
   readonly latitude: Prisma.FieldRef<"Destination", 'Float'>
   readonly longitude: Prisma.FieldRef<"Destination", 'Float'>
   readonly imageUrl: Prisma.FieldRef<"Destination", 'String'>
+  readonly ownerId: Prisma.FieldRef<"Destination", 'Int'>
   readonly openTime: Prisma.FieldRef<"Destination", 'String'>
   readonly closeTime: Prisma.FieldRef<"Destination", 'String'>
   readonly ticketPrice: Prisma.FieldRef<"Destination", 'Int'>
@@ -2491,6 +2819,10 @@ export type DestinationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    */
   data: Prisma.DestinationCreateManyInput | Prisma.DestinationCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DestinationIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2561,6 +2893,10 @@ export type DestinationUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * Limit how many Destinations to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DestinationIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2627,6 +2963,25 @@ export type DestinationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Destinations to delete.
    */
   limit?: number
+}
+
+/**
+ * Destination.owner
+ */
+export type Destination$ownerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
