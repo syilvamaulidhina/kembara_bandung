@@ -137,20 +137,27 @@ export async function PATCH(
 				id: destinationId,
 			},
 			data: {
-				name: body.name,
-				description: body.description,
-				address: body.address,
-				contact: body.contact || null,
-				latitude: Number(body.latitude),
-				longitude: Number(body.longitude),
-				imageUrl: body.imageUrl || null,
-				status: "pending",
-				categories: {
-					create: categoryIds.map((categoryId: number) => ({
-						categoryId,
-					})),
-				},
-			},
+                name: body.name,
+                description: body.description,
+                address: body.address,
+
+                addressStreet: body.addressStreet || null,
+                addressVillage: body.addressVillage || null,
+                addressDistrict: body.addressDistrict || null,
+                addressCity: body.addressCity || null,
+                addressProvince: body.addressProvince || null,
+
+                contact: body.contact || null,
+                latitude: Number(body.latitude),
+                longitude: Number(body.longitude),
+                imageUrl: body.imageUrl || null,
+                status: "pending",
+                categories: {
+                    create: categoryIds.map((categoryId: number) => ({
+                    categoryId,
+                    })),
+                },
+            },
 			include: {
 				categories: {
 					include: {

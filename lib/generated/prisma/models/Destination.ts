@@ -51,6 +51,11 @@ export type DestinationMinAggregateOutputType = {
   name: string | null
   description: string | null
   address: string | null
+  addressStreet: string | null
+  addressVillage: string | null
+  addressDistrict: string | null
+  addressCity: string | null
+  addressProvince: string | null
   contact: string | null
   latitude: number | null
   longitude: number | null
@@ -74,6 +79,11 @@ export type DestinationMaxAggregateOutputType = {
   name: string | null
   description: string | null
   address: string | null
+  addressStreet: string | null
+  addressVillage: string | null
+  addressDistrict: string | null
+  addressCity: string | null
+  addressProvince: string | null
   contact: string | null
   latitude: number | null
   longitude: number | null
@@ -97,6 +107,11 @@ export type DestinationCountAggregateOutputType = {
   name: number
   description: number
   address: number
+  addressStreet: number
+  addressVillage: number
+  addressDistrict: number
+  addressCity: number
+  addressProvince: number
   contact: number
   latitude: number
   longitude: number
@@ -142,6 +157,11 @@ export type DestinationMinAggregateInputType = {
   name?: true
   description?: true
   address?: true
+  addressStreet?: true
+  addressVillage?: true
+  addressDistrict?: true
+  addressCity?: true
+  addressProvince?: true
   contact?: true
   latitude?: true
   longitude?: true
@@ -165,6 +185,11 @@ export type DestinationMaxAggregateInputType = {
   name?: true
   description?: true
   address?: true
+  addressStreet?: true
+  addressVillage?: true
+  addressDistrict?: true
+  addressCity?: true
+  addressProvince?: true
   contact?: true
   latitude?: true
   longitude?: true
@@ -188,6 +213,11 @@ export type DestinationCountAggregateInputType = {
   name?: true
   description?: true
   address?: true
+  addressStreet?: true
+  addressVillage?: true
+  addressDistrict?: true
+  addressCity?: true
+  addressProvince?: true
   contact?: true
   latitude?: true
   longitude?: true
@@ -298,6 +328,11 @@ export type DestinationGroupByOutputType = {
   name: string
   description: string
   address: string
+  addressStreet: string | null
+  addressVillage: string | null
+  addressDistrict: string | null
+  addressCity: string | null
+  addressProvince: string | null
   contact: string | null
   latitude: number
   longitude: number
@@ -344,6 +379,11 @@ export type DestinationWhereInput = {
   name?: Prisma.StringFilter<"Destination"> | string
   description?: Prisma.StringFilter<"Destination"> | string
   address?: Prisma.StringFilter<"Destination"> | string
+  addressStreet?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressVillage?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressDistrict?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressCity?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressProvince?: Prisma.StringNullableFilter<"Destination"> | string | null
   contact?: Prisma.StringNullableFilter<"Destination"> | string | null
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
@@ -374,6 +414,11 @@ export type DestinationOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  addressStreet?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressVillage?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressDistrict?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressProvince?: Prisma.SortOrderInput | Prisma.SortOrder
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -407,6 +452,11 @@ export type DestinationWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Destination"> | string
   description?: Prisma.StringFilter<"Destination"> | string
   address?: Prisma.StringFilter<"Destination"> | string
+  addressStreet?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressVillage?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressDistrict?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressCity?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressProvince?: Prisma.StringNullableFilter<"Destination"> | string | null
   contact?: Prisma.StringNullableFilter<"Destination"> | string | null
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
@@ -437,6 +487,11 @@ export type DestinationOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  addressStreet?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressVillage?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressDistrict?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  addressProvince?: Prisma.SortOrderInput | Prisma.SortOrder
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -468,6 +523,11 @@ export type DestinationScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Destination"> | string
   description?: Prisma.StringWithAggregatesFilter<"Destination"> | string
   address?: Prisma.StringWithAggregatesFilter<"Destination"> | string
+  addressStreet?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  addressVillage?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  addressDistrict?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  addressCity?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
+  addressProvince?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
   contact?: Prisma.StringNullableWithAggregatesFilter<"Destination"> | string | null
   latitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
   longitude?: Prisma.FloatWithAggregatesFilter<"Destination"> | number
@@ -490,6 +550,11 @@ export type DestinationCreateInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -519,6 +584,11 @@ export type DestinationUncheckedCreateInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -547,6 +617,11 @@ export type DestinationUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -576,6 +651,11 @@ export type DestinationUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -605,6 +685,11 @@ export type DestinationCreateManyInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -627,6 +712,11 @@ export type DestinationUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -649,6 +739,11 @@ export type DestinationUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -682,6 +777,11 @@ export type DestinationCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  addressStreet?: Prisma.SortOrder
+  addressVillage?: Prisma.SortOrder
+  addressDistrict?: Prisma.SortOrder
+  addressCity?: Prisma.SortOrder
+  addressProvince?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -715,6 +815,11 @@ export type DestinationMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  addressStreet?: Prisma.SortOrder
+  addressVillage?: Prisma.SortOrder
+  addressDistrict?: Prisma.SortOrder
+  addressCity?: Prisma.SortOrder
+  addressProvince?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -738,6 +843,11 @@ export type DestinationMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  addressStreet?: Prisma.SortOrder
+  addressVillage?: Prisma.SortOrder
+  addressDistrict?: Prisma.SortOrder
+  addressCity?: Prisma.SortOrder
+  addressProvince?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -929,6 +1039,11 @@ export type DestinationCreateWithoutOwnerInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -957,6 +1072,11 @@ export type DestinationUncheckedCreateWithoutOwnerInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1014,6 +1134,11 @@ export type DestinationScalarWhereInput = {
   name?: Prisma.StringFilter<"Destination"> | string
   description?: Prisma.StringFilter<"Destination"> | string
   address?: Prisma.StringFilter<"Destination"> | string
+  addressStreet?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressVillage?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressDistrict?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressCity?: Prisma.StringNullableFilter<"Destination"> | string | null
+  addressProvince?: Prisma.StringNullableFilter<"Destination"> | string | null
   contact?: Prisma.StringNullableFilter<"Destination"> | string | null
   latitude?: Prisma.FloatFilter<"Destination"> | number
   longitude?: Prisma.FloatFilter<"Destination"> | number
@@ -1036,6 +1161,11 @@ export type DestinationCreateWithoutCategoriesInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1064,6 +1194,11 @@ export type DestinationUncheckedCreateWithoutCategoriesInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1107,6 +1242,11 @@ export type DestinationUpdateWithoutCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1135,6 +1275,11 @@ export type DestinationUncheckedUpdateWithoutCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1162,6 +1307,11 @@ export type DestinationCreateWithoutAiAnalysesInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1190,6 +1340,11 @@ export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1233,6 +1388,11 @@ export type DestinationUpdateWithoutAiAnalysesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1261,6 +1421,11 @@ export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1288,6 +1453,11 @@ export type DestinationCreateWithoutSavedByInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1316,6 +1486,11 @@ export type DestinationUncheckedCreateWithoutSavedByInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1359,6 +1534,11 @@ export type DestinationUpdateWithoutSavedByInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1387,6 +1567,11 @@ export type DestinationUncheckedUpdateWithoutSavedByInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1414,6 +1599,11 @@ export type DestinationCreateWithoutItineraryItemsInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1442,6 +1632,11 @@ export type DestinationUncheckedCreateWithoutItineraryItemsInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1485,6 +1680,11 @@ export type DestinationUpdateWithoutItineraryItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1513,6 +1713,11 @@ export type DestinationUncheckedUpdateWithoutItineraryItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1540,6 +1745,11 @@ export type DestinationCreateWithoutReviewsInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1568,6 +1778,11 @@ export type DestinationUncheckedCreateWithoutReviewsInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1611,6 +1826,11 @@ export type DestinationUpdateWithoutReviewsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1639,6 +1859,11 @@ export type DestinationUncheckedUpdateWithoutReviewsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1666,6 +1891,11 @@ export type DestinationCreateWithoutVisitedByInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1694,6 +1924,11 @@ export type DestinationUncheckedCreateWithoutVisitedByInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1737,6 +1972,11 @@ export type DestinationUpdateWithoutVisitedByInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1765,6 +2005,11 @@ export type DestinationUncheckedUpdateWithoutVisitedByInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1793,6 +2038,11 @@ export type DestinationCreateManyOwnerInput = {
   name: string
   description: string
   address: string
+  addressStreet?: string | null
+  addressVillage?: string | null
+  addressDistrict?: string | null
+  addressCity?: string | null
+  addressProvince?: string | null
   contact?: string | null
   latitude: number
   longitude: number
@@ -1814,6 +2064,11 @@ export type DestinationUpdateWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1842,6 +2097,11 @@ export type DestinationUncheckedUpdateWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1870,6 +2130,11 @@ export type DestinationUncheckedUpdateManyWithoutOwnerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  addressStreet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressProvince?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.FloatFieldUpdateOperationsInput | number
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1968,6 +2233,11 @@ export type DestinationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   name?: boolean
   description?: boolean
   address?: boolean
+  addressStreet?: boolean
+  addressVillage?: boolean
+  addressDistrict?: boolean
+  addressCity?: boolean
+  addressProvince?: boolean
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -1999,6 +2269,11 @@ export type DestinationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   description?: boolean
   address?: boolean
+  addressStreet?: boolean
+  addressVillage?: boolean
+  addressDistrict?: boolean
+  addressCity?: boolean
+  addressProvince?: boolean
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -2023,6 +2298,11 @@ export type DestinationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   description?: boolean
   address?: boolean
+  addressStreet?: boolean
+  addressVillage?: boolean
+  addressDistrict?: boolean
+  addressCity?: boolean
+  addressProvince?: boolean
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -2047,6 +2327,11 @@ export type DestinationSelectScalar = {
   name?: boolean
   description?: boolean
   address?: boolean
+  addressStreet?: boolean
+  addressVillage?: boolean
+  addressDistrict?: boolean
+  addressCity?: boolean
+  addressProvince?: boolean
   contact?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -2065,7 +2350,7 @@ export type DestinationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+export type DestinationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "addressStreet" | "addressVillage" | "addressDistrict" | "addressCity" | "addressProvince" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
 export type DestinationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.Destination$ownerArgs<ExtArgs>
   categories?: boolean | Prisma.Destination$categoriesArgs<ExtArgs>
@@ -2099,6 +2384,11 @@ export type $DestinationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     name: string
     description: string
     address: string
+    addressStreet: string | null
+    addressVillage: string | null
+    addressDistrict: string | null
+    addressCity: string | null
+    addressProvince: string | null
     contact: string | null
     latitude: number
     longitude: number
@@ -2549,6 +2839,11 @@ export interface DestinationFieldRefs {
   readonly name: Prisma.FieldRef<"Destination", 'String'>
   readonly description: Prisma.FieldRef<"Destination", 'String'>
   readonly address: Prisma.FieldRef<"Destination", 'String'>
+  readonly addressStreet: Prisma.FieldRef<"Destination", 'String'>
+  readonly addressVillage: Prisma.FieldRef<"Destination", 'String'>
+  readonly addressDistrict: Prisma.FieldRef<"Destination", 'String'>
+  readonly addressCity: Prisma.FieldRef<"Destination", 'String'>
+  readonly addressProvince: Prisma.FieldRef<"Destination", 'String'>
   readonly contact: Prisma.FieldRef<"Destination", 'String'>
   readonly latitude: Prisma.FieldRef<"Destination", 'Float'>
   readonly longitude: Prisma.FieldRef<"Destination", 'Float'>

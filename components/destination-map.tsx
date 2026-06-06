@@ -11,10 +11,19 @@ import type {
   MultiPolygon,
 } from "geojson";
 
+type AddressFields = {
+  addressStreet: string;
+  addressVillage: string;
+  addressDistrict: string;
+  addressCity: string;
+  addressProvince: string;
+};
+
 type DestinationMapProps = {
   latitude: string;
   longitude: string;
   address: string;
+  addressFields?: AddressFields;
   onLocationChange: (lat: string, lng: string) => void;
   onAddressChange: (address: string) => void;
   onAreaValidChange: (isValid: boolean) => void;
@@ -24,6 +33,7 @@ export default function DestinationMap({
   latitude,
   longitude,
   address,
+  addressFields,
   onLocationChange,
   onAddressChange,
   onAreaValidChange,
@@ -89,6 +99,53 @@ export default function DestinationMap({
     });
   }
 
+  function buildAddressQueries() {
+    if (!addressFields) {
+      return [address.trim()].filter(Boolean);
+    }
+
+    const {
+      addressStreet,
+      addressVillage,
+      addressDistrict,
+      addressCity,
+      addressProvince,
+    } = addressFields;
+
+    const streetOrPlace = addressStreet.trim();
+    const city = addressCity.trim() || "Bandung";
+    const province = addressProvince.trim() || "Jawa Barat";
+
+    const queries = [
+        [streetOrPlace],
+        [streetOrPlace, "Bandung"],
+        [streetOrPlace, "Jawa Barat"],
+        [streetOrPlace, "Indonesia"],
+        [streetOrPlace, "Bandung", "Jawa Barat", "Indonesia"],
+
+        [streetOrPlace, city, province, "Indonesia"],
+        [streetOrPlace, addressDistrict, city, province, "Indonesia"],
+        [
+          streetOrPlace,
+          addressVillage,
+          addressDistrict,
+          city,
+          province,
+          "Indonesia",
+        ],
+
+        [addressVillage, addressDistrict, city, province, "Indonesia"],
+        [addressDistrict, city, province, "Indonesia"],
+        [city, province, "Indonesia"],
+        [address.trim()],
+      ];
+
+    return queries
+      .map((parts) => parts.filter(Boolean).join(", "))
+      .filter(Boolean)
+      .filter((query, index, self) => self.indexOf(query) === index);
+  }
+
   function setMarkerAndInputs(lat: number, lng: number) {
     const leaflet = leafletRef.current;
 
@@ -123,33 +180,42 @@ export default function DestinationMap({
   }
 
   async function searchAddress() {
-    const trimmedAddress = address.trim();
+    const queries = buildAddressQueries();
 
-    if (!trimmedAddress) {
+    if (queries.length === 0) {
       alert("Isi alamat terlebih dahulu.");
       return;
     }
 
     try {
+      for (const query of queries) {
+      console.log("NOMINATIM QUERY:", query);
+
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          trimmedAddress
+        `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(
+          query
         )}`
       );
 
       const data = await response.json();
 
-      if (!data || data.length === 0) {
-        alert("Alamat tidak ditemukan.");
+      console.log("NOMINATIM RESULT:", data);
+
+      if (data && data.length > 0) {
+        const result = data[0];
+        const lat = Number(result.lat);
+        const lng = Number(result.lon);
+
+        onAddressChange(result.display_name);
+        setMarkerAndInputs(lat, lng);
+
         return;
       }
+    }
 
-      const result = data[0];
-      const lat = Number(result.lat);
-      const lng = Number(result.lon);
-
-      onAddressChange(result.display_name);
-      setMarkerAndInputs(lat, lng);
+      alert(
+        "Alamat tidak ditemukan otomatis. Silakan tentukan titik lokasi secara manual pada peta."
+      );
     } catch {
       alert("Terjadi kesalahan saat mencari alamat.");
     }
@@ -266,7 +332,7 @@ export default function DestinationMap({
         onClick={searchAddress}
         className="mb-3 w-full rounded-2xl bg-[#F09A43] px-4 py-3 font-semibold text-white hover:opacity-90"
       >
-        Cari Alamat di Map
+        Cari Lokasi di Map
       </button>
 
       <div className="min-h-[520px] flex-1 overflow-hidden rounded-2xl bg-gray-200">

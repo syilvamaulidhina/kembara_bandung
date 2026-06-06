@@ -29,21 +29,29 @@ export default function TambahDestinasiPage() {
 	const MIN_AI_SCORE = 60;
 
 	const [form, setForm] = useState({
-      name: "",
-      categoryIds: [] as number[],
-      description: "",
-      contact: "",
-      address: "",
-      latitude: "",
-      longitude: "",
+		name: "",
+		categoryIds: [] as number[],
+		description: "",
+		contact: "",
 
-      isFree: false,
-      ticketPrice: "",
-      maxPrice: "",
-      openTime: "",
-      closeTime: "",
-      website: "",
-  });
+		address: "",
+
+		addressStreet: "",
+		addressVillage: "",
+		addressDistrict: "",
+		addressCity: "",
+		addressProvince: "",
+
+		latitude: "",
+		longitude: "",
+
+		isFree: false,
+		ticketPrice: "",
+		maxPrice: "",
+		openTime: "",
+		closeTime: "",
+		website: "",
+	});
 
 	const [categories, setCategories] = useState<{ id: number; name: string }[]>(
 		[]
@@ -84,20 +92,32 @@ export default function TambahDestinasiPage() {
 		}));
 
 		if (
-      field === "name" ||
-      field === "description" ||
-      field === "address" ||
-      field === "latitude" ||
-      field === "longitude" ||
-      field === "ticketPrice" ||
-      field === "maxPrice" ||
-      field === "openTime" ||
-      field === "closeTime" ||
-      field === "website"
-    ) {
-      resetAnalysis();
-    }
+			field === "name" ||
+			field === "description" ||
+			field === "address" ||
+			field === "latitude" ||
+			field === "longitude" ||
+			field === "ticketPrice" ||
+			field === "maxPrice" ||
+			field === "openTime" ||
+			field === "closeTime" ||
+			field === "website"
+			) {
+			resetAnalysis();
+		}
 	}
+
+	function buildFullAddress() {
+		return [
+			form.addressStreet,
+			form.addressVillage,
+			form.addressDistrict,
+			form.addressCity,
+			form.addressProvince,
+		]
+			.filter(Boolean)
+			.join(", ");
+		}
 
 	function toggleCategory(categoryId: number) {
 		setForm((prev) => ({
@@ -126,7 +146,7 @@ export default function TambahDestinasiPage() {
 			return;
 		}
 
-		if (!form.address.trim()) {
+		if (!buildFullAddress().trim()) {
 			alert("Alamat wajib diisi sebelum analisis.");
 			return;
 		}
@@ -226,7 +246,7 @@ export default function TambahDestinasiPage() {
 			return;
 		}
 
-		if (!form.address.trim()) {
+		if (!buildFullAddress().trim()) {
 			alert("Alamat wajib diisi.");
 			return;
 		}
@@ -299,6 +319,8 @@ export default function TambahDestinasiPage() {
 				},
 				body: JSON.stringify({
 					...form,
+					address: buildFullAddress(),
+
 					imageUrl,
 					analysisResult,
 				}),
@@ -407,21 +429,63 @@ export default function TambahDestinasiPage() {
 								className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
 							/>
 
-							<input
-								type="text"
-								value={form.address}
-								onChange={(event) =>
-									updateForm("address", event.target.value)
-								}
-								placeholder="Alamat"
-								className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
-							/>
+							<div className="grid gap-4 md:grid-cols-2">
+								<input
+									type="text"
+									value={form.addressStreet}
+									onChange={(event) =>
+									updateForm("addressStreet", event.target.value)
+									}
+									placeholder="Nama jalan / alamat jalan"
+									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+								/>
 
-							{!isAreaValid && (
+								<input
+									type="text"
+									value={form.addressVillage}
+									onChange={(event) =>
+									updateForm("addressVillage", event.target.value)
+									}
+									placeholder="Kelurahan"
+									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+								/>
+
+								<input
+									type="text"
+									value={form.addressDistrict}
+									onChange={(event) =>
+									updateForm("addressDistrict", event.target.value)
+									}
+									placeholder="Kecamatan"
+									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+								/>
+
+								<input
+									type="text"
+									value={form.addressCity}
+									onChange={(event) =>
+									updateForm("addressCity", event.target.value)
+									}
+									placeholder="Kota/Kabupaten"
+									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+								/>
+
+								<input
+									type="text"
+									value={form.addressProvince}
+									onChange={(event) =>
+									updateForm("addressProvince", event.target.value)
+									}
+									placeholder="Provinsi"
+									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43] md:col-span-2"
+								/>
+								</div>
+
+								{!isAreaValid && (
 								<div className="rounded-xl bg-[#FFF3CD] px-4 py-3 text-sm text-[#856404]">
 									Lokasi yang dipilih berada di luar area Bandung Raya.
 								</div>
-							)}
+								)}
 
               <div className="rounded-2xl bg-white p-4">
                 <p className="mb-4 font-semibold text-[#285260]">
@@ -566,19 +630,24 @@ export default function TambahDestinasiPage() {
 						</div>
 
 						<div className="rounded-[24px] bg-white p-3">
-							<DestinationMap
-								latitude={form.latitude}
-								longitude={form.longitude}
-								address={form.address}
-								onAddressChange={(value) =>
-									updateForm("address", value)
-								}
-								onLocationChange={(lat, lng) => {
-									updateForm("latitude", lat);
-									updateForm("longitude", lng);
-								}}
-								onAreaValidChange={setIsAreaValid}
-							/>
+						<DestinationMap
+							latitude={form.latitude}
+							longitude={form.longitude}
+							address={buildFullAddress()}
+							addressFields={{
+							addressStreet: form.addressStreet,
+							addressVillage: form.addressVillage,
+							addressDistrict: form.addressDistrict,
+							addressCity: form.addressCity,
+							addressProvince: form.addressProvince,
+							}}
+							onAddressChange={(value) => updateForm("address", value)}
+							onLocationChange={(lat, lng) => {
+							updateForm("latitude", lat);
+							updateForm("longitude", lng);
+							}}
+							onAreaValidChange={setIsAreaValid}
+						/>
 						</div>
 					</div>
 				</form>

@@ -61,6 +61,13 @@ model Destination {
   name        String
   description String
   address     String
+
+  addressStreet   String?
+  addressVillage  String?
+  addressDistrict String?
+  addressCity     String?
+  addressProvince String?
+
   contact     String?
   latitude    Float
   longitude   Float
