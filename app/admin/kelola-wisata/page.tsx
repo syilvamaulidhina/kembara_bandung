@@ -31,7 +31,6 @@ export default function KelolaWisataPage() {
   const [editWisata, setEditWisata] = useState<Wisata | null>(null);
   const [deleteWisata, setDeleteWisata] = useState<Wisata | null>(null);
 
-  // Hindari hydration mismatch dengan load data di client
   useEffect(() => {
     setWisataList(initialWisata);
   }, []);
@@ -58,7 +57,7 @@ export default function KelolaWisataPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             <MapPin size={22} className="text-primary" />
@@ -66,9 +65,9 @@ export default function KelolaWisataPage() {
           </h1>
           <p className="text-gray-500 text-sm mt-1">Kelola data wisata Kembara Bandung</p>
         </div>
-        <a
-          href="/admin/approval-wisata"
-          className="flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition"
+        
+          <a href="/admin/approval-wisata"
+          className="flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition shrink-0"
         >
           <ClipboardCheck size={16} /> Approval Wisata
         </a>
