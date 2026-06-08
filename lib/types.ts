@@ -1,5 +1,4 @@
-// lib/types.ts
-// Tipe data yang digunakan di seluruh aplikasi wisatawan
+// lib/types.ts — UPDATED: 7 kategori baru
 
 export interface DestinationWithCategory {
   id: number;
@@ -19,27 +18,23 @@ export interface DestinationWithCategory {
   status: string;
   createdAt: Date;
   updatedAt: Date;
-  categories: {
-    category: {
-      id: number;
-      name: string;
-    };
-  }[];
-  // Computed fields
-  distance?: number;       // jarak dalam km dari lokasi user
-  isOpen?: boolean;        // apakah sedang buka
-  averageRating?: number;  // rata-rata rating dari ulasan
-  reviewCount?: number;    // jumlah ulasan
-  isSaved?: boolean;       // apakah sudah disimpan user
+  categories: { category: { id: number; name: string } }[];
+  distance?: number;
+  isOpen?: boolean;
+  averageRating?: number;
+  reviewCount?: number;
+  isSaved?: boolean;
 }
 
 export interface WeatherData {
   temp: number;
+  feelsLike: number;
   description: string;
   icon: string;
   humidity: number;
   windSpeed: number;
   cityName: string;
+  isReal: boolean;
 }
 
 export interface ItineraryItemWithDestination {
@@ -67,17 +62,8 @@ export interface ReviewWithUser {
   photoUrl: string | null;
   helpfulCount: number;
   createdAt: Date;
-  user: {
-    id: number;
-    name: string;
-    photo: string | null;
-  };
-  destination: {
-    id: number;
-    name: string;
-    imageUrl: string | null;
-    address: string;
-  };
+  user: { id: number; name: string; photo: string | null };
+  destination: { id: number; name: string; imageUrl: string | null; address: string };
 }
 
 export interface UserLocation {
@@ -85,11 +71,20 @@ export interface UserLocation {
   lng: number;
 }
 
-export type CategorySlug = "alam" | "budaya" | "kuliner" | "fashion" | "hotel" | "populer";
+export type CategorySlug =
+  | "wisata-alam"
+  | "wisata-budaya"
+  | "wisata-kuliner"
+  | "wisata-edukasi"
+  | "wisata-hiburan"
+  | "wisata-belanja"
+  | "wisata-religi"
+  | "populer";
 
 export interface CategoryInfo {
   slug: CategorySlug;
-  name: string;
+  name: string;           // nama kategori di DB (untuk query)
+  displayName: string;    // nama tampil ke user
   description: string;
   icon: string;
   bgImage: string;
@@ -98,61 +93,97 @@ export interface CategoryInfo {
 
 export const CATEGORIES: CategoryInfo[] = [
   {
-    slug: "alam",
-    name: "Alam",
-    description: "Pegunungan, Kawah, & Kebun Teh",
+    slug: "wisata-alam",
+    name: "Wisata Alam",
+    displayName: "Wisata Alam",
+    description: "Gunung, kawah, kebun teh & danau",
     icon: "🌿",
-    bgImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Kawah_Putih.jpg/1280px-Kawah_Putih.jpg",
+    bgImage: "/images/categories/alam.jpg",
     color: "#16a34a",
   },
   {
-    slug: "budaya",
-    name: "Budaya",
-    description: "Seni, Sejarah, & Arsitektur",
+    slug: "wisata-budaya",
+    name: "Wisata Budaya",
+    displayName: "Wisata Budaya",
+    description: "Seni, sejarah & arsitektur kolonial",
     icon: "🏛️",
-    bgImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Gedung_Sate.jpg/1280px-Gedung_Sate.jpg",
+    bgImage: "/images/categories/budaya.jpg",
     color: "#d97706",
   },
   {
-    slug: "kuliner",
-    name: "Kuliner",
-    description: "Lezatnya Masakan Khas Sunda",
+    slug: "wisata-kuliner",
+    name: "Wisata Kuliner",
+    displayName: "Wisata Kuliner",
+    description: "Kuliner khas Sunda & jajanan lokal",
     icon: "🍜",
-    bgImage: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/d6/70/8e/sate-kardjan.jpg?w=1200",
+    bgImage: "/images/categories/kuliner.jpg",
     color: "#dc2626",
   },
   {
-    slug: "fashion",
-    name: "Fashion",
-    description: "Factory Outlet & Pasar Lokal",
-    icon: "👗",
-    bgImage: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/7a/54/8e/paris-van-java.jpg?w=1200",
+    slug: "wisata-edukasi",
+    name: "Wisata Edukasi",
+    displayName: "Wisata Edukasi",
+    description: "Museum, sains & belajar sambil jalan",
+    icon: "🎓",
+    bgImage: "/images/categories/edukasi.jpg",
+    color: "#0891b2",
+  },
+  {
+    slug: "wisata-hiburan",
+    name: "Wisata Hiburan",
+    displayName: "Wisata Hiburan",
+    description: "Taman bermain, wahana & pertunjukan",
+    icon: "🎡",
+    bgImage: "/images/categories/hiburan.jpg",
     color: "#7c3aed",
   },
   {
-    slug: "hotel",
-    name: "Hotel",
-    description: "Vila, Hotel, & Penginapan",
-    icon: "🏨",
-    bgImage: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/a4/54/8e/trans-luxury.jpg?w=1200",
-    color: "#0891b2",
+    slug: "wisata-belanja",
+    name: "Wisata Belanja",
+    displayName: "Wisata Belanja",
+    description: "Factory outlet, pasar & pusat belanja",
+    icon: "🛍️",
+    bgImage: "/images/categories/belanja.jpg",
+    color: "#e11d48",
+  },
+  {
+    slug: "wisata-religi",
+    name: "Wisata Religi",
+    displayName: "Wisata Religi",
+    description: "Masjid bersejarah, vihara & pura",
+    icon: "🕌",
+    bgImage: "/images/categories/religi.jpg",
+    color: "#b45309",
   },
   {
     slug: "populer",
     name: "Populer",
-    description: "Disukai Banyak Orang",
-    icon: "❤️",
-    bgImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Tangkuban_Parahu.jpg/1280px-Tangkuban_Parahu.jpg",
-    color: "#e11d48",
+    displayName: "Populer",
+    description: "Destinasi paling banyak dikunjungi",
+    icon: "🔥",
+    bgImage: "/images/categories/populer.jpg",
+    color: "#f97316",
   },
 ];
 
-// Bandung area bounds untuk membatasi peta
+// Helper: cari kategori berdasarkan slug
+export function getCategoryBySlug(slug: string): CategoryInfo | undefined {
+  return CATEGORIES.find((c) => c.slug === slug);
+}
+
+// Helper: cari kategori berdasarkan nama DB
+export function getCategoryByName(name: string): CategoryInfo | undefined {
+  return CATEGORIES.find(
+    (c) => c.name.toLowerCase() === name.toLowerCase()
+  );
+}
+
+// Bandung area bounds
 export const BANDUNG_BOUNDS = {
   center: { lat: -6.9175, lng: 107.6191 } as const,
   zoom: 12,
   maxBounds: [
-    [-7.35, 107.3],   // southwest
-    [-6.55, 108.0],   // northeast
+    [-7.35, 107.2],
+    [-6.4, 108.0],
   ] as [[number, number], [number, number]],
 };

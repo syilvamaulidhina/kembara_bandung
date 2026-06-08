@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Map as LeafletMap, LayerGroup } from "leaflet";
+import { CATEGORIES } from "@/lib/types";
 
 interface Destination {
   id: number;
@@ -30,13 +31,19 @@ interface MapViewClientProps {
 }
 
 // Warna pin per kategori
-const CATEGORY_COLORS: Record<string, string> = {
-  Alam:      "#16a34a",
-  Budaya:    "#d97706",
-  Kuliner:   "#dc2626",
-  Fashion:   "#7c3aed",
-  Hotel:     "#0891b2",
-  Populer:   "#e11d48",
+// const CATEGORY_COLORS: Record<string, string> = {
+//   Alam:      "#16a34a",
+//   Budaya:    "#d97706",
+//   Kuliner:   "#dc2626",
+//   Fashion:   "#7c3aed",
+//   Hotel:     "#0891b2",
+//   Populer:   "#e11d48",
+// };
+const getCategoryColor = (categoryName: string) => {
+  return (
+    CATEGORIES.find(c => c.name === categoryName)?.color ||
+    "#1a6b3c"
+  );
 };
 
 // Batas wilayah yang ditampilkan
@@ -64,11 +71,18 @@ export default function MapViewClient({
 
   // Init map sekali
   useEffect(() => {
+    let isMounted = true; // Flag untuk mencegah inisialisasi jika komponen keburu unmount
+
     if (!containerRef.current || mapRef.current) return;
 
     const initMap = async () => {
       const L = (await import("leaflet")).default;
       await import("leaflet/dist/leaflet.css");
+      
+      // CEK PENTING: Hentikan eksekusi jika komponen unmount saat proses import berlangsung
+      // ATAU jika map tiba-tiba sudah diinisialisasi oleh proses lain yang berjalan bersamaan
+      if (!isMounted || mapRef.current) return;
+
       LRef.current = L;
 
       delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -95,12 +109,19 @@ export default function MapViewClient({
         map.setView([userLocation.lat, userLocation.lng], 13);
       }
 
-      setIsLoaded(true);
+      if (isMounted) {
+        setIsLoaded(true);
+      }
     };
 
     initMap();
+
     return () => {
-      if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
+      isMounted = false; // Tandai bahwa komponen sedang di-unmount
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
   }, []);
 
@@ -130,9 +151,11 @@ export default function MapViewClient({
         );
 
     // Tambah marker
-    filtered.forEach(dest => {
-      const catName = dest.categories?.[0]?.category?.name || "Alam";
-      const color = CATEGORY_COLORS[catName] || "#1a6b3c";
+     filtered.forEach(dest => {
+    //   const catName = dest.categories?.[0]?.category?.name || "Alam";
+    //   const color = CATEGORY_COLORS[catName] || "#1a6b3c";
+    const catName = dest.categories?.[0]?.category?.name || "Wisata Alam";
+    const color = getCategoryColor(catName);
 
       // Route order number jika ada
       const orderItem = routeItems.find(r => r.destinationId === dest.id);
