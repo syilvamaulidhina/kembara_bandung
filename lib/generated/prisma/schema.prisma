@@ -13,6 +13,12 @@ enum Role {
   WISATAWAN
 }
 
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum Gender {
   LAKI_LAKI
   PEREMPUAN
@@ -43,6 +49,12 @@ model User {
   reviews           Review[]
   visitedPlaces     VisitedPlace[]
   itineraryQueue    ItineraryQueue[]
+
+  verificationStatus   VerificationStatus?
+  verificationDocument String?
+  rejectionReason      String?
+
+  destinations Destination[]
 }
 
 model Destination {
@@ -54,6 +66,9 @@ model Destination {
   latitude    Float
   longitude   Float
   imageUrl    String?
+
+  ownerId Int?
+  owner   User? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
 
   // Field tambahan dari pengelola
   openTime    String?

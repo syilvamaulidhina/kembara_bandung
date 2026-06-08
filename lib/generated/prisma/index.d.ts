@@ -87,6 +87,15 @@ export namespace $Enums {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const VerificationStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
+
+
 export const Gender: {
   LAKI_LAKI: 'LAKI_LAKI',
   PEREMPUAN: 'PEREMPUAN'
@@ -109,6 +118,10 @@ export type DestinationStatus = (typeof DestinationStatus)[keyof typeof Destinat
 export type Role = $Enums.Role
 
 export const Role: typeof $Enums.Role
+
+export type VerificationStatus = $Enums.VerificationStatus
+
+export const VerificationStatus: typeof $Enums.VerificationStatus
 
 export type Gender = $Enums.Gender
 
@@ -1916,6 +1929,7 @@ export namespace Prisma {
     reviews: number
     visitedPlaces: number
     itineraryQueue: number
+    destinations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1924,6 +1938,7 @@ export namespace Prisma {
     reviews?: boolean | UserCountOutputTypeCountReviewsArgs
     visitedPlaces?: boolean | UserCountOutputTypeCountVisitedPlacesArgs
     itineraryQueue?: boolean | UserCountOutputTypeCountItineraryQueueArgs
+    destinations?: boolean | UserCountOutputTypeCountDestinationsArgs
   }
 
   // Custom InputTypes
@@ -1970,6 +1985,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountItineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ItineraryQueueWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DestinationWhereInput
   }
 
 
@@ -2164,6 +2186,9 @@ export namespace Prisma {
     photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    verificationStatus: $Enums.VerificationStatus | null
+    verificationDocument: string | null
+    rejectionReason: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2177,6 +2202,9 @@ export namespace Prisma {
     photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    verificationStatus: $Enums.VerificationStatus | null
+    verificationDocument: string | null
+    rejectionReason: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2190,6 +2218,9 @@ export namespace Prisma {
     photo: number
     createdAt: number
     updatedAt: number
+    verificationStatus: number
+    verificationDocument: number
+    rejectionReason: number
     _all: number
   }
 
@@ -2213,6 +2244,9 @@ export namespace Prisma {
     photo?: true
     createdAt?: true
     updatedAt?: true
+    verificationStatus?: true
+    verificationDocument?: true
+    rejectionReason?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2226,6 +2260,9 @@ export namespace Prisma {
     photo?: true
     createdAt?: true
     updatedAt?: true
+    verificationStatus?: true
+    verificationDocument?: true
+    rejectionReason?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2239,6 +2276,9 @@ export namespace Prisma {
     photo?: true
     createdAt?: true
     updatedAt?: true
+    verificationStatus?: true
+    verificationDocument?: true
+    rejectionReason?: true
     _all?: true
   }
 
@@ -2339,6 +2379,9 @@ export namespace Prisma {
     photo: string | null
     createdAt: Date
     updatedAt: Date
+    verificationStatus: $Enums.VerificationStatus | null
+    verificationDocument: string | null
+    rejectionReason: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2371,11 +2414,15 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    verificationStatus?: boolean
+    verificationDocument?: boolean
+    rejectionReason?: boolean
     savedDestinations?: boolean | User$savedDestinationsArgs<ExtArgs>
     itineraries?: boolean | User$itinerariesArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
     itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
+    destinations?: boolean | User$destinationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2390,6 +2437,9 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    verificationStatus?: boolean
+    verificationDocument?: boolean
+    rejectionReason?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2403,6 +2453,9 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    verificationStatus?: boolean
+    verificationDocument?: boolean
+    rejectionReason?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2416,15 +2469,19 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    verificationStatus?: boolean
+    verificationDocument?: boolean
+    rejectionReason?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "gender" | "domisili" | "photo" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "gender" | "domisili" | "photo" | "createdAt" | "updatedAt" | "verificationStatus" | "verificationDocument" | "rejectionReason", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     savedDestinations?: boolean | User$savedDestinationsArgs<ExtArgs>
     itineraries?: boolean | User$itinerariesArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
     itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
+    destinations?: boolean | User$destinationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2438,6 +2495,7 @@ export namespace Prisma {
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
       visitedPlaces: Prisma.$VisitedPlacePayload<ExtArgs>[]
       itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
+      destinations: Prisma.$DestinationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2450,6 +2508,9 @@ export namespace Prisma {
       photo: string | null
       createdAt: Date
       updatedAt: Date
+      verificationStatus: $Enums.VerificationStatus | null
+      verificationDocument: string | null
+      rejectionReason: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2849,6 +2910,7 @@ export namespace Prisma {
     reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     visitedPlaces<T extends User$visitedPlacesArgs<ExtArgs> = {}>(args?: Subset<T, User$visitedPlacesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     itineraryQueue<T extends User$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, User$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    destinations<T extends User$destinationsArgs<ExtArgs> = {}>(args?: Subset<T, User$destinationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2888,6 +2950,9 @@ export namespace Prisma {
     readonly photo: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly verificationStatus: FieldRef<"User", 'VerificationStatus'>
+    readonly verificationDocument: FieldRef<"User", 'String'>
+    readonly rejectionReason: FieldRef<"User", 'String'>
   }
     
 
@@ -3401,6 +3466,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.destinations
+   */
+  export type User$destinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Destination
+     */
+    select?: DestinationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Destination
+     */
+    omit?: DestinationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationInclude<ExtArgs> | null
+    where?: DestinationWhereInput
+    orderBy?: DestinationOrderByWithRelationInput | DestinationOrderByWithRelationInput[]
+    cursor?: DestinationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DestinationScalarFieldEnum | DestinationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3435,6 +3524,7 @@ export namespace Prisma {
     id: number | null
     latitude: number | null
     longitude: number | null
+    ownerId: number | null
     ticketPrice: number | null
     maxPrice: number | null
     visitCount: number | null
@@ -3444,6 +3534,7 @@ export namespace Prisma {
     id: number | null
     latitude: number | null
     longitude: number | null
+    ownerId: number | null
     ticketPrice: number | null
     maxPrice: number | null
     visitCount: number | null
@@ -3458,6 +3549,7 @@ export namespace Prisma {
     latitude: number | null
     longitude: number | null
     imageUrl: string | null
+    ownerId: number | null
     openTime: string | null
     closeTime: string | null
     ticketPrice: number | null
@@ -3480,6 +3572,7 @@ export namespace Prisma {
     latitude: number | null
     longitude: number | null
     imageUrl: string | null
+    ownerId: number | null
     openTime: string | null
     closeTime: string | null
     ticketPrice: number | null
@@ -3502,6 +3595,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl: number
+    ownerId: number
     openTime: number
     closeTime: number
     ticketPrice: number
@@ -3521,6 +3615,7 @@ export namespace Prisma {
     id?: true
     latitude?: true
     longitude?: true
+    ownerId?: true
     ticketPrice?: true
     maxPrice?: true
     visitCount?: true
@@ -3530,6 +3625,7 @@ export namespace Prisma {
     id?: true
     latitude?: true
     longitude?: true
+    ownerId?: true
     ticketPrice?: true
     maxPrice?: true
     visitCount?: true
@@ -3544,6 +3640,7 @@ export namespace Prisma {
     latitude?: true
     longitude?: true
     imageUrl?: true
+    ownerId?: true
     openTime?: true
     closeTime?: true
     ticketPrice?: true
@@ -3566,6 +3663,7 @@ export namespace Prisma {
     latitude?: true
     longitude?: true
     imageUrl?: true
+    ownerId?: true
     openTime?: true
     closeTime?: true
     ticketPrice?: true
@@ -3588,6 +3686,7 @@ export namespace Prisma {
     latitude?: true
     longitude?: true
     imageUrl?: true
+    ownerId?: true
     openTime?: true
     closeTime?: true
     ticketPrice?: true
@@ -3697,6 +3796,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl: string | null
+    ownerId: number | null
     openTime: string | null
     closeTime: string | null
     ticketPrice: number | null
@@ -3738,6 +3838,7 @@ export namespace Prisma {
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
+    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -3749,6 +3850,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    owner?: boolean | Destination$ownerArgs<ExtArgs>
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
     aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
     savedBy?: boolean | Destination$savedByArgs<ExtArgs>
@@ -3768,6 +3870,7 @@ export namespace Prisma {
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
+    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -3779,6 +3882,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    owner?: boolean | Destination$ownerArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
   export type DestinationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3790,6 +3894,7 @@ export namespace Prisma {
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
+    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -3801,6 +3906,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    owner?: boolean | Destination$ownerArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
   export type DestinationSelectScalar = {
@@ -3812,6 +3918,7 @@ export namespace Prisma {
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
+    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -3825,8 +3932,9 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
   export type DestinationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | Destination$ownerArgs<ExtArgs>
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
     aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
     savedBy?: boolean | Destination$savedByArgs<ExtArgs>
@@ -3836,12 +3944,17 @@ export namespace Prisma {
     itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
     _count?: boolean | DestinationCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type DestinationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type DestinationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type DestinationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | Destination$ownerArgs<ExtArgs>
+  }
+  export type DestinationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | Destination$ownerArgs<ExtArgs>
+  }
 
   export type $DestinationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Destination"
     objects: {
+      owner: Prisma.$UserPayload<ExtArgs> | null
       categories: Prisma.$DestinationCategoryPayload<ExtArgs>[]
       aiAnalyses: Prisma.$AiAnalysisPayload<ExtArgs>[]
       savedBy: Prisma.$SavedDestinationPayload<ExtArgs>[]
@@ -3859,6 +3972,7 @@ export namespace Prisma {
       latitude: number
       longitude: number
       imageUrl: string | null
+      ownerId: number | null
       openTime: string | null
       closeTime: string | null
       ticketPrice: number | null
@@ -4264,6 +4378,7 @@ export namespace Prisma {
    */
   export interface Prisma__DestinationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    owner<T extends Destination$ownerArgs<ExtArgs> = {}>(args?: Subset<T, Destination$ownerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     categories<T extends Destination$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     aiAnalyses<T extends Destination$aiAnalysesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$aiAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     savedBy<T extends Destination$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Destination$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4308,6 +4423,7 @@ export namespace Prisma {
     readonly latitude: FieldRef<"Destination", 'Float'>
     readonly longitude: FieldRef<"Destination", 'Float'>
     readonly imageUrl: FieldRef<"Destination", 'String'>
+    readonly ownerId: FieldRef<"Destination", 'Int'>
     readonly openTime: FieldRef<"Destination", 'String'>
     readonly closeTime: FieldRef<"Destination", 'String'>
     readonly ticketPrice: FieldRef<"Destination", 'Int'>
@@ -4573,6 +4689,10 @@ export namespace Prisma {
      */
     data: DestinationCreateManyInput | DestinationCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4643,6 +4763,10 @@ export namespace Prisma {
      * Limit how many Destinations to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4709,6 +4833,25 @@ export namespace Prisma {
      * Limit how many Destinations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Destination.owner
+   */
+  export type Destination$ownerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -16159,7 +16302,10 @@ export namespace Prisma {
     domisili: 'domisili',
     photo: 'photo',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    verificationStatus: 'verificationStatus',
+    verificationDocument: 'verificationDocument',
+    rejectionReason: 'rejectionReason'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -16174,6 +16320,7 @@ export namespace Prisma {
     latitude: 'latitude',
     longitude: 'longitude',
     imageUrl: 'imageUrl',
+    ownerId: 'ownerId',
     openTime: 'openTime',
     closeTime: 'closeTime',
     ticketPrice: 'ticketPrice',
@@ -16421,6 +16568,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'VerificationStatus'
+   */
+  export type EnumVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VerificationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'VerificationStatus[]'
+   */
+  export type ListEnumVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VerificationStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -16486,11 +16647,15 @@ export namespace Prisma {
     photo?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    verificationStatus?: EnumVerificationStatusNullableFilter<"User"> | $Enums.VerificationStatus | null
+    verificationDocument?: StringNullableFilter<"User"> | string | null
+    rejectionReason?: StringNullableFilter<"User"> | string | null
     savedDestinations?: SavedDestinationListRelationFilter
     itineraries?: ItineraryListRelationFilter
     reviews?: ReviewListRelationFilter
     visitedPlaces?: VisitedPlaceListRelationFilter
     itineraryQueue?: ItineraryQueueListRelationFilter
+    destinations?: DestinationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -16504,11 +16669,15 @@ export namespace Prisma {
     photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    verificationStatus?: SortOrderInput | SortOrder
+    verificationDocument?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     savedDestinations?: SavedDestinationOrderByRelationAggregateInput
     itineraries?: ItineraryOrderByRelationAggregateInput
     reviews?: ReviewOrderByRelationAggregateInput
     visitedPlaces?: VisitedPlaceOrderByRelationAggregateInput
     itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
+    destinations?: DestinationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16525,11 +16694,15 @@ export namespace Prisma {
     photo?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    verificationStatus?: EnumVerificationStatusNullableFilter<"User"> | $Enums.VerificationStatus | null
+    verificationDocument?: StringNullableFilter<"User"> | string | null
+    rejectionReason?: StringNullableFilter<"User"> | string | null
     savedDestinations?: SavedDestinationListRelationFilter
     itineraries?: ItineraryListRelationFilter
     reviews?: ReviewListRelationFilter
     visitedPlaces?: VisitedPlaceListRelationFilter
     itineraryQueue?: ItineraryQueueListRelationFilter
+    destinations?: DestinationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -16543,6 +16716,9 @@ export namespace Prisma {
     photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    verificationStatus?: SortOrderInput | SortOrder
+    verificationDocument?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -16564,6 +16740,9 @@ export namespace Prisma {
     photo?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    verificationStatus?: EnumVerificationStatusNullableWithAggregatesFilter<"User"> | $Enums.VerificationStatus | null
+    verificationDocument?: StringNullableWithAggregatesFilter<"User"> | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type DestinationWhereInput = {
@@ -16578,6 +16757,7 @@ export namespace Prisma {
     latitude?: FloatFilter<"Destination"> | number
     longitude?: FloatFilter<"Destination"> | number
     imageUrl?: StringNullableFilter<"Destination"> | string | null
+    ownerId?: IntNullableFilter<"Destination"> | number | null
     openTime?: StringNullableFilter<"Destination"> | string | null
     closeTime?: StringNullableFilter<"Destination"> | string | null
     ticketPrice?: IntNullableFilter<"Destination"> | number | null
@@ -16589,6 +16769,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     categories?: DestinationCategoryListRelationFilter
     aiAnalyses?: AiAnalysisListRelationFilter
     savedBy?: SavedDestinationListRelationFilter
@@ -16607,6 +16788,7 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    ownerId?: SortOrderInput | SortOrder
     openTime?: SortOrderInput | SortOrder
     closeTime?: SortOrderInput | SortOrder
     ticketPrice?: SortOrderInput | SortOrder
@@ -16618,6 +16800,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    owner?: UserOrderByWithRelationInput
     categories?: DestinationCategoryOrderByRelationAggregateInput
     aiAnalyses?: AiAnalysisOrderByRelationAggregateInput
     savedBy?: SavedDestinationOrderByRelationAggregateInput
@@ -16639,6 +16822,7 @@ export namespace Prisma {
     latitude?: FloatFilter<"Destination"> | number
     longitude?: FloatFilter<"Destination"> | number
     imageUrl?: StringNullableFilter<"Destination"> | string | null
+    ownerId?: IntNullableFilter<"Destination"> | number | null
     openTime?: StringNullableFilter<"Destination"> | string | null
     closeTime?: StringNullableFilter<"Destination"> | string | null
     ticketPrice?: IntNullableFilter<"Destination"> | number | null
@@ -16650,6 +16834,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     categories?: DestinationCategoryListRelationFilter
     aiAnalyses?: AiAnalysisListRelationFilter
     savedBy?: SavedDestinationListRelationFilter
@@ -16668,6 +16853,7 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    ownerId?: SortOrderInput | SortOrder
     openTime?: SortOrderInput | SortOrder
     closeTime?: SortOrderInput | SortOrder
     ticketPrice?: SortOrderInput | SortOrder
@@ -16698,6 +16884,7 @@ export namespace Prisma {
     latitude?: FloatWithAggregatesFilter<"Destination"> | number
     longitude?: FloatWithAggregatesFilter<"Destination"> | number
     imageUrl?: StringNullableWithAggregatesFilter<"Destination"> | string | null
+    ownerId?: IntNullableWithAggregatesFilter<"Destination"> | number | null
     openTime?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     closeTime?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     ticketPrice?: IntNullableWithAggregatesFilter<"Destination"> | number | null
@@ -17347,11 +17534,15 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    destinations?: DestinationCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -17365,11 +17556,15 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUpdateInput = {
@@ -17382,11 +17577,15 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -17400,11 +17599,15 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -17418,6 +17621,9 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -17430,6 +17636,9 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -17443,6 +17652,9 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DestinationCreateInput = {
@@ -17464,6 +17676,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -17482,6 +17695,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -17521,6 +17735,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -17539,6 +17754,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -17568,6 +17784,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -17611,6 +17828,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -18253,6 +18471,13 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type EnumVerificationStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVerificationStatusNullableFilter<$PrismaModel> | $Enums.VerificationStatus | null
+  }
+
   export type SavedDestinationListRelationFilter = {
     every?: SavedDestinationWhereInput
     some?: SavedDestinationWhereInput
@@ -18283,6 +18508,12 @@ export namespace Prisma {
     none?: ItineraryQueueWhereInput
   }
 
+  export type DestinationListRelationFilter = {
+    every?: DestinationWhereInput
+    some?: DestinationWhereInput
+    none?: DestinationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -18308,6 +18539,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type DestinationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -18319,6 +18554,9 @@ export namespace Prisma {
     photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    verificationStatus?: SortOrder
+    verificationDocument?: SortOrder
+    rejectionReason?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -18336,6 +18574,9 @@ export namespace Prisma {
     photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    verificationStatus?: SortOrder
+    verificationDocument?: SortOrder
+    rejectionReason?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -18349,6 +18590,9 @@ export namespace Prisma {
     photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    verificationStatus?: SortOrder
+    verificationDocument?: SortOrder
+    rejectionReason?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -18441,6 +18685,16 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumVerificationStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVerificationStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.VerificationStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumVerificationStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumVerificationStatusNullableFilter<$PrismaModel>
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -18486,6 +18740,11 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type DestinationCategoryListRelationFilter = {
     every?: DestinationCategoryWhereInput
     some?: DestinationCategoryWhereInput
@@ -18525,6 +18784,7 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrder
+    ownerId?: SortOrder
     openTime?: SortOrder
     closeTime?: SortOrder
     ticketPrice?: SortOrder
@@ -18542,6 +18802,7 @@ export namespace Prisma {
     id?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
+    ownerId?: SortOrder
     ticketPrice?: SortOrder
     maxPrice?: SortOrder
     visitCount?: SortOrder
@@ -18556,6 +18817,7 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrder
+    ownerId?: SortOrder
     openTime?: SortOrder
     closeTime?: SortOrder
     ticketPrice?: SortOrder
@@ -18578,6 +18840,7 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrder
+    ownerId?: SortOrder
     openTime?: SortOrder
     closeTime?: SortOrder
     ticketPrice?: SortOrder
@@ -18595,6 +18858,7 @@ export namespace Prisma {
     id?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
+    ownerId?: SortOrder
     ticketPrice?: SortOrder
     maxPrice?: SortOrder
     visitCount?: SortOrder
@@ -19217,6 +19481,13 @@ export namespace Prisma {
     connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
   }
 
+  export type DestinationCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<DestinationCreateWithoutOwnerInput, DestinationUncheckedCreateWithoutOwnerInput> | DestinationCreateWithoutOwnerInput[] | DestinationUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DestinationCreateOrConnectWithoutOwnerInput | DestinationCreateOrConnectWithoutOwnerInput[]
+    createMany?: DestinationCreateManyOwnerInputEnvelope
+    connect?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+  }
+
   export type SavedDestinationUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
@@ -19252,6 +19523,13 @@ export namespace Prisma {
     connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
   }
 
+  export type DestinationUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<DestinationCreateWithoutOwnerInput, DestinationUncheckedCreateWithoutOwnerInput> | DestinationCreateWithoutOwnerInput[] | DestinationUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DestinationCreateOrConnectWithoutOwnerInput | DestinationCreateOrConnectWithoutOwnerInput[]
+    createMany?: DestinationCreateManyOwnerInputEnvelope
+    connect?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -19270,6 +19548,10 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableEnumVerificationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.VerificationStatus | null
   }
 
   export type SavedDestinationUpdateManyWithoutUserNestedInput = {
@@ -19340,6 +19622,20 @@ export namespace Prisma {
     update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
+  export type DestinationUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<DestinationCreateWithoutOwnerInput, DestinationUncheckedCreateWithoutOwnerInput> | DestinationCreateWithoutOwnerInput[] | DestinationUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DestinationCreateOrConnectWithoutOwnerInput | DestinationCreateOrConnectWithoutOwnerInput[]
+    upsert?: DestinationUpsertWithWhereUniqueWithoutOwnerInput | DestinationUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: DestinationCreateManyOwnerInputEnvelope
+    set?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    disconnect?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    delete?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    connect?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    update?: DestinationUpdateWithWhereUniqueWithoutOwnerInput | DestinationUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: DestinationUpdateManyWithWhereWithoutOwnerInput | DestinationUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: DestinationScalarWhereInput | DestinationScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -19418,6 +19714,26 @@ export namespace Prisma {
     update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
+  export type DestinationUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<DestinationCreateWithoutOwnerInput, DestinationUncheckedCreateWithoutOwnerInput> | DestinationCreateWithoutOwnerInput[] | DestinationUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DestinationCreateOrConnectWithoutOwnerInput | DestinationCreateOrConnectWithoutOwnerInput[]
+    upsert?: DestinationUpsertWithWhereUniqueWithoutOwnerInput | DestinationUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: DestinationCreateManyOwnerInputEnvelope
+    set?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    disconnect?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    delete?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    connect?: DestinationWhereUniqueInput | DestinationWhereUniqueInput[]
+    update?: DestinationUpdateWithWhereUniqueWithoutOwnerInput | DestinationUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: DestinationUpdateManyWithWhereWithoutOwnerInput | DestinationUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: DestinationScalarWhereInput | DestinationScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutDestinationsInput = {
+    create?: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDestinationsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type DestinationCategoryCreateNestedManyWithoutDestinationInput = {
@@ -19544,6 +19860,16 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type UserUpdateOneWithoutDestinationsNestedInput = {
+    create?: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDestinationsInput
+    upsert?: UserUpsertWithoutDestinationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDestinationsInput, UserUpdateWithoutDestinationsInput>, UserUncheckedUpdateWithoutDestinationsInput>
   }
 
   export type DestinationCategoryUpdateManyWithoutDestinationNestedInput = {
@@ -20150,6 +20476,13 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedEnumVerificationStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVerificationStatusNullableFilter<$PrismaModel> | $Enums.VerificationStatus | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20254,6 +20587,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumVerificationStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVerificationStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.VerificationStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumVerificationStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumVerificationStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumDestinationStatusFilter<$PrismaModel = never> = {
@@ -20524,6 +20867,73 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DestinationCreateWithoutOwnerInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutOwnerInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutOwnerInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutOwnerInput, DestinationUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type DestinationCreateManyOwnerInputEnvelope = {
+    data: DestinationCreateManyOwnerInput | DestinationCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SavedDestinationUpsertWithWhereUniqueWithoutUserInput = {
     where: SavedDestinationWhereUniqueInput
     update: XOR<SavedDestinationUpdateWithoutUserInput, SavedDestinationUncheckedUpdateWithoutUserInput>
@@ -20664,6 +21074,94 @@ export namespace Prisma {
     userId?: IntFilter<"ItineraryQueue"> | number
     destinationId?: IntFilter<"ItineraryQueue"> | number
     createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
+  }
+
+  export type DestinationUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: DestinationWhereUniqueInput
+    update: XOR<DestinationUpdateWithoutOwnerInput, DestinationUncheckedUpdateWithoutOwnerInput>
+    create: XOR<DestinationCreateWithoutOwnerInput, DestinationUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type DestinationUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: DestinationWhereUniqueInput
+    data: XOR<DestinationUpdateWithoutOwnerInput, DestinationUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type DestinationUpdateManyWithWhereWithoutOwnerInput = {
+    where: DestinationScalarWhereInput
+    data: XOR<DestinationUpdateManyMutationInput, DestinationUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type DestinationScalarWhereInput = {
+    AND?: DestinationScalarWhereInput | DestinationScalarWhereInput[]
+    OR?: DestinationScalarWhereInput[]
+    NOT?: DestinationScalarWhereInput | DestinationScalarWhereInput[]
+    id?: IntFilter<"Destination"> | number
+    name?: StringFilter<"Destination"> | string
+    description?: StringFilter<"Destination"> | string
+    address?: StringFilter<"Destination"> | string
+    contact?: StringNullableFilter<"Destination"> | string | null
+    latitude?: FloatFilter<"Destination"> | number
+    longitude?: FloatFilter<"Destination"> | number
+    imageUrl?: StringNullableFilter<"Destination"> | string | null
+    ownerId?: IntNullableFilter<"Destination"> | number | null
+    openTime?: StringNullableFilter<"Destination"> | string | null
+    closeTime?: StringNullableFilter<"Destination"> | string | null
+    ticketPrice?: IntNullableFilter<"Destination"> | number | null
+    maxPrice?: IntNullableFilter<"Destination"> | number | null
+    website?: StringNullableFilter<"Destination"> | string | null
+    visitCount?: IntFilter<"Destination"> | number
+    status?: EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
+    isDeleted?: BoolFilter<"Destination"> | boolean
+    deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
+    createdAt?: DateTimeFilter<"Destination"> | Date | string
+    updatedAt?: DateTimeFilter<"Destination"> | Date | string
+  }
+
+  export type UserCreateWithoutDestinationsInput = {
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutDestinationsInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutDestinationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
   }
 
   export type DestinationCategoryCreateWithoutDestinationInput = {
@@ -20833,6 +21331,58 @@ export namespace Prisma {
   export type ItineraryQueueCreateManyDestinationInputEnvelope = {
     data: ItineraryQueueCreateManyDestinationInput | ItineraryQueueCreateManyDestinationInput[]
     skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutDestinationsInput = {
+    update: XOR<UserUpdateWithoutDestinationsInput, UserUncheckedUpdateWithoutDestinationsInput>
+    create: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDestinationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDestinationsInput, UserUncheckedUpdateWithoutDestinationsInput>
+  }
+
+  export type UserUpdateWithoutDestinationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDestinationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput = {
@@ -21082,6 +21632,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
@@ -21099,6 +21650,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -21171,6 +21723,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
@@ -21188,6 +21741,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21292,6 +21846,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
@@ -21309,6 +21864,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -21363,6 +21919,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
@@ -21380,6 +21937,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21409,10 +21967,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    destinations?: DestinationCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutSavedDestinationsInput = {
@@ -21426,10 +21988,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutSavedDestinationsInput = {
@@ -21456,6 +22022,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
@@ -21473,6 +22040,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -21518,10 +22086,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSavedDestinationsInput = {
@@ -21535,10 +22107,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type DestinationUpsertWithoutSavedByInput = {
@@ -21571,6 +22147,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
@@ -21588,6 +22165,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21617,10 +22195,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+    destinations?: DestinationCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutItineraryQueueInput = {
@@ -21634,10 +22216,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+    destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutItineraryQueueInput = {
@@ -21664,6 +22250,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -21681,6 +22268,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -21726,10 +22314,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutItineraryQueueInput = {
@@ -21743,10 +22335,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type DestinationUpsertWithoutItineraryQueueInput = {
@@ -21779,6 +22375,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -21796,6 +22393,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21825,10 +22423,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    destinations?: DestinationCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutItinerariesInput = {
@@ -21842,10 +22444,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutItinerariesInput = {
@@ -21899,10 +22505,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutItinerariesInput = {
@@ -21916,10 +22526,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type ItineraryItemUpsertWithWhereUniqueWithoutItineraryInput = {
@@ -21985,6 +22599,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -22002,6 +22617,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -22090,6 +22706,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -22107,6 +22724,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22136,10 +22754,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    destinations?: DestinationCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -22153,10 +22775,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -22183,6 +22809,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -22200,6 +22827,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -22245,10 +22873,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -22262,10 +22894,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type DestinationUpsertWithoutReviewsInput = {
@@ -22298,6 +22934,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -22315,6 +22952,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22344,10 +22982,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
     itineraries?: ItineraryCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    destinations?: DestinationCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutVisitedPlacesInput = {
@@ -22361,10 +23003,14 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verificationStatus?: $Enums.VerificationStatus | null
+    verificationDocument?: string | null
+    rejectionReason?: string | null
     savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
     itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutVisitedPlacesInput = {
@@ -22391,6 +23037,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -22408,6 +23055,7 @@ export namespace Prisma {
     latitude: number
     longitude: number
     imageUrl?: string | null
+    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -22453,10 +23101,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitedPlacesInput = {
@@ -22470,10 +23122,14 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
     itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type DestinationUpsertWithoutVisitedByInput = {
@@ -22506,6 +23162,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -22523,6 +23180,7 @@ export namespace Prisma {
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -22582,6 +23240,28 @@ export namespace Prisma {
     id?: number
     destinationId: number
     createdAt?: Date | string
+  }
+
+  export type DestinationCreateManyOwnerInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SavedDestinationUpdateWithoutUserInput = {
@@ -22705,6 +23385,85 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     destinationId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DestinationUpdateWithoutOwnerInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateManyWithoutOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DestinationCategoryCreateManyDestinationInput = {

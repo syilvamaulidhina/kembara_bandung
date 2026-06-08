@@ -39,7 +39,7 @@ type PageView = "choose" | "itinerary";
 
 export default function RencanaPage() {
   const { user, loading: userLoading } = useLocalUser();
-  const { location, requestLocation } = useGeolocation(false);
+  const { location, requestLocation } = useGeolocation(true);
 
   const [view, setView] = useState<PageView>("itinerary");
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
@@ -85,16 +85,29 @@ export default function RencanaPage() {
     finally { setLoadingSaved(false); }
   }, [user, location]);
 
+  // useEffect(() => {
+  //   const init = async () => {
+  //     if (!userLoading && user) {
+  //       await fetchItinerary();
+  //       await fetchSaved();
+  //     }
+  //     setLoadingPage(false);
+  //   };
+  //   init();
+  // }, [user, userLoading, fetchItinerary, fetchSaved]);
   useEffect(() => {
-    const init = async () => {
-      if (!userLoading && user) {
-        await fetchItinerary();
-        await fetchSaved();
-      }
-      setLoadingPage(false);
-    };
-    init();
-  }, [user, userLoading, fetchItinerary, fetchSaved]);
+  // ← TAMBAHAN: tunggu auth selesai dulu sebelum lanjut
+  if (userLoading) return;
+
+  const init = async () => {
+    if (user) {
+      await fetchItinerary();
+      await fetchSaved();
+    }
+    setLoadingPage(false);
+  };
+  init();
+}, [user, userLoading, fetchItinerary, fetchSaved]);
 
   useEffect(() => {
     if (!itinerary?.items?.length) { setSummary({ distance: 0, time: 0, cost: 0 }); return; }
@@ -177,18 +190,32 @@ export default function RencanaPage() {
     setItinerary({ ...itinerary, items: newItems });
     setDragIdx(idx);
   };
+  // const handleDragEnd = async () => {
+  //   setDragIdx(null);
+  //   if (!itinerary) return;
+  //   await fetch("/api/pengunjung/itinerary", {
+  //     method: "PATCH",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       itineraryId: itinerary.id,
+  //       items: itinerary.items.map((item, idx) => ({ id: item.id, order: idx + 1 })),
+  //     }),
+  //   });
+  // };
   const handleDragEnd = async () => {
-    setDragIdx(null);
-    if (!itinerary) return;
-    await fetch("/api/pengunjung/itinerary", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        itineraryId: itinerary.id,
-        items: itinerary.items.map((item, idx) => ({ id: item.id, order: idx + 1 })),
-      }),
-    });
-  };
+  setDragIdx(null);
+  if (!itinerary) return;
+  await fetch("/api/pengunjung/itinerary", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      itineraryId: itinerary.id,
+      items: itinerary.items.map((item, idx) => ({ id: item.id, order: idx + 1 })),
+    }),
+  });
+  // Fetch ulang dari server agar urutan tampil sesuai DB
+  await fetchItinerary();
+};
 
   const routeItemsForMap = itinerary?.items.map((item, idx) => ({ destinationId: item.destination.id, order: idx + 1 })) || [];
 
