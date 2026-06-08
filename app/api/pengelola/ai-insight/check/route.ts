@@ -5,8 +5,16 @@ type CategoryAnalysis = {
   categoryId: number;
   categoryName: string;
   isSelected: boolean;
+
   matchedKeywords: string[];
+  nameMatchedKeywords: string[];
+  descriptionMatchedKeywords: string[];
+
   matchCount: number;
+  nameMatchCount: number;
+  descriptionMatchCount: number;
+
+  fieldScore: number;
 };
 
 function normalizeText(text: string) {
@@ -36,8 +44,33 @@ function findMatches(text: string, keywords: string[]) {
   });
 }
 
+function getUniqueKeywords(keywords: string[]) {
+  return Array.from(new Set(keywords));
+}
+
 function roundScore(value: number) {
   return Math.round(value);
+}
+
+function getFieldScore(nameMatchCount: number, descriptionMatchCount: number) {
+  const nameScore = nameMatchCount > 0 ? 50 : 0;
+  const descriptionScore = descriptionMatchCount > 0 ? 50 : 0;
+
+  return nameScore + descriptionScore;
+}
+
+function getStrongestCategory(analysis: CategoryAnalysis[]) {
+  const sortedAnalysis = [...analysis].sort((a, b) => {
+    if (b.fieldScore !== a.fieldScore) {
+      return b.fieldScore - a.fieldScore;
+    }
+
+    return b.matchCount - a.matchCount;
+  });
+
+  return sortedAnalysis[0] && sortedAnalysis[0].fieldScore > 0
+    ? sortedAnalysis[0]
+    : null;
 }
 
 export async function POST(req: NextRequest) {
@@ -58,7 +91,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const text = normalizeText(`${name} ${description}`);
+    const nameText = normalizeText(name);
+    const descriptionText = normalizeText(description);
 
     const categories = await prisma.category.findMany({
       include: {
@@ -68,65 +102,131 @@ export async function POST(req: NextRequest) {
 
     const analysis: CategoryAnalysis[] = categories.map((category) => {
       const keywords = category.keywords.map((item) => item.keyword);
-      const matchedKeywords = findMatches(text, keywords);
+
+      const nameMatchedKeywords = findMatches(nameText, keywords);
+      const descriptionMatchedKeywords = findMatches(descriptionText, keywords);
+
+      const matchedKeywords = getUniqueKeywords([
+        ...nameMatchedKeywords,
+        ...descriptionMatchedKeywords,
+      ]);
+
+      const nameMatchCount = nameMatchedKeywords.length;
+      const descriptionMatchCount = descriptionMatchedKeywords.length;
+      const matchCount = matchedKeywords.length;
+
+      const fieldScore = getFieldScore(nameMatchCount, descriptionMatchCount);
 
       return {
         categoryId: category.id,
         categoryName: category.name,
         isSelected: categoryIds.includes(category.id),
+
         matchedKeywords,
-        matchCount: matchedKeywords.length,
+        nameMatchedKeywords,
+        descriptionMatchedKeywords,
+
+        matchCount,
+        nameMatchCount,
+        descriptionMatchCount,
+
+        fieldScore,
       };
     });
 
     const selectedAnalysis = analysis.filter((item) => item.isSelected);
 
-    const sortedAnalysis = [...analysis].sort(
-      (a, b) => b.matchCount - a.matchCount
-    );
-
-    const strongestCategory: CategoryAnalysis | null =
-      sortedAnalysis[0] && sortedAnalysis[0].matchCount > 0
-        ? sortedAnalysis[0]
-        : null;
+    const strongestCategory = getStrongestCategory(analysis);
 
     const selectedWithMatches = selectedAnalysis.filter(
-      (item) => item.matchCount > 0
+      (item) => item.fieldScore > 0
     );
 
     const selectedWithoutMatches = selectedAnalysis.filter(
-      (item) => item.matchCount === 0
+      (item) => item.fieldScore === 0
     );
 
     const unselectedStrongMatches = analysis.filter(
-      (item) => !item.isSelected && item.matchCount > 0
+      (item) => !item.isSelected && item.fieldScore > 0
     );
 
     const totalSelectedCategories = selectedAnalysis.length;
-    const totalSelectedWithMatches = selectedWithMatches.length;
 
-    const selectedMatchCount = selectedAnalysis.reduce(
-      (total, item) => total + item.matchCount,
-      0
-    );
-
-    const totalMatchCount = analysis.reduce(
-      (total, item) => total + item.matchCount,
-      0
-    );
+    const selectedWithAnyEvidence = selectedAnalysis.filter(
+      (item) => item.nameMatchCount > 0 || item.descriptionMatchCount > 0
+    ).length;
 
     const coverageScore =
       totalSelectedCategories > 0
-        ? (totalSelectedWithMatches / totalSelectedCategories) * 100
+        ? (selectedWithAnyEvidence / totalSelectedCategories) * 100
+        : 0;
+
+    const selectedNameMatchCount = selectedAnalysis.reduce(
+      (total, item) => total + item.nameMatchCount,
+      0
+    );
+
+    const selectedDescriptionMatchCount = selectedAnalysis.reduce(
+      (total, item) => total + item.descriptionMatchCount,
+      0
+    );
+
+    const totalNameMatchCount = analysis.reduce(
+      (total, item) => total + item.nameMatchCount,
+      0
+    );
+
+    const totalDescriptionMatchCount = analysis.reduce(
+      (total, item) => total + item.descriptionMatchCount,
+      0
+    );
+
+    const nameDominanceScore =
+      totalNameMatchCount > 0
+        ? (selectedNameMatchCount / totalNameMatchCount) * 100
+        : 0;
+
+    const descriptionDominanceScore =
+      totalDescriptionMatchCount > 0
+        ? (selectedDescriptionMatchCount / totalDescriptionMatchCount) * 100
         : 0;
 
     const dominanceScore =
-      totalMatchCount > 0 ? (selectedMatchCount / totalMatchCount) * 100 : 0;
+      nameDominanceScore * 0.5 + descriptionDominanceScore * 0.5;
 
-    const strongestAlignmentScore =
-      strongestCategory && categoryIds.includes(strongestCategory.categoryId)
+    const nameSortedAnalysis = [...analysis].sort(
+      (a, b) => b.nameMatchCount - a.nameMatchCount
+    );
+
+    const descriptionSortedAnalysis = [...analysis].sort(
+      (a, b) => b.descriptionMatchCount - a.descriptionMatchCount
+    );
+
+    const strongestNameCategory =
+      nameSortedAnalysis[0] && nameSortedAnalysis[0].nameMatchCount > 0
+        ? nameSortedAnalysis[0]
+        : null;
+
+    const strongestDescriptionCategory =
+      descriptionSortedAnalysis[0] &&
+      descriptionSortedAnalysis[0].descriptionMatchCount > 0
+        ? descriptionSortedAnalysis[0]
+        : null;
+
+    const nameAlignmentScore =
+      strongestNameCategory &&
+      categoryIds.includes(strongestNameCategory.categoryId)
         ? 100
         : 0;
+
+    const descriptionAlignmentScore =
+      strongestDescriptionCategory &&
+      categoryIds.includes(strongestDescriptionCategory.categoryId)
+        ? 100
+        : 0;
+
+    const strongestAlignmentScore =
+      nameAlignmentScore * 0.5 + descriptionAlignmentScore * 0.5;
 
     const score = roundScore(
       coverageScore * 0.5 +
@@ -160,14 +260,26 @@ export async function POST(req: NextRequest) {
       scoringDetail: {
         coverageScore: roundScore(coverageScore),
         dominanceScore: roundScore(dominanceScore),
-        strongestAlignmentScore,
+        strongestAlignmentScore: roundScore(strongestAlignmentScore),
         formula:
           "score = (coverageScore * 0.5) + (dominanceScore * 0.3) + (strongestAlignmentScore * 0.2)",
+        fieldFormula:
+          "Kategori dianggap tercakup jika memiliki bukti pada nama atau deskripsi. Nama dan deskripsi tetap digunakan setara pada dominance dan alignment.",
+        breakdown: {
+          selectedWithAnyEvidence,
+          totalSelectedCategories,
+          nameDominanceScore: roundScore(nameDominanceScore),
+          descriptionDominanceScore: roundScore(descriptionDominanceScore),
+          nameAlignmentScore: roundScore(nameAlignmentScore),
+          descriptionAlignmentScore: roundScore(descriptionAlignmentScore),
+        },
       },
       selectedCategories: selectedAnalysis,
       selectedWithMatches,
       selectedWithoutMatches,
       strongestCategory,
+      strongestNameCategory,
+      strongestDescriptionCategory,
       unselectedStrongMatches,
       allCategoryAnalysis: analysis,
       message,

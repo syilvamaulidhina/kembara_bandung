@@ -1,10 +1,41 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+function getUserFromCookie(req: NextRequest) {
+	const userCookie = req.cookies.get("user");
+
+	if (!userCookie) {
+		return null;
+	}
+
 	try {
+		return JSON.parse(userCookie.value);
+	} catch {
+		return null;
+	}
+}
+
+export async function GET(req: NextRequest) {
+	try {
+		const user = getUserFromCookie(req);
+
+		if (!user) {
+			return NextResponse.json(
+				{ message: "User belum login." },
+				{ status: 401 }
+			);
+		}
+
+		if (user.role !== "PENGELOLA") {
+			return NextResponse.json(
+				{ message: "Akses ditolak." },
+				{ status: 403 }
+			);
+		}
+
 		const destinations = await prisma.destination.findMany({
 			where: {
+				ownerId: Number(user.id),
 				isDeleted: false,
 			},
 			include: {
@@ -52,10 +83,32 @@ export async function GET() {
 	}
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
 	try {
-		const body = await req.json();
+		const user = getUserFromCookie(req);
 
+		if (!user) {
+			return NextResponse.json(
+				{ message: "User belum login." },
+				{ status: 401 }
+			);
+		}
+
+		if (user.role !== "PENGELOLA") {
+			return NextResponse.json(
+				{ message: "Akses ditolak." },
+				{ status: 403 }
+			);
+		}
+
+		if (user.verificationStatus !== "APPROVED") {
+			return NextResponse.json(
+				{ message: "Akun pengelola belum diverifikasi." },
+				{ status: 403 }
+			);
+		}
+
+		const body = await req.json();
 		const analysisResult = body.analysisResult;
 
 		const categoryIds = Array.isArray(body.categoryIds)
@@ -83,8 +136,47 @@ export async function POST(req: Request) {
 			);
 		}
 
+		if (!body.isFree) {
+			if (body.ticketPrice === "" || body.ticketPrice === undefined) {
+				return NextResponse.json(
+					{ message: "Harga tiket mulai wajib diisi." },
+					{ status: 400 }
+				);
+			}
+
+			if (body.maxPrice === "" || body.maxPrice === undefined) {
+				return NextResponse.json(
+					{ message: "Harga tiket maksimal wajib diisi." },
+					{ status: 400 }
+				);
+			}
+
+			if (Number(body.ticketPrice) < 0 || Number(body.maxPrice) < 0) {
+				return NextResponse.json(
+					{ message: "Harga tiket tidak boleh negatif." },
+					{ status: 400 }
+				);
+			}
+
+			if (Number(body.maxPrice) < Number(body.ticketPrice)) {
+				return NextResponse.json(
+					{ message: "Harga maksimal tidak boleh lebih kecil dari harga mulai." },
+					{ status: 400 }
+				);
+			}
+		}
+
+		if (!body.openTime || !body.closeTime) {
+			return NextResponse.json(
+				{ message: "Jam buka dan jam tutup wajib diisi." },
+				{ status: 400 }
+			);
+		}
+
 		const destination = await prisma.destination.create({
 			data: {
+				ownerId: Number(user.id),
+
 				name: body.name,
 				description: body.description,
 				address: body.address,
@@ -92,6 +184,13 @@ export async function POST(req: Request) {
 				latitude: Number(body.latitude),
 				longitude: Number(body.longitude),
 				imageUrl: body.imageUrl || null,
+
+				openTime: body.openTime || null,
+				closeTime: body.closeTime || null,
+				ticketPrice: body.isFree ? 0 : Number(body.ticketPrice),
+				maxPrice: body.isFree ? 0 : Number(body.maxPrice),
+				website: body.website || null,
+
 				status: "pending",
 
 				categories: {
