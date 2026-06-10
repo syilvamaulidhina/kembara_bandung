@@ -1,0 +1,227 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  PENGELOLA
+  WISATAWAN
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Gender {
+  LAKI_LAKI
+  PEREMPUAN
+}
+
+enum DestinationStatus {
+  pending
+  aktif
+  butuh_perbaikan
+  canceled
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role?
+  gender    Gender?
+  domisili  String?
+  photo     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relasi baru untuk fitur wisatawan
+  savedDestinations SavedDestination[]
+  itineraries       Itinerary[]
+  reviews           Review[]
+  visitedPlaces     VisitedPlace[]
+  itineraryQueue    ItineraryQueue[]
+
+  verificationStatus   VerificationStatus?
+  verificationDocument String?
+  rejectionReason      String?
+
+  destinations Destination[]
+}
+
+model Destination {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  address     String
+  contact     String?
+  latitude    Float
+  longitude   Float
+  imageUrl    String?
+
+  ownerId Int?
+  owner   User? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+
+  // Field tambahan dari pengelola
+  openTime    String?
+  closeTime   String?
+  ticketPrice Int?
+  maxPrice    Int?
+  website     String?
+  visitCount  Int     @default(0)
+
+  status    DestinationStatus @default(pending)
+  isDeleted Boolean           @default(false)
+  deletedAt DateTime?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  categories     DestinationCategory[]
+  aiAnalyses     AiAnalysis[]
+  savedBy        SavedDestination[]
+  itineraryItems ItineraryItem[]
+  reviews        Review[]
+  visitedBy      VisitedPlace[]
+  itineraryQueue ItineraryQueue[]
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  destinations DestinationCategory[]
+  keywords     CategoryKeyword[]
+}
+
+model DestinationCategory {
+  id            Int @id @default(autoincrement())
+  destinationId Int
+  categoryId    Int
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([destinationId, categoryId])
+}
+
+model CategoryKeyword {
+  id         Int      @id @default(autoincrement())
+  keyword    String
+  categoryId Int
+  createdAt  DateTime @default(now())
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, keyword])
+}
+
+model AiAnalysis {
+  id            Int      @id @default(autoincrement())
+  destinationId Int
+  score         Int
+  status        String
+  message       String
+  rawResult     Json
+  createdAt     DateTime @default(now())
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+}
+
+// ============================================================
+// TABEL BARU UNTUK FITUR WISATAWAN
+// ============================================================
+
+model SavedDestination {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+// Destinasi yang sudah diklik "Tambah ke Rencana"
+// dari halaman Tersimpan
+model ItineraryQueue {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model Itinerary {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  title         String   @default("Rencana Perjalananku")
+  totalDistance Float?
+  estimatedTime Int?
+  estimatedCost Int?
+  isAiGenerated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ItineraryItem[]
+}
+
+model ItineraryItem {
+  id            Int      @id @default(autoincrement())
+  itineraryId   Int
+  destinationId Int
+  order         Int
+  visitTime     String?
+  createdAt     DateTime @default(now())
+
+  itinerary   Itinerary   @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([itineraryId, order])
+}
+
+model Review {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  rating        Int
+  comment       String?
+  photoUrl      String?
+  videoUrl      String?
+  helpfulCount  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model VisitedPlace {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  visitedAt     DateTime @default(now())
+  checkedIn     Boolean  @default(false)
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}

@@ -7,11 +7,14 @@ import { calculateDistance } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const id = parseInt(params.id);
+
     const { searchParams } = new URL(request.url);
+
     const lat = parseFloat(searchParams.get("lat") || "0");
     const lng = parseFloat(searchParams.get("lng") || "0");
     const userId = searchParams.get("userId");

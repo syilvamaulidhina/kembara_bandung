@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
 }
 
@@ -48,6 +48,7 @@ model User {
   itineraries       Itinerary[]
   reviews           Review[]
   visitedPlaces     VisitedPlace[]
+  itineraryQueue    ItineraryQueue[]
 
   verificationStatus VerificationStatus?
   verificationDocument String?
@@ -96,6 +97,7 @@ model Destination {
   itineraryItems    ItineraryItem[]
   reviews           Review[]
   visitedBy         VisitedPlace[]
+  itineraryQueue    ItineraryQueue[]
 }
 
 model Category {
@@ -157,6 +159,20 @@ model SavedDestination {
   @@unique([userId, destinationId])
 }
 
+// Destinasi yang sudah diklik "Tambah ke Rencana"
+// dari halaman Tersimpan
+model ItineraryQueue {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
 model Itinerary {
   id              Int      @id @default(autoincrement())
   userId          Int
@@ -193,6 +209,7 @@ model Review {
   rating        Int
   comment       String?
   photoUrl      String?
+  videoUrl      String?
   helpfulCount  Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

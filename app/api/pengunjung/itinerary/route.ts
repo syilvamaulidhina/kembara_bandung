@@ -195,15 +195,25 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    // Update order setiap item
-    await Promise.all(
-      items.map((item: { id: number; order: number }) =>
-        prisma.itineraryItem.update({
-          where: { id: item.id },
-          data: { order: item.order },
-        })
-      )
-    );
+    // Solusi unique constraint: update ke nilai negatif dulu, baru ke nilai final
+// Ini mencegah conflict sementara saat 2 item punya order yang sama
+const typedItems = items as { id: number; order: number }[];
+
+// Tahap 1: set semua order ke negatif agar tidak ada conflict
+for (const item of typedItems) {
+  await prisma.itineraryItem.update({
+    where: { id: item.id },
+    data: { order: -item.order },
+  });
+}
+
+// Tahap 2: set ke order final yang benar
+for (const item of typedItems) {
+  await prisma.itineraryItem.update({
+    where: { id: item.id },
+    data: { order: item.order },
+  });
+}
 
     // Recalculate total distance
     const itinerary = await prisma.itinerary.findUnique({
