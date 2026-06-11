@@ -23,7 +23,6 @@ type Insight = {
   impact: "high" | "medium" | "low";
 };
 
-// ✅ Type data real dari DB
 type RealData = {
   totalWisata: number;
   totalPengguna: number;
@@ -151,7 +150,6 @@ export default function AIInsightPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
@@ -172,7 +170,6 @@ export default function AIInsightPage() {
         </button>
       </div>
 
-      {/* ✅ Summary Stats — data real dari DB */}
       {data && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
@@ -213,8 +210,7 @@ export default function AIInsightPage() {
         </div>
       )}
 
-      {/* ✅ Kategori Summary — data real */}
-      {data && data.kategoriSummary.length > 0 && (
+      {data && (data.kategoriSummary?.length ?? 0) > 0 && (
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
           <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
             <Star size={16} className="text-primary" />
@@ -232,8 +228,7 @@ export default function AIInsightPage() {
         </div>
       )}
 
-      {/* ✅ Top Rated — data real */}
-      {data && data.topRated.length > 0 && (
+      {data && (data.topRated?.length ?? 0) > 0 && (
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
           <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
             <Star size={16} className="text-yellow-500" />
@@ -258,7 +253,6 @@ export default function AIInsightPage() {
         </div>
       )}
 
-      {/* Insights Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {insights.map((insight) => {
           const config = getTypeConfig(insight.type);
@@ -287,7 +281,6 @@ export default function AIInsightPage() {
         })}
       </div>
 
-      {/* Action Items */}
       {insights.some((i) => i.type === "recommendation") && (
         <div className="bg-gradient-to-br from-primary/5 to-indigo-50 rounded-2xl p-6 border border-primary/20">
           <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
