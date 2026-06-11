@@ -8,31 +8,34 @@ type Wisata = {
   nama: string;
   kategori: string;
   lokasi: string;
-  rating: number;
-  status: "Aktif" | "Nonaktif";
+  status: string;
 };
-
-const initialWisata: Wisata[] = [
-  { id: 1, nama: "Kawah Putih", kategori: "Wisata Alam", lokasi: "Ciwidey, Bandung", rating: 4.8, status: "Aktif" },
-  { id: 2, nama: "Farm House Lembang", kategori: "Wisata Hiburan", lokasi: "Lembang, Bandung", rating: 4.6, status: "Aktif" },
-  { id: 3, nama: "Orchid Forest", kategori: "Wisata Alam", lokasi: "Lembang, Bandung", rating: 4.7, status: "Aktif" },
-  { id: 4, nama: "Trans Studio Bandung", kategori: "Wisata Hiburan", lokasi: "Bandung Kota", rating: 4.5, status: "Aktif" },
-  { id: 5, nama: "Saung Angklung Udjo", kategori: "Wisata Edukasi", lokasi: "Padasuka, Bandung", rating: 4.7, status: "Aktif" },
-  { id: 6, nama: "Floating Market Lembang", kategori: "Wisata Kuliner", lokasi: "Lembang, Bandung", rating: 4.4, status: "Aktif" },
-  { id: 7, nama: "De'Ranch Lembang", kategori: "Wisata Hiburan", lokasi: "Lembang, Bandung", rating: 4.3, status: "Nonaktif" },
-  { id: 8, nama: "Tebing Keraton", kategori: "Wisata Alam", lokasi: "Cimenyan, Bandung", rating: 4.6, status: "Aktif" },
-];
 
 const KATEGORI = ["Wisata Alam", "Wisata Kuliner", "Wisata Edukasi", "Wisata Hiburan"];
 
 export default function KelolaWisataPage() {
   const [wisataList, setWisataList] = useState<Wisata[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [editWisata, setEditWisata] = useState<Wisata | null>(null);
   const [deleteWisata, setDeleteWisata] = useState<Wisata | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const fetchWisata = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/wisata");
+      const data = await res.json();
+      setWisataList(data.wisata || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setWisataList(initialWisata);
+    fetchWisata();
   }, []);
 
   const filtered = wisataList.filter(
@@ -42,16 +45,40 @@ export default function KelolaWisataPage() {
       w.lokasi.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (!editWisata) return;
-    setWisataList(wisataList.map((w) => (w.id === editWisata.id ? editWisata : w)));
-    setEditWisata(null);
+    setSaving(true);
+    try {
+      await fetch("/api/admin/wisata", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editWisata.id,
+          nama: editWisata.nama,
+          lokasi: editWisata.lokasi,
+          status: editWisata.status,
+        }),
+      });
+      await fetchWisata();
+      setEditWisata(null);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleteWisata) return;
-    setWisataList(wisataList.filter((w) => w.id !== deleteWisata.id));
-    setDeleteWisata(null);
+    try {
+      await fetch("/api/admin/wisata", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: deleteWisata.id }),
+      });
+      await fetchWisata();
+      setDeleteWisata(null);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -76,7 +103,10 @@ export default function KelolaWisataPage() {
       {/* Table */}
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="font-bold text-gray-800">Daftar Wisata</h2>
+          <h2 className="font-bold text-gray-800">
+            Daftar Wisata{" "}
+            <span className="text-sm font-normal text-gray-400">({wisataList.length})</span>
+          </h2>
           <div className="relative">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
@@ -97,19 +127,25 @@ export default function KelolaWisataPage() {
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Nama Wisata</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Kategori</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Lokasi</th>
-                <th className="text-left px-6 py-3 text-gray-500 font-medium">Rating</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Status</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {wisataList.length === 0 ? (
+              {loading ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-10 text-gray-400">Memuat data...</td>
+                  <td colSpan={6} className="text-center py-10 text-gray-400">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      Memuat data...
+                    </div>
+                  </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-10 text-gray-400">Tidak ada wisata ditemukan</td>
+                  <td colSpan={6} className="text-center py-10 text-gray-400">
+                    {search ? "Tidak ada wisata ditemukan" : "Belum ada data wisata"}
+                  </td>
                 </tr>
               ) : (
                 filtered.map((w) => (
@@ -119,11 +155,10 @@ export default function KelolaWisataPage() {
                     <td className="px-6 py-4 text-gray-500">{w.kategori}</td>
                     <td className="px-6 py-4 text-gray-500">{w.lokasi}</td>
                     <td className="px-6 py-4">
-                      <span className="text-yellow-500 font-medium">★ {w.rating}</span>
-                    </td>
-                    <td className="px-6 py-4">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        w.status === "Aktif" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                        w.status === "Aktif"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-500"
                       }`}>
                         {w.status}
                       </span>
@@ -195,11 +230,11 @@ export default function KelolaWisataPage() {
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Status</label>
                 <select
                   value={editWisata.status}
-                  onChange={(e) => setEditWisata({ ...editWisata, status: e.target.value as "Aktif" | "Nonaktif" })}
+                  onChange={(e) => setEditWisata({ ...editWisata, status: e.target.value })}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option>Aktif</option>
-                  <option>Nonaktif</option>
+                  <option value="Aktif">Aktif</option>
+                  <option value="Nonaktif">Nonaktif</option>
                 </select>
               </div>
             </div>
@@ -212,9 +247,13 @@ export default function KelolaWisataPage() {
               </button>
               <button
                 onClick={handleEdit}
-                className="flex-1 bg-primary text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 flex items-center justify-center gap-2"
+                disabled={saving}
+                className="flex-1 bg-primary text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                <Save size={15} /> Simpan
+                {saving
+                  ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  : <Save size={15} />}
+                Simpan
               </button>
             </div>
           </div>

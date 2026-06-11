@@ -7,19 +7,14 @@ import {
 } from "recharts";
 import { MapPin, LayoutGrid, Users, TrendingUp, CheckCircle } from "lucide-react";
 
-const visitData = [
-  { bulan: "Jan", kunjungan: 3000 },
-  { bulan: "Feb", kunjungan: 4000 },
-  { bulan: "Mar", kunjungan: 5200 },
-  { bulan: "Apr", kunjungan: 2400 },
-  { bulan: "Mei", kunjungan: 3600 },
-  { bulan: "Jun", kunjungan: 4100 },
-];
-
-const topWisata = [
-  { nama: "Kawah Putih", pengunjung: "3.000", image: "/images/kawah_putih.png" },
-  { nama: "Farm House Lembang", pengunjung: "2.000", image: "/images/farmhouse.png" },
-  { nama: "Orchid Forest", pengunjung: "1.500", image: "/images/orchid.png" },
+// Default data supaya chart tetap tampil meski data kosong
+const DEFAULT_VISIT_DATA = [
+  { bulan: "Jan", kunjungan: 0 },
+  { bulan: "Feb", kunjungan: 0 },
+  { bulan: "Mar", kunjungan: 0 },
+  { bulan: "Apr", kunjungan: 0 },
+  { bulan: "Mei", kunjungan: 0 },
+  { bulan: "Jun", kunjungan: 0 },
 ];
 
 function SIGMap() {
@@ -233,6 +228,8 @@ export default function DashboardPage() {
     totalKategori: 0,
   });
   const [kategoriData, setKategoriData] = useState<any[]>([]);
+  // Pakai DEFAULT_VISIT_DATA supaya chart langsung tampil
+  const [visitData, setVisitData] = useState<{ bulan: string; kunjungan: number }[]>(DEFAULT_VISIT_DATA);
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
@@ -250,6 +247,12 @@ export default function DashboardPage() {
           totalKategori: data.totalKategori || 0,
         });
         setKategoriData(data.kategoriData || []);
+        // Kalau API return data pakai itu, kalau kosong tetap pakai default
+        setVisitData(
+          data.kunjunganData?.length > 0
+            ? data.kunjunganData
+            : DEFAULT_VISIT_DATA
+        );
       })
       .catch(console.error)
       .finally(() => setLoadingStats(false));
@@ -323,7 +326,9 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="font-bold text-gray-800">Statistik Kunjungan</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Data dummy — belum ada model kunjungan</p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Berdasarkan jumlah review per bulan
+              </p>
             </div>
             <select
               value={period}
@@ -331,21 +336,26 @@ export default function DashboardPage() {
               className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none"
             >
               <option>6 Bulan Terakhir</option>
-              <option>3 Bulan Terakhir</option>
-              <option>1 Tahun Terakhir</option>
             </select>
           </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={visitData} barSize={32}>
-              <XAxis dataKey="bulan" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-              <Tooltip
-                contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
-                cursor={{ fill: "#F4F6FB" }}
-              />
-              <Bar dataKey="kunjungan" fill="#3B4FD8" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          {loadingStats ? (
+            <div className="h-[220px] flex items-center justify-center text-gray-400 text-sm animate-pulse">
+              Memuat data...
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={visitData} barSize={32}>
+                <XAxis dataKey="bulan" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
+                  cursor={{ fill: "#F4F6FB" }}
+                  formatter={(value: any) => [value, "Review"]}
+                />
+                <Bar dataKey="kunjungan" fill="#3B4FD8" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         <div className="bg-white rounded-2xl p-5 shadow-sm">

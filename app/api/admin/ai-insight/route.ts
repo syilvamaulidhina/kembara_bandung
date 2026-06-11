@@ -1,32 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-// Data dummy untuk dashboard (nanti bisa diganti dengan fetch dari database)
-const dashboardData = {
-  visitData: [
-    { bulan: "Jan", kunjungan: 3000 },
-    { bulan: "Feb", kunjungan: 4000 },
-    { bulan: "Mar", kunjungan: 5200 },
-    { bulan: "Apr", kunjungan: 2400 },
-    { bulan: "Mei", kunjungan: 3600 },
-    { bulan: "Jun", kunjungan: 4100 },
-  ],
-  kategoriData: [
-    { name: "Wisata Alam", value: 40 },
-    { name: "Wisata Kuliner", value: 20 },
-    { name: "Wisata Edukasi", value: 20 },
-    { name: "Wisata Hiburan", value: 20 },
-  ],
-  topWisata: [
-    { nama: "Kawah Putih", pengunjung: "3.000" },
-    { nama: "Farm House Lembang", pengunjung: "2.000" },
-    { nama: "Orchid Forest", pengunjung: "1.500" },
-  ],
-  stats: [
-    { label: "Wisata Terdaftar", value: "9,812" },
-    { label: "Total Kategori Wisata", value: "12" },
-    { label: "Pengguna", value: "5,760" },
-  ],
-};
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
@@ -37,87 +10,161 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Invalid action" }, { status: 400 });
     }
 
-    // Siapkan context data untuk AI
-    const totalKunjungan = dashboardData.visitData.reduce((acc, d) => acc + d.kunjungan, 0);
-    const avgKunjungan = Math.round(totalKunjungan / dashboardData.visitData.length);
-    const maxMonth = dashboardData.visitData.reduce((prev, current) =>
-      current.kunjungan > prev.kunjungan ? current : prev
-    );
-    const minMonth = dashboardData.visitData.reduce((prev, current) =>
-      current.kunjungan < prev.kunjungan ? current : prev
-    );
-    const dominantCategory = dashboardData.kategoriData.reduce((prev, current) =>
-      current.value > prev.value ? current : prev
-    );
+    const totalWisata = await prisma.destination.count({
+      where: { isDeleted: false },
+    });
 
-    const context = `
-Data Dashboard Kembara Bandung (per April 2026):
+    const wisataAktif = await prisma.destination.count({
+      where: { isDeleted: false, status: "aktif" },
+    });
+
+    const wisataNonAktif = await prisma.destination.count({
+      where: { isDeleted: false, status: { not: "aktif" } },
+    });
+
+    const tanpaKoordinat = await prisma.destination.count({
+      where: {
+        isDeleted: false,
+        OR: [{ latitude: 0 }, { longitude: 0 }],
+      },
+    });
+
+    const tanpaFoto = await prisma.destination.count({
+      where: {
+        isDeleted: false,
+        OR: [{ imageUrl: null }, { imageUrl: "" }],
+      },
+    });
+
+    const totalPengguna = await prisma.user.count({
+      where: { role: "WISATAWAN" },
+    });
+
+    const categories = await prisma.category.findMany({
+      include: {
+        destinations: {
+          include: {
+            destination: {
+              include: { reviews: true },
+            },
+          },
+        },
+      },
+    });
+
+    const kategoriSummary = categories.map((cat) => {
+      const jumlah = cat.destinations.length;
+      const persentase = totalWisata > 0 ? Math.round((jumlah / totalWisata) * 100) : 0;
+      const allRatings = cat.destinations.flatMap((d) =>
+        d.destination.reviews.map((r) => r.rating)
+      );
+      const avgRating =
+        allRatings.length > 0
+          ? Math.round((allRatings.reduce((a, b) => a + b, 0) / allRatings.length) * 10) / 10
+          : 0;
+      return {
+        kategori: cat.name.toUpperCase(),
+        jumlah,
+        persentase,
+        avgRating,
+      };
+    });
+
+    const topRatedRaw = await prisma.destination.findMany({
+      where: { isDeleted: false, status: "aktif" },
+      include: {
+        reviews: true,
+        categories: {
+          include: { category: true },
+        },
+      },
+      take: 20,
+    });
+
+    const topRated = topRatedRaw
+      .map((d) => {
+        const ratings = d.reviews.map((r) => r.rating);
+        const avgRating =
+          ratings.length > 0
+            ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
+            : 0;
+        return {
+          nama: d.name,
+          kategori: d.categories[0]?.category?.name?.toUpperCase() || "LAINNYA",
+          rating: avgRating,
+          lokasi: d.address,
+        };
+      })
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 3);
+
+    const realData = {
+      totalWisata,
+      totalPengguna,
+      wisataAktif,
+      wisataNonAktif,
+      tanpaKoordinat,
+      tanpaFoto,
+      kategoriSummary,
+      topRated,
+    };
+
+    const context = `Data Real Kembara Bandung:
 
 STATISTIK UTAMA:
-- Total Wisata Terdaftar: ${dashboardData.stats[0].value}
-- Total Kategori: ${dashboardData.stats[1].value}
-- Total Pengguna: ${dashboardData.stats[2].value}
+- Total Wisata Terdaftar: ${totalWisata}
+- Wisata Aktif: ${wisataAktif}
+- Wisata Tidak Aktif: ${wisataNonAktif}
+- Total Pengguna Wisatawan: ${totalPengguna}
+- Wisata Tanpa Koordinat: ${tanpaKoordinat}
+- Wisata Tanpa Foto: ${tanpaFoto}
 
-DATA KUNJUNGAN (6 bulan):
-- Januari: 3,000 kunjungan
-- Februari: 4,000 kunjungan
-- Maret: 5,200 kunjungan (tertinggi)
-- April: 2,400 kunjungan (terendah)
-- Mei: 3,600 kunjungan
-- Juni: 4,100 kunjungan
-- Total: ${totalKunjungan.toLocaleString("id-ID")} kunjungan
-- Rata-rata per bulan: ${avgKunjungan.toLocaleString("id-ID")} kunjungan
+DISTRIBUSI KATEGORI:
+${kategoriSummary.map((k) => `- ${k.kategori}: ${k.jumlah} wisata (${k.persentase}%), avg rating: ${k.avgRating}`).join("\n")}
 
-KATEGORI WISATA:
-- Wisata Alam: ${dominantCategory.value}% (dominan)
-- Wisata Kuliner: 20%
-- Wisata Edukasi: 20%
-- Wisata Hiburan: 20%
-
-TOP WISATA:
-1. ${dashboardData.topWisata[0].nama} - ${dashboardData.topWisata[0].pengunjung} pengunjung/hari
-2. ${dashboardData.topWisata[1].nama} - ${dashboardData.topWisata[1].pengunjung} pengunjung/hari
-3. ${dashboardData.topWisata[2].nama} - ${dashboardData.topWisata[2].pengunjung} pengunjung/hari
-`;
+TOP 3 WISATA RATING TERTINGGI:
+${topRated.map((w, i) => `${i + 1}. ${w.nama} - ${w.kategori} - Rating: ${w.rating}`).join("\n")}`;
 
     const systemPrompt = `Kamu adalah AI Analyst untuk platform wisata Kembara Bandung.
-Tugas kamu adalah menganalisis data dashboard dan menghasilkan 6-8 insight yang actionable untuk admin.
+Analisis data dashboard dan hasilkan 6-8 insight yang actionable untuk admin.
 
-Kategori insight:
-- "opportunity": Peluang yang bisa dimanfaatkan
-- "warning": Peringatan atau area yang perlu perhatian
-- "trend": Pola atau tren yang teridentifikasi
-- "recommendation": Rekomendasi aksi konkret
+Kategori insight yang tersedia:
+- opportunity: Peluang yang bisa dimanfaatkan
+- warning: Peringatan atau area yang perlu perhatian
+- trend: Pola atau tren yang teridentifikasi
+- recommendation: Rekomendasi aksi konkret
 
-Format respons HARUS JSON array seperti ini:
+Format respons HARUS berupa JSON array seperti contoh berikut, tanpa teks lain:
 [
   {
     "id": 1,
     "type": "trend",
-    "title": "Judul insight yang menarik",
-    "description": "Penjelasan insight dalam 2-3 kalimat dengan data pendukung",
-    "impact": "high" | "medium" | "low"
+    "title": "Judul insight",
+    "description": "Penjelasan 2-3 kalimat dengan data spesifik",
+    "impact": "medium"
   }
 ]
 
-Pastikan:
-- Minimal 1 insight per kategori
-- Gunakan data spesifik dari context
-- Bahasa Indonesia yang profesional
-- Insight harus actionable dan relevan untuk pengembangan wisata Bandung`;
+Nilai impact hanya boleh salah satu dari: high, medium, low.
+Nilai type hanya boleh salah satu dari: opportunity, warning, trend, recommendation.
+Gunakan data spesifik dari context, bahasa Indonesia profesional, minimal 1 insight per kategori.
+PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY || "",
-        "anthropic-version": "2023-06-01",
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "llama3-8b-8192",
         max_tokens: 2048,
-        system: systemPrompt,
+        temperature: 0.7,
         messages: [
+          {
+            role: "system",
+            content: systemPrompt,
+          },
           {
             role: "user",
             content: `Analisis data berikut dan hasilkan insight:\n\n${context}`,
@@ -128,125 +175,64 @@ Pastikan:
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Anthropic API error:", errorText);
-      throw new Error(`Anthropic API error: ${response.status}`);
+      console.error("Groq API error:", errorText);
+      return NextResponse.json({ insights: getFallbackInsights(realData), data: realData });
     }
 
-    const data = await response.json();
-    const content = data.content?.[0]?.text || "";
+    const aiData = await response.json();
+    const aiContent = aiData.choices?.[0]?.message?.content || "";
 
-    // Parse JSON dari response
     let insights = [];
     try {
-      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      const jsonMatch = aiContent.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         insights = JSON.parse(jsonMatch[0]);
+      } else {
+        insights = getFallbackInsights(realData);
       }
-    } catch (parseError) {
-      console.error("Failed to parse AI response:", parseError);
-      // Fallback insights jika parsing gagal
-      insights = [
-        {
-          id: 1,
-          type: "trend",
-          title: "Kunjungan Tertinggi di Bulan Maret",
-          description: `Bulan Maret mencatat kunjungan tertinggi dengan ${maxMonth.kunjungan.toLocaleString("id-ID")} pengunjung. Pertimbangkan untuk meningkatkan promosi di bulan-bulan lainnya.`,
-          impact: "medium",
-        },
-        {
-          id: 2,
-          type: "warning",
-          title: "Penurunan Signifikan di Bulan April",
-          description: `Terjadi penurunan drastis dari Maret (${maxMonth.kunjungan.toLocaleString("id-ID")}) ke April (${minMonth.kunjungan.toLocaleString("id-ID")}). Perlu investigasi penyebab penurunan ini.`,
-          impact: "high",
-        },
-        {
-          id: 3,
-          type: "opportunity",
-          title: "Wisata Alam Menjadi Kategori Dominan",
-          description: `Wisata Alam mendominasi dengan ${dominantCategory.value}% dari total kategori. Ini menunjukkan potensi besar untuk mengembangkan lebih banyak destinasi wisata alam.`,
-          impact: "high",
-        },
-        {
-          id: 4,
-          type: "recommendation",
-          title: "Diversifikasi Kategori Wisata",
-          description: "Kategori Kuliner, Edukasi, dan Hiburan masing-masing hanya 20%. Pertimbangkan program khusus untuk mengembangkan ketiga kategori ini agar lebih seimbang.",
-          impact: "medium",
-        },
-        {
-          id: 5,
-          type: "trend",
-          title: "Recovery Pasca Penurunan April",
-          description: "Setelah penurunan di April, kunjungan menunjukkan tren recovery di Mei dan Juni. Momentum ini bisa dimanfaatkan untuk kampanye promosi.",
-          impact: "medium",
-        },
-        {
-          id: 6,
-          type: "recommendation",
-          title: "Optimasi Wisata Top Performer",
-          description: `${dashboardData.topWisata[0].nama} sebagai wisata terpopuler bisa dijadikan flagship untuk package tour atau kampanye promosi utama.`,
-          impact: "low",
-        },
-      ];
+    } catch {
+      insights = getFallbackInsights(realData);
     }
 
-    return NextResponse.json({
-      insights,
-      data: dashboardData,
-    });
+    return NextResponse.json({ insights, data: realData });
   } catch (error) {
     console.error(error);
-
-    // Fallback insights jika API gagal
-    const fallbackInsights = [
-      {
-        id: 1,
-        type: "trend",
-        title: "Kunjungan Tertinggi di Bulan Maret",
-        description: "Bulan Maret mencatat kunjungan tertinggi dengan 5.200 pengunjung. Pertimbangkan untuk meningkatkan promosi di bulan-bulan lainnya.",
-        impact: "medium" as const,
-      },
-      {
-        id: 2,
-        type: "warning",
-        title: "Penurunan Signifikan di Bulan April",
-        description: "Terjadi penurunan drastis dari Maret (5.200) ke April (2.400). Perlu investigasi penyebab penurunan ini.",
-        impact: "high" as const,
-      },
-      {
-        id: 3,
-        type: "opportunity",
-        title: "Wisata Alam Menjadi Kategori Dominan",
-        description: "Wisata Alam mendominasi dengan 40% dari total kategori. Ini menunjukkan potensi besar untuk mengembangkan lebih banyak destinasi wisata alam.",
-        impact: "high" as const,
-      },
-      {
-        id: 4,
-        type: "recommendation",
-        title: "Diversifikasi Kategori Wisata",
-        description: "Kategori Kuliner, Edukasi, dan Hiburan masing-masing hanya 20%. Pertimbangkan program khusus untuk mengembangkan ketiga kategori ini.",
-        impact: "medium" as const,
-      },
-      {
-        id: 5,
-        type: "trend",
-        title: "Recovery Pasca Penurunan April",
-        description: "Setelah penurunan di April, kunjungan menunjukkan tren recovery di Mei dan Juni. Momentum ini bisa dimanfaatkan untuk kampanye promosi.",
-        impact: "medium" as const,
-      },
-      {
-        id: 6,
-        type: "recommendation",
-        title: "Optimasi Wisata Top Performer",
-        description: "Kawah Putih sebagai wisata terpopuler bisa dijadikan flagship untuk package tour atau kampanye promosi utama.",
-        impact: "low" as const,
-      },
-    ];
-
-    return NextResponse.json({
-      insights: fallbackInsights,
-      data: dashboardData,
-    });
+    return NextResponse.json(
+      { insights: getFallbackInsights(null), data: null },
+      { status: 500 }
+    );
   }
+}
+
+function getFallbackInsights(data: any) {
+  return [
+    {
+      id: 1,
+      type: "trend",
+      title: "Wisata Aktif Mendominasi",
+      description: `Dari ${data?.totalWisata ?? 0} wisata terdaftar, ${data?.wisataAktif ?? 0} wisata berstatus aktif. Ini menunjukkan pengelolaan data wisata yang baik.`,
+      impact: "medium",
+    },
+    {
+      id: 2,
+      type: "warning",
+      title: "Wisata Belum Memiliki Foto",
+      description: `Terdapat ${data?.tanpaFoto ?? 0} wisata yang belum memiliki foto. Foto sangat penting untuk menarik minat wisatawan.`,
+      impact: "high",
+    },
+    {
+      id: 3,
+      type: "opportunity",
+      title: "Potensi Pengguna Wisatawan",
+      description: `Total ${data?.totalPengguna ?? 0} wisatawan terdaftar menunjukkan basis pengguna yang terus berkembang.`,
+      impact: "medium",
+    },
+    {
+      id: 4,
+      type: "recommendation",
+      title: "Lengkapi Data Wisata",
+      description: "Pastikan semua wisata memiliki foto dan koordinat yang lengkap untuk meningkatkan pengalaman pengguna.",
+      impact: "high",
+    },
+  ];
 }
