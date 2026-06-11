@@ -55,17 +55,27 @@ model User {
   rejectionReason      String?
 
   destinations Destination[]
+
+  //event relation
+  events Event[]
 }
 
 model Destination {
-  id          Int     @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
   description String
   address     String
-  contact     String?
-  latitude    Float
-  longitude   Float
-  imageUrl    String?
+
+  addressStreet   String?
+  addressVillage  String?
+  addressDistrict String?
+  addressCity     String?
+  addressProvince String?
+
+  contact   String?
+  latitude  Float
+  longitude Float
+  imageUrl  String?
 
   ownerId Int?
   owner   User? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
@@ -91,6 +101,9 @@ model Destination {
   reviews        Review[]
   visitedBy      VisitedPlace[]
   itineraryQueue ItineraryQueue[]
+
+  //event relation
+  events Event[]
 }
 
 model Category {
@@ -224,4 +237,34 @@ model VisitedPlace {
   destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 
   @@unique([userId, destinationId])
+}
+
+model Event {
+  id            Int  @id @default(autoincrement())
+  ownerId       Int
+  destinationId Int?
+
+  name            String
+  description     String
+  bannerUrl       String?
+  startDate       DateTime
+  endDate         DateTime
+  contact         String?
+  registrationUrl String?
+
+  status    EventStatus @default(pending)
+  isDeleted Boolean     @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner       User         @relation(fields: [ownerId], references: [id])
+  destination Destination? @relation(fields: [destinationId], references: [id])
+}
+
+enum EventStatus {
+  pending
+  aktif
+  ditolak
+  selesai
 }
