@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import DestinationMap from "@/components/destination-map";
+import { ChevronDown } from "lucide-react";
+import { CITY_OPTIONS, WILAYAH_BANDUNG } from "@/data/wilayah-bandung";
 
 type Category = {
   id: number;
@@ -46,6 +48,11 @@ type Destination = {
       name: string;
     };
   }[];
+  addressStreet: string | null;
+  addressVillage: string | null;
+  addressDistrict: string | null;
+  addressCity: string | null;
+  addressProvince: string | null;
 };
 
 export default function EditDestinasiPage() {
@@ -77,6 +84,11 @@ export default function EditDestinasiPage() {
     description: "",
     contact: "",
     address: "",
+    addressStreet: "",
+    addressVillage: "",
+    addressDistrict: "",
+    addressCity: "",
+    addressProvince: "Jawa Barat",
     latitude: "",
     longitude: "",
     imageUrl: "",
@@ -111,6 +123,11 @@ export default function EditDestinasiPage() {
           description: destination.description || "",
           contact: destination.contact || "",
           address: destination.address || "",
+          addressStreet: destination.addressStreet || "",
+          addressVillage: destination.addressVillage || "",
+          addressDistrict: destination.addressDistrict || "",
+          addressCity: destination.addressCity || "",
+          addressProvince: destination.addressProvince || "Jawa Barat",
           latitude: String(destination.latitude || ""),
           longitude: String(destination.longitude || ""),
           imageUrl: destination.imageUrl || "",
@@ -128,6 +145,18 @@ export default function EditDestinasiPage() {
     }
   }, [destinationId]);
 
+  function buildFullAddress() {
+    return [
+      form.addressStreet,
+      form.addressVillage,
+      form.addressDistrict,
+      form.addressCity,
+      form.addressProvince,
+    ]
+      .filter(Boolean)
+      .join(", ");
+  }
+
   function updateForm(field: string, value: string) {
     setForm((prev) => ({
       ...prev,
@@ -138,6 +167,10 @@ export default function EditDestinasiPage() {
       field === "name" ||
       field === "description" ||
       field === "address" ||
+      field === "addressStreet" ||
+      field === "addressVillage" ||
+      field === "addressDistrict" ||
+      field === "addressCity" ||
       field === "latitude" ||
       field === "longitude"
     ) {
@@ -172,8 +205,13 @@ export default function EditDestinasiPage() {
       return;
     }
 
-    if (!form.address.trim()) {
-      alert("Alamat wajib diisi sebelum analisis.");
+    if (
+      !form.addressStreet.trim() ||
+      !form.addressVillage.trim() ||
+      !form.addressDistrict.trim() ||
+      !form.addressCity.trim()
+    ) {
+      alert("Lengkapi alamat wisata terlebih dahulu.");
       return;
     }
 
@@ -199,6 +237,12 @@ export default function EditDestinasiPage() {
           categoryIds: form.categoryIds,
           name: form.name,
           description: form.description,
+          address: form.address || buildFullAddress(),
+          addressStreet: form.addressStreet,
+          addressVillage: form.addressVillage,
+          addressDistrict: form.addressDistrict,
+          addressCity: form.addressCity,
+          addressProvince: form.addressProvince,
         }),
       });
 
@@ -245,8 +289,13 @@ export default function EditDestinasiPage() {
       return;
     }
 
-    if (!form.address.trim()) {
-      alert("Alamat wajib diisi.");
+    if (
+      !form.addressStreet.trim() ||
+      !form.addressVillage.trim() ||
+      !form.addressDistrict.trim() ||
+      !form.addressCity.trim()
+    ) {
+      alert("Lengkapi alamat wisata terlebih dahulu.");
       return;
     }
 
@@ -294,10 +343,18 @@ export default function EditDestinasiPage() {
           categoryIds: form.categoryIds,
           description: form.description,
           contact: form.contact,
-          address: form.address,
+
+          address: form.address || buildFullAddress(),
+          addressStreet: form.addressStreet,
+          addressVillage: form.addressVillage,
+          addressDistrict: form.addressDistrict,
+          addressCity: form.addressCity,
+          addressProvince: form.addressProvince,
+
           latitude: form.latitude,
           longitude: form.longitude,
           imageUrl: finalImageUrl,
+          analysisResult,
         }),
       });
 
@@ -318,6 +375,22 @@ export default function EditDestinasiPage() {
       setIsSubmitting(false);
     }
   }
+
+  const wilayahBandung = WILAYAH_BANDUNG as Record<
+    string,
+    Record<string, readonly string[]>
+  >;
+
+  const districtOptions = form.addressCity
+    ? Object.keys(wilayahBandung[form.addressCity] || {})
+    : [];
+
+  const villageOptions =
+    form.addressCity && form.addressDistrict
+      ? Array.from(
+          wilayahBandung[form.addressCity]?.[form.addressDistrict] || []
+        )
+      : [];
 
   const selectedKeywords =
     analysisResult?.selectedCategories.flatMap(
@@ -433,13 +506,119 @@ export default function EditDestinasiPage() {
                 className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
               />
 
-              <input
-                type="text"
-                value={form.address}
-                onChange={(event) => updateForm("address", event.target.value)}
-                placeholder="Alamat"
-                className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
-              />
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="relative">
+                  <select
+                    value={form.addressCity}
+                    onChange={(event) => {
+                      setForm((prev) => ({
+                        ...prev,
+                        addressCity: event.target.value,
+                        addressDistrict: "",
+                        addressVillage: "",
+                        address: "",
+                        latitude: "",
+                        longitude: "",
+                      }));
+                      setAnalysisResult(null);
+                    }}
+                    className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+                  >
+                    <option value="">Pilih Kota/Kabupaten</option>
+                    {CITY_OPTIONS.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+                </div>
+
+                <div className="relative">
+                  <select
+                    value={form.addressDistrict}
+                    disabled={!form.addressCity}
+                    onChange={(event) => {
+                      setForm((prev) => ({
+                        ...prev,
+                        addressDistrict: event.target.value,
+                        addressVillage: "",
+                        address: "",
+                        latitude: "",
+                        longitude: "",
+                      }));
+                      setAnalysisResult(null);
+                    }}
+                    className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+                  >
+                    <option value="">Pilih Kecamatan</option>
+                    {districtOptions.map((district) => (
+                      <option key={district} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
+
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+                </div>
+
+                <div className="relative">
+                  <select
+                    value={form.addressVillage}
+                    disabled={!form.addressDistrict}
+                    onChange={(event) => {
+                      setForm((prev) => ({
+                        ...prev,
+                        addressVillage: event.target.value,
+                        address: "",
+                        latitude: "",
+                        longitude: "",
+                      }));
+                      setAnalysisResult(null);
+                    }}
+                    className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+                  >
+                    <option value="">Pilih Kelurahan/Desa</option>
+                    {villageOptions.map((village) => (
+                      <option key={village} value={village}>
+                        {village}
+                      </option>
+                    ))}
+                  </select>
+
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+                </div>
+
+                <input
+                  type="text"
+                  value={form.addressStreet}
+                  onChange={(event) => {
+                    updateForm("addressStreet", event.target.value);
+                    updateForm("address", "");
+                    updateForm("latitude", "");
+                    updateForm("longitude", "");
+                  }}
+                  placeholder="Nama jalan / alamat detail"
+                  className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+                />
+
+                <input
+                  type="text"
+                  value="Jawa Barat"
+                  readOnly
+                  className="w-full rounded-2xl border-0 bg-white/80 px-5 py-4 text-[#285260] md:col-span-2"
+                />
+
+                {form.address && (
+                  <div className="rounded-2xl bg-white/90 px-5 py-4 text-sm text-[#285260] md:col-span-2">
+                    <p className="mb-1 font-semibold">
+                      Alamat terdeteksi dari peta:
+                    </p>
+                    <p>{form.address}</p>
+                  </div>
+                )}
+              </div>
 
               {!isAreaValid && (
                 <div className="rounded-xl bg-[#FFF3CD] px-4 py-3 text-sm text-[#856404]">
@@ -563,7 +742,14 @@ export default function EditDestinasiPage() {
               <DestinationMap
                 latitude={form.latitude}
                 longitude={form.longitude}
-                address={form.address}
+                address={buildFullAddress() || form.address}
+                addressFields={{
+                  addressStreet: form.addressStreet,
+                  addressVillage: form.addressVillage,
+                  addressDistrict: form.addressDistrict,
+                  addressCity: form.addressCity,
+                  addressProvince: form.addressProvince,
+                }}
                 onAddressChange={(value) => updateForm("address", value)}
                 onLocationChange={(lat, lng) => {
                   updateForm("latitude", lat);

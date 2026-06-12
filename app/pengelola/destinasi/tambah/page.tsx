@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DestinationMap from "@/components/destination-map";
+import { CITY_OPTIONS, WILAYAH_BANDUNG } from "@/data/wilayah-bandung";
+import { ChevronDown, MapPin, Sparkles } from "lucide-react";
 
 type CategoryAnalysis = {
 	categoryId: number;
@@ -40,7 +42,7 @@ export default function TambahDestinasiPage() {
 		addressVillage: "",
 		addressDistrict: "",
 		addressCity: "",
-		addressProvince: "",
+		addressProvince: "Jawa Barat",
 
 		latitude: "",
 		longitude: "",
@@ -319,7 +321,7 @@ export default function TambahDestinasiPage() {
 				},
 				body: JSON.stringify({
 					...form,
-					address: buildFullAddress(),
+					address: form.address || buildFullAddress(),
 
 					imageUrl,
 					analysisResult,
@@ -343,6 +345,19 @@ export default function TambahDestinasiPage() {
 			setIsSubmitting(false);
 		}
 	}
+
+	const districtOptions = form.addressCity
+		? Object.keys(WILAYAH_BANDUNG[form.addressCity as keyof typeof WILAYAH_BANDUNG])
+		: [];
+
+	const villageOptions =
+		form.addressCity && form.addressDistrict
+			? WILAYAH_BANDUNG[
+					form.addressCity as keyof typeof WILAYAH_BANDUNG
+				][
+					form.addressDistrict as keyof typeof WILAYAH_BANDUNG[keyof typeof WILAYAH_BANDUNG]
+				] || []
+			: [];
 
 	const selectedKeywords =
 		analysisResult?.selectedCategories.flatMap(
@@ -430,56 +445,112 @@ export default function TambahDestinasiPage() {
 							/>
 
 							<div className="grid gap-4 md:grid-cols-2">
+								<div className="relative">
+									<select
+										value={form.addressCity}
+										onChange={(event) => {
+											setForm((prev) => ({
+												...prev,
+												addressCity: event.target.value,
+												addressDistrict: "",
+												addressVillage: "",
+												latitude: "",
+												longitude: "",
+											}));
+											resetAnalysis();
+										}}
+										className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+									>
+										<option value="">Pilih Kota/Kabupaten</option>
+										{CITY_OPTIONS.map((city) => (
+											<option key={city} value={city}>
+												{city}
+											</option>
+										))}
+									</select>
+
+									<ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+								</div>
+
+								<div className="relative">
+									<select
+										value={form.addressDistrict}
+										disabled={!form.addressCity}
+										onChange={(event) => {
+											setForm((prev) => ({
+												...prev,
+												addressDistrict: event.target.value,
+												addressVillage: "",
+												latitude: "",
+												longitude: "",
+											}));
+											resetAnalysis();
+										}}
+										className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+									>
+										<option value="">Pilih Kecamatan</option>
+										{districtOptions.map((district) => (
+											<option key={district} value={district}>
+												{district}
+											</option>
+										))}
+									</select>
+
+									<ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+								</div>
+
+								<div className="relative">
+									<select
+										value={form.addressVillage}
+										disabled={!form.addressDistrict}
+										onChange={(event) => {
+											setForm((prev) => ({
+												...prev,
+												addressVillage: event.target.value,
+												latitude: "",
+												longitude: "",
+											}));
+											resetAnalysis();
+										}}
+										className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+									>
+										<option value="">Pilih Kelurahan/Desa</option>
+										{villageOptions.map((village) => (
+											<option key={village} value={village}>
+												{village}
+											</option>
+										))}
+									</select>
+
+									<ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+								</div>
+
 								<input
 									type="text"
 									value={form.addressStreet}
-									onChange={(event) =>
-									updateForm("addressStreet", event.target.value)
-									}
-									placeholder="Nama jalan / alamat jalan"
+									onChange={(event) => {
+										updateForm("addressStreet", event.target.value);
+										updateForm("latitude", "");
+										updateForm("longitude", "");
+									}}
+									placeholder="Nama jalan / alamat detail"
 									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
 								/>
 
 								<input
 									type="text"
-									value={form.addressVillage}
-									onChange={(event) =>
-									updateForm("addressVillage", event.target.value)
-									}
-									placeholder="Kelurahan"
-									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+									value="Jawa Barat"
+									readOnly
+									className="w-full rounded-2xl border-0 bg-white/80 px-5 py-4 text-[#285260] md:col-span-2"
 								/>
 
-								<input
-									type="text"
-									value={form.addressDistrict}
-									onChange={(event) =>
-									updateForm("addressDistrict", event.target.value)
-									}
-									placeholder="Kecamatan"
-									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
-								/>
-
-								<input
-									type="text"
-									value={form.addressCity}
-									onChange={(event) =>
-									updateForm("addressCity", event.target.value)
-									}
-									placeholder="Kota/Kabupaten"
-									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
-								/>
-
-								<input
-									type="text"
-									value={form.addressProvince}
-									onChange={(event) =>
-									updateForm("addressProvince", event.target.value)
-									}
-									placeholder="Provinsi"
-									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43] md:col-span-2"
-								/>
-								</div>
+								{form.address && (
+									<div className="rounded-2xl bg-white/90 px-5 py-4 text-sm text-[#285260] md:col-span-2">
+										<p className="mb-1 font-semibold">Alamat terdeteksi dari peta:</p>
+										<p>{form.address}</p>
+									</div>
+								)}
+							</div>
 
 								{!isAreaValid && (
 								<div className="rounded-xl bg-[#FFF3CD] px-4 py-3 text-sm text-[#856404]">
@@ -641,7 +712,9 @@ export default function TambahDestinasiPage() {
 							addressCity: form.addressCity,
 							addressProvince: form.addressProvince,
 							}}
-							onAddressChange={(value) => updateForm("address", value)}
+							onAddressChange={(address) => {
+								updateForm("address", address);
+							}}
 							onLocationChange={(lat, lng) => {
 							updateForm("latitude", lat);
 							updateForm("longitude", lng);
