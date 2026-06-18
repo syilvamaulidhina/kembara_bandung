@@ -43,18 +43,15 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relasi baru untuk fitur wisatawan
-  savedDestinations SavedDestination[]
-  itineraries       Itinerary[]
-  reviews           Review[]
-  visitedPlaces     VisitedPlace[]
-  itineraryQueue    ItineraryQueue[]
-
-  verificationStatus VerificationStatus?
+  savedDestinations    SavedDestination[]
+  itineraries          Itinerary[]
+  reviews              Review[]
+  visitedPlaces        VisitedPlace[]
+  itineraryQueue       ItineraryQueue[]
+  verificationStatus   VerificationStatus?
   verificationDocument String?
-  rejectionReason String?
-
-  destinations Destination[]
+  rejectionReason      String?
+  destinations         Destination[]
 }
 
 model Destination {
@@ -70,7 +67,6 @@ model Destination {
   ownerId Int?
   owner   User? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
 
-  // Field tambahan dari pengelola
   openTime    String?
   closeTime   String?
   ticketPrice Int?
@@ -78,19 +74,20 @@ model Destination {
   website     String?
   visitCount  Int               @default(0)
 
-  status      DestinationStatus @default(pending)
-  isDeleted   Boolean           @default(false)
-  deletedAt   DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  status    DestinationStatus @default(pending)
+  isDeleted Boolean           @default(false)
+  deletedAt DateTime?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
-  categories        DestinationCategory[]
-  aiAnalyses        AiAnalysis[]
-  savedBy           SavedDestination[]
-  itineraryItems    ItineraryItem[]
-  reviews           Review[]
-  visitedBy         VisitedPlace[]
-  itineraryQueue    ItineraryQueue[]
+  categories     DestinationCategory[]
+  aiAnalyses     AiAnalysis[]
+  savedBy        SavedDestination[]
+  itineraryItems ItineraryItem[]
+  reviews        Review[]
+  visitedBy      VisitedPlace[]
+  itineraryQueue ItineraryQueue[]
+  views          DestinationView[]  // ← BARU
 }
 
 model Category {
@@ -136,10 +133,6 @@ model AiAnalysis {
   destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 }
 
-// ============================================================
-// TABEL BARU UNTUK FITUR WISATAWAN
-// ============================================================
-
 model SavedDestination {
   id            Int      @id @default(autoincrement())
   userId        Int
@@ -152,8 +145,6 @@ model SavedDestination {
   @@unique([userId, destinationId])
 }
 
-// Destinasi yang sudah diklik "Tambah ke Rencana"
-// dari halaman Tersimpan
 model ItineraryQueue {
   id            Int      @id @default(autoincrement())
   userId        Int
@@ -167,15 +158,15 @@ model ItineraryQueue {
 }
 
 model Itinerary {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  title           String   @default("Rencana Perjalananku")
-  totalDistance   Float?
-  estimatedTime   Int?
-  estimatedCost   Int?
-  isAiGenerated   Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  title         String   @default("Rencana Perjalananku")
+  totalDistance Float?
+  estimatedTime Int?
+  estimatedCost Int?
+  isAiGenerated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   items ItineraryItem[]
@@ -226,3 +217,12 @@ model VisitedPlace {
   @@unique([userId, destinationId])
 }
 
+// ← BARU: Model untuk tracking kunjungan halaman detail wisata
+model DestinationView {
+  id            Int      @id @default(autoincrement())
+  destinationId Int
+  userId        Int?
+  createdAt     DateTime @default(now())
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+}

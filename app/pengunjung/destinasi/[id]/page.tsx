@@ -1,5 +1,4 @@
 "use client";
-// app/pengunjung/destinasi/[id]/page.tsx — UPDATED: Rute ke Sini navigasi langsung
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -92,6 +91,16 @@ export default function DestinationDetailPage() {
           setDestination(json.data);
           setSaved(json.data.isSaved);
 
+          // ← BARU: catat kunjungan saat halaman detail dibuka
+          fetch("/api/wisatawan/view", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              destinationId: Number(id),
+              userId: user?.id || null,
+            }),
+          });
+
           const weatherRes = await fetch(
             `/api/pengunjung/weather?lat=${json.data.latitude}&lng=${json.data.longitude}`
           );
@@ -137,7 +146,6 @@ export default function DestinationDetailPage() {
     }
   };
 
-  // Rute ke Sini — navigasi langsung tanpa perlu itinerary
   const handleRuteKeSini = () => {
     if (!destination) return;
     const params = new URLSearchParams({
@@ -151,13 +159,11 @@ export default function DestinationDetailPage() {
     router.push(`/pengunjung/navigasi?${params.toString()}`);
   };
 
-  // Tambah ke itinerary: simpan dulu lalu ke rencana
   const handleAddToItinerary = async () => {
     if (!user) {
       router.push(`/auth/login?redirect=/pengunjung/destinasi/${id}`);
       return;
     }
-    // Simpan ke tersimpan jika belum
     if (!saved) {
       await fetch("/api/pengunjung/saved", {
         method: "POST",
@@ -165,7 +171,6 @@ export default function DestinationDetailPage() {
         body: JSON.stringify({ userId: user.id, destinationId: parseInt(id) }),
       });
     }
-    // Tambah ke queue rencana
     await fetch("/api/pengunjung/rencana-queue", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -208,7 +213,6 @@ export default function DestinationDetailPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
-      {/* Save success toast */}
       {saveSuccess && (
         <div className="fixed top-20 right-4 z-50 bg-[#006837] text-white px-5 py-3 rounded-2xl shadow-lg flex items-center gap-2 animate-in slide-in-from-right-5">
           <CheckCircle2 size={18} />
@@ -224,10 +228,7 @@ export default function DestinationDetailPage() {
         {categoryName && (
           <>
             <span>/</span>
-            <Link
-              href={`/pengunjung/kategori/${categoryName.toLowerCase().replace(/\s+/g, "-")}`}
-              className="hover:text-[#006837]"
-            >
+            <Link href={`/pengunjung/kategori/${categoryName.toLowerCase().replace(/\s+/g, "-")}`} className="hover:text-[#006837]">
               {categoryName}
             </Link>
           </>
@@ -243,10 +244,7 @@ export default function DestinationDetailPage() {
           <div className="relative rounded-2xl overflow-hidden">
             <div className="h-72 md:h-96">
               <img
-                src={getImageUrl(
-                  galleryImages[activeImg] || null,
-                  destination.name
-                )}
+                src={getImageUrl(galleryImages[activeImg] || null, destination.name)}
                 alt={destination.name}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -263,23 +261,15 @@ export default function DestinationDetailPage() {
               <button
                 onClick={handleSaveToggle}
                 disabled={savingToggle}
-                className={`w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center shadow-md transition-all ${
-                  saved ? "bg-red-500" : "bg-white/90"
-                }`}
+                className={`w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center shadow-md transition-all ${saved ? "bg-red-500" : "bg-white/90"}`}
               >
                 {savingToggle ? (
                   <Loader2 size={16} className="animate-spin text-gray-600" />
                 ) : (
-                  <Heart
-                    size={18}
-                    className={saved ? "fill-white text-white" : "text-gray-600"}
-                  />
+                  <Heart size={18} className={saved ? "fill-white text-white" : "text-gray-600"} />
                 )}
               </button>
-              <button
-                onClick={handleShare}
-                className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md"
-              >
+              <button onClick={handleShare} className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md">
                 <Share2 size={18} className="text-gray-600" />
               </button>
             </div>
@@ -288,18 +278,12 @@ export default function DestinationDetailPage() {
           {/* Name + rating */}
           <div>
             <div className="flex items-start justify-between gap-3">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                {destination.name}
-              </h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{destination.name}</h1>
               {destination.averageRating && (
                 <div className="flex items-center gap-1.5 shrink-0">
                   <Star size={18} className="fill-yellow-400 text-yellow-400" />
-                  <span className="font-bold text-gray-900 text-lg">
-                    {destination.averageRating.toFixed(1)}
-                  </span>
-                  <span className="text-gray-400 text-sm">
-                    ({destination.reviewCount} ulasan)
-                  </span>
+                  <span className="font-bold text-gray-900 text-lg">{destination.averageRating.toFixed(1)}</span>
+                  <span className="text-gray-400 text-sm">({destination.reviewCount} ulasan)</span>
                 </div>
               )}
             </div>
@@ -318,31 +302,16 @@ export default function DestinationDetailPage() {
           {/* Status row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  open ? "bg-green-100" : "bg-red-50"
-                }`}
-              >
-                <Clock
-                  size={18}
-                  className={open ? "text-green-600" : "text-red-400"}
-                />
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${open ? "bg-green-100" : "bg-red-50"}`}>
+                <Clock size={18} className={open ? "text-green-600" : "text-red-400"} />
               </div>
               <div>
                 <p className="text-xs text-gray-400 font-medium">STATUS</p>
-                <p
-                  className={`font-bold ${
-                    open ? "text-green-600" : "text-red-500"
-                  }`}
-                >
+                <p className={`font-bold ${open ? "text-green-600" : "text-red-500"}`}>
                   {open ? "Buka Sekarang" : "Tutup Saat Ini"}
                 </p>
               </div>
-              <span
-                className={`ml-auto w-2.5 h-2.5 rounded-full ${
-                  open ? "bg-green-400 animate-pulse" : "bg-red-300"
-                }`}
-              />
+              <span className={`ml-auto w-2.5 h-2.5 rounded-full ${open ? "bg-green-400 animate-pulse" : "bg-red-300"}`} />
             </div>
 
             {weather && (
@@ -351,17 +320,11 @@ export default function DestinationDetailPage() {
                   src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
                   alt={weather.description}
                   className="w-12 h-12 object-contain"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                 />
                 <div>
-                  <p className="text-xs text-white/60 font-medium uppercase">
-                    CUACA
-                  </p>
-                  <p className="text-white font-bold">
-                    {weather.temp}°C · {weather.description}
-                  </p>
+                  <p className="text-xs text-white/60 font-medium uppercase">CUACA</p>
+                  <p className="text-white font-bold">{weather.temp}°C · {weather.description}</p>
                 </div>
               </div>
             )}
@@ -370,9 +333,7 @@ export default function DestinationDetailPage() {
           {/* Description */}
           <div className="bg-white rounded-xl border border-gray-100 p-5">
             <h2 className="font-bold text-gray-900 mb-3">Tentang Destinasi</h2>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {destination.description}
-            </p>
+            <p className="text-gray-600 text-sm leading-relaxed">{destination.description}</p>
           </div>
 
           {/* Ticket + Hours */}
@@ -386,22 +347,15 @@ export default function DestinationDetailPage() {
                 <div className="flex justify-between">
                   <span className="text-gray-500">Harga Tiket</span>
                   <span className="font-semibold text-gray-900">
-                    {destination.ticketPrice === 0
-                      ? "Gratis"
-                      : destination.ticketPrice
-                      ? `Rp ${destination.ticketPrice.toLocaleString("id-ID")}`
-                      : "—"}
+                    {destination.ticketPrice === 0 ? "Gratis" : destination.ticketPrice ? `Rp ${destination.ticketPrice.toLocaleString("id-ID")}` : "—"}
                   </span>
                 </div>
-                {destination.maxPrice &&
-                  destination.maxPrice !== destination.ticketPrice && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Harga Maks</span>
-                      <span className="font-semibold text-gray-900">
-                        Rp {destination.maxPrice.toLocaleString("id-ID")}
-                      </span>
-                    </div>
-                  )}
+                {destination.maxPrice && destination.maxPrice !== destination.ticketPrice && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Harga Maks</span>
+                    <span className="font-semibold text-gray-900">Rp {destination.maxPrice.toLocaleString("id-ID")}</span>
+                  </div>
+                )}
                 {destination.contact && (
                   <div className="flex items-center gap-2 pt-2 border-t border-gray-50 text-gray-500">
                     <Phone size={13} />
@@ -420,12 +374,8 @@ export default function DestinationDetailPage() {
               </p>
               {weather && (
                 <div className="mt-3 pt-3 border-t border-gray-50 flex gap-4 text-xs text-gray-400">
-                  <span className="flex items-center gap-1">
-                    <Droplets size={11} /> {weather.humidity}%
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Wind size={11} /> {weather.windSpeed} m/s
-                  </span>
+                  <span className="flex items-center gap-1"><Droplets size={11} /> {weather.humidity}%</span>
+                  <span className="flex items-center gap-1"><Wind size={11} /> {weather.windSpeed} m/s</span>
                 </div>
               )}
             </div>
@@ -434,54 +384,27 @@ export default function DestinationDetailPage() {
           {/* Reviews */}
           {destination.reviews.length > 0 && (
             <div>
-              <h2 className="font-bold text-gray-900 mb-4 text-lg">
-                Ulasan Pengunjung
-              </h2>
+              <h2 className="font-bold text-gray-900 mb-4 text-lg">Ulasan Pengunjung</h2>
               <div className="space-y-4">
                 {destination.reviews.map((review) => (
-                  <div
-                    key={review.id}
-                    className="bg-white rounded-xl border border-gray-100 p-4"
-                  >
+                  <div key={review.id} className="bg-white rounded-xl border border-gray-100 p-4">
                     <div className="flex items-start gap-3">
                       <div className="w-9 h-9 rounded-full bg-[#006837] flex items-center justify-center text-white text-sm font-bold shrink-0">
                         {review.user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <p className="font-semibold text-gray-900 text-sm">
-                            {review.user.name}
-                          </p>
-                          <span className="text-xs text-gray-400">
-                            {new Date(review.createdAt).toLocaleDateString(
-                              "id-ID"
-                            )}
-                          </span>
+                          <p className="font-semibold text-gray-900 text-sm">{review.user.name}</p>
+                          <span className="text-xs text-gray-400">{new Date(review.createdAt).toLocaleDateString("id-ID")}</span>
                         </div>
                         <div className="flex gap-0.5 my-1">
                           {[1, 2, 3, 4, 5].map((s) => (
-                            <Star
-                              key={s}
-                              size={12}
-                              className={
-                                s <= review.rating
-                                  ? "fill-yellow-400 text-yellow-400"
-                                  : "text-gray-200"
-                              }
-                            />
+                            <Star key={s} size={12} className={s <= review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200"} />
                           ))}
                         </div>
-                        {review.comment && (
-                          <p className="text-gray-600 text-sm">
-                            {review.comment}
-                          </p>
-                        )}
+                        {review.comment && <p className="text-gray-600 text-sm">{review.comment}</p>}
                         {review.photoUrl && (
-                          <img
-                            src={review.photoUrl}
-                            alt="review"
-                            className="mt-2 h-24 rounded-lg object-cover"
-                          />
+                          <img src={review.photoUrl} alt="review" className="mt-2 h-24 rounded-lg object-cover" />
                         )}
                       </div>
                     </div>
@@ -508,19 +431,12 @@ export default function DestinationDetailPage() {
               {saved ? "Tersimpan" : "Simpan"}
             </button>
 
-            {/* RUTE KE SINI — navigasi langsung */}
-            <button
-              onClick={handleRuteKeSini}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm bg-[#006837] text-white hover:bg-[#005229] transition-colors"
-            >
+            <button onClick={handleRuteKeSini} className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm bg-[#006837] text-white hover:bg-[#005229] transition-colors">
               <Navigation size={16} />
               Rute ke Sini
             </button>
 
-            <button
-              onClick={handleAddToItinerary}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm bg-[#f97316] text-white hover:bg-[#ea6a0a] transition-colors"
-            >
+            <button onClick={handleAddToItinerary} className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm bg-[#f97316] text-white hover:bg-[#ea6a0a] transition-colors">
               <Plus size={16} />
               Tambah ke Itinerary
             </button>
@@ -532,36 +448,21 @@ export default function DestinationDetailPage() {
               <h3 className="font-bold text-gray-900 text-sm">Lokasi</h3>
               <p className="text-xs text-gray-400 mt-0.5">{destination.address}</p>
             </div>
-            <MiniMapClient
-              lat={destination.latitude}
-              lng={destination.longitude}
-              name={destination.name}
-            />
+            <MiniMapClient lat={destination.latitude} lng={destination.longitude} name={destination.name} />
             <div className="p-3 flex justify-around border-t border-gray-50">
               {destination.contact && (
-                <a
-                  href={`tel:${destination.contact}`}
-                  className="flex flex-col items-center gap-1 text-xs text-gray-500 hover:text-[#006837] transition-colors"
-                >
+                <a href={`tel:${destination.contact}`} className="flex flex-col items-center gap-1 text-xs text-gray-500 hover:text-[#006837] transition-colors">
                   <Phone size={16} />
                   Kontak
                 </a>
               )}
               {destination.website && (
-                <a
-                  href={destination.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1 text-xs text-gray-500 hover:text-[#006837] transition-colors"
-                >
+                <a href={destination.website} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 text-xs text-gray-500 hover:text-[#006837] transition-colors">
                   <Globe size={16} />
                   Situs
                 </a>
               )}
-              <button
-                onClick={handleShare}
-                className="flex flex-col items-center gap-1 text-xs text-gray-500 hover:text-[#006837] transition-colors"
-              >
+              <button onClick={handleShare} className="flex flex-col items-center gap-1 text-xs text-gray-500 hover:text-[#006837] transition-colors">
                 <Share2 size={16} />
                 Bagikan
               </button>

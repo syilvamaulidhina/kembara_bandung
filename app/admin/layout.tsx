@@ -20,9 +20,9 @@ const menuItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/kelola-wisata", label: "Manajemen Wisata", icon: MapPin },
   { href: "/admin/kelola-pengguna", label: "Kelola Pengguna", icon: Users },
+  { href: "/admin/kategori", label: "Kelola Kategori", icon: Tags },
   { href: "/admin/verifikasi-pengelola", label: "Verifikasi Pengelola", icon: ShieldCheck },
   { href: "/admin/ai-insight", label: "AI Insight", icon: Sparkles },
-  { href: "/admin/kategori", label: "Kelola Kategori", icon: Tags },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -110,8 +110,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-30 flex flex-col transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
-          <img src="/images/logo.svg" alt="logo" className="w-25 h-25 align-center" />
+        {/* Logo */}
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
+          <img src="/images/logo.svg" alt="logo" className="w-32 h-auto" />
           <button
             className="ml-auto md:hidden text-gray-400"
             onClick={() => setSidebarOpen(false)}
@@ -120,7 +121,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-1">
+        {/* Menu */}
+        <nav className="flex-1 px-4 py-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
@@ -143,9 +145,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
+        {/* User & Logout */}
         <div className="px-4 py-4 border-t border-gray-100">
           <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 mb-2">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">
+            {/* ← fix: pakai style inline supaya warna muncul */}
+            <div
+              style={{ backgroundColor: "#130F6A" }}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+            >
               {user ? getInitials(user.name) : "A"}
             </div>
             <div className="flex-1 min-w-0">

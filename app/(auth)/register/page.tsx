@@ -55,10 +55,7 @@ export default function RegisterPage() {
         return;
       }
 
-      // Simpan ke localStorage
       localStorage.setItem("user", JSON.stringify(data.user));
-
-      // Langsung ke select-role
       window.location.href = "/select-role";
 
     } catch (err) {
@@ -168,7 +165,7 @@ export default function RegisterPage() {
                 name="terms"
                 checked={form.terms}
                 onChange={handleChange}
-                className="w-4 h-4 accent-primary"
+                className="w-4 h-4"
               />
               <span className="text-sm text-gray-600">
                 Setuju dengan syarat & ketentuan
@@ -182,14 +179,15 @@ export default function RegisterPage() {
           {/* Button */}
           <button
             type="submit"
-            className="w-full rounded-full bg-primary py-3 text-white text-sm font-semibold hover:bg-blue-600 transition"
+            style={{ backgroundColor: "#130F6A" }}
+            className="w-full rounded-full py-3 text-white text-sm font-semibold hover:opacity-90 transition"
           >
             Daftar
           </button>
 
           <p className="mt-5 text-center text-sm text-gray-600">
             Sudah punya akun?{" "}
-            <a href="/login" className="text-primary font-semibold">
+            <a href="/login" style={{ color: "#130F6A" }} className="font-semibold">
               Masuk
             </a>
           </p>

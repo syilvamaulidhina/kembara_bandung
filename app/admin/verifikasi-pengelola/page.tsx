@@ -61,9 +61,9 @@ export default function VerifikasiPengelolaPage() {
   };
 
   const tabConfig = [
-    { key: "PENDING", label: "Menunggu", icon: Clock },
-    { key: "APPROVED", label: "Disetujui", icon: CheckCircle },
-    { key: "REJECTED", label: "Ditolak", icon: XCircle },
+    { key: "PENDING", label: "Pending", icon: Clock, activeStyle: { backgroundColor: "#130F6A" } },
+    { key: "APPROVED", label: "Disetujui", icon: CheckCircle, activeStyle: { backgroundColor: "#22c55e" } },
+    { key: "REJECTED", label: "Ditolak", icon: XCircle, activeStyle: { backgroundColor: "#ef4444" } },
   ];
 
   return (
@@ -79,12 +79,14 @@ export default function VerifikasiPengelolaPage() {
       <div className="flex gap-2">
         {tabConfig.map((t) => {
           const Icon = t.icon;
+          const isActive = tab === t.key;
           return (
             <button
               key={t.key}
               onClick={() => setTab(t.key as "PENDING" | "APPROVED" | "REJECTED")}
+              style={isActive ? t.activeStyle : {}}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition ${
-                tab === t.key ? "bg-primary text-white" : "bg-white text-gray-500 hover:bg-gray-50"
+                isActive ? "text-white" : "bg-white text-gray-500 hover:bg-gray-50"
               }`}
             >
               <Icon size={15} />
@@ -128,12 +130,7 @@ export default function VerifikasiPengelolaPage() {
                     </td>
                     <td className="px-6 py-4">
                       {u.verificationDocument ? (
-                        
-                          <a href={u.verificationDocument}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-blue-500 hover:text-blue-700 text-xs font-medium"
-                        >
+                        <a href={u.verificationDocument} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-500 hover:text-blue-700 text-xs font-medium">
                           <Eye size={13} /> Lihat Dokumen
                         </a>
                       ) : (
@@ -159,17 +156,10 @@ export default function VerifikasiPengelolaPage() {
                     {tab === "PENDING" && (
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleApprove(u)}
-                            disabled={actionLoading}
-                            className="flex items-center gap-1 text-green-500 hover:text-green-700 text-xs font-medium"
-                          >
+                          <button onClick={() => handleApprove(u)} disabled={actionLoading} className="flex items-center gap-1 text-green-500 hover:text-green-700 text-xs font-medium">
                             <CheckCircle size={13} /> Setujui
                           </button>
-                          <button
-                            onClick={() => { setSelected(u); setShowRejectModal(true); }}
-                            className="flex items-center gap-1 text-red-500 hover:text-red-700 text-xs font-medium"
-                          >
+                          <button onClick={() => { setSelected(u); setShowRejectModal(true); }} className="flex items-center gap-1 text-red-500 hover:text-red-700 text-xs font-medium">
                             <XCircle size={13} /> Tolak
                           </button>
                         </div>
@@ -197,17 +187,10 @@ export default function VerifikasiPengelolaPage() {
               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary h-28 resize-none"
             />
             <div className="flex gap-3 mt-4">
-              <button
-                onClick={() => { setShowRejectModal(false); setRejectReason(""); }}
-                className="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
-              >
+              <button onClick={() => { setShowRejectModal(false); setRejectReason(""); }} className="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50">
                 Batal
               </button>
-              <button
-                onClick={handleReject}
-                disabled={!rejectReason || actionLoading}
-                className="flex-1 bg-red-500 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-red-600 disabled:opacity-50"
-              >
+              <button onClick={handleReject} disabled={!rejectReason || actionLoading} className="flex-1 bg-red-500 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-red-600 disabled:opacity-50">
                 Tolak Pengajuan
               </button>
             </div>

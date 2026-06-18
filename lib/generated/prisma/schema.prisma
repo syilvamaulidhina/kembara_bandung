@@ -43,18 +43,15 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relasi baru untuk fitur wisatawan
-  savedDestinations SavedDestination[]
-  itineraries       Itinerary[]
-  reviews           Review[]
-  visitedPlaces     VisitedPlace[]
-  itineraryQueue    ItineraryQueue[]
-
+  savedDestinations    SavedDestination[]
+  itineraries          Itinerary[]
+  reviews              Review[]
+  visitedPlaces        VisitedPlace[]
+  itineraryQueue       ItineraryQueue[]
   verificationStatus   VerificationStatus?
   verificationDocument String?
   rejectionReason      String?
-
-  destinations Destination[]
+  destinations         Destination[]
 }
 
 model Destination {
@@ -70,7 +67,6 @@ model Destination {
   ownerId Int?
   owner   User? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
 
-  // Field tambahan dari pengelola
   openTime    String?
   closeTime   String?
   ticketPrice Int?
@@ -91,6 +87,7 @@ model Destination {
   reviews        Review[]
   visitedBy      VisitedPlace[]
   itineraryQueue ItineraryQueue[]
+  views          DestinationView[] // ← BARU
 }
 
 model Category {
@@ -136,10 +133,6 @@ model AiAnalysis {
   destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 }
 
-// ============================================================
-// TABEL BARU UNTUK FITUR WISATAWAN
-// ============================================================
-
 model SavedDestination {
   id            Int      @id @default(autoincrement())
   userId        Int
@@ -152,8 +145,6 @@ model SavedDestination {
   @@unique([userId, destinationId])
 }
 
-// Destinasi yang sudah diklik "Tambah ke Rencana"
-// dari halaman Tersimpan
 model ItineraryQueue {
   id            Int      @id @default(autoincrement())
   userId        Int
@@ -224,4 +215,14 @@ model VisitedPlace {
   destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 
   @@unique([userId, destinationId])
+}
+
+// ← BARU: Model untuk tracking kunjungan halaman detail wisata
+model DestinationView {
+  id            Int      @id @default(autoincrement())
+  destinationId Int
+  userId        Int?
+  createdAt     DateTime @default(now())
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 }

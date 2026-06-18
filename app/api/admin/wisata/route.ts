@@ -18,6 +18,9 @@ export async function GET() {
       kategori: d.categories[0]?.category?.name || "Lainnya",
       lokasi: d.address,
       status: "Aktif",
+      lat: d.latitude,
+      lng: d.longitude,
+      deskripsi: d.description,
     }));
 
     return NextResponse.json({ wisata });

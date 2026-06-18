@@ -25,7 +25,10 @@ export async function POST(req: NextRequest) {
     const tanpaKoordinat = await prisma.destination.count({
       where: {
         isDeleted: false,
-        OR: [{ latitude: 0 }, { longitude: 0 }],
+        OR: [
+          { latitude: { equals: 0 } },
+          { longitude: { equals: 0 } },
+        ],
       },
     });
 
@@ -40,59 +43,53 @@ export async function POST(req: NextRequest) {
       where: { role: "WISATAWAN" },
     });
 
-    const categories = await prisma.category.findMany({
+    // Ambil semua destinasi beserta kategori dan review
+    const semuaDestinasi = await prisma.destination.findMany({
+      where: { isDeleted: false },
       include: {
-        destinations: {
-          include: {
-            destination: {
-              include: { reviews: true },
-            },
-          },
-        },
-      },
-    });
-
-    const kategoriSummary = categories.map((cat) => {
-      const jumlah = cat.destinations.length;
-      const persentase = totalWisata > 0 ? Math.round((jumlah / totalWisata) * 100) : 0;
-      const allRatings = cat.destinations.flatMap((d) =>
-        d.destination.reviews.map((r) => r.rating)
-      );
-      const avgRating =
-        allRatings.length > 0
-          ? Math.round((allRatings.reduce((a, b) => a + b, 0) / allRatings.length) * 10) / 10
-          : 0;
-      return {
-        kategori: cat.name.toUpperCase(),
-        jumlah,
-        persentase,
-        avgRating,
-      };
-    });
-
-    const topRatedRaw = await prisma.destination.findMany({
-      where: { isDeleted: false, status: "aktif" },
-      include: {
-        reviews: true,
         categories: {
           include: { category: true },
         },
+        reviews: true,
       },
-      take: 20,
     });
 
-    const topRated = topRatedRaw
+    // Hitung distribusi kategori dari destinasi (1 destinasi = 1 kategori)
+    const kategoriMap: Record<string, { jumlah: number; ratings: number[] }> = {};
+
+    semuaDestinasi.forEach((d) => {
+      const namaKategori = d.categories[0]?.category?.name?.toUpperCase() || "LAINNYA";
+      if (!kategoriMap[namaKategori]) {
+        kategoriMap[namaKategori] = { jumlah: 0, ratings: [] };
+      }
+      kategoriMap[namaKategori].jumlah += 1;
+      d.reviews.forEach((r) => {
+        kategoriMap[namaKategori].ratings.push(r.rating);
+      });
+    });
+
+    const kategoriSummary = Object.entries(kategoriMap).map(([kategori, val]) => {
+      const persentase = totalWisata > 0 ? Math.round((val.jumlah / totalWisata) * 100) : 0;
+      const avgRating =
+        val.ratings.length > 0
+          ? Math.round((val.ratings.reduce((a, b) => a + b, 0) / val.ratings.length) * 10) / 10
+          : 0;
+      return { kategori, jumlah: val.jumlah, persentase, avgRating };
+    });
+
+    // Top 3 wisata rating tertinggi — hanya yang sudah punya review
+    const topRated = semuaDestinasi
+      .filter((d) => d.status === "aktif" && d.reviews.length > 0)
       .map((d) => {
         const ratings = d.reviews.map((r) => r.rating);
         const avgRating =
-          ratings.length > 0
-            ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
-            : 0;
+          Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10;
         return {
           nama: d.name,
           kategori: d.categories[0]?.category?.name?.toUpperCase() || "LAINNYA",
           rating: avgRating,
           lokasi: d.address,
+          jumlahReview: ratings.length,
         };
       })
       .sort((a, b) => b.rating - a.rating)
@@ -123,14 +120,21 @@ DISTRIBUSI KATEGORI:
 ${kategoriSummary.map((k) => `- ${k.kategori}: ${k.jumlah} wisata (${k.persentase}%), avg rating: ${k.avgRating}`).join("\n")}
 
 TOP 3 WISATA RATING TERTINGGI:
-${topRated.map((w, i) => `${i + 1}. ${w.nama} - ${w.kategori} - Rating: ${w.rating}`).join("\n")}`;
+${topRated.length > 0
+  ? topRated.map((w, i) => `${i + 1}. ${w.nama} - ${w.kategori} - Rating: ${w.rating} (${w.jumlahReview} review)`).join("\n")
+  : "Belum ada wisata dengan review"}`;
 
     const systemPrompt = `Kamu adalah AI Analyst untuk platform wisata Kembara Bandung.
 Analisis data dashboard dan hasilkan 6-8 insight yang actionable untuk admin.
 
+PENTING: Jangan buat insight tentang "wisata tanpa foto" jika jumlah wisata tanpa foto adalah 0.
+PENTING: Jangan buat insight tentang "wisata tanpa koordinat" jika jumlah wisata tanpa koordinat adalah 0.
+PENTING: Jangan buat insight tentang "top wisata" atau "rating tertinggi" jika belum ada wisata dengan review.
+Hanya buat insight yang relevan dan akurat berdasarkan data yang diberikan.
+
 Kategori insight yang tersedia:
 - opportunity: Peluang yang bisa dimanfaatkan
-- warning: Peringatan atau area yang perlu perhatian
+- warning: Peringatan atau area yang perlu perhatian (hanya jika ada masalah nyata)
 - trend: Pola atau tren yang teridentifikasi
 - recommendation: Rekomendasi aksi konkret
 
@@ -161,14 +165,8 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
         max_tokens: 2048,
         temperature: 0.7,
         messages: [
-          {
-            role: "system",
-            content: systemPrompt,
-          },
-          {
-            role: "user",
-            content: `Analisis data berikut dan hasilkan insight:\n\n${context}`,
-          },
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `Analisis data berikut dan hasilkan insight:\n\n${context}` },
         ],
       }),
     });
@@ -182,11 +180,21 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
     const aiData = await response.json();
     const aiContent = aiData.choices?.[0]?.message?.content || "";
 
-    let insights = [];
+    let insights: any[] = [];
     try {
       const jsonMatch = aiContent.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         insights = JSON.parse(jsonMatch[0]);
+
+        // Filter insight yang tidak relevan berdasarkan data nyata
+        insights = insights.filter((insight: any) => {
+          const title = insight.title?.toLowerCase() || "";
+          const desc = insight.description?.toLowerCase() || "";
+          if ((title.includes("foto") || desc.includes("foto")) && tanpaFoto === 0) return false;
+          if ((title.includes("koordinat") || desc.includes("koordinat")) && tanpaKoordinat === 0) return false;
+          if ((title.includes("rating") || title.includes("top")) && topRated.length === 0) return false;
+          return true;
+        });
       } else {
         insights = getFallbackInsights(realData);
       }
@@ -205,20 +213,13 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
 }
 
 function getFallbackInsights(data: any) {
-  return [
+  const insights: any[] = [
     {
       id: 1,
       type: "trend",
       title: "Wisata Aktif Mendominasi",
       description: `Dari ${data?.totalWisata ?? 0} wisata terdaftar, ${data?.wisataAktif ?? 0} wisata berstatus aktif. Ini menunjukkan pengelolaan data wisata yang baik.`,
       impact: "medium",
-    },
-    {
-      id: 2,
-      type: "warning",
-      title: "Wisata Belum Memiliki Foto",
-      description: `Terdapat ${data?.tanpaFoto ?? 0} wisata yang belum memiliki foto. Foto sangat penting untuk menarik minat wisatawan.`,
-      impact: "high",
     },
     {
       id: 3,
@@ -230,9 +231,31 @@ function getFallbackInsights(data: any) {
     {
       id: 4,
       type: "recommendation",
-      title: "Lengkapi Data Wisata",
-      description: "Pastikan semua wisata memiliki foto dan koordinat yang lengkap untuk meningkatkan pengalaman pengguna.",
+      title: "Tingkatkan Kualitas Data Wisata",
+      description: "Pastikan semua wisata memiliki deskripsi lengkap dan koordinat yang akurat untuk meningkatkan pengalaman pengguna.",
       impact: "high",
     },
   ];
+
+  if ((data?.tanpaFoto ?? 0) > 0) {
+    insights.splice(1, 0, {
+      id: 2,
+      type: "warning",
+      title: "Wisata Belum Memiliki Foto",
+      description: `Terdapat ${data?.tanpaFoto} wisata yang belum memiliki foto. Foto sangat penting untuk menarik minat wisatawan.`,
+      impact: "high",
+    });
+  }
+
+  if ((data?.tanpaKoordinat ?? 0) > 0) {
+    insights.push({
+      id: 5,
+      type: "warning",
+      title: "Wisata Belum Memiliki Koordinat",
+      description: `Terdapat ${data?.tanpaKoordinat} wisata yang belum memiliki koordinat. Wisata ini tidak akan muncul di peta SIG.`,
+      impact: "high",
+    });
+  }
+
+  return insights;
 }

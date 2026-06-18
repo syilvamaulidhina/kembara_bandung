@@ -92,12 +92,7 @@ export default function KelolaWisataPage() {
           </h1>
           <p className="text-gray-500 text-sm mt-1">Kelola data wisata Kembara Bandung</p>
         </div>
-        
-          <a href="/admin/approval-wisata"
-          className="flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition shrink-0"
-        >
-          <ClipboardCheck size={16} /> Approval Wisata
-        </a>
+        <a href="/admin/approval-wisata" style={{ backgroundColor: "#130F6A" }} className="flex items-center gap-2 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:opacity-90 transition shrink-0"><ClipboardCheck size={16} /> Approval Wisata</a>
       </div>
 
       {/* Table */}
@@ -155,26 +150,16 @@ export default function KelolaWisataPage() {
                     <td className="px-6 py-4 text-gray-500">{w.kategori}</td>
                     <td className="px-6 py-4 text-gray-500">{w.lokasi}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        w.status === "Aktif"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-500"
-                      }`}>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${w.status === "Aktif" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
                         {w.status}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => setEditWisata(w)}
-                          className="flex items-center gap-1 text-blue-500 hover:text-blue-700 text-xs font-medium"
-                        >
+                        <button onClick={() => setEditWisata(w)} className="flex items-center gap-1 text-blue-500 hover:text-blue-700 text-xs font-medium">
                           <Edit2 size={13} /> Edit
                         </button>
-                        <button
-                          onClick={() => setDeleteWisata(w)}
-                          className="flex items-center gap-1 text-red-500 hover:text-red-700 text-xs font-medium"
-                        >
+                        <button onClick={() => setDeleteWisata(w)} className="flex items-center gap-1 text-red-500 hover:text-red-700 text-xs font-medium">
                           <Trash2 size={13} /> Delete
                         </button>
                       </div>
@@ -200,59 +185,32 @@ export default function KelolaWisataPage() {
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Nama Wisata</label>
-                <input
-                  type="text"
-                  value={editWisata.nama}
-                  onChange={(e) => setEditWisata({ ...editWisata, nama: e.target.value })}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                <input type="text" value={editWisata.nama} onChange={(e) => setEditWisata({ ...editWisata, nama: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Kategori</label>
-                <select
-                  value={editWisata.kategori}
-                  onChange={(e) => setEditWisata({ ...editWisata, kategori: e.target.value })}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                >
+                <select value={editWisata.kategori} onChange={(e) => setEditWisata({ ...editWisata, kategori: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                   {KATEGORI.map((k) => <option key={k}>{k}</option>)}
                 </select>
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Lokasi</label>
-                <input
-                  type="text"
-                  value={editWisata.lokasi}
-                  onChange={(e) => setEditWisata({ ...editWisata, lokasi: e.target.value })}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                <input type="text" value={editWisata.lokasi} onChange={(e) => setEditWisata({ ...editWisata, lokasi: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Status</label>
-                <select
-                  value={editWisata.status}
-                  onChange={(e) => setEditWisata({ ...editWisata, status: e.target.value })}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                >
+                <select value={editWisata.status} onChange={(e) => setEditWisata({ ...editWisata, status: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                   <option value="Aktif">Aktif</option>
                   <option value="Nonaktif">Nonaktif</option>
                 </select>
               </div>
             </div>
             <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => setEditWisata(null)}
-                className="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
-              >
+              <button onClick={() => setEditWisata(null)} className="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50">
                 Batal
               </button>
-              <button
-                onClick={handleEdit}
-                disabled={saving}
-                className="flex-1 bg-primary text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 flex items-center justify-center gap-2 disabled:opacity-60"
-              >
-                {saving
-                  ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  : <Save size={15} />}
+              <button onClick={handleEdit} disabled={saving} style={{ backgroundColor: "#130F6A" }} className="flex-1 text-white rounded-xl py-2.5 text-sm font-medium hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-60">
+                {saving ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save size={15} />}
                 Simpan
               </button>
             </div>
@@ -272,16 +230,10 @@ export default function KelolaWisataPage() {
               Yakin ingin menghapus <strong>{deleteWisata.nama}</strong>?
             </p>
             <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => setDeleteWisata(null)}
-                className="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
-              >
+              <button onClick={() => setDeleteWisata(null)} className="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50">
                 Batal
               </button>
-              <button
-                onClick={handleDelete}
-                className="flex-1 bg-red-500 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-red-600"
-              >
+              <button onClick={handleDelete} className="flex-1 bg-red-500 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-red-600">
                 Hapus
               </button>
             </div>
