@@ -53,6 +53,11 @@ type Destination = {
   addressDistrict: string | null;
   addressCity: string | null;
   addressProvince: string | null;
+  ticketPrice: number | null;
+  maxPrice: number | null;
+  openTime: string | null;
+  closeTime: string | null;
+  website: string | null;
 };
 
 export default function EditDestinasiPage() {
@@ -60,7 +65,7 @@ export default function EditDestinasiPage() {
   const params = useParams();
 
   const destinationId = params.id as string;
-  const MIN_AI_SCORE = 60;
+  const MIN_AI_SCORE = 55;
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,6 +97,13 @@ export default function EditDestinasiPage() {
     latitude: "",
     longitude: "",
     imageUrl: "",
+
+    isFree: false,
+    ticketPrice: "",
+    maxPrice: "",
+    openTime: "",
+    closeTime: "",
+    website: "",
   });
 
   useEffect(() => {
@@ -118,20 +130,33 @@ export default function EditDestinasiPage() {
         setAdminFeedback(destination.adminFeedback || "");
 
         setForm({
-          name: destination.name || "",
-          categoryIds: destination.categories.map((item) => item.category.id),
-          description: destination.description || "",
-          contact: destination.contact || "",
-          address: destination.address || "",
-          addressStreet: destination.addressStreet || "",
-          addressVillage: destination.addressVillage || "",
-          addressDistrict: destination.addressDistrict || "",
-          addressCity: destination.addressCity || "",
-          addressProvince: destination.addressProvince || "Jawa Barat",
-          latitude: String(destination.latitude || ""),
-          longitude: String(destination.longitude || ""),
-          imageUrl: destination.imageUrl || "",
-        });
+            name: destination.name || "",
+            categoryIds: destination.categories.map((item) => item.category.id),
+            description: destination.description || "",
+            contact: destination.contact || "",
+            address: destination.address || "",
+            addressStreet: destination.addressStreet || "",
+            addressVillage: destination.addressVillage || "",
+            addressDistrict: destination.addressDistrict || "",
+            addressCity: destination.addressCity || "",
+            addressProvince: destination.addressProvince || "Jawa Barat",
+            latitude: String(destination.latitude || ""),
+            longitude: String(destination.longitude || ""),
+            imageUrl: destination.imageUrl || "",
+
+            isFree: destination.ticketPrice === 0 && destination.maxPrice === 0,
+            ticketPrice:
+              destination.ticketPrice === null || destination.ticketPrice === undefined
+                ? ""
+                : String(destination.ticketPrice),
+            maxPrice:
+              destination.maxPrice === null || destination.maxPrice === undefined
+                ? ""
+                : String(destination.maxPrice),
+            openTime: destination.openTime || "",
+            closeTime: destination.closeTime || "",
+            website: destination.website || "",
+          });
       } catch (error) {
         console.error(error);
         alert("Gagal mengambil data edit wisata.");
@@ -354,6 +379,14 @@ export default function EditDestinasiPage() {
           latitude: form.latitude,
           longitude: form.longitude,
           imageUrl: finalImageUrl,
+
+          isFree: form.isFree,
+          ticketPrice: form.isFree ? 0 : form.ticketPrice,
+          maxPrice: form.isFree ? 0 : form.maxPrice,
+          openTime: form.openTime,
+          closeTime: form.closeTime,
+          website: form.website,
+
           analysisResult,
         }),
       });
@@ -505,6 +538,64 @@ export default function EditDestinasiPage() {
                 placeholder="Kontak"
                 className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
               />
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <input
+                  type="time"
+                  value={form.openTime}
+                  onChange={(event) => updateForm("openTime", event.target.value)}
+                  className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+                />
+
+                <input
+                  type="time"
+                  value={form.closeTime}
+                  onChange={(event) => updateForm("closeTime", event.target.value)}
+                  className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+                />
+
+                <input
+                  type="url"
+                  value={form.website}
+                  onChange={(event) => updateForm("website", event.target.value)}
+                  placeholder="Website"
+                  className="md:col-span-2 w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+                />
+
+                <label className="md:col-span-2 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 text-sm font-semibold text-[#285260]">
+                  <input
+                    type="checkbox"
+                    checked={form.isFree}
+                    onChange={(event) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        isFree: event.target.checked,
+                        ticketPrice: event.target.checked ? "0" : "",
+                        maxPrice: event.target.checked ? "0" : "",
+                      }))
+                    }
+                  />
+                  Wisata Gratis
+                </label>
+
+                <input
+                  type="number"
+                  value={form.ticketPrice}
+                  disabled={form.isFree}
+                  onChange={(event) => updateForm("ticketPrice", event.target.value)}
+                  placeholder="Harga Tiket Minimum"
+                  className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+                />
+
+                <input
+                  type="number"
+                  value={form.maxPrice}
+                  disabled={form.isFree}
+                  onChange={(event) => updateForm("maxPrice", event.target.value)}
+                  placeholder="Harga Tiket Maksimum"
+                  className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+                />
+              </div>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="relative">

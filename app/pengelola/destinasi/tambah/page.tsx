@@ -24,11 +24,18 @@ type AnalysisResult = {
 	unselectedStrongMatches: CategoryAnalysis[];
 	allCategoryAnalysis: CategoryAnalysis[];
 	message: string;
+	reasoning?: AiReasoning;
+};
+
+type AiReasoning = {
+	explanation: string;
+	potentialIssue: string;
+	suggestion: string;
 };
 
 export default function TambahDestinasiPage() {
 	const router = useRouter();
-	const MIN_AI_SCORE = 60;
+	const MIN_AI_SCORE = 55;
 
 	const [form, setForm] = useState({
 		name: "",
@@ -212,8 +219,34 @@ export default function TambahDestinasiPage() {
 				return;
 			}
 
-			setAnalysisResult(data);
-			setShowAnalysisModal(true);
+			let reasoning: AiReasoning | undefined;
+
+				try {
+					const reasoningResponse = await fetch(
+						"/api/pengelola/ai-insight/reasoning",
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({
+								analysisResult: data,
+							}),
+						}
+					);
+
+					const reasoningData = await reasoningResponse.json();
+					reasoning = reasoningData.reasoning;
+				} catch (error) {
+					console.error("AI REASONING ERROR:", error);
+				}
+
+				setAnalysisResult({
+					...data,
+					reasoning,
+				});
+
+				setShowAnalysisModal(true);
 		} catch (error) {
 			console.error("CHECK AI ERROR:", error);
 			alert("Terjadi kesalahan saat melakukan analisis.");
@@ -728,8 +761,8 @@ export default function TambahDestinasiPage() {
 
 			{showAnalysisModal && analysisResult && (
 				<div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
-					<div className="relative w-full max-w-2xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
-						<div className="grid md:grid-cols-[1fr_320px]">
+					<div className="relative w-full max-w-6xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
+						<div className="grid max-h-[90vh] overflow-y-auto md:grid-cols-[1.05fr_1.25fr_0.9fr]">
 							<div className="bg-[#285260] p-6 text-white">
 								<div className="mb-6 flex items-start justify-between">
 									<div>
@@ -768,9 +801,7 @@ export default function TambahDestinasiPage() {
 										<div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
 											<div
 												className="h-full rounded-full bg-[#F09A43]"
-												style={{
-													width: `${analysisResult.score}%`,
-												}}
+												style={{ width: `${analysisResult.score}%` }}
 											/>
 										</div>
 									</div>
@@ -807,17 +838,17 @@ export default function TambahDestinasiPage() {
 
 										<div>
 											<p className="text-sm font-semibold text-white/70">
-												Kategori Terdeteksi
+												Kategori dengan Kecocokan Tertinggi
 											</p>
 
 											<h3 className="mt-1 text-xl font-bold text-[#F09A43]">
-												{analysisResult.strongestCategory
-													?.categoryName ?? "Tidak Terdeteksi"}
+												{analysisResult.strongestCategory?.categoryName ??
+													"Tidak Terdeteksi"}
 											</h3>
 
 											<div className="mt-3 flex flex-wrap gap-2">
-												{analysisResult.strongestCategory
-													?.matchedKeywords?.length ? (
+												{analysisResult.strongestCategory?.matchedKeywords
+													?.length ? (
 													analysisResult.strongestCategory.matchedKeywords.map(
 														(keyword) => (
 															<span
@@ -839,39 +870,94 @@ export default function TambahDestinasiPage() {
 								</div>
 							</div>
 
+							<div className="bg-[#F7FAFA] p-6">
+								<p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
+									Reasoning AI
+								</p>
+
+								<h3 className="mt-2 text-2xl font-extrabold text-[#285260]">
+									Penjelasan Hasil Analisis
+								</h3>
+
+								<p className="mt-2 text-sm leading-6 text-gray-500">
+									Penjelasan ini dibuat berdasarkan hasil domain knowledge,
+									bukan sebagai keputusan status destinasi.
+								</p>
+
+								{analysisResult.reasoning ? (
+									<div className="mt-5 space-y-4">
+										<div className="rounded-2xl bg-white p-4 text-left shadow-sm">
+											<p className="text-sm font-extrabold text-[#285260]">
+												Penalaran AI
+											</p>
+
+											<p className="mt-2 text-sm leading-6 text-gray-600">
+												{analysisResult.reasoning.explanation}
+											</p>
+										</div>
+
+										<div className="grid gap-4 xl:grid-cols-2">
+											<div className="rounded-2xl bg-orange-50 p-4 text-left">
+												<p className="text-sm font-extrabold text-[#C76B1F]">
+													Catatan Potensial
+												</p>
+
+												<p className="mt-2 text-sm leading-6 text-gray-600">
+													{analysisResult.reasoning.potentialIssue}
+												</p>
+											</div>
+
+											<div className="rounded-2xl bg-green-50 p-4 text-left">
+												<p className="text-sm font-extrabold text-green-700">
+													Saran Perbaikan
+												</p>
+
+												<p className="mt-2 text-sm leading-6 text-gray-600">
+													{analysisResult.reasoning.suggestion}
+												</p>
+											</div>
+										</div>
+									</div>
+								) : (
+									<div className="mt-5 rounded-2xl bg-white p-4 text-sm text-gray-500 shadow-sm">
+										Reasoning AI belum tersedia.
+									</div>
+								)}
+							</div>
+
 							<div className="flex flex-col justify-between bg-[#F8F8F8] p-6">
 								<div>
-									<div className="mb-5 flex flex-col items-center text-center">
-										<div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#285260]">
+									<div className="rounded-3xl bg-white p-5 text-center shadow-sm">
+										<div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#285260]">
 											{analysisResult.score >= MIN_AI_SCORE ? (
-												<span className="text-5xl font-black leading-none text-[#4ADE80]">
+												<span className="text-4xl font-black leading-none text-[#4ADE80]">
 													✓
 												</span>
 											) : (
-												<span className="text-5xl font-black leading-none text-[#F09A43]">
+												<span className="text-4xl font-black leading-none text-[#F09A43]">
 													!
 												</span>
 											)}
 										</div>
 
-										<p className="text-xl font-extrabold text-[#F09A43]">
+										<p className="text-lg font-extrabold text-[#F09A43]">
 											{analysisResult.score >= MIN_AI_SCORE
 												? "Bisa Disubmit"
 												: "Perlu Perbaikan"}
 										</p>
 
-										<p className="mt-1 text-lg font-bold text-[#285260]">
-											Skor: {analysisResult.score}/100
+										<p className="mt-1 text-sm font-semibold text-gray-500">
+											Skor minimal submit {MIN_AI_SCORE}/100
 										</p>
 									</div>
 
-									<div className="rounded-3xl bg-[#285260] p-5 text-center text-white">
-										<p className="text-lg font-semibold leading-relaxed">
-											{analysisResult.message}
+									<div className="mt-5 rounded-3xl bg-[#285260] p-5 text-left text-white">
+										<p className="text-sm font-bold uppercase tracking-wide text-[#F09A43]">
+											Kesimpulan Sistem
 										</p>
 
-										<p className="mt-4 text-xs text-white/60">
-											Minimal skor submit adalah {MIN_AI_SCORE}/100.
+										<p className="mt-2 text-base font-semibold leading-relaxed">
+											{analysisResult.message}
 										</p>
 									</div>
 
@@ -895,8 +981,7 @@ export default function TambahDestinasiPage() {
 									<button
 										type="button"
 										disabled={
-											analysisResult.score < MIN_AI_SCORE ||
-											isSubmitting
+											analysisResult.score < MIN_AI_SCORE || isSubmitting
 										}
 										onClick={submitDestination}
 										className="flex-1 rounded-2xl bg-[#F09A43] px-5 py-3 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"

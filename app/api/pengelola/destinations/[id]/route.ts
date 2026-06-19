@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 type Params = {
 	params: Promise<{
@@ -7,13 +7,54 @@ type Params = {
 	}>;
 };
 
-export async function GET(
-	_req: Request,
-	{ params }: Params
-) {
-	try {
-		const { id } = await params;
+function getUserFromCookie(req: NextRequest) {
+	const userCookie = req.cookies.get("user");
 
+	if (!userCookie) return null;
+
+	try {
+		return JSON.parse(userCookie.value);
+	} catch {
+		return null;
+	}
+}
+
+function validatePengelola(req: NextRequest) {
+	const user = getUserFromCookie(req);
+
+	if (!user) {
+		return {
+			error: NextResponse.json(
+				{ message: "User belum login." },
+				{ status: 401 }
+			),
+			user: null,
+		};
+	}
+
+	if (user.role !== "PENGELOLA") {
+		return {
+			error: NextResponse.json(
+				{ message: "Akses ditolak." },
+				{ status: 403 }
+			),
+			user: null,
+		};
+	}
+
+	return {
+		error: null,
+		user,
+	};
+}
+
+export async function GET(req: NextRequest, { params }: Params) {
+	try {
+		const auth = validatePengelola(req);
+
+		if (auth.error) return auth.error;
+
+		const { id } = await params;
 		const destinationId = Number(id);
 
 		if (Number.isNaN(destinationId)) {
@@ -26,6 +67,7 @@ export async function GET(
 		const destination = await prisma.destination.findFirst({
 			where: {
 				id: destinationId,
+				ownerId: Number(auth.user.id),
 				isDeleted: false,
 			},
 			include: {
@@ -60,7 +102,7 @@ export async function GET(
 						status: latestAnalysis.status,
 						message: latestAnalysis.message,
 						...(latestAnalysis.rawResult as object),
-					}
+				  }
 				: null,
 		});
 	} catch (error) {
@@ -73,13 +115,13 @@ export async function GET(
 	}
 }
 
-export async function PATCH(
-	req: Request,
-	{ params }: Params
-) {
+export async function PATCH(req: NextRequest, { params }: Params) {
 	try {
-		const { id } = await params;
+		const auth = validatePengelola(req);
 
+		if (auth.error) return auth.error;
+
+		const { id } = await params;
 		const destinationId = Number(id);
 
 		if (Number.isNaN(destinationId)) {
@@ -89,39 +131,45 @@ export async function PATCH(
 			);
 		}
 
-		const body = await req.json();
+		const existingDestination = await prisma.destination.findFirst({
+			where: {
+				id: destinationId,
+				ownerId: Number(auth.user.id),
+				isDeleted: false,
+			},
+		});
 
+		if (!existingDestination) {
+			return NextResponse.json(
+				{ message: "Wisata tidak ditemukan." },
+				{ status: 404 }
+			);
+		}
+
+		const body = await req.json();
 		const analysisResult = body.analysisResult;
 
 		const categoryIds = Array.isArray(body.categoryIds)
-			? body.categoryIds.map((categoryId: unknown) =>
-					Number(categoryId)
-				)
+			? body.categoryIds.map((categoryId: unknown) => Number(categoryId))
 			: [];
 
 		if (!body.name || !body.description || !body.address) {
 			return NextResponse.json(
-				{
-					message: "Nama, deskripsi, dan alamat wajib diisi.",
-				},
+				{ message: "Nama, deskripsi, dan alamat wajib diisi." },
 				{ status: 400 }
 			);
 		}
 
 		if (categoryIds.length === 0) {
 			return NextResponse.json(
-				{
-					message: "Pilih minimal satu kategori wisata.",
-				},
+				{ message: "Pilih minimal satu kategori wisata." },
 				{ status: 400 }
 			);
 		}
 
 		if (!body.latitude || !body.longitude) {
 			return NextResponse.json(
-				{
-					message: "Latitude dan longitude wajib diisi.",
-				},
+				{ message: "Latitude dan longitude wajib diisi." },
 				{ status: 400 }
 			);
 		}
@@ -137,27 +185,48 @@ export async function PATCH(
 				id: destinationId,
 			},
 			data: {
-                name: body.name,
-                description: body.description,
-                address: body.address,
+				name: body.name,
+				description: body.description,
+				address: body.address,
 
-                addressStreet: body.addressStreet || null,
-                addressVillage: body.addressVillage || null,
-                addressDistrict: body.addressDistrict || null,
-                addressCity: body.addressCity || null,
-                addressProvince: body.addressProvince || null,
+				addressStreet: body.addressStreet || null,
+				addressVillage: body.addressVillage || null,
+				addressDistrict: body.addressDistrict || null,
+				addressCity: body.addressCity || null,
+				addressProvince: body.addressProvince || null,
 
-                contact: body.contact || null,
-                latitude: Number(body.latitude),
-                longitude: Number(body.longitude),
-                imageUrl: body.imageUrl || null,
-                status: "pending",
-                categories: {
-                    create: categoryIds.map((categoryId: number) => ({
-                    categoryId,
-                    })),
-                },
-            },
+				contact: body.contact || null,
+				latitude: Number(body.latitude),
+				longitude: Number(body.longitude),
+				imageUrl: body.imageUrl || null,
+
+				openTime: body.openTime || null,
+				closeTime: body.closeTime || null,
+				ticketPrice: body.isFree
+					? 0
+					: body.ticketPrice === "" ||
+					body.ticketPrice === null ||
+					body.ticketPrice === undefined
+						? null
+						: Number(body.ticketPrice),
+
+				maxPrice: body.isFree
+					? 0
+					: body.maxPrice === "" ||
+					body.maxPrice === null ||
+					body.maxPrice === undefined
+						? null
+						: Number(body.maxPrice),
+				website: body.website || null,
+
+				status: "pending",
+
+				categories: {
+					create: categoryIds.map((categoryId: number) => ({
+						categoryId,
+					})),
+				},
+			},
 			include: {
 				categories: {
 					include: {
@@ -190,13 +259,13 @@ export async function PATCH(
 	}
 }
 
-export async function DELETE(
-	_req: Request,
-	{ params }: Params
-) {
+export async function DELETE(req: NextRequest, { params }: Params) {
 	try {
-		const { id } = await params;
+		const auth = validatePengelola(req);
 
+		if (auth.error) return auth.error;
+
+		const { id } = await params;
 		const destinationId = Number(id);
 
 		if (Number.isNaN(destinationId)) {
@@ -209,6 +278,7 @@ export async function DELETE(
 		const destination = await prisma.destination.findFirst({
 			where: {
 				id: destinationId,
+				ownerId: Number(auth.user.id),
 				isDeleted: false,
 			},
 		});
@@ -226,6 +296,7 @@ export async function DELETE(
 			},
 			data: {
 				isDeleted: true,
+				deletedAt: new Date(),
 			},
 		});
 
