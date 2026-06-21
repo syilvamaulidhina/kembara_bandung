@@ -1,7 +1,7 @@
 "use client";
 // app/pengunjung/navigasi/page.tsx — UPDATED: support navigasi langsung ke 1 destinasi
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -45,7 +45,23 @@ interface ItineraryItem {
 // Mode navigasi: "itinerary" = dari rencana, "direct" = langsung ke 1 destinasi
 type NavMode = "itinerary" | "direct";
 
+// Komponen luar yang di-export — membungkus konten dengan Suspense
+// karena NavigasiContent di bawah memakai useSearchParams()
 export default function NavigasiPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-screen flex items-center justify-center bg-[#0f1a14]">
+          <Loader2 className="animate-spin text-white" size={40} />
+        </div>
+      }
+    >
+      <NavigasiContent />
+    </Suspense>
+  );
+}
+
+function NavigasiContent() {
   const { user } = useLocalUser();
   const searchParams = useSearchParams();
   const { location, loading: gpsLoading, requestLocation } = useGeolocation(true);

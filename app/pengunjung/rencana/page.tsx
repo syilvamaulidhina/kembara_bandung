@@ -544,7 +544,7 @@ export default function RencanaPage() {
                 </Link>
               </div>
               <MapViewClient
-                destinations={itinerary.items.map((i) => i.destination)}
+                destinations={itinerary.items.map((i) => ({ ...i.destination, visitCount: 0 }))}
                 userLocation={location} height="240px" showHeatmap={false}
                 activeCategories={["Wisata Alam","Wisata Budaya","Wisata Kuliner","Wisata Edukasi","Wisata Hiburan","Wisata Belanja","Wisata Religi"]}
                 showRouteOrder={true} routeItems={routeItemsForMap}

@@ -32,7 +32,7 @@ export default function Navbar() {
   const [searchLoading, setSearchLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  const debounceRef = useRef<NodeJS.Timeout>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const isActive = (href: string) => {
     if (href === "/pengunjung") return pathname === "/pengunjung";
