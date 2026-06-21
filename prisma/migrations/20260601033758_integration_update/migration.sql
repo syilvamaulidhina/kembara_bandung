@@ -1,5 +1,5 @@
 -- AlterTable
-ALTER TABLE "Destination" ADD COLUMN     "closeTime" TEXT,
+--ALTER TABLE "Destination" ADD COLUMN     "closeTime" TEXT,
 ADD COLUMN     "maxPrice" INTEGER,
 ADD COLUMN     "openTime" TEXT,
 ADD COLUMN     "ticketPrice" INTEGER,
