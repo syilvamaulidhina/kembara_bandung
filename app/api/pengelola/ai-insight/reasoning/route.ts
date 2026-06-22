@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
 
 		const fallback = getFallbackReasoning(analysisResult);
 
-		if (!process.env.GROQ_API_KEY) {
+		if (!process.env.GROQ_API_KEY_PENGELOLA) {
 			return NextResponse.json({
 				reasoning: fallback,
 				source: "fallback_no_api_key",
@@ -98,7 +98,7 @@ Format respons HARUS JSON valid:
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+						Authorization: `Bearer ${process.env.GROQ_API_KEY_PENGELOLA}`,
 					},
 					body: JSON.stringify({
 						model: "llama-3.1-8b-instant",
