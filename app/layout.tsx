@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Script from "next/script";
 
 import { Poppins, Plus_Jakarta_Sans } from "next/font/google";
 
@@ -29,6 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
+      <head>
+        {/* Maze snippet untuk UAT tracking */}
+        <Script
+          id="maze-snippet"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `PASTE_MAZE_SNIPPET_CONTENT_HERE`,
+          }}
+        />
+      </head>
       <body
         className={`${poppins.className} ${jakarta.variable} font-sans min-h-screen`}
       >
