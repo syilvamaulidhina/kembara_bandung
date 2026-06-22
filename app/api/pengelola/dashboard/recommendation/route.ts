@@ -20,42 +20,67 @@ function getHealthLabel(score: number) {
 }
 
 function getFallbackRecommendation(context: any) {
+	const isEmpty = context.totalDestinations === 0;
+
 	return {
 		health: {
 			score: context.managementHealthScore,
-			label: getHealthLabel(context.managementHealthScore),
-			description:
-				context.avgAiScore !== null
-					? `Rata-rata skor AI Insight berada di ${context.avgAiScore}, dengan kesehatan pengelolaan ${context.managementHealthScore}/100.`
-					: `Kesehatan pengelolaan berada di ${context.managementHealthScore}/100, namun belum ada cukup data AI Insight.`,
+			label: isEmpty
+				? "Belum Ada Data"
+				: getHealthLabel(context.managementHealthScore),
+			description: isEmpty
+				? "Belum ada data destinasi untuk dianalisis."
+				: context.avgAiScore !== null
+				? `Rata-rata skor AI Insight berada di ${context.avgAiScore}, dengan kesehatan pengelolaan ${context.managementHealthScore}/100.`
+				: `Kesehatan pengelolaan berada di ${context.managementHealthScore}/100, namun belum ada cukup data AI Insight.`,
 		},
-		summary:
-			context.revisionDestinations > 0
-				? `Ada ${context.revisionDestinations} destinasi yang membutuhkan perbaikan dari admin.`
-				: `Pengelolaan cukup stabil dengan ${context.activeDestinations} destinasi aktif dan ${context.pendingDestinations} destinasi menunggu review.`,
-		priority:
-			context.revisionDestinations > 0
-				? "Prioritaskan destinasi berstatus butuh perbaikan."
-				: context.pendingDestinations > 0
-				? "Pantau destinasi pending dan pastikan datanya sudah lengkap."
-				: "Pertahankan kualitas data dan lengkapi informasi pendukung.",
-		recommendations: [
-			{
-				title: "Lengkapi Operasional",
-				description: `${context.withoutOperationalHoursCount} destinasi belum memiliki jam operasional lengkap.`,
-			},
-			{
-				title: "Perkuat Informasi Harga",
-				description: `${context.withoutPriceInfoCount} destinasi belum memiliki informasi harga tiket.`,
-			},
-			{
-				title: "Manfaatkan AI Insight",
-				description:
-					context.avgAiScore !== null
-						? `Rata-rata skor AI Insight ${context.avgAiScore}. Gunakan untuk menjaga kesesuaian kategori.`
-						: "Jalankan AI Insight agar kategori dan deskripsi bisa dianalisis.",
-			},
-		],
+		summary: isEmpty
+			? "Belum ada destinasi yang dikelola."
+			: context.revisionDestinations > 0
+			? `Ada ${context.revisionDestinations} destinasi yang membutuhkan perbaikan dari admin.`
+			: `Pengelolaan cukup stabil dengan ${context.activeDestinations} destinasi aktif dan ${context.pendingDestinations} destinasi menunggu review.`,
+		priority: isEmpty
+			? "Tambahkan destinasi pertama agar sistem dapat memberikan rekomendasi."
+			: context.revisionDestinations > 0
+			? "Prioritaskan destinasi berstatus butuh perbaikan."
+			: context.pendingDestinations > 0
+			? "Pantau destinasi pending dan pastikan datanya sudah lengkap."
+			: "Pertahankan kualitas data dan lengkapi informasi pendukung.",
+		recommendations: isEmpty
+			? [
+					{
+						title: "Tambah Destinasi",
+						description:
+							"Tambahkan data destinasi wisata pertama terlebih dahulu.",
+					},
+					{
+						title: "Lengkapi Informasi Dasar",
+						description:
+							"Isi kategori, alamat, gambar, kontak, jam operasional, dan harga tiket.",
+					},
+					{
+						title: "Gunakan AI Insight",
+						description:
+							"Setelah data tersedia, jalankan AI Insight untuk mengecek kesesuaian kategori dan deskripsi.",
+					},
+			  ]
+			: [
+					{
+						title: "Lengkapi Operasional",
+						description: `${context.withoutOperationalHoursCount} destinasi belum memiliki jam operasional lengkap.`,
+					},
+					{
+						title: "Perkuat Informasi Harga",
+						description: `${context.withoutPriceInfoCount} destinasi belum memiliki informasi harga tiket.`,
+					},
+					{
+						title: "Manfaatkan AI Insight",
+						description:
+							context.avgAiScore !== null
+								? `Rata-rata skor AI Insight ${context.avgAiScore}. Gunakan untuk menjaga kesesuaian kategori.`
+								: "Jalankan AI Insight agar kategori dan deskripsi bisa dianalisis.",
+					},
+			  ],
 	};
 }
 
@@ -208,14 +233,17 @@ export async function GET(req: NextRequest) {
 
 		const dataCompleteness =
 			totalDestinations === 0
-				? 100
+				? 0
 				: Math.round(
 						((totalDestinations - incompleteDataCount) /
 							totalDestinations) *
 							100
 				  );
 
-		const managementHealthScore = Math.round(
+		const managementHealthScore = 
+		totalDestinations === 0
+			? 0
+			: Math.round(
 			(avgAiScore || 80) * 0.6 +
 				dataCompleteness * 0.25 +
 				(activeDestinations / Math.max(totalDestinations, 1)) *
