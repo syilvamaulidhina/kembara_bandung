@@ -180,6 +180,13 @@ export async function POST(req: NextRequest) {
 				name: body.name,
 				description: body.description,
 				address: body.address,
+
+				addressStreet: body.addressStreet || null,
+				addressVillage: body.addressVillage || null,
+				addressDistrict: body.addressDistrict || null,
+				addressCity: body.addressCity || null,
+				addressProvince: body.addressProvince || null,
+
 				contact: body.contact || null,
 				latitude: Number(body.latitude),
 				longitude: Number(body.longitude),
@@ -195,10 +202,10 @@ export async function POST(req: NextRequest) {
 
 				categories: {
 					create: categoryIds.map((id: number) => ({
-						categoryId: id,
+					categoryId: id,
 					})),
 				},
-			},
+				},
 			include: {
 				categories: {
 					include: {

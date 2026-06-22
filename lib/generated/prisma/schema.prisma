@@ -100,7 +100,7 @@ model Destination {
   reviews        Review[]
   visitedBy      VisitedPlace[]
   itineraryQueue ItineraryQueue[]
-  views          DestinationView[]  // ← BARU
+  views          DestinationView[] // ← BARU
 
   //event relation
   events Event[]
@@ -272,4 +272,3 @@ enum EventStatus {
   ditolak
   selesai
 }
-
