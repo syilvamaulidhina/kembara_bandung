@@ -4,7 +4,10 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   try {
     const destinations = await prisma.destination.findMany({
-      where: { isDeleted: false, status: "aktif" },
+      where: {
+        isDeleted: false,
+        status: { in: ["aktif", "canceled"] },
+      },
       include: {
         categories: { include: { category: true } },
         reviews: true,
@@ -17,7 +20,7 @@ export async function GET() {
       nama: d.name,
       kategori: d.categories[0]?.category?.name || "Lainnya",
       lokasi: d.address,
-      status: "Aktif",
+      status: d.status === "aktif" ? "Aktif" : "Nonaktif",
       lat: d.latitude,
       lng: d.longitude,
       deskripsi: d.description,
@@ -38,7 +41,7 @@ export async function PATCH(req: NextRequest) {
       data: {
         name: nama,
         address: lokasi,
-        status: status === "Aktif" ? "aktif" : "pending",
+        status: status === "Aktif" ? "aktif" : "canceled",
       },
     });
     return NextResponse.json({ success: true });
