@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DestinationMap from "@/components/destination-map";
+import { CITY_OPTIONS, WILAYAH_BANDUNG } from "@/data/wilayah-bandung";
+import { ChevronDown, MapPin, Sparkles } from "lucide-react";
 
 type CategoryAnalysis = {
 	categoryId: number;
@@ -22,28 +24,43 @@ type AnalysisResult = {
 	unselectedStrongMatches: CategoryAnalysis[];
 	allCategoryAnalysis: CategoryAnalysis[];
 	message: string;
+	reasoning?: AiReasoning;
+};
+
+type AiReasoning = {
+	explanation: string;
+	potentialIssue: string;
+	suggestion: string;
 };
 
 export default function TambahDestinasiPage() {
 	const router = useRouter();
-	const MIN_AI_SCORE = 60;
+	const MIN_AI_SCORE = 55;
 
 	const [form, setForm] = useState({
-      name: "",
-      categoryIds: [] as number[],
-      description: "",
-      contact: "",
-      address: "",
-      latitude: "",
-      longitude: "",
+		name: "",
+		categoryIds: [] as number[],
+		description: "",
+		contact: "",
 
-      isFree: false,
-      ticketPrice: "",
-      maxPrice: "",
-      openTime: "",
-      closeTime: "",
-      website: "",
-  });
+		address: "",
+
+		addressStreet: "",
+		addressVillage: "",
+		addressDistrict: "",
+		addressCity: "",
+		addressProvince: "Jawa Barat",
+
+		latitude: "",
+		longitude: "",
+
+		isFree: false,
+		ticketPrice: "",
+		maxPrice: "",
+		openTime: "",
+		closeTime: "",
+		website: "",
+	});
 
 	const [categories, setCategories] = useState<{ id: number; name: string }[]>(
 		[]
@@ -84,20 +101,32 @@ export default function TambahDestinasiPage() {
 		}));
 
 		if (
-      field === "name" ||
-      field === "description" ||
-      field === "address" ||
-      field === "latitude" ||
-      field === "longitude" ||
-      field === "ticketPrice" ||
-      field === "maxPrice" ||
-      field === "openTime" ||
-      field === "closeTime" ||
-      field === "website"
-    ) {
-      resetAnalysis();
-    }
+			field === "name" ||
+			field === "description" ||
+			field === "address" ||
+			field === "latitude" ||
+			field === "longitude" ||
+			field === "ticketPrice" ||
+			field === "maxPrice" ||
+			field === "openTime" ||
+			field === "closeTime" ||
+			field === "website"
+			) {
+			resetAnalysis();
+		}
 	}
+
+	function buildFullAddress() {
+		return [
+			form.addressStreet,
+			form.addressVillage,
+			form.addressDistrict,
+			form.addressCity,
+			form.addressProvince,
+		]
+			.filter(Boolean)
+			.join(", ");
+		}
 
 	function toggleCategory(categoryId: number) {
 		setForm((prev) => ({
@@ -126,7 +155,7 @@ export default function TambahDestinasiPage() {
 			return;
 		}
 
-		if (!form.address.trim()) {
+		if (!buildFullAddress().trim()) {
 			alert("Alamat wajib diisi sebelum analisis.");
 			return;
 		}
@@ -190,8 +219,34 @@ export default function TambahDestinasiPage() {
 				return;
 			}
 
-			setAnalysisResult(data);
-			setShowAnalysisModal(true);
+			let reasoning: AiReasoning | undefined;
+
+				try {
+					const reasoningResponse = await fetch(
+						"/api/pengelola/ai-insight/reasoning",
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({
+								analysisResult: data,
+							}),
+						}
+					);
+
+					const reasoningData = await reasoningResponse.json();
+					reasoning = reasoningData.reasoning;
+				} catch (error) {
+					console.error("AI REASONING ERROR:", error);
+				}
+
+				setAnalysisResult({
+					...data,
+					reasoning,
+				});
+
+				setShowAnalysisModal(true);
 		} catch (error) {
 			console.error("CHECK AI ERROR:", error);
 			alert("Terjadi kesalahan saat melakukan analisis.");
@@ -226,7 +281,7 @@ export default function TambahDestinasiPage() {
 			return;
 		}
 
-		if (!form.address.trim()) {
+		if (!buildFullAddress().trim()) {
 			alert("Alamat wajib diisi.");
 			return;
 		}
@@ -299,6 +354,8 @@ export default function TambahDestinasiPage() {
 				},
 				body: JSON.stringify({
 					...form,
+					address: form.address || buildFullAddress(),
+
 					imageUrl,
 					analysisResult,
 				}),
@@ -321,6 +378,19 @@ export default function TambahDestinasiPage() {
 			setIsSubmitting(false);
 		}
 	}
+
+	const districtOptions = form.addressCity
+		? Object.keys(WILAYAH_BANDUNG[form.addressCity as keyof typeof WILAYAH_BANDUNG])
+		: [];
+
+	const villageOptions =
+		form.addressCity && form.addressDistrict
+			? WILAYAH_BANDUNG[
+					form.addressCity as keyof typeof WILAYAH_BANDUNG
+				][
+					form.addressDistrict as keyof typeof WILAYAH_BANDUNG[keyof typeof WILAYAH_BANDUNG]
+				] || []
+			: [];
 
 	const selectedKeywords =
 		analysisResult?.selectedCategories.flatMap(
@@ -407,21 +477,119 @@ export default function TambahDestinasiPage() {
 								className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
 							/>
 
-							<input
-								type="text"
-								value={form.address}
-								onChange={(event) =>
-									updateForm("address", event.target.value)
-								}
-								placeholder="Alamat"
-								className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
-							/>
+							<div className="grid gap-4 md:grid-cols-2">
+								<div className="relative">
+									<select
+										value={form.addressCity}
+										onChange={(event) => {
+											setForm((prev) => ({
+												...prev,
+												addressCity: event.target.value,
+												addressDistrict: "",
+												addressVillage: "",
+												latitude: "",
+												longitude: "",
+											}));
+											resetAnalysis();
+										}}
+										className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+									>
+										<option value="">Pilih Kota/Kabupaten</option>
+										{CITY_OPTIONS.map((city) => (
+											<option key={city} value={city}>
+												{city}
+											</option>
+										))}
+									</select>
 
-							{!isAreaValid && (
+									<ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+								</div>
+
+								<div className="relative">
+									<select
+										value={form.addressDistrict}
+										disabled={!form.addressCity}
+										onChange={(event) => {
+											setForm((prev) => ({
+												...prev,
+												addressDistrict: event.target.value,
+												addressVillage: "",
+												latitude: "",
+												longitude: "",
+											}));
+											resetAnalysis();
+										}}
+										className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+									>
+										<option value="">Pilih Kecamatan</option>
+										{districtOptions.map((district) => (
+											<option key={district} value={district}>
+												{district}
+											</option>
+										))}
+									</select>
+
+									<ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+								</div>
+
+								<div className="relative">
+									<select
+										value={form.addressVillage}
+										disabled={!form.addressDistrict}
+										onChange={(event) => {
+											setForm((prev) => ({
+												...prev,
+												addressVillage: event.target.value,
+												latitude: "",
+												longitude: "",
+											}));
+											resetAnalysis();
+										}}
+										className="w-full appearance-none rounded-2xl border-0 bg-white px-5 py-4 pr-12 text-[#285260] disabled:opacity-60 focus:ring-2 focus:ring-[#F09A43]"
+									>
+										<option value="">Pilih Kelurahan/Desa</option>
+										{villageOptions.map((village) => (
+											<option key={village} value={village}>
+												{village}
+											</option>
+										))}
+									</select>
+
+									<ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#285260]" />
+								</div>
+
+								<input
+									type="text"
+									value={form.addressStreet}
+									onChange={(event) => {
+										updateForm("addressStreet", event.target.value);
+										updateForm("latitude", "");
+										updateForm("longitude", "");
+									}}
+									placeholder="Nama jalan / alamat detail"
+									className="w-full rounded-2xl border-0 bg-white px-5 py-4 text-[#285260] placeholder:text-[#285260] focus:ring-2 focus:ring-[#F09A43]"
+								/>
+
+								<input
+									type="text"
+									value="Jawa Barat"
+									readOnly
+									className="w-full rounded-2xl border-0 bg-white/80 px-5 py-4 text-[#285260] md:col-span-2"
+								/>
+
+								{form.address && (
+									<div className="rounded-2xl bg-white/90 px-5 py-4 text-sm text-[#285260] md:col-span-2">
+										<p className="mb-1 font-semibold">Alamat terdeteksi dari peta:</p>
+										<p>{form.address}</p>
+									</div>
+								)}
+							</div>
+
+								{!isAreaValid && (
 								<div className="rounded-xl bg-[#FFF3CD] px-4 py-3 text-sm text-[#856404]">
 									Lokasi yang dipilih berada di luar area Bandung Raya.
 								</div>
-							)}
+								)}
 
               <div className="rounded-2xl bg-white p-4">
                 <p className="mb-4 font-semibold text-[#285260]">
@@ -566,19 +734,26 @@ export default function TambahDestinasiPage() {
 						</div>
 
 						<div className="rounded-[24px] bg-white p-3">
-							<DestinationMap
-								latitude={form.latitude}
-								longitude={form.longitude}
-								address={form.address}
-								onAddressChange={(value) =>
-									updateForm("address", value)
-								}
-								onLocationChange={(lat, lng) => {
-									updateForm("latitude", lat);
-									updateForm("longitude", lng);
-								}}
-								onAreaValidChange={setIsAreaValid}
-							/>
+						<DestinationMap
+							latitude={form.latitude}
+							longitude={form.longitude}
+							address={buildFullAddress()}
+							addressFields={{
+							addressStreet: form.addressStreet,
+							addressVillage: form.addressVillage,
+							addressDistrict: form.addressDistrict,
+							addressCity: form.addressCity,
+							addressProvince: form.addressProvince,
+							}}
+							onAddressChange={(address) => {
+								updateForm("address", address);
+							}}
+							onLocationChange={(lat, lng) => {
+							updateForm("latitude", lat);
+							updateForm("longitude", lng);
+							}}
+							onAreaValidChange={setIsAreaValid}
+						/>
 						</div>
 					</div>
 				</form>
@@ -586,8 +761,8 @@ export default function TambahDestinasiPage() {
 
 			{showAnalysisModal && analysisResult && (
 				<div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
-					<div className="relative w-full max-w-2xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
-						<div className="grid md:grid-cols-[1fr_320px]">
+					<div className="relative w-full max-w-6xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
+						<div className="grid max-h-[90vh] overflow-y-auto md:grid-cols-[1.05fr_1.25fr_0.9fr]">
 							<div className="bg-[#285260] p-6 text-white">
 								<div className="mb-6 flex items-start justify-between">
 									<div>
@@ -626,9 +801,7 @@ export default function TambahDestinasiPage() {
 										<div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
 											<div
 												className="h-full rounded-full bg-[#F09A43]"
-												style={{
-													width: `${analysisResult.score}%`,
-												}}
+												style={{ width: `${analysisResult.score}%` }}
 											/>
 										</div>
 									</div>
@@ -665,17 +838,17 @@ export default function TambahDestinasiPage() {
 
 										<div>
 											<p className="text-sm font-semibold text-white/70">
-												Kategori Terdeteksi
+												Kategori dengan Kecocokan Tertinggi
 											</p>
 
 											<h3 className="mt-1 text-xl font-bold text-[#F09A43]">
-												{analysisResult.strongestCategory
-													?.categoryName ?? "Tidak Terdeteksi"}
+												{analysisResult.strongestCategory?.categoryName ??
+													"Tidak Terdeteksi"}
 											</h3>
 
 											<div className="mt-3 flex flex-wrap gap-2">
-												{analysisResult.strongestCategory
-													?.matchedKeywords?.length ? (
+												{analysisResult.strongestCategory?.matchedKeywords
+													?.length ? (
 													analysisResult.strongestCategory.matchedKeywords.map(
 														(keyword) => (
 															<span
@@ -697,39 +870,94 @@ export default function TambahDestinasiPage() {
 								</div>
 							</div>
 
+							<div className="bg-[#F7FAFA] p-6">
+								<p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
+									Reasoning AI
+								</p>
+
+								<h3 className="mt-2 text-2xl font-extrabold text-[#285260]">
+									Penjelasan Hasil Analisis
+								</h3>
+
+								<p className="mt-2 text-sm leading-6 text-gray-500">
+									Penjelasan ini dibuat berdasarkan hasil domain knowledge,
+									bukan sebagai keputusan status destinasi.
+								</p>
+
+								{analysisResult.reasoning ? (
+									<div className="mt-5 space-y-4">
+										<div className="rounded-2xl bg-white p-4 text-left shadow-sm">
+											<p className="text-sm font-extrabold text-[#285260]">
+												Penalaran AI
+											</p>
+
+											<p className="mt-2 text-sm leading-6 text-gray-600">
+												{analysisResult.reasoning.explanation}
+											</p>
+										</div>
+
+										<div className="grid gap-4 xl:grid-cols-2">
+											<div className="rounded-2xl bg-orange-50 p-4 text-left">
+												<p className="text-sm font-extrabold text-[#C76B1F]">
+													Catatan Potensial
+												</p>
+
+												<p className="mt-2 text-sm leading-6 text-gray-600">
+													{analysisResult.reasoning.potentialIssue}
+												</p>
+											</div>
+
+											<div className="rounded-2xl bg-green-50 p-4 text-left">
+												<p className="text-sm font-extrabold text-green-700">
+													Saran Perbaikan
+												</p>
+
+												<p className="mt-2 text-sm leading-6 text-gray-600">
+													{analysisResult.reasoning.suggestion}
+												</p>
+											</div>
+										</div>
+									</div>
+								) : (
+									<div className="mt-5 rounded-2xl bg-white p-4 text-sm text-gray-500 shadow-sm">
+										Reasoning AI belum tersedia.
+									</div>
+								)}
+							</div>
+
 							<div className="flex flex-col justify-between bg-[#F8F8F8] p-6">
 								<div>
-									<div className="mb-5 flex flex-col items-center text-center">
-										<div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#285260]">
+									<div className="rounded-3xl bg-white p-5 text-center shadow-sm">
+										<div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#285260]">
 											{analysisResult.score >= MIN_AI_SCORE ? (
-												<span className="text-5xl font-black leading-none text-[#4ADE80]">
+												<span className="text-4xl font-black leading-none text-[#4ADE80]">
 													✓
 												</span>
 											) : (
-												<span className="text-5xl font-black leading-none text-[#F09A43]">
+												<span className="text-4xl font-black leading-none text-[#F09A43]">
 													!
 												</span>
 											)}
 										</div>
 
-										<p className="text-xl font-extrabold text-[#F09A43]">
+										<p className="text-lg font-extrabold text-[#F09A43]">
 											{analysisResult.score >= MIN_AI_SCORE
 												? "Bisa Disubmit"
 												: "Perlu Perbaikan"}
 										</p>
 
-										<p className="mt-1 text-lg font-bold text-[#285260]">
-											Skor: {analysisResult.score}/100
+										<p className="mt-1 text-sm font-semibold text-gray-500">
+											Skor minimal submit {MIN_AI_SCORE}/100
 										</p>
 									</div>
 
-									<div className="rounded-3xl bg-[#285260] p-5 text-center text-white">
-										<p className="text-lg font-semibold leading-relaxed">
-											{analysisResult.message}
+									<div className="mt-5 rounded-3xl bg-[#285260] p-5 text-left text-white">
+										<p className="text-sm font-bold uppercase tracking-wide text-[#F09A43]">
+											Kesimpulan Sistem
 										</p>
 
-										<p className="mt-4 text-xs text-white/60">
-											Minimal skor submit adalah {MIN_AI_SCORE}/100.
+										<p className="mt-2 text-base font-semibold leading-relaxed">
+											{analysisResult.message}
 										</p>
 									</div>
 
@@ -753,8 +981,7 @@ export default function TambahDestinasiPage() {
 									<button
 										type="button"
 										disabled={
-											analysisResult.score < MIN_AI_SCORE ||
-											isSubmitting
+											analysisResult.score < MIN_AI_SCORE || isSubmitting
 										}
 										onClick={submitDestination}
 										className="flex-1 rounded-2xl bg-[#F09A43] px-5 py-3 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"

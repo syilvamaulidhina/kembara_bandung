@@ -49,24 +49,37 @@ export default function LoginPage() {
         return;
       }
 
+      console.log("LOGIN RESPONSE:", data);
+      console.log("ROLE:", data.user?.role);
+      console.log("STATUS:", data.user?.verificationStatus);
+
       const role = data.user.role;
       const verificationStatus = data.user.verificationStatus;
 
       localStorage.setItem("user", JSON.stringify(data.user));
 
       if (role === "ADMIN") {
-        window.location.href = "/admin/dashboard";
-      } else if (role === "PENGELOLA") {
-        if (verificationStatus === "APPROVED") {
-          window.location.href = "/pengelola/dashboard";
-        } else {
-          window.location.href = "/pengelola/verifikasi";
-        }
-      } else if (role === "WISATAWAN") {
-        window.location.href = "/pengunjung";
-      } else {
-        window.location.href = "/select-role";
+        window.location.assign("/admin/dashboard");
+        return;
       }
+
+      if (role === "PENGELOLA") {
+        if (verificationStatus === "APPROVED") {
+          window.location.assign("/pengelola/dashboard");
+          return;
+        }
+
+        window.location.assign("/pengelola/verifikasi");
+        return;
+      }
+
+      if (role === "WISATAWAN") {
+        window.location.assign("/pengunjung");
+        return;
+      }
+
+      window.location.assign("/select-role");
+      return;
 
     } catch (err) {
       console.error(err);
