@@ -1,23 +1,24 @@
 "use client";
 // lib/hooks/useLocalUser.ts
-// Hook untuk membaca sesi user dari localStorage (diteruskan dari sistem auth yang sudah ada)
-// Menggunakan session/cookie yang sudah dibuat oleh modul auth
+// UPDATE: tambah fungsi logout, tambah field gender & domisili sesuai schema
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface LocalUser {
   id: number;
   name: string;
   email: string;
-  role: string;
+  role: string | null;
+  gender?: string | null;
+  domisili?: string | null;
+  photo?: string | null;
 }
 
 export function useLocalUser() {
   const [user, setUser] = useState<LocalUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Coba ambil data user dari API /api/user/me yang sudah ada
+  const fetchUser = useCallback(() => {
     fetch("/api/user/me")
       .then((res) => {
         if (res.ok) return res.json();
@@ -32,5 +33,23 @@ export function useLocalUser() {
       .finally(() => setLoading(false));
   }, []);
 
-  return { user, loading, isLoggedIn: !!user };
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
+  // Logout — panggil API logout yang sudah ada, lalu clear state
+  const logout = useCallback(async () => {
+    try {
+      // Sesuaikan path ini dengan endpoint logout yang sudah ada di projectmu
+      // Kemungkinan: /api/auth/logout atau /api/logout
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {
+      // Tetap lanjut logout client-side meski API gagal
+      console.error("Logout API error:", e);
+    } finally {
+      setUser(null);
+    }
+  }, []);
+
+  return { user, loading, isLoggedIn: !!user, logout };
 }

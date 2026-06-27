@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 import {
   ArrowLeft, Star, MapPin, Phone, Clock, DollarSign,
   Heart, Navigation, Plus, Globe, Share2, Thermometer,
-  Droplets, Wind, Loader2, ChevronLeft, ChevronRight, CheckCircle2
+  Droplets, Wind, Loader2, ChevronLeft, ChevronRight, CheckCircle2, ThumbsUp
 } from "lucide-react";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 import { useLocalUser } from "@/lib/hooks/useLocalUser";
@@ -46,6 +46,8 @@ interface DestinationDetail {
     rating: number;
     comment: string | null;
     photoUrl: string | null;
+    videoUrl: string | null;
+    helpfulCount: number;
     createdAt: string;
     user: { id: number; name: string; photo: string | null };
   }[];
@@ -76,6 +78,26 @@ export default function DestinationDetailPage() {
   const [savingToggle, setSavingToggle] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [likedReviews, setLikedReviews] = useState<Set<number>>(new Set());
+
+  const handleHelpful = async (reviewId: number) => {
+    if (likedReviews.has(reviewId)) return;
+    setLikedReviews((prev) => new Set([...prev, reviewId]));
+    setDestination((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        reviews: prev.reviews.map((r) =>
+          r.id === reviewId ? { ...r, helpfulCount: r.helpfulCount + 1 } : r
+        ),
+      };
+    });
+    try {
+      await fetch(`/api/pengunjung/reviews/${reviewId}/helpful`, { method: "PATCH" });
+    } catch (e) {
+      console.error("Gagal menyukai ulasan", e);
+    }
+  };
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -109,6 +131,7 @@ export default function DestinationDetailPage() {
 
   const handleSaveToggle = async () => {
     if (!user) {
+      alert("Silakan masuk (login) terlebih dahulu untuk menyimpan destinasi ini.");
       router.push(`/auth/login?redirect=/pengunjung/destinasi/${id}`);
       return;
     }
@@ -154,6 +177,7 @@ export default function DestinationDetailPage() {
   // Tambah ke itinerary: simpan dulu lalu ke rencana
   const handleAddToItinerary = async () => {
     if (!user) {
+      alert("Silakan masuk (login) terlebih dahulu untuk menambahkan destinasi ke rencana perjalanan.");
       router.push(`/auth/login?redirect=/pengunjung/destinasi/${id}`);
       return;
     }
@@ -483,6 +507,28 @@ export default function DestinationDetailPage() {
                             className="mt-2 h-24 rounded-lg object-cover"
                           />
                         )}
+                        {review.videoUrl && (
+                          <video
+                            src={review.videoUrl}
+                            controls
+                            className="mt-2 h-24 rounded-lg object-cover"
+                          />
+                        )}
+                        
+                        <div className="mt-3 flex items-center gap-4 border-t border-gray-50 pt-3">
+                          <button
+                            onClick={() => handleHelpful(review.id)}
+                            disabled={likedReviews.has(review.id)}
+                            className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
+                              likedReviews.has(review.id)
+                                ? "text-[#006837]"
+                                : "text-gray-400 hover:text-[#006837]"
+                            }`}
+                          >
+                            <ThumbsUp size={14} className={likedReviews.has(review.id) ? "fill-[#006837]" : ""} />
+                            {likedReviews.has(review.id) ? "Membantu" : "Membantu?"} ({review.helpfulCount})
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

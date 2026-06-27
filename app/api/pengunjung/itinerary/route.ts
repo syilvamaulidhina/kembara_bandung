@@ -1,15 +1,19 @@
 // app/api/pengunjung/itinerary/route.ts
-// API untuk membuat, mengambil, dan mengelola rencana perjalanan
+// GANTI TOTAL: dulu 1 user = 1 itinerary (selalu deleteMany lalu create baru).
+// Sekarang user bisa punya banyak itinerary, masing-masing punya title,
+// tripDate, dan status (draft/aktif/selesai).
+//
+// GET  -> daftar SEMUA itinerary milik user (untuk halaman /pengunjung/rencana)
+// POST -> buat itinerary BARU (kosong / manual / AI), TIDAK menghapus yang lama
 
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import {
   optimizeRoute,
   calculateTotalDistance,
-  calculateDistance,
 } from "@/lib/utils";
 
-// GET - ambil itinerary aktif user (atau buat baru jika belum ada)
+// GET - daftar semua itinerary user, urut: aktif dulu, lalu draft, lalu selesai (terbaru dulu)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -22,85 +26,109 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Ambil itinerary terbaru user
-    const itinerary = await prisma.itinerary.findFirst({
+    const itineraries = await prisma.itinerary.findMany({
       where: { userId },
       include: {
         items: {
           include: {
             destination: {
-              include: {
-                categories: { include: { category: true } },
-                reviews: { select: { rating: true } },
+              select: {
+                id: true,
+                name: true,
+                imageUrl: true,
+                latitude: true,
+                longitude: true,
               },
             },
           },
           orderBy: { order: "asc" },
         },
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy: [{ updatedAt: "desc" }],
     });
 
-    if (!itinerary) {
-      return NextResponse.json({ success: true, data: null });
-    }
+    // Urutkan: aktif > draft > selesai, lalu by updatedAt desc di tiap grup
+    const statusWeight: Record<string, number> = { aktif: 0, draft: 1, selesai: 2 };
+    const sorted = [...itineraries].sort(
+      (a, b) => statusWeight[a.status] - statusWeight[b.status]
+    );
 
-    const enriched = {
-      ...itinerary,
-      items: itinerary.items.map((item) => {
-        const ratings = item.destination.reviews.map((r) => r.rating);
-        const averageRating =
-          ratings.length > 0
-            ? ratings.reduce((a, b) => a + b, 0) / ratings.length
-            : null;
-        return {
-          ...item,
-          destination: {
-            ...item.destination,
-            reviews: undefined,
-            averageRating,
-            reviewCount: ratings.length,
-          },
-        };
-      }),
-    };
+    const enriched = sorted.map((it) => ({
+      ...it,
+      visitedCount: it.items.filter((i) => i.visited).length,
+      totalItems: it.items.length,
+    }));
 
     return NextResponse.json({ success: true, data: enriched });
   } catch (error) {
-    console.error("Error fetching itinerary:", error);
+    console.error("Error fetching itineraries:", error);
     return NextResponse.json(
-      { success: false, error: "Gagal mengambil itinerary" },
+      { success: false, error: "Gagal mengambil daftar itinerary" },
       { status: 500 }
     );
   }
 }
 
-// POST - buat itinerary baru / update dengan destinasi yang dipilih
+// POST - buat itinerary baru
+// Body untuk MANUAL (kosong): { userId, title, tripDate, useAI: false }
+// Body untuk AI: { userId, title, tripDate, useAI: true, destinationIds,
+//                  startLat, startLng, startLabel, startType }
+// destinationIds boleh kosong untuk mode manual (itinerary dibuat tanpa item,
+// destinasi ditambahkan belakangan dari halaman detail itinerary)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
       userId,
-      destinationIds,
+      title = "Rencana Perjalananku",
+      tripDate,
+      useAI = false,
+      destinationIds = [],
       startLat,
       startLng,
-      useAI = false,
-      title = "Rencana Perjalananku",
+      startLabel,
+      startType,
     } = body;
 
-    if (!userId || !destinationIds?.length) {
+    if (!userId) {
       return NextResponse.json(
-        { success: false, error: "userId dan destinationIds diperlukan" },
+        { success: false, error: "userId diperlukan" },
         { status: 400 }
       );
     }
 
-    // Ambil data destinasi
+    // Mode manual tanpa destinasi -> buat itinerary kosong langsung
+    if (!destinationIds?.length) {
+      const itinerary = await prisma.itinerary.create({
+        data: {
+          userId,
+          title,
+          tripDate: tripDate ? new Date(tripDate) : null,
+          isAiGenerated: false,
+          startLat: startLat ?? null,
+          startLng: startLng ?? null,
+          startLabel: startLabel ?? null,
+          startType: startType ?? null,
+        },
+        include: {
+          items: {
+            include: {
+              destination: {
+                include: { categories: { include: { category: true } } },
+              },
+            },
+            orderBy: { order: "asc" },
+          },
+        },
+      });
+      return NextResponse.json({ success: true, data: itinerary });
+    }
+
+    // Ada destinationIds -> hitung urutan (AI atau manual sesuai urutan dikirim)
     const destinations = await prisma.destination.findMany({
       where: { id: { in: destinationIds }, status: "aktif" },
     });
 
-    // Tentukan urutan
     let orderedDestinations: Array<{
       id: number;
       visitTime: string;
@@ -108,12 +136,9 @@ export async function POST(request: NextRequest) {
     }>;
 
     if (useAI && startLat && startLng) {
-      // AI optimization: Nearest Neighbor Algorithm
       orderedDestinations = optimizeRoute(startLat, startLng, destinations);
     } else {
-      // Manual order: ikuti urutan yang dikirim
       orderedDestinations = destinationIds.map((id: number, idx: number) => {
-        const dest = destinations.find((d) => d.id === id);
         return {
           id,
           visitTime: `${String(8 + idx * 2).padStart(2, "0")}:00`,
@@ -122,35 +147,36 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Hitung total jarak dan estimasi waktu
     const orderedDests = orderedDestinations
       .map((o) => destinations.find((d) => d.id === o.id)!)
       .filter(Boolean);
 
-    const totalDistance = startLat && startLng
-      ? calculateTotalDistance(startLat, startLng, orderedDests)
-      : 0;
+    const totalDistance =
+      startLat && startLng
+        ? calculateTotalDistance(startLat, startLng, orderedDests)
+        : 0;
 
-    const estimatedTime = orderedDests.length * 90 + Math.round((totalDistance / 40) * 60);
+    const estimatedTime =
+      orderedDests.length * 90 + Math.round((totalDistance / 40) * 60);
 
-    // Hitung estimasi biaya (sum tiket)
     const estimatedCost = orderedDests.reduce(
       (sum, d) => sum + (d.ticketPrice || 0),
       0
     );
 
-    // Hapus itinerary lama user (simpan 1 itinerary aktif saja)
-    await prisma.itinerary.deleteMany({ where: { userId } });
-
-    // Buat itinerary baru
     const itinerary = await prisma.itinerary.create({
       data: {
         userId,
         title,
+        tripDate: tripDate ? new Date(tripDate) : null,
         totalDistance,
         estimatedTime,
         estimatedCost,
         isAiGenerated: useAI,
+        startLat: startLat ?? null,
+        startLng: startLng ?? null,
+        startLabel: startLabel ?? null,
+        startType: startType ?? null,
         items: {
           create: orderedDestinations.map((o, idx) => ({
             destinationId: o.id,
@@ -176,96 +202,6 @@ export async function POST(request: NextRequest) {
     console.error("Error creating itinerary:", error);
     return NextResponse.json(
       { success: false, error: "Gagal membuat itinerary" },
-      { status: 500 }
-    );
-  }
-}
-
-// PATCH - update urutan item dalam itinerary
-export async function PATCH(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { itineraryId, items } = body;
-    // items: Array<{ id: number, order: number }>
-
-    if (!itineraryId || !items) {
-      return NextResponse.json(
-        { success: false, error: "itineraryId dan items diperlukan" },
-        { status: 400 }
-      );
-    }
-
-    // Solusi unique constraint: update ke nilai negatif dulu, baru ke nilai final
-// Ini mencegah conflict sementara saat 2 item punya order yang sama
-const typedItems = items as { id: number; order: number }[];
-
-// Tahap 1: set semua order ke negatif agar tidak ada conflict
-for (const item of typedItems) {
-  await prisma.itineraryItem.update({
-    where: { id: item.id },
-    data: { order: -item.order },
-  });
-}
-
-// Tahap 2: set ke order final yang benar
-for (const item of typedItems) {
-  await prisma.itineraryItem.update({
-    where: { id: item.id },
-    data: { order: item.order },
-  });
-}
-
-    // Recalculate total distance
-    const itinerary = await prisma.itinerary.findUnique({
-      where: { id: itineraryId },
-      include: {
-        items: {
-          include: { destination: true },
-          orderBy: { order: "asc" },
-        },
-      },
-    });
-
-    if (itinerary?.items.length) {
-      const dests = itinerary.items.map((i) => i.destination);
-      await prisma.itinerary.update({
-        where: { id: itineraryId },
-        data: {
-          updatedAt: new Date(),
-          estimatedCost: dests.reduce((s, d) => s + (d.ticketPrice || 0), 0),
-        },
-      });
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error updating itinerary:", error);
-    return NextResponse.json(
-      { success: false, error: "Gagal memperbarui itinerary" },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE - hapus item dari itinerary
-export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const itemId = parseInt(searchParams.get("itemId") || "0");
-
-    if (!itemId) {
-      return NextResponse.json(
-        { success: false, error: "itemId diperlukan" },
-        { status: 400 }
-      );
-    }
-
-    await prisma.itineraryItem.delete({ where: { id: itemId } });
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error deleting itinerary item:", error);
-    return NextResponse.json(
-      { success: false, error: "Gagal menghapus item itinerary" },
       { status: 500 }
     );
   }

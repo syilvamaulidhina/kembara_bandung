@@ -31,6 +31,20 @@ enum DestinationStatus {
   canceled
 }
 
+// BARU: status siklus hidup itinerary
+enum ItineraryStatus {
+  draft // baru dibuat / sedang disusun, belum mulai navigasi
+  aktif // sedang dijalankan (user menekan "Mulai Navigasi")
+  selesai // semua destinasi sudah dikunjungi
+}
+
+// BARU: sumber asal titik koordinat awal itinerary
+enum StartLocationType {
+  gps // GPS user saat membuat itinerary
+  bandung // titik pusat Kota Bandung (default)
+  manual // dipilih manual lewat klik peta
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   name      String
@@ -152,8 +166,9 @@ model SavedDestination {
   @@unique([userId, destinationId])
 }
 
-// Destinasi yang sudah diklik "Tambah ke Rencana"
-// dari halaman Tersimpan
+// SUDAH TIDAK DIPAKAI oleh alur baru ("Tambah ke Rencana" sekarang langsung
+// insert ke ItineraryItem pada itinerary yang dipilih). Dipertahankan di
+// schema supaya migration tidak destruktif terhadap data lama.
 model ItineraryQueue {
   id            Int      @id @default(autoincrement())
   userId        Int
@@ -166,28 +181,54 @@ model ItineraryQueue {
   @@unique([userId, destinationId])
 }
 
+// DIUBAH: dari "1 user = 1 itinerary aktif" menjadi user bisa punya banyak
+// itinerary. Tambahan: title & tripDate diisi user saat create, status
+// siklus hidup, startLat/startLng/startLabel/startType untuk acuan AI.
 model Itinerary {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  title         String   @default("Rencana Perjalananku")
+  id       Int             @id @default(autoincrement())
+  userId   Int
+  title    String          @default("Rencana Perjalananku")
+  tripDate DateTime?
+  status   ItineraryStatus @default(draft)
+
+  // Titik awal yang dipakai AI untuk optimasi urutan saat itinerary dibuat
+  startLat   Float?
+  startLng   Float?
+  startLabel String? // "Lokasi GPS", "Pusat Kota Bandung", "Jl. Asia Afrika No. 8"
+  startType  StartLocationType?
+
   totalDistance Float?
   estimatedTime Int?
   estimatedCost Int?
-  isAiGenerated Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isAiGenerated Boolean @default(false)
+
+  // Diisi saat status berubah jadi "aktif" / "selesai", dipakai untuk
+  // section "Perjalanan Aktif" di halaman Rencana
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   items ItineraryItem[]
+
+  @@index([userId, status])
 }
 
 model ItineraryItem {
-  id            Int      @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   itineraryId   Int
   destinationId Int
   order         Int
   visitTime     String?
-  createdAt     DateTime @default(now())
+
+  // BARU: progress checkpoint khusus itinerary ini (Perjalanan Aktif),
+  // terpisah dari VisitedPlace (dipakai global untuk syarat boleh mengulas)
+  visited   Boolean   @default(false)
+  visitedAt DateTime?
+
+  createdAt DateTime @default(now())
 
   itinerary   Itinerary   @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
   destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)

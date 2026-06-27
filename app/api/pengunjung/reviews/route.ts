@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, destinationId, rating, comment, photoUrl } = body;
+    const { userId, destinationId, rating, comment, photoUrl, videoUrl } = body;
 
     if (!userId || !destinationId || !rating) {
       return NextResponse.json(
@@ -77,8 +77,8 @@ export async function POST(request: NextRequest) {
 
     const review = await prisma.review.upsert({
       where: { userId_destinationId: { userId, destinationId } },
-      update: { rating, comment, photoUrl, updatedAt: new Date() },
-      create: { userId, destinationId, rating, comment, photoUrl },
+      update: { rating, comment, photoUrl, videoUrl, updatedAt: new Date() },
+      create: { userId, destinationId, rating, comment, photoUrl, videoUrl },
       include: {
         user: { select: { id: true, name: true, photo: true } },
         destination: { select: { id: true, name: true, imageUrl: true, address: true } },

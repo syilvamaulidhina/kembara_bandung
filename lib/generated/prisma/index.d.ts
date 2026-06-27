@@ -113,6 +113,24 @@ export const DestinationStatus: {
 
 export type DestinationStatus = (typeof DestinationStatus)[keyof typeof DestinationStatus]
 
+
+export const ItineraryStatus: {
+  draft: 'draft',
+  aktif: 'aktif',
+  selesai: 'selesai'
+};
+
+export type ItineraryStatus = (typeof ItineraryStatus)[keyof typeof ItineraryStatus]
+
+
+export const StartLocationType: {
+  gps: 'gps',
+  bandung: 'bandung',
+  manual: 'manual'
+};
+
+export type StartLocationType = (typeof StartLocationType)[keyof typeof StartLocationType]
+
 }
 
 export type Role = $Enums.Role
@@ -130,6 +148,14 @@ export const Gender: typeof $Enums.Gender
 export type DestinationStatus = $Enums.DestinationStatus
 
 export const DestinationStatus: typeof $Enums.DestinationStatus
+
+export type ItineraryStatus = $Enums.ItineraryStatus
+
+export const ItineraryStatus: typeof $Enums.ItineraryStatus
+
+export type StartLocationType = $Enums.StartLocationType
+
+export const StartLocationType: typeof $Enums.StartLocationType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -11669,6 +11695,8 @@ export namespace Prisma {
   export type ItineraryAvgAggregateOutputType = {
     id: number | null
     userId: number | null
+    startLat: number | null
+    startLng: number | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
@@ -11677,6 +11705,8 @@ export namespace Prisma {
   export type ItinerarySumAggregateOutputType = {
     id: number | null
     userId: number | null
+    startLat: number | null
+    startLng: number | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
@@ -11686,10 +11716,18 @@ export namespace Prisma {
     id: number | null
     userId: number | null
     title: string | null
+    tripDate: Date | null
+    status: $Enums.ItineraryStatus | null
+    startLat: number | null
+    startLng: number | null
+    startLabel: string | null
+    startType: $Enums.StartLocationType | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
     isAiGenerated: boolean | null
+    startedAt: Date | null
+    completedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11698,10 +11736,18 @@ export namespace Prisma {
     id: number | null
     userId: number | null
     title: string | null
+    tripDate: Date | null
+    status: $Enums.ItineraryStatus | null
+    startLat: number | null
+    startLng: number | null
+    startLabel: string | null
+    startType: $Enums.StartLocationType | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
     isAiGenerated: boolean | null
+    startedAt: Date | null
+    completedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11710,10 +11756,18 @@ export namespace Prisma {
     id: number
     userId: number
     title: number
+    tripDate: number
+    status: number
+    startLat: number
+    startLng: number
+    startLabel: number
+    startType: number
     totalDistance: number
     estimatedTime: number
     estimatedCost: number
     isAiGenerated: number
+    startedAt: number
+    completedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -11723,6 +11777,8 @@ export namespace Prisma {
   export type ItineraryAvgAggregateInputType = {
     id?: true
     userId?: true
+    startLat?: true
+    startLng?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
@@ -11731,6 +11787,8 @@ export namespace Prisma {
   export type ItinerarySumAggregateInputType = {
     id?: true
     userId?: true
+    startLat?: true
+    startLng?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
@@ -11740,10 +11798,18 @@ export namespace Prisma {
     id?: true
     userId?: true
     title?: true
+    tripDate?: true
+    status?: true
+    startLat?: true
+    startLng?: true
+    startLabel?: true
+    startType?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
     isAiGenerated?: true
+    startedAt?: true
+    completedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11752,10 +11818,18 @@ export namespace Prisma {
     id?: true
     userId?: true
     title?: true
+    tripDate?: true
+    status?: true
+    startLat?: true
+    startLng?: true
+    startLabel?: true
+    startType?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
     isAiGenerated?: true
+    startedAt?: true
+    completedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11764,10 +11838,18 @@ export namespace Prisma {
     id?: true
     userId?: true
     title?: true
+    tripDate?: true
+    status?: true
+    startLat?: true
+    startLng?: true
+    startLabel?: true
+    startType?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
     isAiGenerated?: true
+    startedAt?: true
+    completedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -11863,10 +11945,18 @@ export namespace Prisma {
     id: number
     userId: number
     title: string
+    tripDate: Date | null
+    status: $Enums.ItineraryStatus
+    startLat: number | null
+    startLng: number | null
+    startLabel: string | null
+    startType: $Enums.StartLocationType | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
     isAiGenerated: boolean
+    startedAt: Date | null
+    completedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: ItineraryCountAggregateOutputType | null
@@ -11894,10 +11984,18 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    tripDate?: boolean
+    status?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startLabel?: boolean
+    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -11909,10 +12007,18 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    tripDate?: boolean
+    status?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startLabel?: boolean
+    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -11922,10 +12028,18 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    tripDate?: boolean
+    status?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startLabel?: boolean
+    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -11935,15 +12049,23 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
+    tripDate?: boolean
+    status?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startLabel?: boolean
+    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ItineraryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "totalDistance" | "estimatedTime" | "estimatedCost" | "isAiGenerated" | "createdAt" | "updatedAt", ExtArgs["result"]["itinerary"]>
+  export type ItineraryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "tripDate" | "status" | "startLat" | "startLng" | "startLabel" | "startType" | "totalDistance" | "estimatedTime" | "estimatedCost" | "isAiGenerated" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["itinerary"]>
   export type ItineraryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | Itinerary$itemsArgs<ExtArgs>
@@ -11966,10 +12088,18 @@ export namespace Prisma {
       id: number
       userId: number
       title: string
+      tripDate: Date | null
+      status: $Enums.ItineraryStatus
+      startLat: number | null
+      startLng: number | null
+      startLabel: string | null
+      startType: $Enums.StartLocationType | null
       totalDistance: number | null
       estimatedTime: number | null
       estimatedCost: number | null
       isAiGenerated: boolean
+      startedAt: Date | null
+      completedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["itinerary"]>
@@ -12400,10 +12530,18 @@ export namespace Prisma {
     readonly id: FieldRef<"Itinerary", 'Int'>
     readonly userId: FieldRef<"Itinerary", 'Int'>
     readonly title: FieldRef<"Itinerary", 'String'>
+    readonly tripDate: FieldRef<"Itinerary", 'DateTime'>
+    readonly status: FieldRef<"Itinerary", 'ItineraryStatus'>
+    readonly startLat: FieldRef<"Itinerary", 'Float'>
+    readonly startLng: FieldRef<"Itinerary", 'Float'>
+    readonly startLabel: FieldRef<"Itinerary", 'String'>
+    readonly startType: FieldRef<"Itinerary", 'StartLocationType'>
     readonly totalDistance: FieldRef<"Itinerary", 'Float'>
     readonly estimatedTime: FieldRef<"Itinerary", 'Int'>
     readonly estimatedCost: FieldRef<"Itinerary", 'Int'>
     readonly isAiGenerated: FieldRef<"Itinerary", 'Boolean'>
+    readonly startedAt: FieldRef<"Itinerary", 'DateTime'>
+    readonly completedAt: FieldRef<"Itinerary", 'DateTime'>
     readonly createdAt: FieldRef<"Itinerary", 'DateTime'>
     readonly updatedAt: FieldRef<"Itinerary", 'DateTime'>
   }
@@ -12881,6 +13019,8 @@ export namespace Prisma {
     destinationId: number | null
     order: number | null
     visitTime: string | null
+    visited: boolean | null
+    visitedAt: Date | null
     createdAt: Date | null
   }
 
@@ -12890,6 +13030,8 @@ export namespace Prisma {
     destinationId: number | null
     order: number | null
     visitTime: string | null
+    visited: boolean | null
+    visitedAt: Date | null
     createdAt: Date | null
   }
 
@@ -12899,6 +13041,8 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime: number
+    visited: number
+    visitedAt: number
     createdAt: number
     _all: number
   }
@@ -12924,6 +13068,8 @@ export namespace Prisma {
     destinationId?: true
     order?: true
     visitTime?: true
+    visited?: true
+    visitedAt?: true
     createdAt?: true
   }
 
@@ -12933,6 +13079,8 @@ export namespace Prisma {
     destinationId?: true
     order?: true
     visitTime?: true
+    visited?: true
+    visitedAt?: true
     createdAt?: true
   }
 
@@ -12942,6 +13090,8 @@ export namespace Prisma {
     destinationId?: true
     order?: true
     visitTime?: true
+    visited?: true
+    visitedAt?: true
     createdAt?: true
     _all?: true
   }
@@ -13038,6 +13188,8 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime: string | null
+    visited: boolean
+    visitedAt: Date | null
     createdAt: Date
     _count: ItineraryItemCountAggregateOutputType | null
     _avg: ItineraryItemAvgAggregateOutputType | null
@@ -13066,6 +13218,8 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    visited?: boolean
+    visitedAt?: boolean
     createdAt?: boolean
     itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
@@ -13077,6 +13231,8 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    visited?: boolean
+    visitedAt?: boolean
     createdAt?: boolean
     itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
@@ -13088,6 +13244,8 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    visited?: boolean
+    visitedAt?: boolean
     createdAt?: boolean
     itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
@@ -13099,10 +13257,12 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    visited?: boolean
+    visitedAt?: boolean
     createdAt?: boolean
   }
 
-  export type ItineraryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itineraryId" | "destinationId" | "order" | "visitTime" | "createdAt", ExtArgs["result"]["itineraryItem"]>
+  export type ItineraryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itineraryId" | "destinationId" | "order" | "visitTime" | "visited" | "visitedAt" | "createdAt", ExtArgs["result"]["itineraryItem"]>
   export type ItineraryItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
@@ -13128,6 +13288,8 @@ export namespace Prisma {
       destinationId: number
       order: number
       visitTime: string | null
+      visited: boolean
+      visitedAt: Date | null
       createdAt: Date
     }, ExtArgs["result"]["itineraryItem"]>
     composites: {}
@@ -13559,6 +13721,8 @@ export namespace Prisma {
     readonly destinationId: FieldRef<"ItineraryItem", 'Int'>
     readonly order: FieldRef<"ItineraryItem", 'Int'>
     readonly visitTime: FieldRef<"ItineraryItem", 'String'>
+    readonly visited: FieldRef<"ItineraryItem", 'Boolean'>
+    readonly visitedAt: FieldRef<"ItineraryItem", 'DateTime'>
     readonly createdAt: FieldRef<"ItineraryItem", 'DateTime'>
   }
     
@@ -16402,10 +16566,18 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     title: 'title',
+    tripDate: 'tripDate',
+    status: 'status',
+    startLat: 'startLat',
+    startLng: 'startLng',
+    startLabel: 'startLabel',
+    startType: 'startType',
     totalDistance: 'totalDistance',
     estimatedTime: 'estimatedTime',
     estimatedCost: 'estimatedCost',
     isAiGenerated: 'isAiGenerated',
+    startedAt: 'startedAt',
+    completedAt: 'completedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16419,6 +16591,8 @@ export namespace Prisma {
     destinationId: 'destinationId',
     order: 'order',
     visitTime: 'visitTime',
+    visited: 'visited',
+    visitedAt: 'visitedAt',
     createdAt: 'createdAt'
   };
 
@@ -16627,6 +16801,34 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'ItineraryStatus'
+   */
+  export type EnumItineraryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItineraryStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ItineraryStatus[]'
+   */
+  export type ListEnumItineraryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItineraryStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'StartLocationType'
+   */
+  export type EnumStartLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StartLocationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'StartLocationType[]'
+   */
+  export type ListEnumStartLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StartLocationType[]'>
     
   /**
    * Deep Input Types
@@ -17238,10 +17440,18 @@ export namespace Prisma {
     id?: IntFilter<"Itinerary"> | number
     userId?: IntFilter<"Itinerary"> | number
     title?: StringFilter<"Itinerary"> | string
+    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
+    startLat?: FloatNullableFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableFilter<"Itinerary"> | number | null
+    startLabel?: StringNullableFilter<"Itinerary"> | string | null
+    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
     totalDistance?: FloatNullableFilter<"Itinerary"> | number | null
     estimatedTime?: IntNullableFilter<"Itinerary"> | number | null
     estimatedCost?: IntNullableFilter<"Itinerary"> | number | null
     isAiGenerated?: BoolFilter<"Itinerary"> | boolean
+    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
     createdAt?: DateTimeFilter<"Itinerary"> | Date | string
     updatedAt?: DateTimeFilter<"Itinerary"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -17252,10 +17462,18 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    tripDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    startLat?: SortOrderInput | SortOrder
+    startLng?: SortOrderInput | SortOrder
+    startLabel?: SortOrderInput | SortOrder
+    startType?: SortOrderInput | SortOrder
     totalDistance?: SortOrderInput | SortOrder
     estimatedTime?: SortOrderInput | SortOrder
     estimatedCost?: SortOrderInput | SortOrder
     isAiGenerated?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -17269,10 +17487,18 @@ export namespace Prisma {
     NOT?: ItineraryWhereInput | ItineraryWhereInput[]
     userId?: IntFilter<"Itinerary"> | number
     title?: StringFilter<"Itinerary"> | string
+    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
+    startLat?: FloatNullableFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableFilter<"Itinerary"> | number | null
+    startLabel?: StringNullableFilter<"Itinerary"> | string | null
+    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
     totalDistance?: FloatNullableFilter<"Itinerary"> | number | null
     estimatedTime?: IntNullableFilter<"Itinerary"> | number | null
     estimatedCost?: IntNullableFilter<"Itinerary"> | number | null
     isAiGenerated?: BoolFilter<"Itinerary"> | boolean
+    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
     createdAt?: DateTimeFilter<"Itinerary"> | Date | string
     updatedAt?: DateTimeFilter<"Itinerary"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -17283,10 +17509,18 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    tripDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    startLat?: SortOrderInput | SortOrder
+    startLng?: SortOrderInput | SortOrder
+    startLabel?: SortOrderInput | SortOrder
+    startType?: SortOrderInput | SortOrder
     totalDistance?: SortOrderInput | SortOrder
     estimatedTime?: SortOrderInput | SortOrder
     estimatedCost?: SortOrderInput | SortOrder
     isAiGenerated?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ItineraryCountOrderByAggregateInput
@@ -17303,10 +17537,18 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Itinerary"> | number
     userId?: IntWithAggregatesFilter<"Itinerary"> | number
     title?: StringWithAggregatesFilter<"Itinerary"> | string
+    tripDate?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusWithAggregatesFilter<"Itinerary"> | $Enums.ItineraryStatus
+    startLat?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
+    startLabel?: StringNullableWithAggregatesFilter<"Itinerary"> | string | null
+    startType?: EnumStartLocationTypeNullableWithAggregatesFilter<"Itinerary"> | $Enums.StartLocationType | null
     totalDistance?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
     estimatedTime?: IntNullableWithAggregatesFilter<"Itinerary"> | number | null
     estimatedCost?: IntNullableWithAggregatesFilter<"Itinerary"> | number | null
     isAiGenerated?: BoolWithAggregatesFilter<"Itinerary"> | boolean
+    startedAt?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
+    completedAt?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Itinerary"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Itinerary"> | Date | string
   }
@@ -17320,6 +17562,8 @@ export namespace Prisma {
     destinationId?: IntFilter<"ItineraryItem"> | number
     order?: IntFilter<"ItineraryItem"> | number
     visitTime?: StringNullableFilter<"ItineraryItem"> | string | null
+    visited?: BoolFilter<"ItineraryItem"> | boolean
+    visitedAt?: DateTimeNullableFilter<"ItineraryItem"> | Date | string | null
     createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
     itinerary?: XOR<ItineraryScalarRelationFilter, ItineraryWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
@@ -17331,6 +17575,8 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrderInput | SortOrder
+    visited?: SortOrder
+    visitedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     itinerary?: ItineraryOrderByWithRelationInput
     destination?: DestinationOrderByWithRelationInput
@@ -17346,6 +17592,8 @@ export namespace Prisma {
     destinationId?: IntFilter<"ItineraryItem"> | number
     order?: IntFilter<"ItineraryItem"> | number
     visitTime?: StringNullableFilter<"ItineraryItem"> | string | null
+    visited?: BoolFilter<"ItineraryItem"> | boolean
+    visitedAt?: DateTimeNullableFilter<"ItineraryItem"> | Date | string | null
     createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
     itinerary?: XOR<ItineraryScalarRelationFilter, ItineraryWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
@@ -17357,6 +17605,8 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrderInput | SortOrder
+    visited?: SortOrder
+    visitedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: ItineraryItemCountOrderByAggregateInput
     _avg?: ItineraryItemAvgOrderByAggregateInput
@@ -17374,6 +17624,8 @@ export namespace Prisma {
     destinationId?: IntWithAggregatesFilter<"ItineraryItem"> | number
     order?: IntWithAggregatesFilter<"ItineraryItem"> | number
     visitTime?: StringNullableWithAggregatesFilter<"ItineraryItem"> | string | null
+    visited?: BoolWithAggregatesFilter<"ItineraryItem"> | boolean
+    visitedAt?: DateTimeNullableWithAggregatesFilter<"ItineraryItem"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ItineraryItem"> | Date | string
   }
 
@@ -18128,10 +18380,18 @@ export namespace Prisma {
 
   export type ItineraryCreateInput = {
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutItinerariesInput
@@ -18142,10 +18402,18 @@ export namespace Prisma {
     id?: number
     userId: number
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ItineraryItemUncheckedCreateNestedManyWithoutItineraryInput
@@ -18153,10 +18421,18 @@ export namespace Prisma {
 
   export type ItineraryUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutItinerariesNestedInput
@@ -18167,10 +18443,18 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItineraryItemUncheckedUpdateManyWithoutItineraryNestedInput
@@ -18180,20 +18464,36 @@ export namespace Prisma {
     id?: number
     userId: number
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ItineraryUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18202,10 +18502,18 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18213,6 +18521,8 @@ export namespace Prisma {
   export type ItineraryItemCreateInput = {
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
     itinerary: ItineraryCreateNestedOneWithoutItemsInput
     destination: DestinationCreateNestedOneWithoutItineraryItemsInput
@@ -18224,12 +18534,16 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
   }
 
   export type ItineraryItemUpdateInput = {
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     itinerary?: ItineraryUpdateOneRequiredWithoutItemsNestedInput
     destination?: DestinationUpdateOneRequiredWithoutItineraryItemsNestedInput
@@ -18241,6 +18555,8 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -18250,12 +18566,16 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
   }
 
   export type ItineraryItemUpdateManyMutationInput = {
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -18265,6 +18585,8 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -19215,6 +19537,13 @@ export namespace Prisma {
     destinationId?: SortOrder
   }
 
+  export type EnumItineraryStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumItineraryStatusFilter<$PrismaModel> | $Enums.ItineraryStatus
+  }
+
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -19226,14 +19555,29 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type EnumStartLocationTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StartLocationType | EnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel> | $Enums.StartLocationType | null
+  }
+
   export type ItineraryCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    tripDate?: SortOrder
+    status?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
+    startLabel?: SortOrder
+    startType?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
     isAiGenerated?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19241,6 +19585,8 @@ export namespace Prisma {
   export type ItineraryAvgOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
@@ -19250,10 +19596,18 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    tripDate?: SortOrder
+    status?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
+    startLabel?: SortOrder
+    startType?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
     isAiGenerated?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19262,10 +19616,18 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
+    tripDate?: SortOrder
+    status?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
+    startLabel?: SortOrder
+    startType?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
     isAiGenerated?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19273,9 +19635,21 @@ export namespace Prisma {
   export type ItinerarySumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
+  }
+
+  export type EnumItineraryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ItineraryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumItineraryStatusFilter<$PrismaModel>
+    _max?: NestedEnumItineraryStatusFilter<$PrismaModel>
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -19294,6 +19668,16 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type EnumStartLocationTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StartLocationType | EnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStartLocationTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StartLocationType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
+  }
+
   export type ItineraryScalarRelationFilter = {
     is?: ItineraryWhereInput
     isNot?: ItineraryWhereInput
@@ -19310,6 +19694,8 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrder
+    visited?: SortOrder
+    visitedAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -19326,6 +19712,8 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrder
+    visited?: SortOrder
+    visitedAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -19335,6 +19723,8 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrder
+    visited?: SortOrder
+    visitedAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -20284,12 +20674,20 @@ export namespace Prisma {
     connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
   }
 
+  export type EnumItineraryStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ItineraryStatus
+  }
+
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type NullableEnumStartLocationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.StartLocationType | null
   }
 
   export type UserUpdateOneRequiredWithoutItinerariesNestedInput = {
@@ -20720,6 +21118,30 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumItineraryStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumItineraryStatusFilter<$PrismaModel> | $Enums.ItineraryStatus
+  }
+
+  export type NestedEnumStartLocationTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StartLocationType | EnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel> | $Enums.StartLocationType | null
+  }
+
+  export type NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ItineraryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumItineraryStatusFilter<$PrismaModel>
+    _max?: NestedEnumItineraryStatusFilter<$PrismaModel>
+  }
+
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -20734,6 +21156,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStartLocationTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StartLocationType | EnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStartLocationTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.StartLocationType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
   }
 
   export type SavedDestinationCreateWithoutUserInput = {
@@ -20759,10 +21191,18 @@ export namespace Prisma {
 
   export type ItineraryCreateWithoutUserInput = {
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ItineraryItemCreateNestedManyWithoutItineraryInput
@@ -20771,10 +21211,18 @@ export namespace Prisma {
   export type ItineraryUncheckedCreateWithoutUserInput = {
     id?: number
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ItineraryItemUncheckedCreateNestedManyWithoutItineraryInput
@@ -20983,10 +21431,18 @@ export namespace Prisma {
     id?: IntFilter<"Itinerary"> | number
     userId?: IntFilter<"Itinerary"> | number
     title?: StringFilter<"Itinerary"> | string
+    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
+    startLat?: FloatNullableFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableFilter<"Itinerary"> | number | null
+    startLabel?: StringNullableFilter<"Itinerary"> | string | null
+    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
     totalDistance?: FloatNullableFilter<"Itinerary"> | number | null
     estimatedTime?: IntNullableFilter<"Itinerary"> | number | null
     estimatedCost?: IntNullableFilter<"Itinerary"> | number | null
     isAiGenerated?: BoolFilter<"Itinerary"> | boolean
+    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
     createdAt?: DateTimeFilter<"Itinerary"> | Date | string
     updatedAt?: DateTimeFilter<"Itinerary"> | Date | string
   }
@@ -21234,6 +21690,8 @@ export namespace Prisma {
   export type ItineraryItemCreateWithoutDestinationInput = {
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
     itinerary: ItineraryCreateNestedOneWithoutItemsInput
   }
@@ -21243,6 +21701,8 @@ export namespace Prisma {
     itineraryId: number
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -21480,6 +21940,8 @@ export namespace Prisma {
     destinationId?: IntFilter<"ItineraryItem"> | number
     order?: IntFilter<"ItineraryItem"> | number
     visitTime?: StringNullableFilter<"ItineraryItem"> | string | null
+    visited?: BoolFilter<"ItineraryItem"> | boolean
+    visitedAt?: DateTimeNullableFilter<"ItineraryItem"> | Date | string | null
     createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
   }
 
@@ -22462,6 +22924,8 @@ export namespace Prisma {
   export type ItineraryItemCreateWithoutItineraryInput = {
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
     destination: DestinationCreateNestedOneWithoutItineraryItemsInput
   }
@@ -22471,6 +22935,8 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -22554,10 +23020,18 @@ export namespace Prisma {
 
   export type ItineraryCreateWithoutItemsInput = {
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutItinerariesInput
@@ -22567,10 +23041,18 @@ export namespace Prisma {
     id?: number
     userId: number
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22655,10 +23137,18 @@ export namespace Prisma {
 
   export type ItineraryUpdateWithoutItemsInput = {
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutItinerariesNestedInput
@@ -22668,10 +23158,18 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23209,10 +23707,18 @@ export namespace Prisma {
   export type ItineraryCreateManyUserInput = {
     id?: number
     title?: string
+    tripDate?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    startLat?: number | null
+    startLng?: number | null
+    startLabel?: string | null
+    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23283,10 +23789,18 @@ export namespace Prisma {
 
   export type ItineraryUpdateWithoutUserInput = {
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItineraryItemUpdateManyWithoutItineraryNestedInput
@@ -23295,10 +23809,18 @@ export namespace Prisma {
   export type ItineraryUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItineraryItemUncheckedUpdateManyWithoutItineraryNestedInput
@@ -23307,10 +23829,18 @@ export namespace Prisma {
   export type ItineraryUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23491,6 +24021,8 @@ export namespace Prisma {
     itineraryId: number
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -23579,6 +24111,8 @@ export namespace Prisma {
   export type ItineraryItemUpdateWithoutDestinationInput = {
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     itinerary?: ItineraryUpdateOneRequiredWithoutItemsNestedInput
   }
@@ -23588,6 +24122,8 @@ export namespace Prisma {
     itineraryId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -23596,6 +24132,8 @@ export namespace Prisma {
     itineraryId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -23718,12 +24256,16 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime?: string | null
+    visited?: boolean
+    visitedAt?: Date | string | null
     createdAt?: Date | string
   }
 
   export type ItineraryItemUpdateWithoutItineraryInput = {
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     destination?: DestinationUpdateOneRequiredWithoutItineraryItemsNestedInput
   }
@@ -23733,6 +24275,8 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -23741,6 +24285,8 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

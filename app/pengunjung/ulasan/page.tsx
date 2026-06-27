@@ -26,6 +26,7 @@ interface Review {
   rating: number;
   comment: string | null;
   photoUrl: string | null;
+  videoUrl?: string | null;
   helpfulCount: number;
   createdAt: string;
   destination: { id: number; name: string; imageUrl: string | null; address: string };
@@ -125,6 +126,7 @@ export default function UlasanPage() {
     setSubmitting(true);
     try {
       const photoUrl = medias.find(m => m.type === "image")?.url || null;
+      const videoUrl = medias.find(m => m.type === "video")?.url || null;
       const res = await fetch("/api/pengunjung/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -134,7 +136,7 @@ export default function UlasanPage() {
           rating,
           comment: comment.trim() || null,
           photoUrl,
-          // videoUrl juga bisa disimpan jika schema support
+          videoUrl,
         }),
       });
       const json = await res.json();
@@ -481,6 +483,9 @@ export default function UlasanPage() {
                     {review.comment && <p className="text-sm text-gray-600 leading-relaxed">{review.comment}</p>}
                     {review.photoUrl && (
                       <img src={review.photoUrl} alt="review" className="mt-3 h-28 rounded-xl object-cover" />
+                    )}
+                    {review.videoUrl && (
+                      <video src={review.videoUrl} controls className="mt-3 h-28 rounded-xl object-cover" />
                     )}
                     <div className="mt-2 flex items-center gap-3 text-xs text-gray-400">
                       <span>👍 {review.helpfulCount} membantu</span>

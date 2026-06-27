@@ -1,10 +1,12 @@
 "use client";
 // app/pengunjung/components/MapViewClient.tsx
-// Peta Leaflet – dibatasi area Bandung Raya + Subang
-// Kategori filter: klik kategori → tampil pin berwarna per kategori
+// UPDATE: fix bug — marker lokasi user tidak muncul kalau GPS resolve
+// SETELAH peta selesai init (kasus umum karena useGeolocation bersifat async).
+// Sekarang marker user disimpan di ref terpisah dan di-redraw setiap kali
+// userLocation berubah, bukan cuma menggeser kamera.
 
 import { useEffect, useRef, useState } from "react";
-import type { Map as LeafletMap, LayerGroup } from "leaflet";
+import type { Map as LeafletMap, LayerGroup, Marker } from "leaflet";
 import { CATEGORIES } from "@/lib/types";
 
 interface Destination {
@@ -30,15 +32,6 @@ interface MapViewClientProps {
   routeItems?: { destinationId: number; order: number }[];
 }
 
-// Warna pin per kategori
-// const CATEGORY_COLORS: Record<string, string> = {
-//   Alam:      "#16a34a",
-//   Budaya:    "#d97706",
-//   Kuliner:   "#dc2626",
-//   Fashion:   "#7c3aed",
-//   Hotel:     "#0891b2",
-//   Populer:   "#e11d48",
-// };
 const getCategoryColor = (categoryName: string) => {
   return (
     CATEGORIES.find(c => c.name === categoryName)?.color ||
@@ -47,8 +40,8 @@ const getCategoryColor = (categoryName: string) => {
 };
 
 // Batas wilayah yang ditampilkan
-const BANDUNG_SW: [number, number] = [-7.35, 107.2];   // Lebih lebar ke barat (Subang)
-const BANDUNG_NE: [number, number] = [-6.4, 108.0];    // Lebih lebar ke utara (Subang)
+const BANDUNG_SW: [number, number] = [-7.35, 107.2];
+const BANDUNG_NE: [number, number] = [-6.4, 108.0];
 const BANDUNG_CENTER: [number, number] = [-6.9175, 107.6191];
 
 export default function MapViewClient({
@@ -66,21 +59,25 @@ export default function MapViewClient({
   const markersRef = useRef<LayerGroup | null>(null);
   const heatLayersRef = useRef<any[]>([]);
   const routeLineRef = useRef<any>(null);
+  // TAMBAHAN: ref khusus untuk marker lokasi user, terpisah dari markersRef
+  // (markersRef di-clear setiap kali filter kategori berubah, marker user TIDAK boleh ikut hilang)
+  const userMarkerRef = useRef<Marker | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const LRef = useRef<any>(null);
+  // TAMBAHAN: flag agar map hanya auto pan-ke-user SEKALI saat GPS pertama resolve,
+  // tidak setiap kali userLocation berubah (misal habis geolocation re-fetch tiap beberapa menit)
+  const hasAutoPannedRef = useRef(false);
 
-  // Init map sekali
+  // Init map sekali — TIDAK DIUBAH, kecuali addUserMarker dipanggil via fungsi baru
   useEffect(() => {
-    let isMounted = true; // Flag untuk mencegah inisialisasi jika komponen keburu unmount
+    let isMounted = true;
 
     if (!containerRef.current || mapRef.current) return;
 
     const initMap = async () => {
       const L = (await import("leaflet")).default;
       await import("leaflet/dist/leaflet.css");
-      
-      // CEK PENTING: Hentikan eksekusi jika komponen unmount saat proses import berlangsung
-      // ATAU jika map tiba-tiba sudah diinisialisasi oleh proses lain yang berjalan bersamaan
+
       if (!isMounted || mapRef.current) return;
 
       LRef.current = L;
@@ -103,10 +100,12 @@ export default function MapViewClient({
       markersRef.current = L.layerGroup().addTo(map);
       mapRef.current = map;
 
-      // User location
+      // Kalau GPS SUDAH ada saat map pertama kali init (jarang, tapi mungkin),
+      // langsung gambar marker user
       if (userLocation) {
-        addUserMarker(L, map, userLocation);
+        upsertUserMarker(L, map, userLocation, userMarkerRef);
         map.setView([userLocation.lat, userLocation.lng], 13);
+        hasAutoPannedRef.current = true;
       }
 
       if (isMounted) {
@@ -117,7 +116,7 @@ export default function MapViewClient({
     initMap();
 
     return () => {
-      isMounted = false; // Tandai bahwa komponen sedang di-unmount
+      isMounted = false;
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
@@ -125,39 +124,33 @@ export default function MapViewClient({
     };
   }, []);
 
-  // Update markers saat activeCategories atau destinations berubah
+  // Update markers destinasi saat activeCategories atau destinations berubah — TIDAK DIUBAH
   useEffect(() => {
     const L = LRef.current;
     if (!L || !mapRef.current || !markersRef.current) return;
 
     markersRef.current.clearLayers();
 
-    // Hapus heatmap lama
     heatLayersRef.current.forEach(l => mapRef.current?.removeLayer(l));
     heatLayersRef.current = [];
 
-    // Hapus rute lama
     if (routeLineRef.current) {
       mapRef.current.removeLayer(routeLineRef.current);
       routeLineRef.current = null;
     }
 
     const filtered = activeCategories.length === 0
-      ? [] // Tidak ada kategori aktif → hanya tampil user location
+      ? []
       : destinations.filter(d =>
           d.categories?.some(c =>
             activeCategories.includes(c.category.name)
           )
         );
 
-    // Tambah marker
-     filtered.forEach(dest => {
-    //   const catName = dest.categories?.[0]?.category?.name || "Alam";
-    //   const color = CATEGORY_COLORS[catName] || "#1a6b3c";
-    const catName = dest.categories?.[0]?.category?.name || "Wisata Alam";
-    const color = getCategoryColor(catName);
+    filtered.forEach(dest => {
+      const catName = dest.categories?.[0]?.category?.name || "Wisata Alam";
+      const color = getCategoryColor(catName);
 
-      // Route order number jika ada
       const orderItem = routeItems.find(r => r.destinationId === dest.id);
       const orderNum = orderItem ? orderItem.order : null;
 
@@ -203,7 +196,6 @@ export default function MapViewClient({
       marker.on("click", () => onMarkerClick?.(dest.id));
     });
 
-    // Heatmap (hanya jika ada kategori aktif)
     if (showHeatmap && filtered.length > 0) {
       filtered.forEach(dest => {
         const intensity = Math.min(dest.visitCount / 500, 1);
@@ -219,7 +211,6 @@ export default function MapViewClient({
       });
     }
 
-    // Gambar garis rute jika routeItems ada
     if (showRouteOrder && routeItems.length > 1) {
       const ordered = routeItems
         .sort((a, b) => a.order - b.order)
@@ -238,15 +229,34 @@ export default function MapViewClient({
     }
   }, [activeCategories, destinations, showHeatmap, showRouteOrder, routeItems]);
 
-  // Update user location
+  // DIUBAH: dulu cuma setView, sekarang gambar/update marker user juga.
+  // Ini yang fix bug "titik lokasi saya tidak muncul kalau GPS resolve belakangan".
   useEffect(() => {
     const L = LRef.current;
-    if (!L || !mapRef.current || !userLocation) return;
-    mapRef.current.setView([userLocation.lat, userLocation.lng], 13);
+    if (!L || !mapRef.current) return;
+
+    if (userLocation) {
+      // Gambar ulang / pindahkan marker user ke posisi terbaru
+      upsertUserMarker(L, mapRef.current, userLocation, userMarkerRef);
+
+      // Auto pan ke lokasi user HANYA sekali (saat GPS pertama kali resolve),
+      // supaya tidak mengganggu kalau user sedang pan/zoom manual di peta
+      if (!hasAutoPannedRef.current) {
+        mapRef.current.setView([userLocation.lat, userLocation.lng], 13);
+        hasAutoPannedRef.current = true;
+      }
+    } else {
+      // GPS hilang/dicabut izinnya — hapus marker user dari peta
+      if (userMarkerRef.current) {
+        mapRef.current.removeLayer(userMarkerRef.current);
+        userMarkerRef.current = null;
+      }
+      hasAutoPannedRef.current = false;
+    }
   }, [userLocation]);
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden" style={{ height }}>
+    <div className="relative w-full rounded-2xl overflow-hidden z-0" style={{ height }}>
       {!isLoaded && (
         <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
           <div className="flex flex-col items-center gap-3">
@@ -260,7 +270,21 @@ export default function MapViewClient({
   );
 }
 
-function addUserMarker(L: any, map: LeafletMap, userLocation: { lat: number; lng: number }) {
+// DIUBAH: dulu nama fungsinya addUserMarker (selalu nambah baru, bisa duplikat).
+// Sekarang upsertUserMarker — kalau marker sudah ada, geser posisinya (setLatLng);
+// kalau belum ada, baru buat marker baru. Mencegah marker dobel kalau efek ini
+// terpanggil berkali-kali (misal GPS browser update posisi tiap beberapa menit).
+function upsertUserMarker(
+  L: any,
+  map: LeafletMap,
+  userLocation: { lat: number; lng: number },
+  userMarkerRef: { current: Marker | null }
+) {
+  if (userMarkerRef.current) {
+    userMarkerRef.current.setLatLng([userLocation.lat, userLocation.lng]);
+    return;
+  }
+
   const userIcon = L.divIcon({
     className: "",
     html: `<div style="position:relative;width:20px;height:20px;">
@@ -271,7 +295,8 @@ function addUserMarker(L: any, map: LeafletMap, userLocation: { lat: number; lng
     iconSize: [20, 20],
     iconAnchor: [10, 10],
   });
-  L.marker([userLocation.lat, userLocation.lng], { icon: userIcon })
+
+  userMarkerRef.current = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon })
     .addTo(map)
     .bindPopup("<b>Lokasi Anda</b>");
 }

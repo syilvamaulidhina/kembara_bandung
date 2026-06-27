@@ -36,9 +36,13 @@ export default function NavigasiMapClient({
   const prevDestRef = useRef<string>("");
   const isFollowingRef = useRef(true);
 
+  const isInitializingRef = useRef(false);
+
   // Init map
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    if (!containerRef.current || mapRef.current || isInitializingRef.current) return;
+    if ((containerRef.current as any)._leaflet_id) return;
+    isInitializingRef.current = true;
 
     const init = async () => {
       const L = (await import("leaflet")).default;
@@ -115,6 +119,7 @@ export default function NavigasiMapClient({
 
     init();
     return () => {
+      isInitializingRef.current = false;
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
     };
   }, []);

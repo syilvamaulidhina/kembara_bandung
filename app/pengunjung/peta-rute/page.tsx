@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ArrowLeft, Navigation, Loader2, MapPin, Clock, DollarSign } from "lucide-react";
 import { useLocalUser } from "@/lib/hooks/useLocalUser";
@@ -42,19 +43,59 @@ interface ItineraryItem {
 export default function PetaRutePage() {
   const { user } = useLocalUser();
   const { location } = useGeolocation(true);
+  const router = useRouter();
   const [items, setItems] = useState<ItineraryItem[]>([]);
+  const [currentItineraryId, setCurrentItineraryId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [startingNav, setStartingNav] = useState(false);
 
   useEffect(() => {
     if (!user) return;
-    fetch(`/api/pengunjung/itinerary?userId=${user.id}`)
-      .then(r => r.json())
-      .then(json => {
-        if (json.success && json.data?.items) setItems(json.data.items);
-      })
-      .finally(() => setLoading(false));
+    
+    const searchParams = new URLSearchParams(window.location.search);
+    const itineraryId = searchParams.get("id");
+    
+    if (itineraryId) {
+      setCurrentItineraryId(Number(itineraryId));
+      fetch(`/api/pengunjung/itinerary/${itineraryId}`)
+        .then(r => r.json())
+        .then(json => {
+          if (json.success && json.data?.items) setItems(json.data.items);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      fetch(`/api/pengunjung/itinerary?userId=${user.id}`)
+        .then(r => r.json())
+        .then(json => {
+          if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+            setCurrentItineraryId(json.data[0].id);
+            setItems(json.data[0].items || []);
+          }
+        })
+        .finally(() => setLoading(false));
+    }
   }, [user]);
+
+  const handleStartNavigation = async () => {
+    if (!currentItineraryId) return;
+    setStartingNav(true);
+    try {
+      await fetch(`/api/pengunjung/itinerary/${currentItineraryId}/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          useCurrentLocation: true,
+          currentLat: location?.lat,
+          currentLng: location?.lng,
+        }),
+      });
+      router.push("/pengunjung/navigasi");
+    } catch (e) {
+      console.error(e);
+      setStartingNav(false);
+    }
+  };
 
   if (loading) return (
     <div className="h-screen flex items-center justify-center bg-gray-50">
@@ -85,13 +126,14 @@ export default function PetaRutePage() {
           <h1 className="font-bold text-gray-900 text-base">Rute Perjalanan</h1>
           <p className="text-xs text-gray-500">{items.length} destinasi · klik marker untuk detail</p>
         </div>
-        <Link
-          href="/pengunjung/navigasi"
-          className="ml-auto flex items-center gap-2 px-4 py-2.5 bg-[#f97316] text-white rounded-xl text-sm font-bold hover:bg-[#ea6a0a] transition-colors shadow-md"
+        <button
+          onClick={handleStartNavigation}
+          disabled={startingNav}
+          className="ml-auto flex items-center gap-2 px-4 py-2.5 bg-[#f97316] text-white rounded-xl text-sm font-bold hover:bg-[#ea6a0a] transition-colors shadow-md disabled:opacity-60"
         >
-          <Navigation size={16} />
+          {startingNav ? <Loader2 size={16} className="animate-spin" /> : <Navigation size={16} />}
           Mulai Navigasi
-        </Link>
+        </button>
       </div>
 
       {/* Main: map + sidebar */}
@@ -153,11 +195,14 @@ export default function PetaRutePage() {
 
           {/* CTA */}
           <div className="p-4">
-            <Link href="/pengunjung/navigasi"
-              className="flex items-center justify-center gap-2 w-full py-3 bg-[#f97316] text-white rounded-xl font-bold text-sm hover:bg-[#ea6a0a] transition-colors">
-              <Navigation size={15} />
+            <button 
+              onClick={handleStartNavigation}
+              disabled={startingNav}
+              className="flex items-center justify-center gap-2 w-full py-3 bg-[#f97316] text-white rounded-xl font-bold text-sm hover:bg-[#ea6a0a] transition-colors disabled:opacity-60"
+            >
+              {startingNav ? <Loader2 size={15} className="animate-spin" /> : <Navigation size={15} />}
               Mulai Navigasi Sekarang
-            </Link>
+            </button>
           </div>
         </div>
       </div>

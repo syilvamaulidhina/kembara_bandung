@@ -1,9 +1,21 @@
 "use client";
-// app/pengunjung/navigasi/page.tsx — UPDATED: support navigasi langsung ke 1 destinasi
+// app/pengunjung/navigasi/page.tsx — UPDATED v8
+// Perubahan dari versi sebelumnya:
+// 1. Fetch itinerary AKTIF (bukan asumsi "1 user = 1 itinerary") lewat
+//    /api/pengunjung/itinerary/active, dan simpan itineraryId + itemId
+//    supaya bisa sinkron progress "visited" ke DB per item.
+// 2. Geofencing auto check-in (50m) DIHAPUS sesuai requirement — checkin
+//    harus selalu manual klik "Sudah Sampai" (syarat boleh kirim ulasan).
+// 3. doCheckin sekarang PATCH dua tempat: VisitedPlace (syarat ulasan,
+//    sudah ada sebelumnya) DAN ItineraryItem.visited (progress Perjalanan
+//    Aktif di halaman Rencana).
+// 4. "Daftar Destinasi" diubah dari overlay full-height (menutupi sisi
+//    kanan peta total) jadi BOTTOM SHEET (slide dari bawah, max-height
+//    60vh) supaya peta tetap terlihat di belakangnya.
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
   ArrowLeft, CheckCircle2, Clock, MapPin, ChevronRight,
@@ -26,9 +38,10 @@ const NavigasiMapClient = dynamic(() => import("../components/NavigasiMapClient"
 });
 
 interface ItineraryItem {
-  id: number;
+  id: number; // itemId, dipakai untuk PATCH visited
   order: number;
   visitTime: string | null;
+  visited: boolean;
   destination: {
     id: number;
     name: string;
@@ -45,8 +58,23 @@ interface ItineraryItem {
 // Mode navigasi: "itinerary" = dari rencana, "direct" = langsung ke 1 destinasi
 type NavMode = "itinerary" | "direct";
 
+import { Suspense } from "react";
+
 export default function NavigasiPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen flex items-center justify-center bg-[#0f1a14]">
+        <Loader2 className="animate-spin text-white" size={40} />
+      </div>
+    }>
+      <NavigasiContent />
+    </Suspense>
+  );
+}
+
+function NavigasiContent() {
   const { user } = useLocalUser();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const { location, loading: gpsLoading, requestLocation } = useGeolocation(true);
 
@@ -61,18 +89,19 @@ export default function NavigasiPage() {
   const navMode: NavMode =
     directId && directLat && directLng ? "direct" : "itinerary";
 
+  const [itineraryId, setItineraryId] = useState<number | null>(null);
   const [items, setItems] = useState<ItineraryItem[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [checkedIn, setCheckedIn] = useState<Set<number>>(new Set());
+  const [checkedIn, setCheckedIn] = useState<Set<number>>(new Set()); // berisi destination.id
   const [loading, setLoading] = useState(true);
   const [showList, setShowList] = useState(false);
+  const [checkingIn, setCheckingIn] = useState(false);
   const [routeInfo, setRouteInfo] = useState<{
     distance: number;
     duration: number;
     instruction: string;
   } | null>(null);
   const [fetchingRoute, setFetchingRoute] = useState(false);
-  const geofenceChecked = useRef<Set<number>>(new Set());
 
   // Untuk mode direct: buat 1 item sementara
   const directItem: ItineraryItem | null =
@@ -81,6 +110,7 @@ export default function NavigasiPage() {
           id: 0,
           order: 1,
           visitTime: null,
+          visited: false,
           destination: {
             id: parseInt(directId),
             name: directName || "Destinasi",
@@ -97,26 +127,37 @@ export default function NavigasiPage() {
 
   const effectiveItems = navMode === "direct" && directItem ? [directItem] : items;
   const currentDest = effectiveItems[currentIdx]?.destination;
+  const currentItemId = effectiveItems[currentIdx]?.id;
   const allDone =
     effectiveItems.length > 0 &&
     effectiveItems.every((i) => checkedIn.has(i.destination.id));
 
-  // Fetch itinerary (hanya jika mode itinerary)
+  // Fetch itinerary AKTIF milik user (hanya jika mode itinerary)
   useEffect(() => {
     if (navMode === "direct") {
       setLoading(false);
       return;
     }
     if (!user) return;
-    fetch(`/api/pengunjung/itinerary?userId=${user.id}`)
+    fetch(`/api/pengunjung/itinerary/active?userId=${user.id}`)
       .then((r) => r.json())
       .then((json) => {
         if (json.success && json.data?.items?.length) {
-          setItems(
-            json.data.items.sort(
-              (a: ItineraryItem, b: ItineraryItem) => a.order - b.order
+          const sortedItems = [...json.data.items].sort(
+            (a: ItineraryItem, b: ItineraryItem) => a.order - b.order
+          );
+          setItineraryId(json.data.id);
+          setItems(sortedItems);
+          setCheckedIn(
+            new Set(
+              sortedItems
+                .filter((i: ItineraryItem) => i.visited)
+                .map((i: ItineraryItem) => i.destination.id)
             )
           );
+          // Mulai dari destinasi pertama yang belum dikunjungi
+          const firstUnvisitedIdx = sortedItems.findIndex((i: ItineraryItem) => !i.visited);
+          setCurrentIdx(firstUnvisitedIdx >= 0 ? firstUnvisitedIdx : 0);
         }
       })
       .finally(() => setLoading(false));
@@ -180,35 +221,43 @@ export default function NavigasiPage() {
     fetchRouteInfo();
   }, [fetchRouteInfo]);
 
-  // Geofencing auto check-in (50m)
-  useEffect(() => {
-    if (!location || !currentDest) return;
-    if (geofenceChecked.current.has(currentDest.id)) return;
-    const dist = calculateDistance(
-      location.lat,
-      location.lng,
-      currentDest.latitude,
-      currentDest.longitude
-    );
-    if (dist <= 0.05) {
-      geofenceChecked.current.add(currentDest.id);
-      doCheckin(currentDest.id);
-    }
-  }, [location, currentDest]);
+  // CATATAN: geofencing auto check-in (50m) SUDAH DIHAPUS sesuai requirement.
+  // Checkin sekarang HARUS selalu manual lewat tombol "Sudah Sampai" supaya
+  // konsisten dengan syarat pengiriman ulasan.
 
   const doCheckin = async (destId: number) => {
-    if (checkedIn.has(destId)) return;
+    if (checkedIn.has(destId) || checkingIn) return;
+    setCheckingIn(true);
     setCheckedIn((prev) => new Set([...prev, destId]));
-    if (user) {
-      try {
+    try {
+      // 1. VisitedPlace global — syarat boleh mengirim ulasan (sudah ada sebelumnya)
+      if (user) {
         await fetch("/api/pengunjung/reviews", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: user.id, destinationId: destId }),
         });
-      } catch (e) {
-        console.error(e);
       }
+      // 2. ItineraryItem.visited — progress checkpoint "Perjalanan Aktif" (BARU)
+      if (navMode === "itinerary" && itineraryId && currentItemId) {
+        const res = await fetch(`/api/pengunjung/itinerary/${itineraryId}/items`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ itemId: currentItemId, visited: true }),
+        });
+        const json = await res.json();
+        setItems((prev) =>
+          prev.map((i) => (i.id === currentItemId ? { ...i, visited: true } : i))
+        );
+        if (json.itineraryCompleted) {
+          // Semua destinasi sudah dikunjungi -> itinerary otomatis jadi "selesai"
+          // (sudah ditangani di backend), tidak perlu aksi tambahan di sini.
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setCheckingIn(false);
     }
   };
 
@@ -242,24 +291,24 @@ export default function NavigasiPage() {
     );
   }
 
-  // Tidak ada rencana & bukan mode direct
+  // Tidak ada rencana aktif & bukan mode direct
   if (navMode === "itinerary" && effectiveItems.length === 0) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center max-w-sm px-4">
           <Route size={48} className="mx-auto mb-4 text-gray-300" />
           <h2 className="text-lg font-bold text-gray-900 mb-2">
-            Belum Ada Rencana
+            Belum Ada Perjalanan Aktif
           </h2>
           <p className="text-gray-500 text-sm mb-6">
-            Buat rencana perjalanan terlebih dahulu untuk memulai navigasi.
+            Buka salah satu rencana perjalanan dan tekan "Mulai Navigasi" untuk memulai.
           </p>
           <Link
             href="/pengunjung/rencana"
             className="px-6 py-3 bg-[#f97316] text-white rounded-xl font-semibold inline-flex items-center gap-2"
           >
             <Navigation size={16} />
-            Buat Rencana
+            Buka Rencana
           </Link>
         </div>
       </div>
@@ -274,6 +323,8 @@ export default function NavigasiPage() {
           href={
             navMode === "direct"
               ? `/pengunjung/destinasi/${directId}`
+              : itineraryId
+              ? `/pengunjung/rencana/${itineraryId}`
               : "/pengunjung/rencana"
           }
           className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
@@ -384,64 +435,79 @@ export default function NavigasiPage() {
           currentIdx={currentIdx}
         />
 
-        {/* List overlay (itinerary mode) */}
+        {/* DAFTAR DESTINASI — BOTTOM SHEET (BARU)
+            Sebelumnya: overlay absolute inset-y-0 right-0 w-72 yang menutupi
+            seluruh sisi kanan peta dari atas ke bawah. Sekarang: slide dari
+            bawah, max-height 60vh, supaya peta tetap terlihat di atasnya
+            dan tidak menutupi marker/instruksi arah. */}
         {showList && navMode === "itinerary" && (
-          <div className="absolute inset-y-0 right-0 w-72 bg-[#0a120e]/95 backdrop-blur-sm z-30 overflow-y-auto border-l border-white/10">
-            <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
-              <h3 className="text-white font-bold text-sm">Daftar Destinasi</h3>
-              <button onClick={() => setShowList(false)}>
-                <X size={18} className="text-white/50" />
-              </button>
-            </div>
-            {effectiveItems.map((item, idx) => {
-              const done = checkedIn.has(item.destination.id);
-              const isCurr = idx === currentIdx;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setCurrentIdx(idx);
-                    setShowList(false);
-                  }}
-                  className={`w-full text-left p-4 border-b border-white/5 flex items-start gap-3 transition-colors ${
-                    isCurr ? "bg-white/10" : "hover:bg-white/5"
-                  }`}
-                >
-                  <div
-                    className={`w-7 h-7 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${
-                      done
-                        ? "bg-green-500 border-green-500"
-                        : isCurr
-                        ? "border-[#f97316] bg-[#f97316]/20"
-                        : "border-white/30"
-                    }`}
-                  >
-                    {done ? (
-                      <CheckCircle2 size={13} className="text-white" />
-                    ) : (
-                      <span className="text-xs font-bold text-white">
-                        {idx + 1}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <p
-                      className={`text-sm font-semibold ${
-                        done ? "line-through text-white/30" : "text-white"
+          <>
+            <div
+              className="absolute inset-0 bg-black/40 z-30"
+              onClick={() => setShowList(false)}
+            />
+            <div className="absolute bottom-0 left-0 right-0 z-40 bg-[#0a120e]/98 backdrop-blur-sm rounded-t-2xl border-t border-white/10 max-h-[60vh] flex flex-col">
+              <div className="flex items-center justify-center pt-2.5 pb-1 shrink-0">
+                <div className="w-10 h-1 rounded-full bg-white/20" />
+              </div>
+              <div className="px-4 py-2.5 border-b border-white/10 flex items-center justify-between shrink-0">
+                <h3 className="text-white font-bold text-sm">Daftar Destinasi</h3>
+                <button onClick={() => setShowList(false)}>
+                  <X size={18} className="text-white/50" />
+                </button>
+              </div>
+              <div className="overflow-y-auto flex-1">
+                {effectiveItems.map((item, idx) => {
+                  const done = checkedIn.has(item.destination.id);
+                  const isCurr = idx === currentIdx;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setCurrentIdx(idx);
+                        setShowList(false);
+                      }}
+                      className={`w-full text-left p-4 border-b border-white/5 flex items-start gap-3 transition-colors ${
+                        isCurr ? "bg-white/10" : "hover:bg-white/5"
                       }`}
                     >
-                      {item.destination.name}
-                    </p>
-                    {item.visitTime && (
-                      <p className="text-xs text-white/40 mt-0.5">
-                        {item.visitTime}
-                      </p>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                      <div
+                        className={`w-7 h-7 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${
+                          done
+                            ? "bg-green-500 border-green-500"
+                            : isCurr
+                            ? "border-[#f97316] bg-[#f97316]/20"
+                            : "border-white/30"
+                        }`}
+                      >
+                        {done ? (
+                          <CheckCircle2 size={13} className="text-white" />
+                        ) : (
+                          <span className="text-xs font-bold text-white">
+                            {idx + 1}
+                          </span>
+                        )}
+                      </div>
+                      <div>
+                        <p
+                          className={`text-sm font-semibold ${
+                            done ? "line-through text-white/30" : "text-white"
+                          }`}
+                        >
+                          {item.destination.name}
+                        </p>
+                        {item.visitTime && (
+                          <p className="text-xs text-white/40 mt-0.5">
+                            {item.visitTime}
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </>
         )}
       </div>
 
@@ -547,9 +613,14 @@ export default function NavigasiPage() {
               ) : (
                 <button
                   onClick={handleManualCheckin}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#006837] text-white rounded-xl text-sm font-bold hover:bg-[#005229] transition-colors active:scale-95"
+                  disabled={checkingIn}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#006837] text-white rounded-xl text-sm font-bold hover:bg-[#005229] transition-colors active:scale-95 disabled:opacity-60"
                 >
-                  <CheckCircle2 size={16} />
+                  {checkingIn ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <CheckCircle2 size={16} />
+                  )}
                   Sudah Sampai
                 </button>
               )}

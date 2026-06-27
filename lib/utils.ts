@@ -228,3 +228,33 @@ export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 }
+
+/**
+ * BARU: format tanggal trip ke format Indonesia singkat
+ * Contoh: 2026-07-12 -> "Sabtu, 12 Jul 2026"
+ */
+export function formatTripDate(date: string | Date | null | undefined): string {
+  if (!date) return "Tanggal belum ditentukan";
+  const d = new Date(date);
+  return d.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+/**
+ * BARU: cek apakah dua koordinat berbeda cukup jauh (dalam km) untuk
+ * dianggap "lokasi baru". Dipakai saat user menekan "Mulai Navigasi" untuk
+ * menentukan apakah perlu menawarkan re-optimize rute pakai GPS terbaru.
+ */
+export function isLocationSignificantlyDifferent(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number,
+  thresholdKm: number = 1
+): boolean {
+  return calculateDistance(lat1, lng1, lat2, lng2) > thresholdKm;
+}

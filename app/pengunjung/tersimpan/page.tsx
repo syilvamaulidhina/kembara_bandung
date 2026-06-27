@@ -8,12 +8,13 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Trash2, MapPin, Navigation, Plus, ArrowLeft,
-  Loader2, Route, Star, Heart
+  Loader2, Route, Star, Heart, ListPlus
 } from "lucide-react";
 import { useLocalUser } from "@/lib/hooks/useLocalUser";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 import { formatDistance, getImageUrl, isOpenNow } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/types";
+import AddToItineraryModal from "../components/AddToItineraryModal";
 
 const CATEGORY_TABS = [
   { label: "Semua", value: "semua" },
@@ -49,6 +50,7 @@ export default function TersimpanPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("semua");
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [addToItinDest, setAddToItinDest] = useState<{ id: number; name: string } | null>(null);
 
   const fetchSaved = useCallback(async () => {
     if (!user) return;
@@ -150,9 +152,9 @@ export default function TersimpanPage() {
       {saved.length > 0 && (
         <div className="mb-4 px-4 py-3 bg-[#006837]/5 border border-[#006837]/15 rounded-xl flex items-center gap-2 text-sm text-[#006837]">
           <Route size={15} className="shrink-0" />
-          <span>Semua destinasi tersimpan bisa langsung dipilih saat membuat rencana perjalanan.</span>
+          <span>Tekan <strong>Tambah ke Rencana</strong> pada destinasi untuk langsung memasukkannya ke itinerary.</span>
           <Link href="/pengunjung/rencana" className="ml-auto font-bold underline whitespace-nowrap">
-            Buat Rencana →
+            Lihat Rencana →
           </Link>
         </div>
       )}
@@ -225,6 +227,13 @@ export default function TersimpanPage() {
                       <span className="text-white text-xs font-semibold">{dest.averageRating.toFixed(1)}</span>
                     </div>
                   )}
+                  <button
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setAddToItinDest({ id: dest.id, name: dest.name }); }}
+                    className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 bg-white/95 rounded-full shadow text-xs font-bold text-[#006837] hover:bg-white transition-colors z-10"
+                  >
+                    <ListPlus size={12} />
+                    Tambah ke Rencana
+                  </button>
                 </div>
                 <div className="p-4">
                   <h3 className="font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-[#006837] transition-colors">{dest.name}</h3>
@@ -255,6 +264,13 @@ export default function TersimpanPage() {
           })}
         </div>
       )}
+
+      <AddToItineraryModal
+        open={!!addToItinDest}
+        onClose={() => setAddToItinDest(null)}
+        destinationId={addToItinDest?.id ?? null}
+        destinationName={addToItinDest?.name}
+      />
     </div>
   );
 }
