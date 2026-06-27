@@ -53,8 +53,10 @@ async function main() {
   for (const data of destinations) {
     const { category, ...destFields } = data;
     const categoryId = categoryMap[category];
-    // Cari existing by name
-    const existing = await prisma.destination.findFirst({ where: { name: destFields.name } });
+    // Workaround: Prisma v7 + adapter-pg has a bug with findFirst.
+    // Use findMany + take 1 instead.
+    const existingList = await prisma.destination.findMany({ where: { name: destFields.name }, take: 1 });
+    const existing = existingList[0] ?? null;
     let dest;
     if (existing) {
       dest = await prisma.destination.update({

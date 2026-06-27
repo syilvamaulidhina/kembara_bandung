@@ -140,6 +140,8 @@ export const StartLocationType: {
 };
 
 export type StartLocationType = (typeof StartLocationType)[keyof typeof StartLocationType]
+
+
 export const EventStatus: {
   pending: 'pending',
   aktif: 'aktif',
@@ -174,6 +176,7 @@ export const ItineraryStatus: typeof $Enums.ItineraryStatus
 export type StartLocationType = $Enums.StartLocationType
 
 export const StartLocationType: typeof $Enums.StartLocationType
+
 export type EventStatus = $Enums.EventStatus
 
 export const EventStatus: typeof $Enums.EventStatus
@@ -19553,10 +19556,6 @@ export namespace Prisma {
    * Reference to a field of type 'ItineraryStatus'
    */
   export type EnumItineraryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItineraryStatus'>
-  /**
-   * Reference to a field of type 'EventStatus'
-   */
-  export type EnumEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventStatus'>
     
 
 
@@ -19578,6 +19577,16 @@ export namespace Prisma {
    * Reference to a field of type 'StartLocationType[]'
    */
   export type ListEnumStartLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StartLocationType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventStatus'
+   */
+  export type EnumEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventStatus'>
+    
+
+
   /**
    * Reference to a field of type 'EventStatus[]'
    */
@@ -24644,7 +24653,7 @@ export namespace Prisma {
     _min?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
     _max?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
   }
-  
+
   export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
