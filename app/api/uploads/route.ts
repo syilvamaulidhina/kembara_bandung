@@ -1,16 +1,36 @@
 // app/api/uploads/route.ts
-// Upload foto & video ke /public/uploads (server lokal)
+// Upload foto & video ke Cloudinary (bukan lagi disk lokal — disk lokal di Vercel bersifat sementara)
 
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { existsSync } from "fs";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 const ALLOWED_TYPES = {
   image: ["image/jpeg", "image/png", "image/webp", "image/gif"],
   video: ["video/mp4", "video/webm", "video/quicktime"],
 };
+
+function uploadBuffer(
+  buffer: Buffer,
+  resourceType: "image" | "video"
+): Promise<UploadApiResponse> {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { resource_type: resourceType, folder: "kembara" },
+      (error, result) => {
+        if (error || !result) reject(error);
+        else resolve(result);
+      }
+    );
+    stream.end(buffer);
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,29 +57,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Buat folder uploads jika belum ada
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
-    // Generate nama file unik
-    const ext = file.name.split(".").pop()?.toLowerCase() || (type === "video" ? "mp4" : "jpg");
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substring(2, 8);
-    const fileName = `${type}_${timestamp}_${random}.${ext}`;
-    const filePath = path.join(uploadDir, fileName);
-
-    // Tulis file ke disk
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(filePath, buffer);
-
-    const fileUrl = `/uploads/${fileName}`;
+    const result = await uploadBuffer(buffer, type === "video" ? "video" : "image");
 
     return NextResponse.json({
       success: true,
-      url: fileUrl,
-      fileName,
+      url: result.secure_url,
+      fileName: result.public_id,
       type,
       size: file.size,
     });
@@ -71,9 +75,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};

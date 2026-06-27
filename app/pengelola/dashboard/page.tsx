@@ -22,6 +22,20 @@ type DashboardData = {
 	recentDestinations: Destination[];
 };
 
+type DashboardRecommendation = {
+	health: {
+		score: number;
+		label: string;
+		description: string;
+	};
+	summary: string;
+	priority: string;
+	recommendations: {
+		title: string;
+		description: string;
+	}[];
+};
+
 function formatDate(date: string) {
 	return new Date(date).toLocaleDateString("id-ID", {
 		day: "numeric",
@@ -34,7 +48,24 @@ export default function DashboardPage() {
 	const [data, setData] = useState<DashboardData | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const [recommendation, setRecommendation] =
+		useState<DashboardRecommendation | null>(null);
+	const [isRecommendationLoading, setIsRecommendationLoading] = useState(true);
+
 	useEffect(() => {
+		async function fetchRecommendation() {
+			try {
+				const res = await fetch("/api/pengelola/dashboard/recommendation");
+				const result = await res.json();
+
+				setRecommendation(result.recommendation);
+			} catch (error) {
+				console.error(error);
+			} finally {
+				setIsRecommendationLoading(false);
+			}
+		}	
+
 		async function fetchDashboard() {
 			try {
 				const res = await fetch("/api/pengelola/dashboard");
@@ -49,6 +80,7 @@ export default function DashboardPage() {
 		}
 
 		fetchDashboard();
+		fetchRecommendation();
 	}, []);
 
 	if (isLoading) {
@@ -289,40 +321,68 @@ export default function DashboardPage() {
 							</p>
 
 							<h2 className="mt-2 text-2xl font-extrabold">
-								Prioritas Pengelolaan
+								Asisten Pengelolaan
 							</h2>
 
-							<div className="mt-5 space-y-4">
-								<div className="rounded-2xl bg-white/10 p-4">
-									<p className="text-sm font-bold">
-										1. Periksa status revisi
-									</p>
-									<p className="mt-1 text-sm leading-6 text-white/70">
-										Destinasi berstatus butuh perbaikan perlu
-										diperbarui sesuai catatan admin.
-									</p>
+							{isRecommendationLoading ? (
+								<div className="mt-5 space-y-4">
+									<div className="h-24 animate-pulse rounded-2xl bg-white/10" />
+									<div className="h-24 animate-pulse rounded-2xl bg-white/10" />
+									<div className="h-24 animate-pulse rounded-2xl bg-white/10" />
 								</div>
+							) : recommendation ? (
+								<div className="mt-5 space-y-4">
+									<div className="rounded-2xl bg-white/10 p-4">
+										<div className="flex items-center justify-between gap-4">
+											<div>
+												<p className="text-sm font-bold">Kesehatan Pengelolaan</p>
+												<p className="mt-1 text-sm leading-6 text-white/70">
+													{recommendation.health.description}
+												</p>
+											</div>
 
-								<div className="rounded-2xl bg-white/10 p-4">
-									<p className="text-sm font-bold">
-										2. Pantau pengajuan pending
-									</p>
-									<p className="mt-1 text-sm leading-6 text-white/70">
-										Destinasi pending sedang menunggu validasi
-										admin sebelum tampil ke pengunjung.
-									</p>
-								</div>
+											<div className="shrink-0 text-right">
+												<p className="text-3xl font-extrabold">
+													{recommendation.health.score}
+												</p>
+												<p className="text-xs font-bold text-[#FFD7A8]">
+													{recommendation.health.label}
+												</p>
+											</div>
+										</div>
+									</div>
+									<div className="rounded-2xl bg-white/10 p-4">
+										<p className="text-sm font-bold">Ringkasan Kondisi</p>
+										<p className="mt-1 text-sm leading-6 text-white/70">
+											{recommendation.summary}
+										</p>
+									</div>
 
-								<div className="rounded-2xl bg-white/10 p-4">
-									<p className="text-sm font-bold">
-										3. Lengkapi informasi wisata
-									</p>
-									<p className="mt-1 text-sm leading-6 text-white/70">
-										Pastikan nama, kategori, deskripsi, kontak,
-										alamat, dan gambar wisata sudah sesuai.
-									</p>
+									<div className="rounded-2xl bg-[#F29B4B]/20 p-4">
+										<p className="text-sm font-bold text-[#FFD7A8]">
+											Prioritas Utama
+										</p>
+										<p className="mt-1 text-sm leading-6 text-white/75">
+											{recommendation.priority}
+										</p>
+									</div>
+
+									{recommendation.recommendations.map((item, index) => (
+										<div key={index} className="rounded-2xl bg-white/10 p-4">
+											<p className="text-sm font-bold">
+												{index + 1}. {item.title}
+											</p>
+											<p className="mt-1 text-sm leading-6 text-white/70">
+												{item.description}
+											</p>
+										</div>
+									))}
 								</div>
-							</div>
+							) : (
+								<p className="mt-5 text-sm leading-6 text-white/70">
+									Rekomendasi belum tersedia.
+								</p>
+							)}
 						</div>
 
 						<div className="rounded-[24px] border border-gray-200 bg-white p-6 shadow-sm">

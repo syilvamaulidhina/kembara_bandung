@@ -1,7 +1,29 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+function uploadBuffer(buffer: Buffer, fileName: string): Promise<UploadApiResponse> {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: "auto", // otomatis deteksi: PDF, JPG, PNG, dll
+        folder: "kembara/verifikasi-pengelola",
+        public_id: fileName,
+      },
+      (error, result) => {
+        if (error || !result) reject(error);
+        else resolve(result);
+      }
+    );
+    stream.end(buffer);
+  });
+}
 
 export async function PATCH(req: NextRequest) {
 	try {
@@ -34,24 +56,11 @@ export async function PATCH(req: NextRequest) {
 		const bytes = await file.arrayBuffer();
 		const buffer = Buffer.from(bytes);
 
-		const uploadDir = path.join(
-			process.cwd(),
-			"public",
-			"uploads",
-			"verifikasi-pengelola"
-		);
-
-		if (!fs.existsSync(uploadDir)) {
-			fs.mkdirSync(uploadDir, { recursive: true });
-		}
-
 		const fileExt = file.name.split(".").pop();
 		const fileName = `verifikasi-${userId}-${Date.now()}.${fileExt}`;
-		const filePath = path.join(uploadDir, fileName);
 
-		fs.writeFileSync(filePath, buffer);
-
-		const documentUrl = `/uploads/verifikasi-pengelola/${fileName}`;
+		const result = await uploadBuffer(buffer, fileName);
+		const documentUrl = result.secure_url;
 
 		const user = await prisma.user.update({
 			where: {
