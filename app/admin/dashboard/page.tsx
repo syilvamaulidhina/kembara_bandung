@@ -7,14 +7,11 @@ import {
 } from "recharts";
 import { MapPin, LayoutGrid, Users, TrendingUp, CheckCircle } from "lucide-react";
 
-// Default data supaya chart tetap tampil meski data kosong
 const DEFAULT_VISIT_DATA = [
-  { bulan: "Jan", kunjungan: 0 },
-  { bulan: "Feb", kunjungan: 0 },
-  { bulan: "Mar", kunjungan: 0 },
-  { bulan: "Apr", kunjungan: 0 },
-  { bulan: "Mei", kunjungan: 0 },
-  { bulan: "Jun", kunjungan: 0 },
+  { bulan: "Minggu 1", kunjungan: 0 },
+  { bulan: "Minggu 2", kunjungan: 0 },
+  { bulan: "Minggu 3", kunjungan: 0 },
+  { bulan: "Minggu 4", kunjungan: 0 },
 ];
 
 function SIGMap() {
@@ -220,7 +217,6 @@ function SIGMap() {
 
 export default function DashboardPage() {
   const [user, setUser] = useState<{ name: string } | null>(null);
-  const [period, setPeriod] = useState("6 Bulan Terakhir");
 
   const [dbStats, setDbStats] = useState({
     totalWisata: 0,
@@ -228,8 +224,9 @@ export default function DashboardPage() {
     totalKategori: 0,
   });
   const [kategoriData, setKategoriData] = useState<any[]>([]);
-  // Pakai DEFAULT_VISIT_DATA supaya chart langsung tampil
   const [visitData, setVisitData] = useState<{ bulan: string; kunjungan: number }[]>(DEFAULT_VISIT_DATA);
+  const [availableMonths, setAvailableMonths] = useState<{ value: string; label: string }[]>([]);
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
@@ -237,8 +234,13 @@ export default function DashboardPage() {
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
-  useEffect(() => {
-    fetch("/api/admin/dashboard")
+  const fetchDashboard = (month: string) => {
+    setLoadingStats(true);
+    const url = month
+      ? `/api/admin/dashboard?month=${month}`
+      : "/api/admin/dashboard";
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setDbStats({
@@ -247,16 +249,27 @@ export default function DashboardPage() {
           totalKategori: data.totalKategori || 0,
         });
         setKategoriData(data.kategoriData || []);
-        // Kalau API return data pakai itu, kalau kosong tetap pakai default
         setVisitData(
-          data.kunjunganData?.length > 0
-            ? data.kunjunganData
-            : DEFAULT_VISIT_DATA
+          data.kunjunganData?.length > 0 ? data.kunjunganData : DEFAULT_VISIT_DATA
         );
+        if (data.availableMonths) setAvailableMonths(data.availableMonths);
+        if (data.selectedMonth && !selectedMonth) setSelectedMonth(data.selectedMonth);
       })
       .catch(console.error)
       .finally(() => setLoadingStats(false));
+  };
+
+  useEffect(() => {
+    fetchDashboard("");
   }, []);
+
+  const handleMonthChange = (value: string) => {
+    setSelectedMonth(value);
+    fetchDashboard(value);
+  };
+
+  const currentMonthLabel =
+    availableMonths.find((m) => m.value === selectedMonth)?.label || "";
 
   return (
     <div className="space-y-6">
@@ -323,19 +336,23 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
             <div>
               <h2 className="font-bold text-gray-800">Statistik Kunjungan</h2>
               <p className="text-xs text-gray-400 mt-0.5">
-                Berdasarkan jumlah review per bulan
+                Jumlah kunjungan per minggu — {currentMonthLabel}
               </p>
             </div>
             <select
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
+              value={selectedMonth}
+              onChange={(e) => handleMonthChange(e.target.value)}
               className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none"
             >
-              <option>6 Bulan Terakhir</option>
+              {availableMonths.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
             </select>
           </div>
           {loadingStats ? (
@@ -344,13 +361,13 @@ export default function DashboardPage() {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={visitData} barSize={32}>
+              <BarChart data={visitData} barSize={48}>
                 <XAxis dataKey="bulan" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} allowDecimals={false} />
                 <Tooltip
                   contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
                   cursor={{ fill: "#F4F6FB" }}
-                  formatter={(value: any) => [value, "Review"]}
+                  formatter={(value: any) => [value, "Kunjungan"]}
                 />
                 <Bar dataKey="kunjungan" fill="#3B4FD8" radius={[6, 6, 0, 0]} />
               </BarChart>

@@ -1,8 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const now = new Date();
+
+    const monthParam =
+      searchParams.get("month") ||
+      `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+
     const totalWisata = await prisma.destination.count({
       where: { isDeleted: false, status: "aktif" },
     });
@@ -14,9 +21,7 @@ export async function GET() {
     const totalKategori = await prisma.category.count();
 
     const categories = await prisma.category.findMany({
-      include: {
-        destinations: true,
-      },
+      include: { destinations: true },
     });
 
     const totalSemuaDestinasi = categories.reduce(
@@ -34,33 +39,46 @@ export async function GET() {
       color: colors[i % colors.length],
     }));
 
-    const now = new Date();
-    const bulanList = [];
-    for (let i = 5; i >= 0; i--) {
+    // Daftar 12 bulan terakhir untuk opsi dropdown
+    const availableMonths: { value: string; label: string }[] = [];
+    for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      bulanList.push({
-        bulan: d.toLocaleString("id-ID", { month: "short" }),
-        year: d.getFullYear(),
-        month: d.getMonth(),
-      });
+      const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const label = d.toLocaleString("id-ID", { month: "long", year: "numeric" });
+      availableMonths.push({ value, label });
     }
 
-    const reviews = await prisma.review.findMany({
-      where: {
-        createdAt: {
-          gte: new Date(now.getFullYear(), now.getMonth() - 5, 1),
-        },
-      },
+    // Breakdown per minggu (selalu 4 batang) untuk bulan yang dipilih
+    const [yearStr, monthStr] = monthParam.split("-");
+    const year = Number(yearStr);
+    const month = Number(monthStr) - 1; // JS month index 0-based
+
+    const startOfMonth = new Date(year, month, 1);
+    const endOfMonth = new Date(year, month + 1, 1);
+
+    const views = await prisma.destinationView.findMany({
+      where: { createdAt: { gte: startOfMonth, lt: endOfMonth } },
       select: { createdAt: true },
     });
 
-    const kunjunganData = bulanList.map((b) => ({
-      bulan: b.bulan,
-      kunjungan: reviews.filter(
-        (r: { createdAt: Date }) =>
-          r.createdAt.getFullYear() === b.year &&
-          r.createdAt.getMonth() === b.month
-      ).length,
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    // Bagi rata jadi 4 minggu (minggu ke-4 menampung sisa hari kalau bulan 29-31 hari)
+    const weekSize = Math.ceil(daysInMonth / 4);
+    const weekBuckets = [1, 2, 3, 4].map((w) => {
+      const start = (w - 1) * weekSize + 1;
+      const end = w === 4 ? daysInMonth : Math.min(w * weekSize, daysInMonth);
+      return { week: w, start, end, count: 0 };
+    });
+
+    views.forEach((v: { createdAt: Date }) => {
+      const day = v.createdAt.getDate();
+      const bucket = weekBuckets.find((b) => day >= b.start && day <= b.end);
+      if (bucket) bucket.count++;
+    });
+
+    const kunjunganData = weekBuckets.map((b) => ({
+      bulan: `Minggu ${b.week}`,
+      kunjungan: b.count,
     }));
 
     return NextResponse.json({
@@ -69,6 +87,8 @@ export async function GET() {
       totalKategori,
       kategoriData,
       kunjunganData,
+      availableMonths,
+      selectedMonth: monthParam,
     });
   } catch (error) {
     console.error(error);
@@ -79,6 +99,7 @@ export async function GET() {
         totalKategori: 0,
         kategoriData: [],
         kunjunganData: [],
+        availableMonths: [],
       },
       { status: 500 }
     );

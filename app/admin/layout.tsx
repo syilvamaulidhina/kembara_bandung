@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Tags,
   ShieldCheck,
+  CalendarCheck,
 } from "lucide-react";
 
 const menuItems = [
@@ -22,6 +23,7 @@ const menuItems = [
   { href: "/admin/kelola-pengguna", label: "Kelola Pengguna", icon: Users },
   { href: "/admin/kategori", label: "Kelola Kategori", icon: Tags },
   { href: "/admin/verifikasi-pengelola", label: "Verifikasi Pengelola", icon: ShieldCheck },
+  { href: "/admin/verifikasi-event", label: "Verifikasi Event", icon: CalendarCheck },
   { href: "/admin/ai-insight", label: "AI Insight", icon: Sparkles },
 ];
 
