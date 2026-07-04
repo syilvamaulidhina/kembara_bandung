@@ -544,7 +544,7 @@ export default function DestinationDetailPage() {
               lat={destination.latitude} 
               lng={destination.longitude} 
               name={destination.name} 
-              onClickMap={handleRuteKeSini}
+              // onClickMap={handleRuteKeSini}
             />
             <div className="p-3 flex justify-around border-t border-gray-50">
               {destination.contact && (
