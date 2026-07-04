@@ -343,7 +343,7 @@ export default function KategoriDetailPage() {
       <div className="flex gap-2 justify-end mb-4">
         <button
           onClick={() => setViewMode(viewMode === "list" ? "map" : "list")}
-          className="hidden md:flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 hover:border-[#006837] hover:text-[#006837] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 hover:border-[#006837] hover:text-[#006837] transition-colors"
         >
           {viewMode === "list" ? (
             <>

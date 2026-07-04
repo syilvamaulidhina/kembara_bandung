@@ -131,10 +131,10 @@ export default function SelectRolePage() {
 					<div className="flex flex-col gap-4">
 						<button
 							onClick={() => setSelectedRole("wisatawan")}
-							className={`flex w-full items-center justify-center gap-3 rounded-full border-2 py-3 text-sm font-semibold text-white transition ${
+							className={`flex w-full items-center justify-center gap-3 rounded-full border-2 py-3 text-sm font-semibold transition-all ${
 								selectedRole === "wisatawan"
-									? "border-blue-800 bg-primary"
-									: "border-transparent bg-primary hover:bg-blue-600"
+									? "border-[#130F6A] bg-[#130F6A] text-white"
+									: "border-[#130F6A]/50 bg-[#130F6A]/10 text-[#130F6A] hover:bg-[#130F6A] hover:text-white"
 							}`}
 						>
 							Wisatawan
@@ -142,10 +142,10 @@ export default function SelectRolePage() {
 
 						<button
 							onClick={() => setSelectedRole("pengelola")}
-							className={`flex w-full items-center justify-center gap-3 rounded-full border-2 py-3 text-sm font-semibold text-white transition ${
+							className={`flex w-full items-center justify-center gap-3 rounded-full border-2 py-3 text-sm font-semibold transition-all ${
 								selectedRole === "pengelola"
-									? "border-emerald-800 bg-emerald-600"
-									: "border-transparent bg-emerald-600 hover:bg-emerald-700"
+									? "border-emerald-600 bg-emerald-600 text-white"
+									: "border-emerald-600/50 bg-emerald-600/20 text-emerald-700 hover:bg-emerald-600 hover:text-white"
 							}`}
 						>
 							Pengelola Wisata
@@ -158,7 +158,7 @@ export default function SelectRolePage() {
 						className={`mt-6 w-full rounded-full py-3 text-sm font-semibold text-white transition ${
 							selectedRole
 								? "bg-gray-800 hover:bg-gray-900"
-								: "cursor-not-allowed bg-gray-400"
+								: "cursor-not-allowed bg-gray-400 opacity-50"
 						}`}
 					>
 						Pilih Peran Ini

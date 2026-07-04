@@ -10,6 +10,7 @@ interface MiniMapClientProps {
   lng: number;
   name: string;
   height?: string;
+  onClickMap?: () => void;
 }
 
 export default function MiniMapClient({ lat, lng, name, height = "192px" }: MiniMapClientProps) {
@@ -63,5 +64,24 @@ export default function MiniMapClient({ lat, lng, name, height = "192px" }: Mini
     };
   }, [lat, lng, name]);
 
-  return <div ref={containerRef} style={{ height, width: "100%" }} />;
+  const handleMapClick = () => {
+    if (onClickMap) {
+      onClickMap();
+    } else {
+      window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+    }
+  };
+
+  return (
+    <div 
+      ref={containerRef} 
+      style={{ height, width: "100%" }} 
+      className="relative z-0 cursor-pointer group" 
+      onClick={handleMapClick}
+    >
+      <div className="absolute inset-0 z-[1000] bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center">
+        {/* Overlay to handle clicks easily over the leaflet map */}
+      </div>
+    </div>
+  );
 }

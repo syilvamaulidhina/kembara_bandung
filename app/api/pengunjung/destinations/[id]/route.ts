@@ -37,6 +37,10 @@ export async function GET(
           orderBy: { createdAt: "desc" },
           take: 10,
         },
+        events: {
+          where: { status: "aktif", isDeleted: false },
+          orderBy: { startDate: "asc" },
+        },
       },
     });
 

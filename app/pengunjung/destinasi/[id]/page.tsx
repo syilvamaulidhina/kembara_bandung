@@ -7,13 +7,14 @@ import dynamic from "next/dynamic";
 import {
   ArrowLeft, Star, MapPin, Phone, Clock, DollarSign,
   Heart, Navigation, Plus, Globe, Share2, Thermometer,
-  Droplets, Wind, Loader2, ChevronLeft, ChevronRight, CheckCircle2, ThumbsUp
+  Droplets, Wind, Loader2, ChevronLeft, ChevronRight, CheckCircle2, ThumbsUp, Calendar
 } from "lucide-react";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 import { useLocalUser } from "@/lib/hooks/useLocalUser";
 import {
   formatDistance, isOpenNow, formatOperationalHours, getImageUrl
 } from "@/lib/utils";
+import AddToItineraryModal from "../../components/AddToItineraryModal";
 
 const MiniMapClient = dynamic(() => import("../../components/MiniMapClient"), {
   ssr: false,
@@ -50,6 +51,16 @@ interface DestinationDetail {
     createdAt: string;
     user: { id: number; name: string; photo: string | null };
   }[];
+  events: {
+    id: number;
+    name: string;
+    description: string;
+    bannerUrl: string | null;
+    startDate: string;
+    endDate: string;
+    contact: string | null;
+    registrationUrl: string | null;
+  }[];
 }
 
 interface WeatherData {
@@ -78,6 +89,7 @@ export default function DestinationDetailPage() {
   const [activeImg, setActiveImg] = useState(0);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [likedReviews, setLikedReviews] = useState<Set<number>>(new Set());
+  const [showItinModal, setShowItinModal] = useState(false);
 
   const handleHelpful = async (reviewId: number) => {
     if (likedReviews.has(reviewId)) return;
@@ -188,19 +200,7 @@ export default function DestinationDetailPage() {
       router.push(`/auth/login?redirect=/pengunjung/destinasi/${id}`);
       return;
     }
-    if (!saved) {
-      await fetch("/api/pengunjung/saved", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id, destinationId: parseInt(id) }),
-      });
-    }
-    await fetch("/api/pengunjung/rencana-queue", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user.id, destinationId: parseInt(id) }),
-    });
-    router.push("/pengunjung/rencana");
+    setShowItinModal(true);
   };
 
   const handleShare = () => {
@@ -405,6 +405,52 @@ export default function DestinationDetailPage() {
             </div>
           </div>
 
+          {/* Events */}
+          {destination.events && destination.events.length > 0 && (
+            <div>
+              <h2 className="font-bold text-gray-900 mb-4 text-lg flex items-center gap-2">
+                <Calendar size={20} className="text-[#006837]" />
+                Event Mendatang
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {destination.events.map((event) => {
+                  const start = new Date(event.startDate);
+                  const end = new Date(event.endDate);
+                  const isSameDay = start.toDateString() === end.toDateString();
+                  
+                  return (
+                    <Link href={`/pengunjung/event/${event.id}`} key={event.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow transition-all flex flex-col group cursor-pointer">
+                      {event.bannerUrl && (
+                        <div className="h-32 bg-gray-100 overflow-hidden relative">
+                          <img 
+                            src={event.bannerUrl} 
+                            alt={event.name} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(event.name)}&background=006837&color=fff&size=400`;
+                            }}
+                          />
+                        </div>
+                      )}
+                      <div className="p-4 flex flex-col flex-1">
+                        <h3 className="font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-[#006837] transition-colors">{event.name}</h3>
+                        <p className="text-xs text-[#f97316] font-semibold mb-2 flex items-center gap-1">
+                          <Calendar size={12} />
+                          {isSameDay 
+                            ? start.toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })
+                            : `${start.toLocaleDateString("id-ID", { day: 'numeric', month: 'short' })} - ${end.toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' })}`}
+                        </p>
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-4 flex-1">
+                          {event.description}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Reviews */}
           {destination.reviews.length > 0 && (
             <div>
@@ -494,7 +540,12 @@ export default function DestinationDetailPage() {
               <h3 className="font-bold text-gray-900 text-sm">Lokasi</h3>
               <p className="text-xs text-gray-400 mt-0.5">{destination.address}</p>
             </div>
-            <MiniMapClient lat={destination.latitude} lng={destination.longitude} name={destination.name} />
+            <MiniMapClient 
+              lat={destination.latitude} 
+              lng={destination.longitude} 
+              name={destination.name} 
+              onClickMap={handleRuteKeSini}
+            />
             <div className="p-3 flex justify-around border-t border-gray-50">
               {destination.contact && (
                 <a href={`tel:${destination.contact}`} className="flex flex-col items-center gap-1 text-xs text-gray-500 hover:text-[#006837] transition-colors">
@@ -516,6 +567,13 @@ export default function DestinationDetailPage() {
           </div>
         </div>
       </div>
+
+      <AddToItineraryModal
+        open={showItinModal}
+        onClose={() => setShowItinModal(false)}
+        destinationId={destination.id}
+        destinationName={destination.name}
+      />
     </div>
   );
 }

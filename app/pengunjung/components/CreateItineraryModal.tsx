@@ -22,7 +22,7 @@ interface CreateItineraryModalProps {
 }
 
 type Step = "info" | "ai-detail";
-type Method = "manual" | "ai" | null;
+type Method = "Custom Itinerary" | "Smart Itinerary" | null;
 type SourceMode = "tersimpan" | "semua" | "kombinasi";
 
 export default function CreateItineraryModal({ open, onClose }: CreateItineraryModalProps) {
@@ -71,7 +71,7 @@ export default function CreateItineraryModal({ open, onClose }: CreateItineraryM
   const handleContinue = async () => {
     if (!user || !method) return;
 
-    if (method === "manual") {
+    if (method === "Custom Itinerary") {
       setSubmitting(true);
       try {
         const res = await fetch("/api/pengunjung/itinerary", {
@@ -227,23 +227,21 @@ export default function CreateItineraryModal({ open, onClose }: CreateItineraryM
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
-                    onClick={() => setMethod("manual")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
-                      method === "manual" ? "border-[#006837] bg-[#006837]/5" : "border-gray-100 hover:border-gray-200"
-                    }`}
+                    onClick={() => setMethod("Custom Itinerary")}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${method === "Custom Itinerary" ? "border-[#006837] bg-[#006837]/5" : "border-gray-100 hover:border-gray-200"
+                      }`}
                   >
                     <PenLine size={22} className="text-[#006837]" />
-                    <span className="text-sm font-semibold text-gray-800">Manual</span>
+                    <span className="text-sm font-semibold text-gray-800">Custom Itinerary</span>
                     <span className="text-xs text-gray-400 text-center">Susun sendiri destinasinya</span>
                   </button>
                   <button
-                    onClick={() => setMethod("ai")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
-                      method === "ai" ? "border-[#006837] bg-[#006837]/5" : "border-gray-100 hover:border-gray-200"
-                    }`}
+                    onClick={() => setMethod("Smart Itinerary")}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${method === "Smart Itinerary" ? "border-[#006837] bg-[#006837]/5" : "border-gray-100 hover:border-gray-200"
+                      }`}
                   >
                     <Bot size={22} className="text-[#f97316]" />
-                    <span className="text-sm font-semibold text-gray-800">AI</span>
+                    <span className="text-sm font-semibold text-gray-800">Smart Itinerary</span>
                     <span className="text-xs text-gray-400 text-center">Direkomendasikan otomatis</span>
                   </button>
                 </div>
@@ -279,11 +277,10 @@ export default function CreateItineraryModal({ open, onClose }: CreateItineraryM
                       <button
                         key={cat.slug}
                         onClick={() => toggleCategory(cat.name)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 transition-all ${
-                          active
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 transition-all ${active
                             ? "border-[#006837] bg-[#006837] text-white"
                             : "border-gray-200 text-gray-600 hover:border-gray-300"
-                        }`}
+                          }`}
                       >
                         {cat.icon} {cat.displayName}
                       </button>
@@ -328,9 +325,8 @@ export default function CreateItineraryModal({ open, onClose }: CreateItineraryM
                     <button
                       key={opt.value}
                       onClick={() => setSourceMode(opt.value as SourceMode)}
-                      className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl border-2 text-left transition-all ${
-                        sourceMode === opt.value ? "border-[#006837] bg-[#006837]/5" : "border-gray-100 hover:border-gray-200"
-                      }`}
+                      className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl border-2 text-left transition-all ${sourceMode === opt.value ? "border-[#006837] bg-[#006837]/5" : "border-gray-100 hover:border-gray-200"
+                        }`}
                     >
                       <opt.icon size={15} className="text-gray-500 shrink-0" />
                       <span className="text-sm font-medium text-gray-800">{opt.label}</span>
