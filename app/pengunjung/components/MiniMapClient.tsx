@@ -11,6 +11,7 @@ interface MiniMapClientProps {
   lng: number;
   name: string;
   height?: string;
+  onClickMap?: () => void; // <-- Tambahkan baris ini (tanda tanya berarti opsional)
 }
 
 // Style marker
@@ -34,7 +35,7 @@ function userIconHtml() {
   </div>`;
 }
 
-export default function MiniMapClient({ lat, lng, name, height = "192px" }: MiniMapClientProps) {
+export default function MiniMapClient({ lat, lng, name, height = "192px", onClickMap }: MiniMapClientProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
@@ -96,13 +97,16 @@ export default function MiniMapClient({ lat, lng, name, height = "192px" }: Mini
     };
   }, [lat, lng, name]);
 
-  return (
+return (
     <>
       <div
         ref={containerRef}
         style={{ height, width: "100%" }}
         className="relative z-0 cursor-pointer group"
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          setShowModal(true);
+          if (onClickMap) onClickMap(); // <-- Tambahkan eksekusi onClickMap di sini
+        }}
       >
         <div className="absolute inset-0 z-[1000] bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center" />
       </div>
@@ -119,7 +123,7 @@ export default function MiniMapClient({ lat, lng, name, height = "192px" }: Mini
   );
 }
 
-// ---------------- Modal Peta Lokasi ----------------
+
 // ---------------- Modal Peta Lokasi ----------------
 
 interface LocationModalProps {

@@ -176,7 +176,7 @@ export default function VisitorEventDetailPage() {
                     lng={event.destination.longitude} 
                     name={event.destination.name}
                     height="100%"
-                    onClickMap={handleRuteKeSini}
+                    // onClickMap={handleRuteKeSini}
                   />
                 </div>
                 <div className="p-3 bg-white">
