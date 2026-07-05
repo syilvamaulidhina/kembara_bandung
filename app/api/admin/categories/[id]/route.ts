@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@/lib/generated/prisma";
 import { prisma } from "@/lib/prisma";
+
+function cleanText(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
 
 export async function PUT(
   req: NextRequest,
@@ -7,9 +12,16 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const categoryId = Number(id);
     const body = await req.json();
+    const name = cleanText(body.name);
 
-    const name = String(body.name || "").trim();
+    if (Number.isNaN(categoryId)) {
+      return NextResponse.json(
+        { message: "ID kategori tidak valid" },
+        { status: 400 }
+      );
+    }
 
     if (!name) {
       return NextResponse.json(
@@ -19,20 +31,28 @@ export async function PUT(
     }
 
     const category = await prisma.category.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        name,
-      },
+      where: { id: categoryId },
+      data: { name },
       include: {
-        keywords: true,
+        keywords: {
+          orderBy: { createdAt: "desc" },
+        },
       },
     });
 
     return NextResponse.json(category);
   } catch (error) {
     console.error("PUT ADMIN CATEGORY ERROR:", error);
+
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return NextResponse.json(
+        { message: "Nama kategori sudah digunakan" },
+        { status: 409 }
+      );
+    }
 
     return NextResponse.json(
       { message: "Gagal mengubah kategori" },
@@ -47,11 +67,31 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    const categoryId = Number(id);
+
+    if (Number.isNaN(categoryId)) {
+      return NextResponse.json(
+        { message: "ID kategori tidak valid" },
+        { status: 400 }
+      );
+    }
+
+    const usedByDestination = await prisma.destinationCategory.count({
+      where: { categoryId },
+    });
+
+    if (usedByDestination > 0) {
+      return NextResponse.json(
+        {
+          message:
+            "Kategori tidak dapat dihapus karena sudah digunakan oleh destinasi.",
+        },
+        { status: 400 }
+      );
+    }
 
     await prisma.category.delete({
-      where: {
-        id: Number(id),
-      },
+      where: { id: categoryId },
     });
 
     return NextResponse.json({
