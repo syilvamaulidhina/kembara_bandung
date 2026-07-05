@@ -39,7 +39,6 @@ export async function GET(req: NextRequest) {
       color: colors[i % colors.length],
     }));
 
-    // Daftar 12 bulan terakhir untuk opsi dropdown
     const availableMonths: { value: string; label: string }[] = [];
     for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
@@ -48,40 +47,62 @@ export async function GET(req: NextRequest) {
       availableMonths.push({ value, label });
     }
 
-    // Breakdown per minggu (selalu 4 batang) untuk bulan yang dipilih
     const [yearStr, monthStr] = monthParam.split("-");
     const year = Number(yearStr);
-    const month = Number(monthStr) - 1; // JS month index 0-based
+    const month = Number(monthStr) - 1;
 
     const startOfMonth = new Date(year, month, 1);
     const endOfMonth = new Date(year, month + 1, 1);
 
-    // Statistik kunjungan diambil dari VisitedPlace
-    // Setiap record = 1 kunjungan unik (1 user hanya bisa punya 1 record per destinasi)
-    // sehingga tidak ada duplikasi kunjungan dari user yang sama ke destinasi yang sama
+    // Ambil visited place beserta kategori destinasinya
     const visits = await prisma.visitedPlace.findMany({
       where: { visitedAt: { gte: startOfMonth, lt: endOfMonth } },
-      select: { visitedAt: true },
+      select: {
+        visitedAt: true,
+        destination: {
+          select: {
+            categories: {
+              select: { category: { select: { name: true } } },
+              take: 1,
+            },
+          },
+        },
+      },
     });
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    // Bagi rata jadi 4 minggu (minggu ke-4 menampung sisa hari kalau bulan 29-31 hari)
     const weekSize = Math.ceil(daysInMonth / 4);
-    const weekBuckets = [1, 2, 3, 4].map((w) => {
-      const start = (w - 1) * weekSize + 1;
-      const end = w === 4 ? daysInMonth : Math.min(w * weekSize, daysInMonth);
-      return { week: w, start, end, count: 0 };
+
+    // Buat struktur data: weekBuckets[weekIndex][kategoriName] = count
+    const weekLabels = ["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"];
+    const kategoriNames = categories.map((c) => c.name);
+
+    // Init semua minggu dengan 0 per kategori
+    const weekBuckets: Record<string, Record<string, number>> = {};
+    weekLabels.forEach((label) => {
+      weekBuckets[label] = {};
+      kategoriNames.forEach((k) => {
+        weekBuckets[label][k] = 0;
+      });
+      weekBuckets[label]["Lainnya"] = 0;
     });
 
-    visits.forEach((v: { visitedAt: Date }) => {
+    visits.forEach((v) => {
       const day = v.visitedAt.getDate();
-      const bucket = weekBuckets.find((b) => day >= b.start && day <= b.end);
-      if (bucket) bucket.count++;
+      const weekIndex = Math.min(Math.floor((day - 1) / weekSize), 3);
+      const weekLabel = weekLabels[weekIndex];
+      const kategori = v.destination.categories[0]?.category?.name || "Lainnya";
+      if (weekBuckets[weekLabel][kategori] !== undefined) {
+        weekBuckets[weekLabel][kategori]++;
+      } else {
+        weekBuckets[weekLabel]["Lainnya"]++;
+      }
     });
 
-    const kunjunganData = weekBuckets.map((b) => ({
-      bulan: `Minggu ${b.week}`,
-      kunjungan: b.count,
+    // Format untuk stacked bar chart
+    const kunjunganData = weekLabels.map((label) => ({
+      bulan: label,
+      ...weekBuckets[label],
     }));
 
     return NextResponse.json({
@@ -90,6 +111,7 @@ export async function GET(req: NextRequest) {
       totalKategori,
       kategoriData,
       kunjunganData,
+      kategoriNames,
       availableMonths,
       selectedMonth: monthParam,
     });
@@ -102,6 +124,7 @@ export async function GET(req: NextRequest) {
         totalKategori: 0,
         kategoriData: [],
         kunjunganData: [],
+        kategoriNames: [],
         availableMonths: [],
       },
       { status: 500 }
