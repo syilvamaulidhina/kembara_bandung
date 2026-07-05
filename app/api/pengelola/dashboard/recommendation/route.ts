@@ -235,10 +235,20 @@ export async function GET(req: NextRequest) {
 			totalDestinations === 0
 				? 0
 				: Math.round(
-						((totalDestinations - incompleteDataCount) /
-							totalDestinations) *
-							100
-				  );
+					destinations.reduce((total, item) => {
+					let score = 0;
+
+					if (item.name?.trim()) score += 15;
+					if (item.description?.trim().length >= 80) score += 20;
+					if (item.imageUrl?.trim()) score += 15;
+					if (item.contact?.trim()) score += 10;
+					if (item.openTime && item.closeTime) score += 15;
+					if (item.ticketPrice !== null && item.maxPrice !== null) score += 15;
+					if (item.website?.trim()) score += 10;
+
+					return total + score;
+					}, 0) / totalDestinations
+				);
 
 		const managementHealthScore = 
 		totalDestinations === 0
