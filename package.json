@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "migrate-uploads": "ts-node --project tsconfig.scripts.json scripts/migrate-uploads-to-cloudinary.ts"
+    "migrate-uploads": "ts-node --project tsconfig.scripts.json scripts/migrate-uploads-to-cloudinary.ts",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.2.7",
@@ -37,6 +39,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.18.0",
     "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",

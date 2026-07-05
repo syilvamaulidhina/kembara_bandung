@@ -3,9 +3,11 @@
 import { useEffect, useState, useRef } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell,
+  PieChart, Pie, Cell, Legend,
 } from "recharts";
 import { MapPin, LayoutGrid, Users, TrendingUp, CheckCircle } from "lucide-react";
+
+const colors = ["#F59E0B", "#10B981", "#EF4444", "#8B5CF6", "#3B82F6", "#EC4899"];
 
 const DEFAULT_VISIT_DATA = [
   { bulan: "Minggu 1", kunjungan: 0 },
@@ -224,7 +226,8 @@ export default function DashboardPage() {
     totalKategori: 0,
   });
   const [kategoriData, setKategoriData] = useState<any[]>([]);
-  const [visitData, setVisitData] = useState<{ bulan: string; kunjungan: number }[]>(DEFAULT_VISIT_DATA);
+  const [visitData, setVisitData] = useState<any[]>(DEFAULT_VISIT_DATA);
+  const [kategoriNames, setKategoriNames] = useState<string[]>([]);
   const [availableMonths, setAvailableMonths] = useState<{ value: string; label: string }[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [loadingStats, setLoadingStats] = useState(true);
@@ -236,9 +239,7 @@ export default function DashboardPage() {
 
   const fetchDashboard = (month: string) => {
     setLoadingStats(true);
-    const url = month
-      ? `/api/admin/dashboard?month=${month}`
-      : "/api/admin/dashboard";
+    const url = month ? `/api/admin/dashboard?month=${month}` : "/api/admin/dashboard";
 
     fetch(url)
       .then((res) => res.json())
@@ -249,9 +250,8 @@ export default function DashboardPage() {
           totalKategori: data.totalKategori || 0,
         });
         setKategoriData(data.kategoriData || []);
-        setVisitData(
-          data.kunjunganData?.length > 0 ? data.kunjunganData : DEFAULT_VISIT_DATA
-        );
+        setVisitData(data.kunjunganData?.length > 0 ? data.kunjunganData : DEFAULT_VISIT_DATA);
+        if (data.kategoriNames) setKategoriNames(data.kategoriNames);
         if (data.availableMonths) setAvailableMonths(data.availableMonths);
         if (data.selectedMonth && !selectedMonth) setSelectedMonth(data.selectedMonth);
       })
@@ -361,15 +361,46 @@ export default function DashboardPage() {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={visitData} barSize={48}>
-                <XAxis dataKey="bulan" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} allowDecimals={false} />
-                <Tooltip
-                  contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
+              <BarChart data={visitData} barSize={32} layout="vertical">
+  <XAxis
+    type="number"
+    axisLine={false}
+    tickLine={false}
+    tick={{ fontSize: 12, fill: "#9CA3AF" }}
+    allowDecimals={false}
+  />
+  <YAxis
+    type="category"
+    dataKey="bulan"
+    axisLine={false}
+    tickLine={false}
+    tick={{ fontSize: 12, fill: "#9CA3AF" }}
+    width={65}
+  />
+              <Tooltip
+                  contentStyle={{
+                    borderRadius: "12px",
+                    border: "none",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                  }}
                   cursor={{ fill: "#F4F6FB" }}
-                  formatter={(value: any) => [value, "Kunjungan"]}
                 />
-                <Bar dataKey="kunjungan" fill="#3B4FD8" radius={[6, 6, 0, 0]} />
+                <Legend
+                  wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }}
+                />
+                {kategoriNames.length > 0 ? (
+                  kategoriNames.map((nama, i) => (
+                    <Bar
+                      key={nama}
+                      dataKey={nama}
+                      stackId="a"
+                      fill={colors[i % colors.length]}
+                      radius={i === kategoriNames.length - 1 ? [0, 6, 6, 0] : [0, 0, 0, 0]}
+                    />
+                  ))
+                ) : (
+                  <Bar dataKey="kunjungan" fill="#3B4FD8" radius={[6, 6, 0, 0]} />
+                )}
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -385,7 +416,15 @@ export default function DashboardPage() {
             <div className="flex items-center gap-4">
               <ResponsiveContainer width="55%" height={200}>
                 <PieChart>
-                  <Pie data={kategoriData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
+                  <Pie
+                    data={kategoriData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={85}
+                    dataKey="value"
+                    paddingAngle={3}
+                  >
                     {kategoriData.map((entry: any, index: number) => (
                       <Cell key={index} fill={entry.color} />
                     ))}
@@ -395,8 +434,13 @@ export default function DashboardPage() {
               <div className="space-y-2 flex-1">
                 {kategoriData.map((item: any) => (
                   <div key={item.name} className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
-                    <span className="text-xs text-gray-600">{item.value}% {item.name}</span>
+                    <div
+                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className="text-xs text-gray-600">
+                      {item.value}% {item.name}
+                    </span>
                   </div>
                 ))}
               </div>
