@@ -223,7 +223,7 @@ export default function TambahDestinasiPage() {
 
 				try {
 					const reasoningResponse = await fetch(
-						"/api/pengelola/ai-insight/reasoning",
+						"/api/pengelola/ai-insight/check/reasoning",
 						{
 							method: "POST",
 							headers: {
