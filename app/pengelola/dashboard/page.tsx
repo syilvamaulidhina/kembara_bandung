@@ -44,6 +44,17 @@ function formatDate(date: string) {
 	});
 }
 
+async function parseJsonResponse(res: Response) {
+	const text = await res.text();
+
+	try {
+		return JSON.parse(text);
+	} catch {
+		console.error("Response API bukan JSON:", text);
+		throw new Error("API mengembalikan HTML, bukan JSON.");
+	}
+}
+
 export default function DashboardPage() {
 	const [data, setData] = useState<DashboardData | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +67,7 @@ export default function DashboardPage() {
 		async function fetchRecommendation() {
 			try {
 				const res = await fetch("/api/pengelola/dashboard/recommendation");
-				const result = await res.json();
+				const result = await parseJsonResponse(res);
 
 				setRecommendation(result.recommendation);
 			} catch (error) {
@@ -64,12 +75,12 @@ export default function DashboardPage() {
 			} finally {
 				setIsRecommendationLoading(false);
 			}
-		}	
+		}
 
 		async function fetchDashboard() {
 			try {
 				const res = await fetch("/api/pengelola/dashboard");
-				const result = await res.json();
+				const result = await parseJsonResponse(res);
 
 				setData(result);
 			} catch (error) {

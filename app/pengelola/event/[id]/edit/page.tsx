@@ -1,29 +1,39 @@
 "use client";
 
 import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 
 type Destination = {
   id: number;
   name: string;
-  address?: string | null;
   status?: string;
+};
+
+type EventDetail = {
+  id: number;
+  name: string;
+  description: string;
+  bannerUrl?: string | null;
+  startDate: string;
+  endDate: string;
+  contact?: string | null;
+  registrationUrl?: string | null;
+  status: string;
+  destination?: {
+    id: number;
+    name: string;
+  } | null;
 };
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-function formatPreviewDate(value: string) {
-  if (!value) return "Tanggal belum dipilih";
-
-  return new Date(value).toLocaleDateString("id-ID", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+function toDatetimeLocal(value: string) {
+  const date = new Date(value);
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().slice(0, 16);
 }
 
 function isValidUrl(value: string) {
@@ -37,11 +47,25 @@ function isValidUrl(value: string) {
   }
 }
 
-export default function TambahEventPage() {
+function formatPreviewDate(value: string) {
+  if (!value) return "Tanggal belum dipilih";
+
+  return new Date(value).toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default function EditEventPage() {
+  const params = useParams();
   const router = useRouter();
+  const eventId = params.id as string;
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
-  const [loadingDestinations, setLoadingDestinations] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [bannerFile, setBannerFile] = useState<File | null>(null);
@@ -55,6 +79,7 @@ export default function TambahEventPage() {
     endDate: "",
     contact: "",
     registrationUrl: "",
+    bannerUrl: "",
   });
 
   const selectedDestination = useMemo(
@@ -90,7 +115,7 @@ export default function TambahEventPage() {
   }
 
   async function uploadBanner() {
-    if (!bannerFile) return "";
+    if (!bannerFile) return form.bannerUrl;
 
     const formData = new FormData();
     formData.append("file", bannerFile);
@@ -110,26 +135,58 @@ export default function TambahEventPage() {
   }
 
   useEffect(() => {
-    async function fetchDestinations() {
+    async function fetchInitialData() {
       try {
-        const response = await fetch("/api/pengelola/destinations");
+        setLoading(true);
+        setError("");
 
-        if (!response.ok) {
+        const [eventResponse, destinationsResponse] = await Promise.all([
+          fetch(`/api/pengelola/events/${eventId}`),
+          fetch("/api/pengelola/destinations"),
+        ]);
+
+        const eventData = await eventResponse.json();
+
+        if (!eventResponse.ok) {
+          throw new Error(eventData.message || "Gagal mengambil data event.");
+        }
+
+        const destinationsData = await destinationsResponse.json();
+
+        if (!destinationsResponse.ok) {
           throw new Error("Gagal mengambil data destinasi.");
         }
 
-        const data = await response.json();
-        setDestinations(data);
+        const event: EventDetail = eventData.event;
+
+        setDestinations(destinationsData);
+
+        setForm({
+          name: event.name || "",
+          description: event.description || "",
+          destinationId: event.destination?.id ? String(event.destination.id) : "",
+          startDate: toDatetimeLocal(event.startDate),
+          endDate: toDatetimeLocal(event.endDate),
+          contact: event.contact || "",
+          registrationUrl: event.registrationUrl || "",
+          bannerUrl: event.bannerUrl || "",
+        });
+
+        setBannerPreview(event.bannerUrl || "");
       } catch (error) {
         console.error(error);
-        setError("Gagal mengambil data destinasi.");
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Terjadi kesalahan saat mengambil data event."
+        );
       } finally {
-        setLoadingDestinations(false);
+        setLoading(false);
       }
     }
 
-    fetchDestinations();
-  }, []);
+    if (eventId) fetchInitialData();
+  }, [eventId]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -141,7 +198,7 @@ export default function TambahEventPage() {
       !form.destinationId ||
       !form.startDate ||
       !form.endDate ||
-      !bannerFile
+      !form.bannerUrl && !bannerFile
     ) {
       setError(
         "Nama, poster event, destinasi, deskripsi, tanggal mulai, dan tanggal selesai wajib diisi."
@@ -174,15 +231,17 @@ export default function TambahEventPage() {
     try {
       const bannerUrl = await uploadBanner();
 
-      const response = await fetch("/api/pengelola/events", {
-        method: "POST",
+      const response = await fetch(`/api/pengelola/events/${eventId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...form,
           name: form.name.trim(),
           description: form.description.trim(),
+          destinationId: form.destinationId,
+          startDate: form.startDate,
+          endDate: form.endDate,
           contact: form.contact.trim(),
           registrationUrl: form.registrationUrl.trim(),
           bannerUrl,
@@ -192,22 +251,34 @@ export default function TambahEventPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Gagal menambahkan event.");
+        setError(data.message || "Gagal memperbarui event.");
         return;
       }
 
-      router.push("/pengelola/event");
+      router.push(`/pengelola/event/${eventId}`);
       router.refresh();
     } catch (error) {
       console.error(error);
       setError(
         error instanceof Error
           ? error.message
-          : "Terjadi kesalahan saat menambahkan event."
+          : "Terjadi kesalahan saat memperbarui event."
       );
     } finally {
       setSubmitting(false);
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F6F8F8] px-8 py-10 text-[#285260]">
+        <div className="h-8 w-56 animate-pulse rounded bg-gray-200" />
+        <div className="mt-8 grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
+          <div className="h-[600px] animate-pulse rounded-[28px] bg-white" />
+          <div className="h-[500px] animate-pulse rounded-[28px] bg-white" />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -217,15 +288,15 @@ export default function TambahEventPage() {
           <p className="mb-2 text-sm font-semibold text-[#F09A43]">
             Manajemen Event
           </p>
-          <h1 className="text-3xl font-bold">Tambah Event</h1>
+          <h1 className="text-3xl font-bold">Edit Event</h1>
           <p className="mt-2 text-sm text-gray-500">
-            Buat event baru yang terhubung dengan destinasi wisata milik Anda.
+            Perubahan event akan dikirim kembali untuk proses verifikasi admin.
           </p>
         </div>
 
         <button
           type="button"
-          onClick={() => router.push("/pengelola/event")}
+          onClick={() => router.push(`/pengelola/event/${eventId}`)}
           className="rounded-2xl border border-[#285260]/15 bg-white px-5 py-3 text-sm font-semibold text-[#285260] hover:bg-[#285260]/5"
         >
           Kembali
@@ -238,13 +309,15 @@ export default function TambahEventPage() {
         </div>
       )}
 
+      <div className="mb-6 rounded-3xl border border-yellow-100 bg-yellow-50 p-5 text-sm text-yellow-700">
+        <b>Catatan:</b> Setelah event diperbarui, status event akan kembali menjadi{" "}
+        <b>Menunggu Verifikasi</b>.
+      </div>
+
       <form onSubmit={handleSubmit} className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
         <div className="space-y-6">
           <section className="rounded-[28px] bg-white p-6 shadow-sm">
             <h2 className="text-lg font-bold">Informasi Event</h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Isi informasi utama event yang akan diajukan ke admin.
-            </p>
 
             <div className="mt-6 grid gap-5">
               <div>
@@ -255,7 +328,6 @@ export default function TambahEventPage() {
                   type="text"
                   value={form.name}
                   onChange={(event) => updateForm("name", event.target.value)}
-                  placeholder="Contoh: Festival Budaya Bandung"
                   maxLength={100}
                   className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm outline-none focus:border-[#F09A43] focus:ring-2 focus:ring-[#F09A43]/20"
                 />
@@ -270,7 +342,7 @@ export default function TambahEventPage() {
                 </label>
                 <label className="flex min-h-36 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#285260]/20 bg-[#F6F8F8] px-5 py-6 text-center hover:border-[#F09A43]">
                   <span className="text-sm font-semibold">
-                    Klik untuk upload poster
+                    Klik untuk mengganti poster
                   </span>
                   <span className="mt-1 text-xs text-gray-500">
                     JPG, PNG, WEBP. Maksimal 5 MB.
@@ -305,7 +377,6 @@ export default function TambahEventPage() {
                   onChange={(event) =>
                     updateForm("description", event.target.value)
                   }
-                  placeholder="Jelaskan aktivitas, tujuan, dan daya tarik event..."
                   rows={6}
                   className="w-full resize-none rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm outline-none focus:border-[#F09A43] focus:ring-2 focus:ring-[#F09A43]/20"
                 />
@@ -318,9 +389,6 @@ export default function TambahEventPage() {
 
           <section className="rounded-[28px] bg-white p-6 shadow-sm">
             <h2 className="text-lg font-bold">Pelaksanaan Event</h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Tentukan lokasi destinasi dan jadwal pelaksanaan event.
-            </p>
 
             <div className="mt-6 grid gap-5">
               <div>
@@ -333,14 +401,8 @@ export default function TambahEventPage() {
                     updateForm("destinationId", event.target.value)
                   }
                   className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm outline-none focus:border-[#F09A43] focus:ring-2 focus:ring-[#F09A43]/20"
-                  disabled={loadingDestinations}
                 >
-                  <option value="">
-                    {loadingDestinations
-                      ? "Memuat destinasi..."
-                      : "Pilih destinasi terkait"}
-                  </option>
-
+                  <option value="">Pilih destinasi terkait</option>
                   {destinations.map((destination) => (
                     <option key={destination.id} value={destination.id}>
                       {destination.name}
@@ -394,7 +456,6 @@ export default function TambahEventPage() {
                   type="text"
                   value={form.contact}
                   onChange={(event) => updateForm("contact", event.target.value)}
-                  placeholder="Contoh: 08123456789 / email@example.com"
                   className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm outline-none focus:border-[#F09A43] focus:ring-2 focus:ring-[#F09A43]/20"
                 />
               </div>
@@ -419,7 +480,7 @@ export default function TambahEventPage() {
           <div className="flex justify-end gap-3">
             <button
               type="button"
-              onClick={() => router.push("/pengelola/event")}
+              onClick={() => router.push(`/pengelola/event/${eventId}`)}
               className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-[#285260] hover:bg-gray-50"
             >
               Batal
@@ -430,7 +491,7 @@ export default function TambahEventPage() {
               disabled={submitting}
               className="rounded-2xl bg-[#F09A43] px-6 py-3 text-sm font-semibold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? "Menyimpan..." : "Simpan Event"}
+              {submitting ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </div>
         </div>
@@ -461,9 +522,7 @@ export default function TambahEventPage() {
             </div>
 
             <div className="p-5">
-              <h3 className="text-xl font-bold">
-                {form.name || "Nama Event"}
-              </h3>
+              <h3 className="text-xl font-bold">{form.name || "Nama Event"}</h3>
 
               <p className="mt-2 line-clamp-3 text-sm text-gray-500">
                 {form.description || "Deskripsi event akan tampil di sini."}
