@@ -399,17 +399,6 @@ export default function DestinasiPage() {
                 </div>
               </div>
             </div>
-
-            {/* TIPS */}
-            <div className="bg-[#285260] text-white rounded-[24px] shadow-sm p-4">
-              <h3 className="font-bold text-lg mb-3">Tips Pengelolaan</h3>
-
-              <p className="text-xs leading-relaxed text-white/80">
-                Pastikan nama wisata, kategori, deskripsi, alamat,
-                koordinat, dan gambar wisata sudah sesuai agar sistem AI
-                dapat melakukan validasi dengan lebih akurat.
-              </p>
-            </div>
           </aside>
         </div>
       </main>
