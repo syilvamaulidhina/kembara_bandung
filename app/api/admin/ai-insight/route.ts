@@ -1,75 +1,113 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+type Periode = "all" | "7d" | "30d" | "90d" | "365d";
+
+const PERIODE_DAYS: Record<Exclude<Periode, "all">, number> = {
+  "7d": 7,
+  "30d": 30,
+  "90d": 90,
+  "365d": 365,
+};
+
+function getDateFrom(periode: Periode): Date | null {
+  if (periode === "all") return null;
+  const d = new Date();
+  d.setDate(d.getDate() - PERIODE_DAYS[periode]);
+  return d;
+}
+
+function periodeLabel(periode: Periode) {
+  switch (periode) {
+    case "7d": return "7 hari terakhir";
+    case "30d": return "30 hari terakhir";
+    case "90d": return "3 bulan terakhir";
+    case "365d": return "1 tahun terakhir";
+    default: return "semua waktu";
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action } = body;
+    const { action, filters } = body;
 
     if (action !== "generate_insights") {
       return NextResponse.json({ message: "Invalid action" }, { status: 400 });
     }
 
-    const totalWisata = await prisma.destination.count({
-      where: { isDeleted: false },
+    const kategoriId: string = filters?.kategoriId || "ALL";
+    const periode: Periode = filters?.periode || "all";
+    const dateFrom = getDateFrom(periode);
+
+    // Daftar kategori selalu diambil tanpa filter, untuk mengisi dropdown
+    const allCategoriesRaw = await prisma.category.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
     });
 
+    // Samakan id ke string agar konsisten dengan value dari <select> di frontend,
+    // apapun tipe id aslinya di Prisma (Int atau String).
+    const allCategories = allCategoriesRaw.map((c) => ({ id: String(c.id), name: c.name }));
+
+    // Untuk query Prisma, kembalikan ke tipe asli sesuai skema (number jika id Int).
+    const kategoriIdForQuery: any =
+      kategoriId !== "ALL" && !Number.isNaN(Number(kategoriId)) ? Number(kategoriId) : kategoriId;
+
+    // Where clause dasar (tanpa filter kategori/waktu) untuk statistik global
+    const baseWhere = { isDeleted: false };
+
+    const totalWisata = await prisma.destination.count({ where: baseWhere });
     const wisataAktif = await prisma.destination.count({
-      where: { isDeleted: false, status: "aktif" },
+      where: { ...baseWhere, status: "aktif" },
     });
-
     const wisataNonAktif = await prisma.destination.count({
-      where: { isDeleted: false, status: { not: "aktif" } },
+      where: { ...baseWhere, status: { not: "aktif" } },
     });
-
     const tanpaKoordinat = await prisma.destination.count({
       where: {
-        isDeleted: false,
-        OR: [
-          { latitude: { equals: 0 } },
-          { longitude: { equals: 0 } },
-        ],
+        ...baseWhere,
+        OR: [{ latitude: { equals: 0 } }, { longitude: { equals: 0 } }],
       },
     });
-
     const tanpaFoto = await prisma.destination.count({
-      where: {
-        isDeleted: false,
-        OR: [{ imageUrl: null }, { imageUrl: "" }],
-      },
+      where: { ...baseWhere, OR: [{ imageUrl: null }, { imageUrl: "" }] },
     });
+    const totalPengguna = await prisma.user.count({ where: { role: "WISATAWAN" } });
 
-    const totalPengguna = await prisma.user.count({
-      where: { role: "WISATAWAN" },
-    });
+    // Where clause khusus untuk data yang DIANALISIS, sesuai filter admin
+    const filteredWhere: any = { isDeleted: false };
+    if (kategoriId !== "ALL") {
+      filteredWhere.categories = { some: { categoryId: kategoriIdForQuery } };
+    }
+    if (dateFrom) {
+      filteredWhere.createdAt = { gte: dateFrom };
+    }
 
-    // Ambil semua destinasi beserta kategori dan review
-    const semuaDestinasi = await prisma.destination.findMany({
-      where: { isDeleted: false },
+    const destinasiTerfilter = await prisma.destination.findMany({
+      where: filteredWhere,
       include: {
-        categories: {
-          include: { category: true },
-        },
+        categories: { include: { category: true } },
         reviews: true,
       },
     });
 
-    // Hitung distribusi kategori dari destinasi (1 destinasi = 1 kategori)
+    // Distribusi kategori dihitung dari data yang SUDAH difilter
     const kategoriMap: Record<string, { jumlah: number; ratings: number[] }> = {};
-
-    semuaDestinasi.forEach((d) => {
+    destinasiTerfilter.forEach((d) => {
       const namaKategori = d.categories[0]?.category?.name?.toUpperCase() || "LAINNYA";
       if (!kategoriMap[namaKategori]) {
         kategoriMap[namaKategori] = { jumlah: 0, ratings: [] };
       }
       kategoriMap[namaKategori].jumlah += 1;
-      d.reviews.forEach((r) => {
-        kategoriMap[namaKategori].ratings.push(r.rating);
-      });
+      d.reviews.forEach((r) => kategoriMap[namaKategori].ratings.push(r.rating));
     });
 
+    const totalTerfilter = destinasiTerfilter.length;
+
+
     const kategoriSummary = Object.entries(kategoriMap).map(([kategori, val]) => {
-      const persentase = totalWisata > 0 ? Math.round((val.jumlah / totalWisata) * 100) : 0;
+      const persentase = totalTerfilter > 0 ? Math.round((val.jumlah / totalTerfilter) * 100) : 0;
       const avgRating =
         val.ratings.length > 0
           ? Math.round((val.ratings.reduce((a, b) => a + b, 0) / val.ratings.length) * 10) / 10
@@ -77,13 +115,12 @@ export async function POST(req: NextRequest) {
       return { kategori, jumlah: val.jumlah, persentase, avgRating };
     });
 
-    // Top 3 wisata rating tertinggi — hanya yang sudah punya review
-    const topRated = semuaDestinasi
+    // Top wisata rating tertinggi, mengikuti filter kategori & periode
+    const topRated = destinasiTerfilter
       .filter((d) => d.status === "aktif" && d.reviews.length > 0)
       .map((d) => {
         const ratings = d.reviews.map((r) => r.rating);
-        const avgRating =
-          Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10;
+        const avgRating = Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10;
         return {
           nama: d.name,
           kategori: d.categories[0]?.category?.name?.toUpperCase() || "LAINNYA",
@@ -93,7 +130,7 @@ export async function POST(req: NextRequest) {
         };
       })
       .sort((a, b) => b.rating - a.rating)
-      .slice(0, 3);
+      .slice(0, 5);
 
     const realData = {
       totalWisata,
@@ -102,13 +139,38 @@ export async function POST(req: NextRequest) {
       wisataNonAktif,
       tanpaKoordinat,
       tanpaFoto,
+      totalTerfilter,
       kategoriSummary,
       topRated,
     };
 
-    const context = `Data Real Kembara Bandung:
+    const namaKategoriAktif =
+      kategoriId === "ALL"
+        ? "Semua Kategori"
+        : allCategories.find((c) => c.id === String(kategoriId))?.name || "Kategori tertentu";
 
-STATISTIK UTAMA:
+    const filterLabel = `Kategori: ${namaKategoriAktif} | Periode: ${periodeLabel(periode)}`;
+
+    if (totalTerfilter === 0) {
+      return NextResponse.json({
+        insights: [
+          {
+            id: 1,
+            type: "warning",
+            title: "Tidak Ada Data Sesuai Filter",
+            description: `Tidak ditemukan data wisata untuk filter "${filterLabel}". Coba ubah kategori atau perluas rentang waktu.`,
+            impact: "medium",
+          },
+        ],
+        data: realData,
+        categories: allCategories,
+        appliedFilters: { kategoriId, periode },
+      });
+    }
+
+    const context = `Data Kembara Bandung (FILTER AKTIF: ${filterLabel}):
+
+STATISTIK GLOBAL (seluruh sistem, tidak terpengaruh filter):
 - Total Wisata Terdaftar: ${totalWisata}
 - Wisata Aktif: ${wisataAktif}
 - Wisata Tidak Aktif: ${wisataNonAktif}
@@ -116,20 +178,25 @@ STATISTIK UTAMA:
 - Wisata Tanpa Koordinat: ${tanpaKoordinat}
 - Wisata Tanpa Foto: ${tanpaFoto}
 
-DISTRIBUSI KATEGORI:
+DATA HASIL FILTER (${filterLabel}):
+- Jumlah wisata sesuai filter: ${totalTerfilter}
+
+DISTRIBUSI KATEGORI (dalam hasil filter):
 ${kategoriSummary.map((k) => `- ${k.kategori}: ${k.jumlah} wisata (${k.persentase}%), avg rating: ${k.avgRating}`).join("\n")}
 
-TOP 3 WISATA RATING TERTINGGI:
+TOP WISATA RATING TERTINGGI (dalam hasil filter):
 ${topRated.length > 0
   ? topRated.map((w, i) => `${i + 1}. ${w.nama} - ${w.kategori} - Rating: ${w.rating} (${w.jumlahReview} review)`).join("\n")
-  : "Belum ada wisata dengan review"}`;
+  : "Belum ada wisata dengan review pada hasil filter ini"}`;
 
     const systemPrompt = `Kamu adalah AI Analyst untuk platform wisata Kembara Bandung.
-Analisis data dashboard dan hasilkan 6-8 insight yang actionable untuk admin.
+Admin sedang menganalisis data dengan FILTER AKTIF: ${filterLabel}.
+Fokuskan seluruh insight HANYA pada data hasil filter tersebut, bukan data global, kecuali diminta membandingkan.
+Hasilkan 4-6 insight yang actionable untuk admin, relevan dengan konteks filter yang dipilih.
 
 PENTING: Jangan buat insight tentang "wisata tanpa foto" jika jumlah wisata tanpa foto adalah 0.
 PENTING: Jangan buat insight tentang "wisata tanpa koordinat" jika jumlah wisata tanpa koordinat adalah 0.
-PENTING: Jangan buat insight tentang "top wisata" atau "rating tertinggi" jika belum ada wisata dengan review.
+PENTING: Jangan buat insight tentang "top wisata" atau "rating tertinggi" jika belum ada wisata dengan review pada hasil filter.
 Hanya buat insight yang relevan dan akurat berdasarkan data yang diberikan.
 
 Kategori insight yang tersedia:
@@ -151,7 +218,7 @@ Format respons HARUS berupa JSON array seperti contoh berikut, tanpa teks lain:
 
 Nilai impact hanya boleh salah satu dari: high, medium, low.
 Nilai type hanya boleh salah satu dari: opportunity, warning, trend, recommendation.
-Gunakan data spesifik dari context, bahasa Indonesia profesional, minimal 1 insight per kategori.
+Gunakan data spesifik dari context, bahasa Indonesia profesional.
 PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -174,7 +241,12 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Groq API error:", errorText);
-      return NextResponse.json({ insights: getFallbackInsights(realData), data: realData });
+      return NextResponse.json({
+        insights: getFallbackInsights(realData, filterLabel),
+        data: realData,
+        categories: allCategories,
+        appliedFilters: { kategoriId, periode },
+      });
     }
 
     const aiData = await response.json();
@@ -186,7 +258,6 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
       if (jsonMatch) {
         insights = JSON.parse(jsonMatch[0]);
 
-        // Filter insight yang tidak relevan berdasarkan data nyata
         insights = insights.filter((insight: any) => {
           const title = insight.title?.toLowerCase() || "";
           const desc = insight.description?.toLowerCase() || "";
@@ -196,29 +267,34 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
           return true;
         });
       } else {
-        insights = getFallbackInsights(realData);
+        insights = getFallbackInsights(realData, filterLabel);
       }
     } catch {
-      insights = getFallbackInsights(realData);
+      insights = getFallbackInsights(realData, filterLabel);
     }
 
-    return NextResponse.json({ insights, data: realData });
+    return NextResponse.json({
+      insights,
+      data: realData,
+      categories: allCategories,
+      appliedFilters: { kategoriId, periode },
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { insights: getFallbackInsights(null), data: null },
+      { insights: getFallbackInsights(null, "Semua Kategori | semua waktu"), data: null, categories: [] },
       { status: 500 }
     );
   }
 }
 
-function getFallbackInsights(data: any) {
+function getFallbackInsights(data: any, filterLabel: string) {
   const insights: any[] = [
     {
       id: 1,
       type: "trend",
-      title: "Wisata Aktif Mendominasi",
-      description: `Dari ${data?.totalWisata ?? 0} wisata terdaftar, ${data?.wisataAktif ?? 0} wisata berstatus aktif. Ini menunjukkan pengelolaan data wisata yang baik.`,
+      title: "Ringkasan Data Sesuai Filter",
+      description: `Berdasarkan filter (${filterLabel}), ditemukan ${data?.totalTerfilter ?? 0} wisata yang sesuai kriteria.`,
       impact: "medium",
     },
     {
