@@ -891,148 +891,222 @@ export default function EditDestinasiPage() {
 	  </main>
 
 	  {showAnalysisModal && analysisResult && (
-		<div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
-		  <div className="relative w-full max-w-2xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
-			<div className="grid md:grid-cols-[1fr_320px]">
-			  <div className="bg-[#285260] p-6 text-white">
-				<div className="mb-6 flex items-start justify-between">
-				  <div>
-					<p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
-					  Hasil Analisis Domain Knowledge
-					</p>
+			<div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
+				<div className="relative w-full max-w-6xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
+				<div className="grid lg:grid-cols-[1fr_1fr_0.9fr]">
+					{/* LEFT */}
+					<div className="bg-[#285260] p-6 text-white">
+					<div className="mb-6 flex items-start justify-between">
+						<div>
+						<p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
+							Hasil Analisis Domain Knowledge
+						</p>
 
-					<h2 className="mt-2 text-3xl font-extrabold leading-tight">
-					  {analysisResult.status === "konsisten"
-						? "Data Cukup Selaras"
-						: "Perlu Perbaikan"}
-					</h2>
-				  </div>
+						<h2 className="mt-2 text-3xl font-extrabold leading-tight">
+							{analysisResult.status === "konsisten"
+							? "Data Cukup Selaras"
+							: "Perlu Perbaikan"}
+						</h2>
+						</div>
 
-				  <button
-					type="button"
-					onClick={() => setShowAnalysisModal(false)}
-					className="rounded-full bg-white/10 px-3 py-1 text-xl font-bold hover:bg-white/20"
-				  >
-					×
-				  </button>
-				</div>
-
-				<div className="rounded-3xl bg-white/10 p-5">
-				  <div className="mb-5">
-					<div className="mb-2 flex items-center justify-between">
-					  <p className="text-sm font-semibold text-white/80">
-						Skor Kecocokan
-					  </p>
-
-					  <p className="text-2xl font-extrabold">
-						{analysisResult.score}/100
-					  </p>
+						<button
+						type="button"
+						onClick={() => setShowAnalysisModal(false)}
+						className="rounded-full bg-white/10 px-3 py-1 text-xl font-bold hover:bg-white/20"
+						>
+						×
+						</button>
 					</div>
 
-					<div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
-					  <div
-						className="h-full rounded-full bg-[#F09A43]"
-						style={{ width: `${analysisResult.score}%` }}
-					  />
+					<div className="rounded-3xl bg-white/10 p-5">
+						<div className="mb-5">
+						<div className="mb-2 flex items-center justify-between">
+							<p className="text-sm font-semibold text-white/80">
+							Skor Kecocokan
+							</p>
+
+							<p className="text-3xl font-extrabold">
+							{analysisResult.score}/100
+							</p>
+						</div>
+
+						<div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
+							<div
+							className="h-full rounded-full bg-[#F09A43]"
+							style={{ width: `${analysisResult.score}%` }}
+							/>
+						</div>
+						</div>
+
+						<p className="text-sm leading-relaxed text-white/80">
+						{analysisResult.message}
+						</p>
 					</div>
-				  </div>
 
-				  <p className="text-sm leading-relaxed text-white/80">
-					{analysisResult.message}
-				  </p>
-				</div>
-			  </div>
-
-			  <div className="p-6">
-				<h3 className="text-xl font-extrabold text-[#285260]">
-				  Ringkasan Analisis
-				</h3>
-
-				<div className="mt-5 space-y-5">
-				  <div>
-					<p className="text-sm font-semibold text-gray-500">
-					  Kategori Dipilih
-					</p>
-
-					<p className="mt-1 font-bold text-[#285260]">
-					  {analysisResult.selectedCategories
-						.map((category) => category.categoryName)
-						.join(", ")}
-					</p>
-				  </div>
-
-				  <div>
-					<p className="text-sm font-semibold text-gray-500">
-					  Keyword Cocok
-					</p>
-
-					<div className="mt-2 flex flex-wrap gap-2">
-					  {selectedKeywords.length > 0 ? (
-						selectedKeywords.map((keyword) => (
-						  <span
-							key={keyword}
-							className="rounded-full bg-[#285260]/10 px-3 py-1 text-xs font-semibold text-[#285260]"
-						  >
-							{keyword}
-						  </span>
-						))
-					  ) : (
-						<span className="text-sm text-gray-400">
-						  Tidak ada keyword cocok
-						</span>
-					  )}
+					<div className="mt-5 rounded-3xl bg-white/10 p-5">
+						<p className="text-sm font-semibold text-white/80">
+						Kategori Terdeteksi Terkuat
+						</p>
+						<p className="mt-2 text-xl font-extrabold text-[#F09A43]">
+						{analysisResult.strongestCategory?.categoryName || "-"}
+						</p>
 					</div>
-				  </div>
+					</div>
 
-				  <div>
-					<p className="text-sm font-semibold text-gray-500">
-					  Kategori Terdeteksi
-					</p>
+					{/* MIDDLE */}
+					<div className="bg-[#F7FAFA] p-6">
+					<h3 className="text-xl font-extrabold text-[#285260]">
+						Ringkasan Analisis
+					</h3>
 
-					<p className="mt-1 font-bold text-[#F09A43]">
-					  {analysisResult.strongestCategory.categoryName}
-					</p>
-				  </div>
-				  <div className="rounded-2xl bg-[#F6F8F8] p-4">
-					<p className="text-sm font-bold text-[#285260]">
-					  Penalaran AI
-					</p>
-					<p className="mt-2 text-sm leading-6 text-gray-600">
-					  {aiReasoning?.explanation || "Penalaran AI belum tersedia."}
-					</p>
-				  </div>
+					<div className="mt-5 space-y-5">
+						<div className="rounded-2xl bg-white p-4 shadow-sm">
+						<p className="text-sm font-semibold text-gray-500">
+							Kategori Dipilih
+						</p>
 
-				  <div className="rounded-2xl bg-orange-50 p-4">
-					<p className="text-sm font-bold text-orange-700">
-					  Catatan Potensial
-					</p>
-					<p className="mt-2 text-sm leading-6 text-gray-600">
-					  {aiReasoning?.potentialIssue || "Belum ada catatan potensial."}
-					</p>
-				  </div>
+						<p className="mt-2 font-bold text-[#285260]">
+							{analysisResult.selectedCategories
+							.map((category) => category.categoryName)
+							.join(", ")}
+						</p>
+						</div>
 
-				  <div className="rounded-2xl bg-green-50 p-4">
-					<p className="text-sm font-bold text-green-700">
-					  Saran Perbaikan
-					</p>
-					<p className="mt-2 text-sm leading-6 text-gray-600">
-					  {aiReasoning?.suggestion || "Belum ada saran perbaikan."}
-					</p>
-				  </div>
+						<div className="rounded-2xl bg-white p-4 shadow-sm">
+						<p className="text-sm font-semibold text-gray-500">
+							Keyword Cocok
+						</p>
+
+						<div className="mt-3 flex flex-wrap gap-2">
+							{selectedKeywords.length > 0 ? (
+							selectedKeywords.map((keyword) => (
+								<span
+								key={keyword}
+								className="rounded-full bg-[#285260]/10 px-3 py-1 text-xs font-semibold text-[#285260]"
+								>
+								{keyword}
+								</span>
+							))
+							) : (
+							<span className="text-sm text-gray-400">
+								Tidak ada keyword cocok
+							</span>
+							)}
+						</div>
+						</div>
+
+						<div className="rounded-2xl bg-white p-4 shadow-sm">
+						<p className="text-sm font-semibold text-gray-500">
+							Kategori Dipilih Tanpa Keyword Cocok
+						</p>
+
+						<div className="mt-3 flex flex-wrap gap-2">
+							{analysisResult.selectedWithoutMatches.length > 0 ? (
+							analysisResult.selectedWithoutMatches.map((category) => (
+								<span
+								key={category.categoryId}
+								className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-600"
+								>
+								{category.categoryName}
+								</span>
+							))
+							) : (
+							<span className="text-sm text-gray-400">
+								Semua kategori pilihan memiliki kecocokan.
+							</span>
+							)}
+						</div>
+						</div>
+
+						<div className="rounded-2xl bg-white p-4 shadow-sm">
+						<p className="text-sm font-semibold text-gray-500">
+							Kategori Lain yang Terdeteksi
+						</p>
+
+						<div className="mt-3 flex flex-wrap gap-2">
+							{analysisResult.unselectedStrongMatches.length > 0 ? (
+							analysisResult.unselectedStrongMatches.map((category) => (
+								<span
+								key={category.categoryId}
+								className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-700"
+								>
+								{category.categoryName}
+								</span>
+							))
+							) : (
+							<span className="text-sm text-gray-400">
+								Tidak ada kategori lain yang dominan.
+							</span>
+							)}
+						</div>
+						</div>
+					</div>
+					</div>
+
+					{/* RIGHT */}
+					<div className="flex flex-col justify-between bg-[#F8F8F8] p-6">
+					<div>
+						<h3 className="text-xl font-extrabold text-[#285260]">
+						Reasoning AI
+						</h3>
+
+						<p className="mt-1 text-sm text-gray-500">
+						Penjelasan hasil analisis dalam bahasa yang lebih mudah dipahami.
+						</p>
+
+						<div className="mt-5 space-y-4">
+						<div className="rounded-2xl bg-white p-4 shadow-sm">
+							<p className="text-sm font-bold text-[#285260]">
+							Penalaran AI
+							</p>
+							<p className="mt-2 text-sm leading-6 text-gray-600">
+							{aiReasoning?.explanation ||
+								"Penalaran AI belum tersedia."}
+							</p>
+						</div>
+
+						<div className="rounded-2xl bg-orange-50 p-4">
+							<p className="text-sm font-bold text-orange-700">
+							Catatan Potensial
+							</p>
+							<p className="mt-2 text-sm leading-6 text-gray-600">
+							{aiReasoning?.potentialIssue ||
+								"Belum ada catatan potensial."}
+							</p>
+						</div>
+
+						<div className="rounded-2xl bg-green-50 p-4">
+							<p className="text-sm font-bold text-green-700">
+							Saran Perbaikan
+							</p>
+							<p className="mt-2 text-sm leading-6 text-gray-600">
+							{aiReasoning?.suggestion ||
+								"Belum ada saran perbaikan."}
+							</p>
+						</div>
+						</div>
+					</div>
+
+					<div className="mt-6 space-y-3">
+						<button
+						type="button"
+						onClick={() => setShowAnalysisModal(false)}
+						className="w-full rounded-2xl bg-[#285260] px-5 py-3 font-semibold text-white hover:opacity-90"
+						>
+						Tutup
+						</button>
+
+						{analysisResult.score < MIN_AI_SCORE && (
+						<p className="text-center text-xs font-semibold text-red-500">
+							Skor belum memenuhi batas minimal {MIN_AI_SCORE}/100.
+						</p>
+						)}
+					</div>
+					</div>
 				</div>
-
-				<button
-				  type="button"
-				  onClick={() => setShowAnalysisModal(false)}
-				  className="mt-8 w-full rounded-2xl bg-[#285260] px-5 py-3 font-semibold text-white hover:opacity-90"
-				>
-				  Tutup
-				</button>
-			  </div>
+				</div>
 			</div>
-		  </div>
-		</div>
-	  )}
+			)}
 	</>
   );
 }
