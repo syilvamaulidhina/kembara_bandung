@@ -56,9 +56,12 @@ export async function GET(req: NextRequest) {
     const startOfMonth = new Date(year, month, 1);
     const endOfMonth = new Date(year, month + 1, 1);
 
-    const views = await prisma.destinationView.findMany({
-      where: { createdAt: { gte: startOfMonth, lt: endOfMonth } },
-      select: { createdAt: true },
+    // Statistik kunjungan diambil dari VisitedPlace
+    // Setiap record = 1 kunjungan unik (1 user hanya bisa punya 1 record per destinasi)
+    // sehingga tidak ada duplikasi kunjungan dari user yang sama ke destinasi yang sama
+    const visits = await prisma.visitedPlace.findMany({
+      where: { visitedAt: { gte: startOfMonth, lt: endOfMonth } },
+      select: { visitedAt: true },
     });
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -70,8 +73,8 @@ export async function GET(req: NextRequest) {
       return { week: w, start, end, count: 0 };
     });
 
-    views.forEach((v: { createdAt: Date }) => {
-      const day = v.createdAt.getDate();
+    visits.forEach((v: { visitedAt: Date }) => {
+      const day = v.visitedAt.getDate();
       const bucket = weekBuckets.find((b) => day >= b.start && day <= b.end);
       if (bucket) bucket.count++;
     });
