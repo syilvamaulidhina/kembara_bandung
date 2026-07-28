@@ -25,10 +25,11 @@ type AnalysisResult = {
   selectedCategories: CategoryAnalysis[];
   selectedWithMatches: CategoryAnalysis[];
   selectedWithoutMatches: CategoryAnalysis[];
-  strongestCategory: CategoryAnalysis;
+  strongestCategory: CategoryAnalysis | null;
   unselectedStrongMatches: CategoryAnalysis[];
   allCategoryAnalysis: CategoryAnalysis[];
   message: string;
+  reasoning?: AiReasoning;
 };
 
 type AiReasoning = {
@@ -84,8 +85,6 @@ export default function EditDestinasiPage() {
 
   const [analysisResult, setAnalysisResult] =
 	useState<AnalysisResult | null>(null);
-
-  const [aiReasoning, setAiReasoning] = useState<AiReasoning | null>(null);
 
   const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
@@ -208,7 +207,6 @@ export default function EditDestinasiPage() {
 	  field === "longitude"
 	) {
 	  setAnalysisResult(null);
-	  setAiReasoning(null);
 	}
   }
 
@@ -221,7 +219,6 @@ export default function EditDestinasiPage() {
 	}));
 
 	setAnalysisResult(null);
-	setAiReasoning(null);
   }
 
   async function handleCheckAI() {
@@ -288,7 +285,7 @@ export default function EditDestinasiPage() {
 		return;
 	  }
 
-	  let reasoning: AiReasoning | null = null;
+	  let reasoning: AiReasoning | undefined;
 
 	  try {
 		const reasoningResponse = await fetch(
@@ -314,8 +311,10 @@ export default function EditDestinasiPage() {
 		console.error("AI REASONING CONNECTION ERROR:", error);
 	  }
 
-	  setAnalysisResult(data);
-	  setAiReasoning(reasoning);
+	  setAnalysisResult({
+		...data,
+		reasoning,
+	  });
 	  setShowAnalysisModal(true);
 	} catch (error) {
 	  console.error("CHECK AI ERROR:", error);
@@ -890,223 +889,226 @@ export default function EditDestinasiPage() {
 		</form>
 	  </main>
 
+
 	  {showAnalysisModal && analysisResult && (
-			<div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
-				<div className="relative w-full max-w-6xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
-				<div className="grid lg:grid-cols-[1fr_1fr_0.9fr]">
-					{/* LEFT */}
-					<div className="bg-[#285260] p-6 text-white">
-					<div className="mb-6 flex items-start justify-between">
-						<div>
-						<p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
-							Hasil Analisis Domain Knowledge
-						</p>
+		<div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
+		  <div className="relative w-full max-w-6xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
+			<div className="grid max-h-[90vh] overflow-y-auto md:grid-cols-[1.05fr_1.25fr_0.9fr]">
+			  <div className="bg-[#285260] p-6 text-white">
+				<div className="mb-6 flex items-start justify-between">
+				  <div>
+					<p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
+					  Hasil Analisis Domain Knowledge
+					</p>
+					<h2 className="mt-2 text-3xl font-extrabold leading-tight">
+					  {analysisResult.status === "konsisten"
+						? "Data Cukup Selaras"
+						: "Perlu Perbaikan"}
+					</h2>
+				  </div>
+				  <button
+					type="button"
+					onClick={() => setShowAnalysisModal(false)}
+					className="rounded-full bg-white/10 px-3 py-1 text-xl font-bold hover:bg-white/20"
+				  >
+					×
+				  </button>
+				</div>
 
-						<h2 className="mt-2 text-3xl font-extrabold leading-tight">
-							{analysisResult.status === "konsisten"
-							? "Data Cukup Selaras"
-							: "Perlu Perbaikan"}
-						</h2>
-						</div>
-
-						<button
-						type="button"
-						onClick={() => setShowAnalysisModal(false)}
-						className="rounded-full bg-white/10 px-3 py-1 text-xl font-bold hover:bg-white/20"
-						>
-						×
-						</button>
+				<div className="rounded-3xl bg-white/10 p-5">
+				  <div className="mb-5">
+					<div className="mb-2 flex items-center justify-between">
+					  <p className="text-sm font-semibold text-white/80">
+						Skor Kecocokan
+					  </p>
+					  <p className="text-2xl font-extrabold">
+						{analysisResult.score}/100
+					  </p>
 					</div>
-
-					<div className="rounded-3xl bg-white/10 p-5">
-						<div className="mb-5">
-						<div className="mb-2 flex items-center justify-between">
-							<p className="text-sm font-semibold text-white/80">
-							Skor Kecocokan
-							</p>
-
-							<p className="text-3xl font-extrabold">
-							{analysisResult.score}/100
-							</p>
-						</div>
-
-						<div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
-							<div
-							className="h-full rounded-full bg-[#F09A43]"
-							style={{ width: `${analysisResult.score}%` }}
-							/>
-						</div>
-						</div>
-
-						<p className="text-sm leading-relaxed text-white/80">
-						{analysisResult.message}
-						</p>
+					<div className="h-3 w-full overflow-hidden rounded-full bg-white/20">
+					  <div
+						className="h-full rounded-full bg-[#F09A43]"
+						style={{ width: `${analysisResult.score}%` }}
+					  />
 					</div>
+				  </div>
 
-					<div className="mt-5 rounded-3xl bg-white/10 p-5">
-						<p className="text-sm font-semibold text-white/80">
-						Kategori Terdeteksi Terkuat
-						</p>
-						<p className="mt-2 text-xl font-extrabold text-[#F09A43]">
-						{analysisResult.strongestCategory?.categoryName || "-"}
-						</p>
-					</div>
-					</div>
-
-					{/* MIDDLE */}
-					<div className="bg-[#F7FAFA] p-6">
-					<h3 className="text-xl font-extrabold text-[#285260]">
-						Ringkasan Analisis
-					</h3>
-
-					<div className="mt-5 space-y-5">
-						<div className="rounded-2xl bg-white p-4 shadow-sm">
-						<p className="text-sm font-semibold text-gray-500">
-							Kategori Dipilih
-						</p>
-
-						<p className="mt-2 font-bold text-[#285260]">
-							{analysisResult.selectedCategories
-							.map((category) => category.categoryName)
-							.join(", ")}
-						</p>
-						</div>
-
-						<div className="rounded-2xl bg-white p-4 shadow-sm">
-						<p className="text-sm font-semibold text-gray-500">
-							Keyword Cocok
-						</p>
-
-						<div className="mt-3 flex flex-wrap gap-2">
-							{selectedKeywords.length > 0 ? (
-							selectedKeywords.map((keyword) => (
-								<span
-								key={keyword}
-								className="rounded-full bg-[#285260]/10 px-3 py-1 text-xs font-semibold text-[#285260]"
-								>
-								{keyword}
-								</span>
-							))
-							) : (
-							<span className="text-sm text-gray-400">
-								Tidak ada keyword cocok
-							</span>
-							)}
-						</div>
-						</div>
-
-						<div className="rounded-2xl bg-white p-4 shadow-sm">
-						<p className="text-sm font-semibold text-gray-500">
-							Kategori Dipilih Tanpa Keyword Cocok
-						</p>
-
-						<div className="mt-3 flex flex-wrap gap-2">
-							{analysisResult.selectedWithoutMatches.length > 0 ? (
-							analysisResult.selectedWithoutMatches.map((category) => (
-								<span
-								key={category.categoryId}
-								className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-600"
-								>
-								{category.categoryName}
-								</span>
-							))
-							) : (
-							<span className="text-sm text-gray-400">
-								Semua kategori pilihan memiliki kecocokan.
-							</span>
-							)}
-						</div>
-						</div>
-
-						<div className="rounded-2xl bg-white p-4 shadow-sm">
-						<p className="text-sm font-semibold text-gray-500">
-							Kategori Lain yang Terdeteksi
-						</p>
-
-						<div className="mt-3 flex flex-wrap gap-2">
-							{analysisResult.unselectedStrongMatches.length > 0 ? (
-							analysisResult.unselectedStrongMatches.map((category) => (
-								<span
-								key={category.categoryId}
-								className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-700"
-								>
-								{category.categoryName}
-								</span>
-							))
-							) : (
-							<span className="text-sm text-gray-400">
-								Tidak ada kategori lain yang dominan.
-							</span>
-							)}
-						</div>
-						</div>
-					</div>
-					</div>
-
-					{/* RIGHT */}
-					<div className="flex flex-col justify-between bg-[#F8F8F8] p-6">
+				  <div className="space-y-5">
 					<div>
-						<h3 className="text-xl font-extrabold text-[#285260]">
-						Reasoning AI
-						</h3>
-
-						<p className="mt-1 text-sm text-gray-500">
-						Penjelasan hasil analisis dalam bahasa yang lebih mudah dipahami.
-						</p>
-
-						<div className="mt-5 space-y-4">
-						<div className="rounded-2xl bg-white p-4 shadow-sm">
-							<p className="text-sm font-bold text-[#285260]">
-							Penalaran AI
-							</p>
-							<p className="mt-2 text-sm leading-6 text-gray-600">
-							{aiReasoning?.explanation ||
-								"Penalaran AI belum tersedia."}
-							</p>
-						</div>
-
-						<div className="rounded-2xl bg-orange-50 p-4">
-							<p className="text-sm font-bold text-orange-700">
-							Catatan Potensial
-							</p>
-							<p className="mt-2 text-sm leading-6 text-gray-600">
-							{aiReasoning?.potentialIssue ||
-								"Belum ada catatan potensial."}
-							</p>
-						</div>
-
-						<div className="rounded-2xl bg-green-50 p-4">
-							<p className="text-sm font-bold text-green-700">
-							Saran Perbaikan
-							</p>
-							<p className="mt-2 text-sm leading-6 text-gray-600">
-							{aiReasoning?.suggestion ||
-								"Belum ada saran perbaikan."}
-							</p>
-						</div>
-						</div>
-					</div>
-
-					<div className="mt-6 space-y-3">
-						<button
-						type="button"
-						onClick={() => setShowAnalysisModal(false)}
-						className="w-full rounded-2xl bg-[#285260] px-5 py-3 font-semibold text-white hover:opacity-90"
-						>
-						Tutup
-						</button>
-
-						{analysisResult.score < MIN_AI_SCORE && (
-						<p className="text-center text-xs font-semibold text-red-500">
-							Skor belum memenuhi batas minimal {MIN_AI_SCORE}/100.
-						</p>
+					  <p className="text-sm font-semibold text-white/70">
+						Kategori Dipilih
+					  </p>
+					  <h3 className="mt-1 text-xl font-bold">
+						{analysisResult.selectedCategories
+						  .map((category) => category.categoryName)
+						  .join(", ")}
+					  </h3>
+					  <div className="mt-3 flex flex-wrap gap-2">
+						{selectedKeywords.length > 0 ? (
+						  selectedKeywords.map((keyword) => (
+							<span
+							  key={keyword}
+							  className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold"
+							>
+							  {keyword}
+							</span>
+						  ))
+						) : (
+						  <span className="text-sm text-white/60">
+							Tidak ada keyword cocok
+						  </span>
 						)}
+					  </div>
 					</div>
+
+					<div>
+					  <p className="text-sm font-semibold text-white/70">
+						Kategori dengan Kecocokan Tertinggi
+					  </p>
+					  <h3 className="mt-1 text-xl font-bold text-[#F09A43]">
+						{analysisResult.strongestCategory?.categoryName ??
+						  "Tidak Terdeteksi"}
+					  </h3>
+					  <div className="mt-3 flex flex-wrap gap-2">
+						{analysisResult.strongestCategory?.matchedKeywords?.length ? (
+						  analysisResult.strongestCategory.matchedKeywords.map(
+							(keyword) => (
+							  <span
+								key={keyword}
+								className="rounded-full bg-[#F09A43]/20 px-3 py-1 text-xs font-semibold text-[#FFD7A8]"
+							  >
+								{keyword}
+							  </span>
+							)
+						  )
+						) : (
+						  <span className="text-sm text-white/60">
+							Tidak ada keyword terdeteksi
+						  </span>
+						)}
+					  </div>
 					</div>
+				  </div>
 				</div>
+			  </div>
+
+			  <div className="bg-[#F7FAFA] p-6">
+				<p className="text-sm font-semibold uppercase tracking-wide text-[#F09A43]">
+				  Reasoning AI
+				</p>
+				<h3 className="mt-2 text-2xl font-extrabold text-[#285260]">
+				  Penjelasan Hasil Analisis
+				</h3>
+				<p className="mt-2 text-sm leading-6 text-gray-500">
+				  Penjelasan ini dibuat berdasarkan hasil domain knowledge,
+				  bukan sebagai keputusan status destinasi.
+				</p>
+
+				{analysisResult.reasoning ? (
+				  <div className="mt-5 space-y-4">
+					<div className="rounded-2xl bg-white p-4 text-left shadow-sm">
+					  <p className="text-sm font-extrabold text-[#285260]">
+						Penalaran AI
+					  </p>
+					  <p className="mt-2 text-sm leading-6 text-gray-600">
+						{analysisResult.reasoning.explanation}
+					  </p>
+					</div>
+
+					<div className="grid gap-4 xl:grid-cols-2">
+					  <div className="rounded-2xl bg-orange-50 p-4 text-left">
+						<p className="text-sm font-extrabold text-[#C76B1F]">
+						  Catatan Potensial
+						</p>
+						<p className="mt-2 text-sm leading-6 text-gray-600">
+						  {analysisResult.reasoning.potentialIssue}
+						</p>
+					  </div>
+
+					  <div className="rounded-2xl bg-green-50 p-4 text-left">
+						<p className="text-sm font-extrabold text-green-700">
+						  Saran Perbaikan
+						</p>
+						<p className="mt-2 text-sm leading-6 text-gray-600">
+						  {analysisResult.reasoning.suggestion}
+						</p>
+					  </div>
+					</div>
+				  </div>
+				) : (
+				  <div className="mt-5 rounded-2xl bg-white p-4 text-sm text-gray-500 shadow-sm">
+					Reasoning AI belum tersedia.
+				  </div>
+				)}
+			  </div>
+
+			  <div className="flex flex-col justify-between bg-[#F8F8F8] p-6">
+				<div>
+				  <div className="rounded-3xl bg-white p-5 text-center shadow-sm">
+					<div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#285260]">
+					  {analysisResult.score >= MIN_AI_SCORE ? (
+						<span className="text-4xl font-black leading-none text-[#4ADE80]">
+						  ✓
+						</span>
+					  ) : (
+						<span className="text-4xl font-black leading-none text-[#F09A43]">
+						  !
+						</span>
+					  )}
+					</div>
+					<p className="text-lg font-extrabold text-[#F09A43]">
+					  {analysisResult.score >= MIN_AI_SCORE
+						? "Bisa Disubmit"
+						: "Perlu Perbaikan"}
+					</p>
+					<p className="mt-1 text-sm font-semibold text-gray-500">
+					  Skor minimal submit {MIN_AI_SCORE}/100
+					</p>
+				  </div>
+
+				  <div className="mt-5 rounded-3xl bg-[#285260] p-5 text-left text-white">
+					<p className="text-sm font-bold uppercase tracking-wide text-[#F09A43]">
+					  Kesimpulan Sistem
+					</p>
+					<p className="mt-2 text-base font-semibold leading-relaxed">
+					  {analysisResult.message}
+					</p>
+				  </div>
+
+				  {analysisResult.score < MIN_AI_SCORE && (
+					<p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+					  Skor belum memenuhi batas minimal. Silakan perbaiki data
+					  terlebih dahulu.
+					</p>
+				  )}
 				</div>
+
+				<div className="mt-6 flex gap-3">
+				  <button
+					type="button"
+					onClick={() => setShowAnalysisModal(false)}
+					className="flex-1 rounded-2xl bg-[#C45454] px-5 py-3 font-bold text-white transition hover:opacity-90"
+				  >
+					Perbaiki
+				  </button>
+
+				  <button
+					type="button"
+					disabled={
+					  analysisResult.score < MIN_AI_SCORE || isSubmitting
+					}
+					onClick={handleSubmit}
+					className="flex-1 rounded-2xl bg-[#F09A43] px-5 py-3 font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+				  >
+					{isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
+				  </button>
+				</div>
+			  </div>
 			</div>
-			)}
+		  </div>
+		</div>
+	  )}
+
 	</>
   );
 }

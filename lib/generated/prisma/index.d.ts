@@ -3839,6 +3839,7 @@ export namespace Prisma {
     website: string | null
     visitCount: number | null
     status: $Enums.DestinationStatus | null
+    adminFeedback: string | null
     isDeleted: boolean | null
     deletedAt: Date | null
     createdAt: Date | null
@@ -3867,6 +3868,7 @@ export namespace Prisma {
     website: string | null
     visitCount: number | null
     status: $Enums.DestinationStatus | null
+    adminFeedback: string | null
     isDeleted: boolean | null
     deletedAt: Date | null
     createdAt: Date | null
@@ -3895,6 +3897,7 @@ export namespace Prisma {
     website: number
     visitCount: number
     status: number
+    adminFeedback: number
     isDeleted: number
     deletedAt: number
     createdAt: number
@@ -3945,6 +3948,7 @@ export namespace Prisma {
     website?: true
     visitCount?: true
     status?: true
+    adminFeedback?: true
     isDeleted?: true
     deletedAt?: true
     createdAt?: true
@@ -3973,6 +3977,7 @@ export namespace Prisma {
     website?: true
     visitCount?: true
     status?: true
+    adminFeedback?: true
     isDeleted?: true
     deletedAt?: true
     createdAt?: true
@@ -4001,6 +4006,7 @@ export namespace Prisma {
     website?: true
     visitCount?: true
     status?: true
+    adminFeedback?: true
     isDeleted?: true
     deletedAt?: true
     createdAt?: true
@@ -4116,6 +4122,7 @@ export namespace Prisma {
     website: string | null
     visitCount: number
     status: $Enums.DestinationStatus
+    adminFeedback: string | null
     isDeleted: boolean
     deletedAt: Date | null
     createdAt: Date
@@ -4163,6 +4170,7 @@ export namespace Prisma {
     website?: boolean
     visitCount?: boolean
     status?: boolean
+    adminFeedback?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
     createdAt?: boolean
@@ -4202,6 +4210,7 @@ export namespace Prisma {
     website?: boolean
     visitCount?: boolean
     status?: boolean
+    adminFeedback?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
     createdAt?: boolean
@@ -4231,6 +4240,7 @@ export namespace Prisma {
     website?: boolean
     visitCount?: boolean
     status?: boolean
+    adminFeedback?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
     createdAt?: boolean
@@ -4260,13 +4270,14 @@ export namespace Prisma {
     website?: boolean
     visitCount?: boolean
     status?: boolean
+    adminFeedback?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "addressStreet" | "addressVillage" | "addressDistrict" | "addressCity" | "addressProvince" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "addressStreet" | "addressVillage" | "addressDistrict" | "addressCity" | "addressProvince" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "adminFeedback" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
   export type DestinationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | Destination$ownerArgs<ExtArgs>
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
@@ -4323,6 +4334,7 @@ export namespace Prisma {
       website: string | null
       visitCount: number
       status: $Enums.DestinationStatus
+      adminFeedback: string | null
       isDeleted: boolean
       deletedAt: Date | null
       createdAt: Date
@@ -4781,6 +4793,7 @@ export namespace Prisma {
     readonly website: FieldRef<"Destination", 'String'>
     readonly visitCount: FieldRef<"Destination", 'Int'>
     readonly status: FieldRef<"Destination", 'DestinationStatus'>
+    readonly adminFeedback: FieldRef<"Destination", 'String'>
     readonly isDeleted: FieldRef<"Destination", 'Boolean'>
     readonly deletedAt: FieldRef<"Destination", 'DateTime'>
     readonly createdAt: FieldRef<"Destination", 'DateTime'>
@@ -19210,6 +19223,7 @@ export namespace Prisma {
     website: 'website',
     visitCount: 'visitCount',
     status: 'status',
+    adminFeedback: 'adminFeedback',
     isDeleted: 'isDeleted',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
@@ -19737,6 +19751,7 @@ export namespace Prisma {
     website?: StringNullableFilter<"Destination"> | string | null
     visitCount?: IntFilter<"Destination"> | number
     status?: EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
+    adminFeedback?: StringNullableFilter<"Destination"> | string | null
     isDeleted?: BoolFilter<"Destination"> | boolean
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
@@ -19775,6 +19790,7 @@ export namespace Prisma {
     website?: SortOrderInput | SortOrder
     visitCount?: SortOrder
     status?: SortOrder
+    adminFeedback?: SortOrderInput | SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -19816,6 +19832,7 @@ export namespace Prisma {
     website?: StringNullableFilter<"Destination"> | string | null
     visitCount?: IntFilter<"Destination"> | number
     status?: EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
+    adminFeedback?: StringNullableFilter<"Destination"> | string | null
     isDeleted?: BoolFilter<"Destination"> | boolean
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
@@ -19854,6 +19871,7 @@ export namespace Prisma {
     website?: SortOrderInput | SortOrder
     visitCount?: SortOrder
     status?: SortOrder
+    adminFeedback?: SortOrderInput | SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -19890,6 +19908,7 @@ export namespace Prisma {
     website?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     visitCount?: IntWithAggregatesFilter<"Destination"> | number
     status?: EnumDestinationStatusWithAggregatesFilter<"Destination"> | $Enums.DestinationStatus
+    adminFeedback?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     isDeleted?: BoolWithAggregatesFilter<"Destination"> | boolean
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Destination"> | Date | string
@@ -20886,6 +20905,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -20924,6 +20944,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -20959,6 +20980,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20997,6 +21019,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21034,6 +21057,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -21060,6 +21084,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21088,6 +21113,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22298,6 +22324,7 @@ export namespace Prisma {
     website?: SortOrder
     visitCount?: SortOrder
     status?: SortOrder
+    adminFeedback?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
@@ -22336,6 +22363,7 @@ export namespace Prisma {
     website?: SortOrder
     visitCount?: SortOrder
     status?: SortOrder
+    adminFeedback?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
@@ -22364,6 +22392,7 @@ export namespace Prisma {
     website?: SortOrder
     visitCount?: SortOrder
     status?: SortOrder
+    adminFeedback?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
     createdAt?: SortOrder
@@ -24838,6 +24867,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -24874,6 +24904,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -25131,6 +25162,7 @@ export namespace Prisma {
     website?: StringNullableFilter<"Destination"> | string | null
     visitCount?: IntFilter<"Destination"> | number
     status?: EnumDestinationStatusFilter<"Destination"> | $Enums.DestinationStatus
+    adminFeedback?: StringNullableFilter<"Destination"> | string | null
     isDeleted?: BoolFilter<"Destination"> | boolean
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
@@ -25802,6 +25834,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -25839,6 +25872,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -25907,6 +25941,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25944,6 +25979,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26044,6 +26080,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -26081,6 +26118,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -26131,6 +26169,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26168,6 +26207,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26250,6 +26290,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -26287,6 +26328,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -26391,6 +26433,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26428,6 +26471,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26510,6 +26554,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -26547,6 +26592,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -26651,6 +26697,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26688,6 +26735,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26913,6 +26961,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -26950,6 +26999,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27050,6 +27100,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27087,6 +27138,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27169,6 +27221,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27206,6 +27259,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27310,6 +27364,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27347,6 +27402,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27429,6 +27485,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27466,6 +27523,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27570,6 +27628,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27607,6 +27666,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27641,6 +27701,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27678,6 +27739,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27728,6 +27790,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27765,6 +27828,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27847,6 +27911,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27884,6 +27949,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -27988,6 +28054,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28025,6 +28092,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28110,6 +28178,7 @@ export namespace Prisma {
     website?: string | null
     visitCount?: number
     status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
     createdAt?: Date | string
@@ -28299,6 +28368,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28335,6 +28405,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28371,6 +28442,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     visitCount?: IntFieldUpdateOperationsInput | number
     status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

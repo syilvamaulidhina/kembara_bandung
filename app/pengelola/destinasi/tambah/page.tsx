@@ -15,16 +15,17 @@ type CategoryAnalysis = {
 };
 
 type AnalysisResult = {
-	status: string;
-	score: number;
-	selectedCategories: CategoryAnalysis[];
-	selectedWithMatches: CategoryAnalysis[];
-	selectedWithoutMatches: CategoryAnalysis[];
-	strongestCategory: CategoryAnalysis | null;
-	unselectedStrongMatches: CategoryAnalysis[];
-	allCategoryAnalysis: CategoryAnalysis[];
-	message: string;
-	reasoning?: AiReasoning;
+  status: string;
+  score: number;
+  selectedCategories: CategoryAnalysis[];
+  selectedWithMatches: CategoryAnalysis[];
+  selectedWithoutMatches: CategoryAnalysis[];
+  strongestCategory: CategoryAnalysis | null;
+  unselectedStrongMatches: CategoryAnalysis[];
+  allCategoryAnalysis: CategoryAnalysis[];
+  message: string;
+  reasoning?: AiReasoning;
+  reasoningSource?: string;
 };
 
 type AiReasoning = {
@@ -220,31 +221,35 @@ export default function TambahDestinasiPage() {
 			}
 
 			let reasoning: AiReasoning | undefined;
+			let reasoningSource: string | undefined;
 
-				try {
-					const reasoningResponse = await fetch(
-						"/api/pengelola/ai-insight/check/reasoning",
-						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify({
-								analysisResult: data,
-							}),
-						}
-					);
-
-					const reasoningData = await reasoningResponse.json();
-					reasoning = reasoningData.reasoning;
-				} catch (error) {
-					console.error("AI REASONING ERROR:", error);
+			try {
+			const reasoningResponse = await fetch(
+				"/api/pengelola/ai-insight/check/reasoning",
+				{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					analysisResult: data,
+				}),
 				}
+			);
 
-				setAnalysisResult({
-					...data,
-					reasoning,
-				});
+			const reasoningData = await reasoningResponse.json();
+
+			reasoning = reasoningData.reasoning;
+			reasoningSource = reasoningData.source;
+			} catch (error) {
+			console.error("AI REASONING ERROR:", error);
+			}
+
+			setAnalysisResult({
+			...data,
+			reasoning,
+			reasoningSource,
+			});
 
 				setShowAnalysisModal(true);
 		} catch (error) {

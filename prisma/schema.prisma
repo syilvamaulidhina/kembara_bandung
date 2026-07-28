@@ -101,7 +101,8 @@ model Destination {
   website     String?
   visitCount  Int     @default(0)
 
-  status    DestinationStatus @default(pending)
+  status        DestinationStatus @default(pending)
+  adminFeedback String?
   isDeleted Boolean           @default(false)
   deletedAt DateTime?
   createdAt DateTime          @default(now())
@@ -315,4 +316,3 @@ enum EventStatus {
   ditolak
   selesai
 }
-

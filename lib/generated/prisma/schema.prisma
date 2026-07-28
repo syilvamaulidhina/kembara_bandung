@@ -101,11 +101,12 @@ model Destination {
   website     String?
   visitCount  Int     @default(0)
 
-  status    DestinationStatus @default(pending)
-  isDeleted Boolean           @default(false)
-  deletedAt DateTime?
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  status        DestinationStatus @default(pending)
+  adminFeedback String?
+  isDeleted     Boolean           @default(false)
+  deletedAt     DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 
   categories     DestinationCategory[]
   aiAnalyses     AiAnalysis[]

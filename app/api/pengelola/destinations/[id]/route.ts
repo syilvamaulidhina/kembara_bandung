@@ -220,6 +220,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 				website: body.website || null,
 
 				status: "pending",
+				adminFeedback: null,
 
 				categories: {
 					create: categoryIds.map((categoryId: number) => ({
