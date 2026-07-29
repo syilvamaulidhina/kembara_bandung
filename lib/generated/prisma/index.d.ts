@@ -24,6 +24,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Destination = $Result.DefaultSelection<Prisma.$DestinationPayload>
 /**
+ * Model DestinationCoverageHistory
+ * 
+ */
+export type DestinationCoverageHistory = $Result.DefaultSelection<Prisma.$DestinationCoverageHistoryPayload>
+/**
  * Model Category
  * 
  */
@@ -321,6 +326,16 @@ export class PrismaClient<
     * ```
     */
   get destination(): Prisma.DestinationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.destinationCoverageHistory`: Exposes CRUD operations for the **DestinationCoverageHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DestinationCoverageHistories
+    * const destinationCoverageHistories = await prisma.destinationCoverageHistory.findMany()
+    * ```
+    */
+  get destinationCoverageHistory(): Prisma.DestinationCoverageHistoryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.category`: Exposes CRUD operations for the **Category** model.
@@ -877,6 +892,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Destination: 'Destination',
+    DestinationCoverageHistory: 'DestinationCoverageHistory',
     Category: 'Category',
     DestinationCategory: 'DestinationCategory',
     CategoryKeyword: 'CategoryKeyword',
@@ -904,7 +920,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis" | "savedDestination" | "itineraryQueue" | "itinerary" | "itineraryItem" | "review" | "visitedPlace" | "destinationView" | "event"
+      modelProps: "user" | "destination" | "destinationCoverageHistory" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis" | "savedDestination" | "itineraryQueue" | "itinerary" | "itineraryItem" | "review" | "visitedPlace" | "destinationView" | "event"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1053,6 +1069,80 @@ export namespace Prisma {
           count: {
             args: Prisma.DestinationCountArgs<ExtArgs>
             result: $Utils.Optional<DestinationCountAggregateOutputType> | number
+          }
+        }
+      }
+      DestinationCoverageHistory: {
+        payload: Prisma.$DestinationCoverageHistoryPayload<ExtArgs>
+        fields: Prisma.DestinationCoverageHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DestinationCoverageHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DestinationCoverageHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.DestinationCoverageHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DestinationCoverageHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.DestinationCoverageHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.DestinationCoverageHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.DestinationCoverageHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DestinationCoverageHistoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>[]
+          }
+          delete: {
+            args: Prisma.DestinationCoverageHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>
+          }
+          update: {
+            args: Prisma.DestinationCoverageHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.DestinationCoverageHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DestinationCoverageHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DestinationCoverageHistoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.DestinationCoverageHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DestinationCoverageHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.DestinationCoverageHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDestinationCoverageHistory>
+          }
+          groupBy: {
+            args: Prisma.DestinationCoverageHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DestinationCoverageHistoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DestinationCoverageHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<DestinationCoverageHistoryCountAggregateOutputType> | number
           }
         }
       }
@@ -2054,6 +2144,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     destination?: DestinationOmit
+    destinationCoverageHistory?: DestinationCoverageHistoryOmit
     category?: CategoryOmit
     destinationCategory?: DestinationCategoryOmit
     categoryKeyword?: CategoryKeywordOmit
@@ -2240,6 +2331,7 @@ export namespace Prisma {
     itineraryQueue: number
     views: number
     events: number
+    coverageHistories: number
   }
 
   export type DestinationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2252,6 +2344,7 @@ export namespace Prisma {
     itineraryQueue?: boolean | DestinationCountOutputTypeCountItineraryQueueArgs
     views?: boolean | DestinationCountOutputTypeCountViewsArgs
     events?: boolean | DestinationCountOutputTypeCountEventsArgs
+    coverageHistories?: boolean | DestinationCountOutputTypeCountCoverageHistoriesArgs
   }
 
   // Custom InputTypes
@@ -2326,6 +2419,13 @@ export namespace Prisma {
    */
   export type DestinationCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EventWhereInput
+  }
+
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountCoverageHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DestinationCoverageHistoryWhereInput
   }
 
 
@@ -3844,6 +3944,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    coveragePolygonChanged: boolean | null
   }
 
   export type DestinationMaxAggregateOutputType = {
@@ -3873,6 +3974,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    coveragePolygonChanged: boolean | null
   }
 
   export type DestinationCountAggregateOutputType = {
@@ -3902,6 +4004,9 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     updatedAt: number
+    coveragePolygon: number
+    pendingCoveragePolygon: number
+    coveragePolygonChanged: number
     _all: number
   }
 
@@ -3953,6 +4058,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    coveragePolygonChanged?: true
   }
 
   export type DestinationMaxAggregateInputType = {
@@ -3982,6 +4088,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    coveragePolygonChanged?: true
   }
 
   export type DestinationCountAggregateInputType = {
@@ -4011,6 +4118,9 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    coveragePolygon?: true
+    pendingCoveragePolygon?: true
+    coveragePolygonChanged?: true
     _all?: true
   }
 
@@ -4127,6 +4237,9 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    coveragePolygon: JsonValue | null
+    pendingCoveragePolygon: JsonValue | null
+    coveragePolygonChanged: boolean
     _count: DestinationCountAggregateOutputType | null
     _avg: DestinationAvgAggregateOutputType | null
     _sum: DestinationSumAggregateOutputType | null
@@ -4175,6 +4288,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coveragePolygon?: boolean
+    pendingCoveragePolygon?: boolean
+    coveragePolygonChanged?: boolean
     owner?: boolean | Destination$ownerArgs<ExtArgs>
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
     aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
@@ -4185,6 +4301,7 @@ export namespace Prisma {
     itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
     views?: boolean | Destination$viewsArgs<ExtArgs>
     events?: boolean | Destination$eventsArgs<ExtArgs>
+    coverageHistories?: boolean | Destination$coverageHistoriesArgs<ExtArgs>
     _count?: boolean | DestinationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
@@ -4215,6 +4332,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coveragePolygon?: boolean
+    pendingCoveragePolygon?: boolean
+    coveragePolygonChanged?: boolean
     owner?: boolean | Destination$ownerArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
@@ -4245,6 +4365,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coveragePolygon?: boolean
+    pendingCoveragePolygon?: boolean
+    coveragePolygonChanged?: boolean
     owner?: boolean | Destination$ownerArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
@@ -4275,9 +4398,12 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    coveragePolygon?: boolean
+    pendingCoveragePolygon?: boolean
+    coveragePolygonChanged?: boolean
   }
 
-  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "addressStreet" | "addressVillage" | "addressDistrict" | "addressCity" | "addressProvince" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "adminFeedback" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "addressStreet" | "addressVillage" | "addressDistrict" | "addressCity" | "addressProvince" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "adminFeedback" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt" | "coveragePolygon" | "pendingCoveragePolygon" | "coveragePolygonChanged", ExtArgs["result"]["destination"]>
   export type DestinationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | Destination$ownerArgs<ExtArgs>
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
@@ -4289,6 +4415,7 @@ export namespace Prisma {
     itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
     views?: boolean | Destination$viewsArgs<ExtArgs>
     events?: boolean | Destination$eventsArgs<ExtArgs>
+    coverageHistories?: boolean | Destination$coverageHistoriesArgs<ExtArgs>
     _count?: boolean | DestinationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DestinationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4311,6 +4438,7 @@ export namespace Prisma {
       itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
       views: Prisma.$DestinationViewPayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
+      coverageHistories: Prisma.$DestinationCoverageHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4339,6 +4467,9 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
+      coveragePolygon: Prisma.JsonValue | null
+      pendingCoveragePolygon: Prisma.JsonValue | null
+      coveragePolygonChanged: boolean
     }, ExtArgs["result"]["destination"]>
     composites: {}
   }
@@ -4743,6 +4874,7 @@ export namespace Prisma {
     itineraryQueue<T extends Destination$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, Destination$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     views<T extends Destination$viewsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Destination$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    coverageHistories<T extends Destination$coverageHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$coverageHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4798,6 +4930,9 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"Destination", 'DateTime'>
     readonly createdAt: FieldRef<"Destination", 'DateTime'>
     readonly updatedAt: FieldRef<"Destination", 'DateTime'>
+    readonly coveragePolygon: FieldRef<"Destination", 'Json'>
+    readonly pendingCoveragePolygon: FieldRef<"Destination", 'Json'>
+    readonly coveragePolygonChanged: FieldRef<"Destination", 'Boolean'>
   }
     
 
@@ -5434,6 +5569,30 @@ export namespace Prisma {
   }
 
   /**
+   * Destination.coverageHistories
+   */
+  export type Destination$coverageHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    where?: DestinationCoverageHistoryWhereInput
+    orderBy?: DestinationCoverageHistoryOrderByWithRelationInput | DestinationCoverageHistoryOrderByWithRelationInput[]
+    cursor?: DestinationCoverageHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DestinationCoverageHistoryScalarFieldEnum | DestinationCoverageHistoryScalarFieldEnum[]
+  }
+
+  /**
    * Destination without action
    */
   export type DestinationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5449,6 +5608,1090 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DestinationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DestinationCoverageHistory
+   */
+
+  export type AggregateDestinationCoverageHistory = {
+    _count: DestinationCoverageHistoryCountAggregateOutputType | null
+    _avg: DestinationCoverageHistoryAvgAggregateOutputType | null
+    _sum: DestinationCoverageHistorySumAggregateOutputType | null
+    _min: DestinationCoverageHistoryMinAggregateOutputType | null
+    _max: DestinationCoverageHistoryMaxAggregateOutputType | null
+  }
+
+  export type DestinationCoverageHistoryAvgAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+  }
+
+  export type DestinationCoverageHistorySumAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+  }
+
+  export type DestinationCoverageHistoryMinAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+    createdAt: Date | null
+  }
+
+  export type DestinationCoverageHistoryMaxAggregateOutputType = {
+    id: number | null
+    destinationId: number | null
+    createdAt: Date | null
+  }
+
+  export type DestinationCoverageHistoryCountAggregateOutputType = {
+    id: number
+    destinationId: number
+    polygon: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type DestinationCoverageHistoryAvgAggregateInputType = {
+    id?: true
+    destinationId?: true
+  }
+
+  export type DestinationCoverageHistorySumAggregateInputType = {
+    id?: true
+    destinationId?: true
+  }
+
+  export type DestinationCoverageHistoryMinAggregateInputType = {
+    id?: true
+    destinationId?: true
+    createdAt?: true
+  }
+
+  export type DestinationCoverageHistoryMaxAggregateInputType = {
+    id?: true
+    destinationId?: true
+    createdAt?: true
+  }
+
+  export type DestinationCoverageHistoryCountAggregateInputType = {
+    id?: true
+    destinationId?: true
+    polygon?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type DestinationCoverageHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DestinationCoverageHistory to aggregate.
+     */
+    where?: DestinationCoverageHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DestinationCoverageHistories to fetch.
+     */
+    orderBy?: DestinationCoverageHistoryOrderByWithRelationInput | DestinationCoverageHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DestinationCoverageHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DestinationCoverageHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DestinationCoverageHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DestinationCoverageHistories
+    **/
+    _count?: true | DestinationCoverageHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DestinationCoverageHistoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DestinationCoverageHistorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DestinationCoverageHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DestinationCoverageHistoryMaxAggregateInputType
+  }
+
+  export type GetDestinationCoverageHistoryAggregateType<T extends DestinationCoverageHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateDestinationCoverageHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDestinationCoverageHistory[P]>
+      : GetScalarType<T[P], AggregateDestinationCoverageHistory[P]>
+  }
+
+
+
+
+  export type DestinationCoverageHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DestinationCoverageHistoryWhereInput
+    orderBy?: DestinationCoverageHistoryOrderByWithAggregationInput | DestinationCoverageHistoryOrderByWithAggregationInput[]
+    by: DestinationCoverageHistoryScalarFieldEnum[] | DestinationCoverageHistoryScalarFieldEnum
+    having?: DestinationCoverageHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DestinationCoverageHistoryCountAggregateInputType | true
+    _avg?: DestinationCoverageHistoryAvgAggregateInputType
+    _sum?: DestinationCoverageHistorySumAggregateInputType
+    _min?: DestinationCoverageHistoryMinAggregateInputType
+    _max?: DestinationCoverageHistoryMaxAggregateInputType
+  }
+
+  export type DestinationCoverageHistoryGroupByOutputType = {
+    id: number
+    destinationId: number
+    polygon: JsonValue
+    createdAt: Date
+    _count: DestinationCoverageHistoryCountAggregateOutputType | null
+    _avg: DestinationCoverageHistoryAvgAggregateOutputType | null
+    _sum: DestinationCoverageHistorySumAggregateOutputType | null
+    _min: DestinationCoverageHistoryMinAggregateOutputType | null
+    _max: DestinationCoverageHistoryMaxAggregateOutputType | null
+  }
+
+  type GetDestinationCoverageHistoryGroupByPayload<T extends DestinationCoverageHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DestinationCoverageHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DestinationCoverageHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DestinationCoverageHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], DestinationCoverageHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DestinationCoverageHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    destinationId?: boolean
+    polygon?: boolean
+    createdAt?: boolean
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["destinationCoverageHistory"]>
+
+  export type DestinationCoverageHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    destinationId?: boolean
+    polygon?: boolean
+    createdAt?: boolean
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["destinationCoverageHistory"]>
+
+  export type DestinationCoverageHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    destinationId?: boolean
+    polygon?: boolean
+    createdAt?: boolean
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["destinationCoverageHistory"]>
+
+  export type DestinationCoverageHistorySelectScalar = {
+    id?: boolean
+    destinationId?: boolean
+    polygon?: boolean
+    createdAt?: boolean
+  }
+
+  export type DestinationCoverageHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "destinationId" | "polygon" | "createdAt", ExtArgs["result"]["destinationCoverageHistory"]>
+  export type DestinationCoverageHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+  export type DestinationCoverageHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+  export type DestinationCoverageHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
+  }
+
+  export type $DestinationCoverageHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DestinationCoverageHistory"
+    objects: {
+      destination: Prisma.$DestinationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      destinationId: number
+      polygon: Prisma.JsonValue
+      createdAt: Date
+    }, ExtArgs["result"]["destinationCoverageHistory"]>
+    composites: {}
+  }
+
+  type DestinationCoverageHistoryGetPayload<S extends boolean | null | undefined | DestinationCoverageHistoryDefaultArgs> = $Result.GetResult<Prisma.$DestinationCoverageHistoryPayload, S>
+
+  type DestinationCoverageHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DestinationCoverageHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DestinationCoverageHistoryCountAggregateInputType | true
+    }
+
+  export interface DestinationCoverageHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DestinationCoverageHistory'], meta: { name: 'DestinationCoverageHistory' } }
+    /**
+     * Find zero or one DestinationCoverageHistory that matches the filter.
+     * @param {DestinationCoverageHistoryFindUniqueArgs} args - Arguments to find a DestinationCoverageHistory
+     * @example
+     * // Get one DestinationCoverageHistory
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DestinationCoverageHistoryFindUniqueArgs>(args: SelectSubset<T, DestinationCoverageHistoryFindUniqueArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DestinationCoverageHistory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DestinationCoverageHistoryFindUniqueOrThrowArgs} args - Arguments to find a DestinationCoverageHistory
+     * @example
+     * // Get one DestinationCoverageHistory
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DestinationCoverageHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, DestinationCoverageHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DestinationCoverageHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DestinationCoverageHistoryFindFirstArgs} args - Arguments to find a DestinationCoverageHistory
+     * @example
+     * // Get one DestinationCoverageHistory
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DestinationCoverageHistoryFindFirstArgs>(args?: SelectSubset<T, DestinationCoverageHistoryFindFirstArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DestinationCoverageHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DestinationCoverageHistoryFindFirstOrThrowArgs} args - Arguments to find a DestinationCoverageHistory
+     * @example
+     * // Get one DestinationCoverageHistory
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DestinationCoverageHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, DestinationCoverageHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DestinationCoverageHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DestinationCoverageHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DestinationCoverageHistories
+     * const destinationCoverageHistories = await prisma.destinationCoverageHistory.findMany()
+     * 
+     * // Get first 10 DestinationCoverageHistories
+     * const destinationCoverageHistories = await prisma.destinationCoverageHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const destinationCoverageHistoryWithIdOnly = await prisma.destinationCoverageHistory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DestinationCoverageHistoryFindManyArgs>(args?: SelectSubset<T, DestinationCoverageHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DestinationCoverageHistory.
+     * @param {DestinationCoverageHistoryCreateArgs} args - Arguments to create a DestinationCoverageHistory.
+     * @example
+     * // Create one DestinationCoverageHistory
+     * const DestinationCoverageHistory = await prisma.destinationCoverageHistory.create({
+     *   data: {
+     *     // ... data to create a DestinationCoverageHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends DestinationCoverageHistoryCreateArgs>(args: SelectSubset<T, DestinationCoverageHistoryCreateArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DestinationCoverageHistories.
+     * @param {DestinationCoverageHistoryCreateManyArgs} args - Arguments to create many DestinationCoverageHistories.
+     * @example
+     * // Create many DestinationCoverageHistories
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DestinationCoverageHistoryCreateManyArgs>(args?: SelectSubset<T, DestinationCoverageHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DestinationCoverageHistories and returns the data saved in the database.
+     * @param {DestinationCoverageHistoryCreateManyAndReturnArgs} args - Arguments to create many DestinationCoverageHistories.
+     * @example
+     * // Create many DestinationCoverageHistories
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DestinationCoverageHistories and only return the `id`
+     * const destinationCoverageHistoryWithIdOnly = await prisma.destinationCoverageHistory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DestinationCoverageHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, DestinationCoverageHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DestinationCoverageHistory.
+     * @param {DestinationCoverageHistoryDeleteArgs} args - Arguments to delete one DestinationCoverageHistory.
+     * @example
+     * // Delete one DestinationCoverageHistory
+     * const DestinationCoverageHistory = await prisma.destinationCoverageHistory.delete({
+     *   where: {
+     *     // ... filter to delete one DestinationCoverageHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DestinationCoverageHistoryDeleteArgs>(args: SelectSubset<T, DestinationCoverageHistoryDeleteArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DestinationCoverageHistory.
+     * @param {DestinationCoverageHistoryUpdateArgs} args - Arguments to update one DestinationCoverageHistory.
+     * @example
+     * // Update one DestinationCoverageHistory
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DestinationCoverageHistoryUpdateArgs>(args: SelectSubset<T, DestinationCoverageHistoryUpdateArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DestinationCoverageHistories.
+     * @param {DestinationCoverageHistoryDeleteManyArgs} args - Arguments to filter DestinationCoverageHistories to delete.
+     * @example
+     * // Delete a few DestinationCoverageHistories
+     * const { count } = await prisma.destinationCoverageHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DestinationCoverageHistoryDeleteManyArgs>(args?: SelectSubset<T, DestinationCoverageHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DestinationCoverageHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DestinationCoverageHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DestinationCoverageHistories
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DestinationCoverageHistoryUpdateManyArgs>(args: SelectSubset<T, DestinationCoverageHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DestinationCoverageHistories and returns the data updated in the database.
+     * @param {DestinationCoverageHistoryUpdateManyAndReturnArgs} args - Arguments to update many DestinationCoverageHistories.
+     * @example
+     * // Update many DestinationCoverageHistories
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DestinationCoverageHistories and only return the `id`
+     * const destinationCoverageHistoryWithIdOnly = await prisma.destinationCoverageHistory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DestinationCoverageHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, DestinationCoverageHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DestinationCoverageHistory.
+     * @param {DestinationCoverageHistoryUpsertArgs} args - Arguments to update or create a DestinationCoverageHistory.
+     * @example
+     * // Update or create a DestinationCoverageHistory
+     * const destinationCoverageHistory = await prisma.destinationCoverageHistory.upsert({
+     *   create: {
+     *     // ... data to create a DestinationCoverageHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DestinationCoverageHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DestinationCoverageHistoryUpsertArgs>(args: SelectSubset<T, DestinationCoverageHistoryUpsertArgs<ExtArgs>>): Prisma__DestinationCoverageHistoryClient<$Result.GetResult<Prisma.$DestinationCoverageHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DestinationCoverageHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DestinationCoverageHistoryCountArgs} args - Arguments to filter DestinationCoverageHistories to count.
+     * @example
+     * // Count the number of DestinationCoverageHistories
+     * const count = await prisma.destinationCoverageHistory.count({
+     *   where: {
+     *     // ... the filter for the DestinationCoverageHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends DestinationCoverageHistoryCountArgs>(
+      args?: Subset<T, DestinationCoverageHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DestinationCoverageHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DestinationCoverageHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DestinationCoverageHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DestinationCoverageHistoryAggregateArgs>(args: Subset<T, DestinationCoverageHistoryAggregateArgs>): Prisma.PrismaPromise<GetDestinationCoverageHistoryAggregateType<T>>
+
+    /**
+     * Group by DestinationCoverageHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DestinationCoverageHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DestinationCoverageHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DestinationCoverageHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: DestinationCoverageHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DestinationCoverageHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDestinationCoverageHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DestinationCoverageHistory model
+   */
+  readonly fields: DestinationCoverageHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DestinationCoverageHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DestinationCoverageHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DestinationCoverageHistory model
+   */
+  interface DestinationCoverageHistoryFieldRefs {
+    readonly id: FieldRef<"DestinationCoverageHistory", 'Int'>
+    readonly destinationId: FieldRef<"DestinationCoverageHistory", 'Int'>
+    readonly polygon: FieldRef<"DestinationCoverageHistory", 'Json'>
+    readonly createdAt: FieldRef<"DestinationCoverageHistory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DestinationCoverageHistory findUnique
+   */
+  export type DestinationCoverageHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which DestinationCoverageHistory to fetch.
+     */
+    where: DestinationCoverageHistoryWhereUniqueInput
+  }
+
+  /**
+   * DestinationCoverageHistory findUniqueOrThrow
+   */
+  export type DestinationCoverageHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which DestinationCoverageHistory to fetch.
+     */
+    where: DestinationCoverageHistoryWhereUniqueInput
+  }
+
+  /**
+   * DestinationCoverageHistory findFirst
+   */
+  export type DestinationCoverageHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which DestinationCoverageHistory to fetch.
+     */
+    where?: DestinationCoverageHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DestinationCoverageHistories to fetch.
+     */
+    orderBy?: DestinationCoverageHistoryOrderByWithRelationInput | DestinationCoverageHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DestinationCoverageHistories.
+     */
+    cursor?: DestinationCoverageHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DestinationCoverageHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DestinationCoverageHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DestinationCoverageHistories.
+     */
+    distinct?: DestinationCoverageHistoryScalarFieldEnum | DestinationCoverageHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * DestinationCoverageHistory findFirstOrThrow
+   */
+  export type DestinationCoverageHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which DestinationCoverageHistory to fetch.
+     */
+    where?: DestinationCoverageHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DestinationCoverageHistories to fetch.
+     */
+    orderBy?: DestinationCoverageHistoryOrderByWithRelationInput | DestinationCoverageHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DestinationCoverageHistories.
+     */
+    cursor?: DestinationCoverageHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DestinationCoverageHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DestinationCoverageHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DestinationCoverageHistories.
+     */
+    distinct?: DestinationCoverageHistoryScalarFieldEnum | DestinationCoverageHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * DestinationCoverageHistory findMany
+   */
+  export type DestinationCoverageHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which DestinationCoverageHistories to fetch.
+     */
+    where?: DestinationCoverageHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DestinationCoverageHistories to fetch.
+     */
+    orderBy?: DestinationCoverageHistoryOrderByWithRelationInput | DestinationCoverageHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DestinationCoverageHistories.
+     */
+    cursor?: DestinationCoverageHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DestinationCoverageHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DestinationCoverageHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DestinationCoverageHistories.
+     */
+    distinct?: DestinationCoverageHistoryScalarFieldEnum | DestinationCoverageHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * DestinationCoverageHistory create
+   */
+  export type DestinationCoverageHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DestinationCoverageHistory.
+     */
+    data: XOR<DestinationCoverageHistoryCreateInput, DestinationCoverageHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * DestinationCoverageHistory createMany
+   */
+  export type DestinationCoverageHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DestinationCoverageHistories.
+     */
+    data: DestinationCoverageHistoryCreateManyInput | DestinationCoverageHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DestinationCoverageHistory createManyAndReturn
+   */
+  export type DestinationCoverageHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many DestinationCoverageHistories.
+     */
+    data: DestinationCoverageHistoryCreateManyInput | DestinationCoverageHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DestinationCoverageHistory update
+   */
+  export type DestinationCoverageHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DestinationCoverageHistory.
+     */
+    data: XOR<DestinationCoverageHistoryUpdateInput, DestinationCoverageHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which DestinationCoverageHistory to update.
+     */
+    where: DestinationCoverageHistoryWhereUniqueInput
+  }
+
+  /**
+   * DestinationCoverageHistory updateMany
+   */
+  export type DestinationCoverageHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DestinationCoverageHistories.
+     */
+    data: XOR<DestinationCoverageHistoryUpdateManyMutationInput, DestinationCoverageHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which DestinationCoverageHistories to update
+     */
+    where?: DestinationCoverageHistoryWhereInput
+    /**
+     * Limit how many DestinationCoverageHistories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DestinationCoverageHistory updateManyAndReturn
+   */
+  export type DestinationCoverageHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to update DestinationCoverageHistories.
+     */
+    data: XOR<DestinationCoverageHistoryUpdateManyMutationInput, DestinationCoverageHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which DestinationCoverageHistories to update
+     */
+    where?: DestinationCoverageHistoryWhereInput
+    /**
+     * Limit how many DestinationCoverageHistories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DestinationCoverageHistory upsert
+   */
+  export type DestinationCoverageHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DestinationCoverageHistory to update in case it exists.
+     */
+    where: DestinationCoverageHistoryWhereUniqueInput
+    /**
+     * In case the DestinationCoverageHistory found by the `where` argument doesn't exist, create a new DestinationCoverageHistory with this data.
+     */
+    create: XOR<DestinationCoverageHistoryCreateInput, DestinationCoverageHistoryUncheckedCreateInput>
+    /**
+     * In case the DestinationCoverageHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DestinationCoverageHistoryUpdateInput, DestinationCoverageHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * DestinationCoverageHistory delete
+   */
+  export type DestinationCoverageHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which DestinationCoverageHistory to delete.
+     */
+    where: DestinationCoverageHistoryWhereUniqueInput
+  }
+
+  /**
+   * DestinationCoverageHistory deleteMany
+   */
+  export type DestinationCoverageHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DestinationCoverageHistories to delete
+     */
+    where?: DestinationCoverageHistoryWhereInput
+    /**
+     * Limit how many DestinationCoverageHistories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DestinationCoverageHistory without action
+   */
+  export type DestinationCoverageHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCoverageHistory
+     */
+    select?: DestinationCoverageHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCoverageHistory
+     */
+    omit?: DestinationCoverageHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCoverageHistoryInclude<ExtArgs> | null
   }
 
 
@@ -19227,10 +20470,23 @@ export namespace Prisma {
     isDeleted: 'isDeleted',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    coveragePolygon: 'coveragePolygon',
+    pendingCoveragePolygon: 'pendingCoveragePolygon',
+    coveragePolygonChanged: 'coveragePolygonChanged'
   };
 
   export type DestinationScalarFieldEnum = (typeof DestinationScalarFieldEnum)[keyof typeof DestinationScalarFieldEnum]
+
+
+  export const DestinationCoverageHistoryScalarFieldEnum: {
+    id: 'id',
+    destinationId: 'destinationId',
+    polygon: 'polygon',
+    createdAt: 'createdAt'
+  };
+
+  export type DestinationCoverageHistoryScalarFieldEnum = (typeof DestinationCoverageHistoryScalarFieldEnum)[keyof typeof DestinationCoverageHistoryScalarFieldEnum]
 
 
   export const CategoryScalarFieldEnum: {
@@ -19394,6 +20650,14 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const JsonNullValueInput: {
@@ -19756,6 +21020,9 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    coveragePolygon?: JsonNullableFilter<"Destination">
+    pendingCoveragePolygon?: JsonNullableFilter<"Destination">
+    coveragePolygonChanged?: BoolFilter<"Destination"> | boolean
     owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     categories?: DestinationCategoryListRelationFilter
     aiAnalyses?: AiAnalysisListRelationFilter
@@ -19766,6 +21033,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueListRelationFilter
     views?: DestinationViewListRelationFilter
     events?: EventListRelationFilter
+    coverageHistories?: DestinationCoverageHistoryListRelationFilter
   }
 
   export type DestinationOrderByWithRelationInput = {
@@ -19795,6 +21063,9 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coveragePolygon?: SortOrderInput | SortOrder
+    pendingCoveragePolygon?: SortOrderInput | SortOrder
+    coveragePolygonChanged?: SortOrder
     owner?: UserOrderByWithRelationInput
     categories?: DestinationCategoryOrderByRelationAggregateInput
     aiAnalyses?: AiAnalysisOrderByRelationAggregateInput
@@ -19805,6 +21076,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
     views?: DestinationViewOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
+    coverageHistories?: DestinationCoverageHistoryOrderByRelationAggregateInput
   }
 
   export type DestinationWhereUniqueInput = Prisma.AtLeast<{
@@ -19837,6 +21109,9 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    coveragePolygon?: JsonNullableFilter<"Destination">
+    pendingCoveragePolygon?: JsonNullableFilter<"Destination">
+    coveragePolygonChanged?: BoolFilter<"Destination"> | boolean
     owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     categories?: DestinationCategoryListRelationFilter
     aiAnalyses?: AiAnalysisListRelationFilter
@@ -19847,6 +21122,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueListRelationFilter
     views?: DestinationViewListRelationFilter
     events?: EventListRelationFilter
+    coverageHistories?: DestinationCoverageHistoryListRelationFilter
   }, "id">
 
   export type DestinationOrderByWithAggregationInput = {
@@ -19876,6 +21152,9 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coveragePolygon?: SortOrderInput | SortOrder
+    pendingCoveragePolygon?: SortOrderInput | SortOrder
+    coveragePolygonChanged?: SortOrder
     _count?: DestinationCountOrderByAggregateInput
     _avg?: DestinationAvgOrderByAggregateInput
     _max?: DestinationMaxOrderByAggregateInput
@@ -19913,6 +21192,61 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Destination"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Destination"> | Date | string
+    coveragePolygon?: JsonNullableWithAggregatesFilter<"Destination">
+    pendingCoveragePolygon?: JsonNullableWithAggregatesFilter<"Destination">
+    coveragePolygonChanged?: BoolWithAggregatesFilter<"Destination"> | boolean
+  }
+
+  export type DestinationCoverageHistoryWhereInput = {
+    AND?: DestinationCoverageHistoryWhereInput | DestinationCoverageHistoryWhereInput[]
+    OR?: DestinationCoverageHistoryWhereInput[]
+    NOT?: DestinationCoverageHistoryWhereInput | DestinationCoverageHistoryWhereInput[]
+    id?: IntFilter<"DestinationCoverageHistory"> | number
+    destinationId?: IntFilter<"DestinationCoverageHistory"> | number
+    polygon?: JsonFilter<"DestinationCoverageHistory">
+    createdAt?: DateTimeFilter<"DestinationCoverageHistory"> | Date | string
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+  }
+
+  export type DestinationCoverageHistoryOrderByWithRelationInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    polygon?: SortOrder
+    createdAt?: SortOrder
+    destination?: DestinationOrderByWithRelationInput
+  }
+
+  export type DestinationCoverageHistoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: DestinationCoverageHistoryWhereInput | DestinationCoverageHistoryWhereInput[]
+    OR?: DestinationCoverageHistoryWhereInput[]
+    NOT?: DestinationCoverageHistoryWhereInput | DestinationCoverageHistoryWhereInput[]
+    destinationId?: IntFilter<"DestinationCoverageHistory"> | number
+    polygon?: JsonFilter<"DestinationCoverageHistory">
+    createdAt?: DateTimeFilter<"DestinationCoverageHistory"> | Date | string
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+  }, "id">
+
+  export type DestinationCoverageHistoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    polygon?: SortOrder
+    createdAt?: SortOrder
+    _count?: DestinationCoverageHistoryCountOrderByAggregateInput
+    _avg?: DestinationCoverageHistoryAvgOrderByAggregateInput
+    _max?: DestinationCoverageHistoryMaxOrderByAggregateInput
+    _min?: DestinationCoverageHistoryMinOrderByAggregateInput
+    _sum?: DestinationCoverageHistorySumOrderByAggregateInput
+  }
+
+  export type DestinationCoverageHistoryScalarWhereWithAggregatesInput = {
+    AND?: DestinationCoverageHistoryScalarWhereWithAggregatesInput | DestinationCoverageHistoryScalarWhereWithAggregatesInput[]
+    OR?: DestinationCoverageHistoryScalarWhereWithAggregatesInput[]
+    NOT?: DestinationCoverageHistoryScalarWhereWithAggregatesInput | DestinationCoverageHistoryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"DestinationCoverageHistory"> | number
+    destinationId?: IntWithAggregatesFilter<"DestinationCoverageHistory"> | number
+    polygon?: JsonWithAggregatesFilter<"DestinationCoverageHistory">
+    createdAt?: DateTimeWithAggregatesFilter<"DestinationCoverageHistory"> | Date | string
   }
 
   export type CategoryWhereInput = {
@@ -20910,6 +22244,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -20920,6 +22257,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateInput = {
@@ -20949,6 +22287,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -20958,6 +22299,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUpdateInput = {
@@ -20985,6 +22327,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -20995,6 +22340,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateInput = {
@@ -21024,6 +22370,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -21033,6 +22382,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationCreateManyInput = {
@@ -21062,6 +22412,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
   }
 
   export type DestinationUpdateManyMutationInput = {
@@ -21089,6 +22442,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DestinationUncheckedUpdateManyInput = {
@@ -21118,6 +22474,54 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type DestinationCoverageHistoryCreateInput = {
+    polygon: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    destination: DestinationCreateNestedOneWithoutCoverageHistoriesInput
+  }
+
+  export type DestinationCoverageHistoryUncheckedCreateInput = {
+    id?: number
+    destinationId: number
+    polygon: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type DestinationCoverageHistoryUpdateInput = {
+    polygon?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    destination?: DestinationUpdateOneRequiredWithoutCoverageHistoriesNestedInput
+  }
+
+  export type DestinationCoverageHistoryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    polygon?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DestinationCoverageHistoryCreateManyInput = {
+    id?: number
+    destinationId: number
+    polygon: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type DestinationCoverageHistoryUpdateManyMutationInput = {
+    polygon?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DestinationCoverageHistoryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    polygon?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryCreateInput = {
@@ -22256,6 +23660,29 @@ export namespace Prisma {
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
@@ -22286,6 +23713,12 @@ export namespace Prisma {
     none?: DestinationViewWhereInput
   }
 
+  export type DestinationCoverageHistoryListRelationFilter = {
+    every?: DestinationCoverageHistoryWhereInput
+    some?: DestinationCoverageHistoryWhereInput
+    none?: DestinationCoverageHistoryWhereInput
+  }
+
   export type DestinationCategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -22299,6 +23732,10 @@ export namespace Prisma {
   }
 
   export type DestinationViewOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DestinationCoverageHistoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22329,6 +23766,9 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coveragePolygon?: SortOrder
+    pendingCoveragePolygon?: SortOrder
+    coveragePolygonChanged?: SortOrder
   }
 
   export type DestinationAvgOrderByAggregateInput = {
@@ -22368,6 +23808,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coveragePolygonChanged?: SortOrder
   }
 
   export type DestinationMinOrderByAggregateInput = {
@@ -22397,6 +23838,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    coveragePolygonChanged?: SortOrder
   }
 
   export type DestinationSumOrderByAggregateInput = {
@@ -22472,6 +23914,115 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type DestinationScalarRelationFilter = {
+    is?: DestinationWhereInput
+    isNot?: DestinationWhereInput
+  }
+
+  export type DestinationCoverageHistoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    polygon?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DestinationCoverageHistoryAvgOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+  }
+
+  export type DestinationCoverageHistoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DestinationCoverageHistoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DestinationCoverageHistorySumOrderByAggregateInput = {
+    id?: SortOrder
+    destinationId?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
 
   export type CategoryKeywordListRelationFilter = {
     every?: CategoryKeywordWhereInput
@@ -22507,11 +24058,6 @@ export namespace Prisma {
 
   export type CategorySumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type DestinationScalarRelationFilter = {
-    is?: DestinationWhereInput
-    isNot?: DestinationWhereInput
   }
 
   export type CategoryScalarRelationFilter = {
@@ -22589,29 +24135,6 @@ export namespace Prisma {
     id?: SortOrder
     categoryId?: SortOrder
   }
-  export type JsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type AiAnalysisCountOrderByAggregateInput = {
     id?: SortOrder
@@ -22651,32 +24174,6 @@ export namespace Prisma {
     id?: SortOrder
     destinationId?: SortOrder
     score?: SortOrder
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -23572,6 +25069,13 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
+  export type DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<DestinationCoverageHistoryCreateWithoutDestinationInput, DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput> | DestinationCoverageHistoryCreateWithoutDestinationInput[] | DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput | DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput[]
+    createMany?: DestinationCoverageHistoryCreateManyDestinationInputEnvelope
+    connect?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+  }
+
   export type DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput = {
     create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
@@ -23633,6 +25137,13 @@ export namespace Prisma {
     connectOrCreate?: EventCreateOrConnectWithoutDestinationInput | EventCreateOrConnectWithoutDestinationInput[]
     createMany?: EventCreateManyDestinationInputEnvelope
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<DestinationCoverageHistoryCreateWithoutDestinationInput, DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput> | DestinationCoverageHistoryCreateWithoutDestinationInput[] | DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput | DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput[]
+    createMany?: DestinationCoverageHistoryCreateManyDestinationInputEnvelope
+    connect?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -23799,6 +25310,20 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
+  export type DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<DestinationCoverageHistoryCreateWithoutDestinationInput, DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput> | DestinationCoverageHistoryCreateWithoutDestinationInput[] | DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput | DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput[]
+    upsert?: DestinationCoverageHistoryUpsertWithWhereUniqueWithoutDestinationInput | DestinationCoverageHistoryUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: DestinationCoverageHistoryCreateManyDestinationInputEnvelope
+    set?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    disconnect?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    delete?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    connect?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    update?: DestinationCoverageHistoryUpdateWithWhereUniqueWithoutDestinationInput | DestinationCoverageHistoryUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: DestinationCoverageHistoryUpdateManyWithWhereWithoutDestinationInput | DestinationCoverageHistoryUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: DestinationCoverageHistoryScalarWhereInput | DestinationCoverageHistoryScalarWhereInput[]
+  }
+
   export type DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput = {
     create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
@@ -23923,6 +25448,34 @@ export namespace Prisma {
     update?: EventUpdateWithWhereUniqueWithoutDestinationInput | EventUpdateWithWhereUniqueWithoutDestinationInput[]
     updateMany?: EventUpdateManyWithWhereWithoutDestinationInput | EventUpdateManyWithWhereWithoutDestinationInput[]
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<DestinationCoverageHistoryCreateWithoutDestinationInput, DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput> | DestinationCoverageHistoryCreateWithoutDestinationInput[] | DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput | DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput[]
+    upsert?: DestinationCoverageHistoryUpsertWithWhereUniqueWithoutDestinationInput | DestinationCoverageHistoryUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: DestinationCoverageHistoryCreateManyDestinationInputEnvelope
+    set?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    disconnect?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    delete?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    connect?: DestinationCoverageHistoryWhereUniqueInput | DestinationCoverageHistoryWhereUniqueInput[]
+    update?: DestinationCoverageHistoryUpdateWithWhereUniqueWithoutDestinationInput | DestinationCoverageHistoryUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: DestinationCoverageHistoryUpdateManyWithWhereWithoutDestinationInput | DestinationCoverageHistoryUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: DestinationCoverageHistoryScalarWhereInput | DestinationCoverageHistoryScalarWhereInput[]
+  }
+
+  export type DestinationCreateNestedOneWithoutCoverageHistoriesInput = {
+    create?: XOR<DestinationCreateWithoutCoverageHistoriesInput, DestinationUncheckedCreateWithoutCoverageHistoriesInput>
+    connectOrCreate?: DestinationCreateOrConnectWithoutCoverageHistoriesInput
+    connect?: DestinationWhereUniqueInput
+  }
+
+  export type DestinationUpdateOneRequiredWithoutCoverageHistoriesNestedInput = {
+    create?: XOR<DestinationCreateWithoutCoverageHistoriesInput, DestinationUncheckedCreateWithoutCoverageHistoriesInput>
+    connectOrCreate?: DestinationCreateOrConnectWithoutCoverageHistoriesInput
+    upsert?: DestinationUpsertWithoutCoverageHistoriesInput
+    connect?: DestinationWhereUniqueInput
+    update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutCoverageHistoriesInput, DestinationUpdateWithoutCoverageHistoriesInput>, DestinationUncheckedUpdateWithoutCoverageHistoriesInput>
   }
 
   export type DestinationCategoryCreateNestedManyWithoutCategoryInput = {
@@ -24609,6 +26162,29 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -24872,6 +26448,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -24881,6 +26460,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutOwnerInput = {
@@ -24909,6 +26489,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -24918,6 +26501,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutOwnerInput = {
@@ -25167,6 +26751,9 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    coveragePolygon?: JsonNullableFilter<"Destination">
+    pendingCoveragePolygon?: JsonNullableFilter<"Destination">
+    coveragePolygonChanged?: BoolFilter<"Destination"> | boolean
   }
 
   export type EventUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -25488,6 +27075,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DestinationCoverageHistoryCreateWithoutDestinationInput = {
+    polygon: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    polygon: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type DestinationCoverageHistoryCreateOrConnectWithoutDestinationInput = {
+    where: DestinationCoverageHistoryWhereUniqueInput
+    create: XOR<DestinationCoverageHistoryCreateWithoutDestinationInput, DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type DestinationCoverageHistoryCreateManyDestinationInputEnvelope = {
+    data: DestinationCoverageHistoryCreateManyDestinationInput | DestinationCoverageHistoryCreateManyDestinationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutDestinationsInput = {
     update: XOR<UserUpdateWithoutDestinationsInput, UserUncheckedUpdateWithoutDestinationsInput>
     create: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
@@ -25732,6 +27340,210 @@ export namespace Prisma {
     data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutDestinationInput>
   }
 
+  export type DestinationCoverageHistoryUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: DestinationCoverageHistoryWhereUniqueInput
+    update: XOR<DestinationCoverageHistoryUpdateWithoutDestinationInput, DestinationCoverageHistoryUncheckedUpdateWithoutDestinationInput>
+    create: XOR<DestinationCoverageHistoryCreateWithoutDestinationInput, DestinationCoverageHistoryUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type DestinationCoverageHistoryUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: DestinationCoverageHistoryWhereUniqueInput
+    data: XOR<DestinationCoverageHistoryUpdateWithoutDestinationInput, DestinationCoverageHistoryUncheckedUpdateWithoutDestinationInput>
+  }
+
+  export type DestinationCoverageHistoryUpdateManyWithWhereWithoutDestinationInput = {
+    where: DestinationCoverageHistoryScalarWhereInput
+    data: XOR<DestinationCoverageHistoryUpdateManyMutationInput, DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationInput>
+  }
+
+  export type DestinationCoverageHistoryScalarWhereInput = {
+    AND?: DestinationCoverageHistoryScalarWhereInput | DestinationCoverageHistoryScalarWhereInput[]
+    OR?: DestinationCoverageHistoryScalarWhereInput[]
+    NOT?: DestinationCoverageHistoryScalarWhereInput | DestinationCoverageHistoryScalarWhereInput[]
+    id?: IntFilter<"DestinationCoverageHistory"> | number
+    destinationId?: IntFilter<"DestinationCoverageHistory"> | number
+    polygon?: JsonFilter<"DestinationCoverageHistory">
+    createdAt?: DateTimeFilter<"DestinationCoverageHistory"> | Date | string
+  }
+
+  export type DestinationCreateWithoutCoverageHistoriesInput = {
+    name: string
+    description: string
+    address: string
+    addressStreet?: string | null
+    addressVillage?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressProvince?: string | null
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
+    owner?: UserCreateNestedOneWithoutDestinationsInput
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    events?: EventCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutCoverageHistoriesInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    addressStreet?: string | null
+    addressVillage?: string | null
+    addressDistrict?: string | null
+    addressCity?: string | null
+    addressProvince?: string | null
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    ownerId?: number | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    adminFeedback?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutCoverageHistoriesInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutCoverageHistoriesInput, DestinationUncheckedCreateWithoutCoverageHistoriesInput>
+  }
+
+  export type DestinationUpsertWithoutCoverageHistoriesInput = {
+    update: XOR<DestinationUpdateWithoutCoverageHistoriesInput, DestinationUncheckedUpdateWithoutCoverageHistoriesInput>
+    create: XOR<DestinationCreateWithoutCoverageHistoriesInput, DestinationUncheckedCreateWithoutCoverageHistoriesInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutCoverageHistoriesInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutCoverageHistoriesInput, DestinationUncheckedUpdateWithoutCoverageHistoriesInput>
+  }
+
+  export type DestinationUpdateWithoutCoverageHistoriesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    events?: EventUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutCoverageHistoriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    adminFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+  }
+
   export type DestinationCategoryCreateWithoutCategoryInput = {
     destination: DestinationCreateNestedOneWithoutCategoriesInput
   }
@@ -25839,6 +27651,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -25848,6 +27663,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutCategoriesInput = {
@@ -25877,6 +27693,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
@@ -25885,6 +27704,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutCategoriesInput = {
@@ -25946,6 +27766,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -25955,6 +27778,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutCategoriesInput = {
@@ -25984,6 +27808,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
@@ -25992,6 +27819,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type CategoryUpsertWithoutDestinationsInput = {
@@ -26085,6 +27913,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
@@ -26094,6 +27925,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
@@ -26123,6 +27955,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
@@ -26131,6 +27966,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutAiAnalysesInput = {
@@ -26174,6 +28010,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -26183,6 +28022,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
@@ -26212,6 +28052,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
@@ -26220,6 +28063,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutSavedDestinationsInput = {
@@ -26295,6 +28139,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -26304,6 +28151,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutSavedByInput = {
@@ -26333,6 +28181,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
@@ -26341,6 +28192,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutSavedByInput = {
@@ -26438,6 +28290,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -26447,6 +28302,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutSavedByInput = {
@@ -26476,6 +28332,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
@@ -26484,6 +28343,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutItineraryQueueInput = {
@@ -26559,6 +28419,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -26568,6 +28431,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutItineraryQueueInput = {
@@ -26597,6 +28461,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -26605,6 +28472,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutItineraryQueueInput = {
@@ -26702,6 +28570,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -26711,6 +28582,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutItineraryQueueInput = {
@@ -26740,6 +28612,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -26748,6 +28623,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutItinerariesInput = {
@@ -26966,6 +28842,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -26975,6 +28854,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutItineraryItemsInput = {
@@ -27004,6 +28884,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -27012,6 +28895,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutItineraryItemsInput = {
@@ -27105,6 +28989,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -27114,6 +29001,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutItineraryItemsInput = {
@@ -27143,6 +29031,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -27151,6 +29042,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutReviewsInput = {
@@ -27226,6 +29118,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -27235,6 +29130,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutReviewsInput = {
@@ -27264,6 +29160,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -27272,6 +29171,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutReviewsInput = {
@@ -27369,6 +29269,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -27378,6 +29281,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutReviewsInput = {
@@ -27407,6 +29311,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -27415,6 +29322,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutVisitedPlacesInput = {
@@ -27490,6 +29398,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -27499,6 +29410,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutVisitedByInput = {
@@ -27528,6 +29440,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -27536,6 +29451,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutVisitedByInput = {
@@ -27633,6 +29549,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -27642,6 +29561,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutVisitedByInput = {
@@ -27671,6 +29591,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -27679,6 +29602,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationCreateWithoutViewsInput = {
@@ -27706,6 +29630,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -27715,6 +29642,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutViewsInput = {
@@ -27744,6 +29672,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -27752,6 +29683,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutViewsInput = {
@@ -27795,6 +29727,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -27804,6 +29739,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutViewsInput = {
@@ -27833,6 +29769,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -27841,6 +29780,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserCreateWithoutEventsInput = {
@@ -27916,6 +29856,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
@@ -27925,6 +29868,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
     itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutEventsInput = {
@@ -27954,6 +29898,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
     savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
@@ -27962,6 +29909,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
     itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutEventsInput = {
@@ -28059,6 +30007,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
@@ -28068,6 +30019,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutEventsInput = {
@@ -28097,6 +30049,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -28105,6 +30060,7 @@ export namespace Prisma {
     visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type SavedDestinationCreateManyUserInput = {
@@ -28183,6 +30139,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: boolean
   }
 
   export type EventCreateManyOwnerInput = {
@@ -28373,6 +30332,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
@@ -28382,6 +30344,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutOwnerInput = {
@@ -28410,6 +30373,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
     savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
@@ -28419,6 +30385,7 @@ export namespace Prisma {
     itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    coverageHistories?: DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateManyWithoutOwnerInput = {
@@ -28447,6 +30414,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    pendingCoveragePolygon?: NullableJsonNullValueInput | InputJsonValue
+    coveragePolygonChanged?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type EventUpdateWithoutOwnerInput = {
@@ -28571,6 +30541,12 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type DestinationCoverageHistoryCreateManyDestinationInput = {
+    id?: number
+    polygon: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
   }
 
   export type DestinationCategoryUpdateWithoutDestinationInput = {
@@ -28793,6 +30769,23 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DestinationCoverageHistoryUpdateWithoutDestinationInput = {
+    polygon?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DestinationCoverageHistoryUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    polygon?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DestinationCoverageHistoryUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    polygon?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DestinationCategoryCreateManyCategoryInput = {

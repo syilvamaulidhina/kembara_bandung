@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import DestinationMap from "@/components/destination-map";
 import { ChevronDown } from "lucide-react";
 import { CITY_OPTIONS, WILAYAH_BANDUNG } from "@/data/wilayah-bandung";
+import type { CoveragePolygon } from "@/types/coverage-polygon";
 
 type Category = {
   id: number;
@@ -65,6 +66,10 @@ type Destination = {
   openTime: string | null;
   closeTime: string | null;
   website: string | null;
+
+  coveragePolygon: CoveragePolygon | null;
+	pendingCoveragePolygon: CoveragePolygon | null;
+	coveragePolygonChanged: boolean;
 };
 
 export default function EditDestinasiPage() {
@@ -77,6 +82,9 @@ export default function EditDestinasiPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAreaValid, setIsAreaValid] = useState(true);
+
+  const [isCoverageValid, setIsCoverageValid] = useState(true);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingAI, setIsCheckingAI] = useState(false);
 
@@ -89,6 +97,12 @@ export default function EditDestinasiPage() {
   const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
   const [adminFeedback, setAdminFeedback] = useState("");
+
+  const [approvedCoveragePolygon, setApprovedCoveragePolygon] =
+  useState<CoveragePolygon | null>(null);
+
+	const [coveragePolygon, setCoveragePolygon] =
+	useState<CoveragePolygon | null>(null);
 
   const [form, setForm] = useState({
 	name: "",
@@ -135,6 +149,14 @@ export default function EditDestinasiPage() {
 		setCategories(categoryData);
 		setOldImageUrl(destination.imageUrl || "");
 		setAdminFeedback(destination.adminFeedback || "");
+
+		setApprovedCoveragePolygon(destination.coveragePolygon || null);
+
+		setCoveragePolygon(
+		destination.coveragePolygonChanged
+			? destination.pendingCoveragePolygon || null
+			: null
+		);
 
 		setForm({
 			name: destination.name || "",
@@ -257,6 +279,13 @@ export default function EditDestinasiPage() {
 	  return;
 	}
 
+	if (!isCoverageValid) {
+		alert(
+			"Cakupan wilayah belum valid. Polygon harus memiliki minimal 3 titik dan seluruh titik harus berada di Bandung Raya."
+		);
+		return;
+	}
+
 	try {
 	  setIsCheckingAI(true);
 
@@ -366,8 +395,15 @@ export default function EditDestinasiPage() {
 	}
 
 	if (!isAreaValid) {
-	  alert("Lokasi berada di luar area Bandung Raya.");
-	  return;
+		alert("Lokasi berada di luar area Bandung Raya.");
+		return;
+	}
+
+	if (!isCoverageValid) {
+		alert(
+			"Cakupan wilayah belum valid. Polygon harus memiliki minimal 3 titik dan seluruh titik harus berada di Bandung Raya."
+		);
+		return;
 	}
 
 	try {
@@ -414,6 +450,9 @@ export default function EditDestinasiPage() {
 
 		  latitude: form.latitude,
 		  longitude: form.longitude,
+
+		  coveragePolygon,
+
 		  imageUrl: finalImageUrl,
 
 		  isFree: form.isFree,
@@ -869,6 +908,16 @@ export default function EditDestinasiPage() {
 			  <DestinationMap
 				latitude={form.latitude}
 				longitude={form.longitude}
+
+				coverageEnabled
+				approvedCoveragePolygon={approvedCoveragePolygon}
+				coveragePolygon={coveragePolygon}
+				onCoverageChange={(polygon) => {
+					setCoveragePolygon(polygon);
+					setAnalysisResult(null);
+				}}
+				onCoverageValidChange={setIsCoverageValid}
+
 				address={buildFullAddress() || form.address}
 				addressFields={{
 				  addressStreet: form.addressStreet,

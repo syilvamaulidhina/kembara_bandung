@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DestinationMap from "@/components/destination-map";
+import type { CoveragePolygon } from "@/types/coverage-polygon";
 import { CITY_OPTIONS, WILAYAH_BANDUNG } from "@/data/wilayah-bandung";
 import { ChevronDown, MapPin, Sparkles } from "lucide-react";
 
@@ -69,6 +70,14 @@ export default function TambahDestinasiPage() {
 
 	const [imageFile, setImageFile] = useState<File | null>(null);
 	const [isAreaValid, setIsAreaValid] = useState(true);
+
+	const [hasCoverageArea, setHasCoverageArea] = useState(false);
+
+	const [coveragePolygon, setCoveragePolygon] =
+	useState<CoveragePolygon | null>(null);
+
+	const [isCoverageValid, setIsCoverageValid] = useState(true);
+
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isCheckingAI, setIsCheckingAI] = useState(false);
 	const [analysisResult, setAnalysisResult] =
@@ -168,6 +177,16 @@ export default function TambahDestinasiPage() {
 
 		if (!isAreaValid) {
 			alert("Lokasi berada di luar area Bandung Raya.");
+			return;
+		}
+
+		if (hasCoverageArea && !coveragePolygon) {
+			alert("Cakupan wilayah minimal harus memiliki 3 titik.");
+			return;
+		}
+
+		if (hasCoverageArea && !isCoverageValid) {
+			alert("Seluruh titik cakupan harus berada di Bandung Raya.");
 			return;
 		}
 
@@ -301,6 +320,16 @@ export default function TambahDestinasiPage() {
 			return;
 		}
 
+		if (hasCoverageArea && !coveragePolygon) {
+			alert("Cakupan wilayah minimal harus memiliki 3 titik.");
+			return;
+		}
+
+		if (hasCoverageArea && !isCoverageValid) {
+			alert("Seluruh titik cakupan harus berada di Bandung Raya.");
+			return;
+		}
+
     if (!form.isFree) {
         if (!form.ticketPrice) {
           alert("Harga tiket mulai wajib diisi.");
@@ -360,6 +389,8 @@ export default function TambahDestinasiPage() {
 				body: JSON.stringify({
 					...form,
 					address: form.address || buildFullAddress(),
+
+					coveragePolygon: hasCoverageArea ? coveragePolygon : null,
 
 					imageUrl,
 					analysisResult,
@@ -596,6 +627,52 @@ export default function TambahDestinasiPage() {
 								</div>
 								)}
 
+								<div className="rounded-2xl bg-white p-4">
+									<label className="flex items-start gap-3">
+										<input
+										type="checkbox"
+										checked={hasCoverageArea}
+										onChange={(event) => {
+											const checked = event.target.checked;
+
+											setHasCoverageArea(checked);
+
+											if (!checked) {
+											setCoveragePolygon(null);
+											setIsCoverageValid(true);
+											}
+
+											resetAnalysis();
+										}}
+										className="mt-1 h-4 w-4 accent-[#F09A43]"
+										/>
+
+										<div>
+										<p className="font-semibold text-[#285260]">
+											Destinasi memiliki cakupan wilayah
+										</p>
+
+										<p className="mt-1 text-sm text-gray-500">
+											Aktifkan untuk menggambar area destinasi menggunakan titik-titik
+											polygon pada peta.
+										</p>
+										</div>
+									</label>
+
+									{hasCoverageArea && (
+										<div className="mt-3 rounded-xl bg-orange-50 px-4 py-3 text-sm text-[#C76B1F]">
+										Klik peta untuk menambahkan titik cakupan. Minimal 3 titik dan
+										maksimal 30 titik.
+										</div>
+									)}
+
+									{hasCoverageArea && !isCoverageValid && (
+										<div className="mt-3 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+										Cakupan wilayah belum valid.
+										</div>
+									)}
+									</div>
+
               <div className="rounded-2xl bg-white p-4">
                 <p className="mb-4 font-semibold text-[#285260]">
                   	Informasi Tambahan
@@ -758,6 +835,13 @@ export default function TambahDestinasiPage() {
 							updateForm("longitude", lng);
 							}}
 							onAreaValidChange={setIsAreaValid}
+							coverageEnabled={hasCoverageArea}
+							coveragePolygon={coveragePolygon}
+							onCoverageChange={(polygon) => {
+							setCoveragePolygon(polygon);
+							resetAnalysis();
+							}}
+							onCoverageValidChange={setIsCoverageValid}
 						/>
 						</div>
 					</div>

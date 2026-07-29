@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@/lib/generated/prisma";
 import { prisma } from "@/lib/prisma";
 
 const VALID_ACTIONS = ["approve", "revision", "reject"] as const;
@@ -142,6 +143,8 @@ export async function PATCH(req: NextRequest) {
       },
       select: {
         id: true,
+        pendingCoveragePolygon: true,
+        coveragePolygonChanged: true,
       },
     });
 
@@ -156,20 +159,30 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
+    const updateData: Prisma.DestinationUpdateInput = {
+      status:
+        action === "approve"
+          ? "aktif"
+          : action === "revision"
+            ? "butuh_perbaikan"
+            : "canceled",
+
+      adminFeedback: action === "revision" ? feedback : null,
+    };
+
+    if (action === "approve" && existingDestination.coveragePolygonChanged) {
+      updateData.coveragePolygon =
+        existingDestination.pendingCoveragePolygon ?? Prisma.DbNull;
+
+      updateData.pendingCoveragePolygon = Prisma.DbNull;
+      updateData.coveragePolygonChanged = false;
+    }
+
     const destination = await prisma.destination.update({
       where: {
         id,
       },
-      data: {
-        status:
-          action === "approve"
-            ? "aktif"
-            : action === "revision"
-              ? "butuh_perbaikan"
-              : "canceled",
-
-        adminFeedback: action === "revision" ? feedback : null,
-      },
+      data: updateData,
     });
 
     return NextResponse.json({

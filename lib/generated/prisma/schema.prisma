@@ -119,6 +119,22 @@ model Destination {
 
   //event relation
   events Event[]
+
+  //vertex and polygon
+  coveragePolygon        Json?
+  pendingCoveragePolygon Json?
+  coveragePolygonChanged Boolean @default(false)
+
+  coverageHistories DestinationCoverageHistory[]
+}
+
+model DestinationCoverageHistory {
+  id            Int      @id @default(autoincrement())
+  destinationId Int
+  polygon       Json
+  createdAt     DateTime @default(now())
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 }
 
 model Category {

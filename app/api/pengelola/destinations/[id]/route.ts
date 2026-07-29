@@ -1,3 +1,4 @@
+import { Prisma } from "@/lib/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -149,6 +150,19 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 		const body = await req.json();
 		const analysisResult = body.analysisResult;
 
+		// const submittedCoveragePolygon = body.coveragePolygon ?? null;
+
+		// const currentProposedPolygon =
+		// 	existingDestination.coveragePolygonChanged
+		// 		? existingDestination.pendingCoveragePolygon
+		// 		: existingDestination.coveragePolygon;
+
+		// const coveragePolygonChanged =
+		// 	JSON.stringify(submittedCoveragePolygon) !==
+		// 	JSON.stringify(currentProposedPolygon);
+
+		const submittedCoveragePolygon = body.coveragePolygon ?? null;
+
 		const categoryIds = Array.isArray(body.categoryIds)
 			? body.categoryIds.map((categoryId: unknown) => Number(categoryId))
 			: [];
@@ -180,54 +194,77 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 			},
 		});
 
+		const updateData: Prisma.DestinationUpdateInput = {
+			name: body.name,
+			description: body.description,
+			address: body.address,
+
+			addressStreet: body.addressStreet || null,
+			addressVillage: body.addressVillage || null,
+			addressDistrict: body.addressDistrict || null,
+			addressCity: body.addressCity || null,
+			addressProvince: body.addressProvince || null,
+
+			contact: body.contact || null,
+			latitude: Number(body.latitude),
+			longitude: Number(body.longitude),
+			imageUrl: body.imageUrl || null,
+
+			openTime: body.openTime || null,
+			closeTime: body.closeTime || null,
+
+			ticketPrice: body.isFree
+				? 0
+				: body.ticketPrice === "" ||
+					body.ticketPrice === null ||
+					body.ticketPrice === undefined
+					? null
+					: Number(body.ticketPrice),
+
+			maxPrice: body.isFree
+				? 0
+				: body.maxPrice === "" ||
+					body.maxPrice === null ||
+					body.maxPrice === undefined
+					? null
+					: Number(body.maxPrice),
+
+			website: body.website || null,
+
+			status: "pending",
+			adminFeedback: null,
+
+			categories: {
+				create: categoryIds.map((categoryId: number) => ({
+					categoryId,
+				})),
+			},
+		};
+
+		if (submittedCoveragePolygon) {
+		const isDifferentFromCurrentPending =
+			JSON.stringify(submittedCoveragePolygon) !==
+			JSON.stringify(existingDestination.pendingCoveragePolygon);
+
+		if (
+			!existingDestination.coveragePolygonChanged ||
+			isDifferentFromCurrentPending
+		) {
+			updateData.pendingCoveragePolygon = submittedCoveragePolygon;
+			updateData.coveragePolygonChanged = true;
+		}
+		} else if (existingDestination.coveragePolygonChanged) {
+		// Pengelola menghapus/membatalkan polygon usulan.
+		// Polygon approved tetap tidak berubah.
+		updateData.pendingCoveragePolygon = Prisma.DbNull;
+		updateData.coveragePolygonChanged = false;
+		}
+
 		const updatedDestination = await prisma.destination.update({
 			where: {
 				id: destinationId,
 			},
-			data: {
-				name: body.name,
-				description: body.description,
-				address: body.address,
-
-				addressStreet: body.addressStreet || null,
-				addressVillage: body.addressVillage || null,
-				addressDistrict: body.addressDistrict || null,
-				addressCity: body.addressCity || null,
-				addressProvince: body.addressProvince || null,
-
-				contact: body.contact || null,
-				latitude: Number(body.latitude),
-				longitude: Number(body.longitude),
-				imageUrl: body.imageUrl || null,
-
-				openTime: body.openTime || null,
-				closeTime: body.closeTime || null,
-				ticketPrice: body.isFree
-					? 0
-					: body.ticketPrice === "" ||
-					body.ticketPrice === null ||
-					body.ticketPrice === undefined
-						? null
-						: Number(body.ticketPrice),
-
-				maxPrice: body.isFree
-					? 0
-					: body.maxPrice === "" ||
-					body.maxPrice === null ||
-					body.maxPrice === undefined
-						? null
-						: Number(body.maxPrice),
-				website: body.website || null,
-
-				status: "pending",
-				adminFeedback: null,
-
-				categories: {
-					create: categoryIds.map((categoryId: number) => ({
-						categoryId,
-					})),
-				},
-			},
+			data: updateData,
 			include: {
 				categories: {
 					include: {
