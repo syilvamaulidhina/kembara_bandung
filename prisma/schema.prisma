@@ -7,6 +7,236 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id                   Int                 @id @default(autoincrement())
+  name                 String
+  email                String              @unique
+  password             String
+  role                 Role?
+  gender               Gender?
+  domisili             String?
+  photo                String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  rejectionReason      String?
+  verificationDocument String?
+  verificationStatus   VerificationStatus?
+  destinations         Destination[]
+  events               Event[]
+  itineraries          Itinerary[]
+  itineraryQueue       ItineraryQueue[]
+  reviews              Review[]
+  reviewLikes          ReviewLike[]
+  savedDestinations    SavedDestination[]
+  visitedPlaces        VisitedPlace[]
+}
+
+model Destination {
+  id              Int                   @id @default(autoincrement())
+  name            String
+  description     String
+  address         String
+  contact         String?
+  latitude        Float
+  longitude       Float
+  imageUrl        String?
+  openTime        String?
+  closeTime       String?
+  ticketPrice     Int?
+  maxPrice        Int?
+  website         String?
+  visitCount      Int                   @default(0)
+  status          DestinationStatus     @default(pending)
+  isDeleted       Boolean               @default(false)
+  deletedAt       DateTime?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  ownerId         Int?
+  addressCity     String?
+  addressDistrict String?
+  addressProvince String?
+  addressStreet   String?
+  addressVillage  String?
+  aiAnalyses      AiAnalysis[]
+  owner           User?                 @relation(fields: [ownerId], references: [id])
+  categories      DestinationCategory[]
+  views           DestinationView[]
+  events          Event[]
+  itineraryItems  ItineraryItem[]
+  itineraryQueue  ItineraryQueue[]
+  reviews         Review[]
+  savedBy         SavedDestination[]
+  visitedBy       VisitedPlace[]
+}
+
+model Category {
+  id           Int                   @id @default(autoincrement())
+  name         String                @unique
+  createdAt    DateTime              @default(now())
+  keywords     CategoryKeyword[]
+  destinations DestinationCategory[]
+}
+
+model DestinationCategory {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  categoryId    Int
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([destinationId, categoryId])
+}
+
+model CategoryKeyword {
+  id         Int      @id @default(autoincrement())
+  keyword    String
+  categoryId Int
+  createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, keyword])
+}
+
+model AiAnalysis {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  score         Int
+  status        String
+  message       String
+  rawResult     Json
+  createdAt     DateTime    @default(now())
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+}
+
+model SavedDestination {
+  id            Int         @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  createdAt     DateTime    @default(now())
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model ItineraryQueue {
+  id            Int         @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  createdAt     DateTime    @default(now())
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model Itinerary {
+  id            Int                @id @default(autoincrement())
+  userId        Int
+  title         String             @default("Rencana Perjalananku")
+  totalDistance Float?
+  estimatedTime Int?
+  estimatedCost Int?
+  isAiGenerated Boolean            @default(false)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  completedAt   DateTime?
+  startLabel    String?
+  startLat      Float?
+  startLng      Float?
+  startType     StartLocationType?
+  startedAt     DateTime?
+  status        ItineraryStatus    @default(draft)
+  tripDate      DateTime?
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items         ItineraryItem[]
+
+  @@index([userId, status])
+}
+
+model ItineraryItem {
+  id            Int         @id @default(autoincrement())
+  itineraryId   Int
+  destinationId Int
+  order         Int
+  visitTime     String?
+  createdAt     DateTime    @default(now())
+  visited       Boolean     @default(false)
+  visitedAt     DateTime?
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  itinerary     Itinerary   @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+
+  @@unique([itineraryId, order])
+}
+
+model Review {
+  id            Int          @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  rating        Int
+  comment       String?
+  photoUrl      String?
+  videoUrl      String?
+  helpfulCount  Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  destination   Destination  @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes         ReviewLike[]
+
+  @@unique([userId, destinationId])
+}
+
+model ReviewLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  reviewId  Int
+  createdAt DateTime @default(now())
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
+}
+
+model VisitedPlace {
+  id            Int         @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  visitedAt     DateTime    @default(now())
+  checkedIn     Boolean     @default(false)
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model DestinationView {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  userId        Int?
+  createdAt     DateTime    @default(now())
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+  id              Int          @id @default(autoincrement())
+  ownerId         Int
+  destinationId   Int?
+  name            String
+  description     String
+  bannerUrl       String?
+  startDate       DateTime
+  endDate         DateTime
+  contact         String?
+  registrationUrl String?
+  status          EventStatus  @default(pending)
+  isDeleted       Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  destination     Destination? @relation(fields: [destinationId], references: [id])
+  owner           User         @relation(fields: [ownerId], references: [id])
+}
+
 enum Role {
   ADMIN
   PENGELOLA
@@ -31,282 +261,16 @@ enum DestinationStatus {
   canceled
 }
 
-// BARU: status siklus hidup itinerary
 enum ItineraryStatus {
-  draft     // baru dibuat / sedang disusun, belum mulai navigasi
-  aktif     // sedang dijalankan (user menekan "Mulai Navigasi")
-  selesai   // semua destinasi sudah dikunjungi
+  draft
+  aktif
+  selesai
 }
 
-// BARU: sumber asal titik koordinat awal itinerary
 enum StartLocationType {
-  gps       // GPS user saat membuat itinerary
-  bandung   // titik pusat Kota Bandung (default)
-  manual    // dipilih manual lewat klik peta
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role?
-  gender    Gender?
-  domisili  String?
-  photo     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relasi baru untuk fitur wisatawan
-  savedDestinations SavedDestination[]
-  itineraries       Itinerary[]
-  reviews           Review[]
-  visitedPlaces     VisitedPlace[]
-  itineraryQueue    ItineraryQueue[]
-
-  verificationStatus   VerificationStatus?
-  verificationDocument String?
-  rejectionReason      String?
-
-  destinations Destination[]
-
-  //event relation
-  events Event[]
-}
-
-model Destination {
-  id          Int    @id @default(autoincrement())
-  name        String
-  description String
-  address     String
-
-  addressStreet   String?
-  addressVillage  String?
-  addressDistrict String?
-  addressCity     String?
-  addressProvince String?
-
-  contact   String?
-  latitude  Float
-  longitude Float
-  imageUrl  String?
-
-  ownerId Int?
-  owner   User? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
-
-  openTime    String?
-  closeTime   String?
-  ticketPrice Int?
-  maxPrice    Int?
-  website     String?
-  visitCount  Int     @default(0)
-
-  status    DestinationStatus @default(pending)
-  isDeleted Boolean           @default(false)
-  deletedAt DateTime?
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-
-  categories     DestinationCategory[]
-  aiAnalyses     AiAnalysis[]
-  savedBy        SavedDestination[]
-  itineraryItems ItineraryItem[]
-  reviews        Review[]
-  visitedBy      VisitedPlace[]
-  itineraryQueue ItineraryQueue[]
-  views          DestinationView[]  // ← BARU
-
-  //event relation
-  events Event[]
-}
-
-model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-
-  destinations DestinationCategory[]
-  keywords     CategoryKeyword[]
-}
-
-model DestinationCategory {
-  id            Int @id @default(autoincrement())
-  destinationId Int
-  categoryId    Int
-
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@unique([destinationId, categoryId])
-}
-
-model CategoryKeyword {
-  id         Int      @id @default(autoincrement())
-  keyword    String
-  categoryId Int
-  createdAt  DateTime @default(now())
-
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@unique([categoryId, keyword])
-}
-
-model AiAnalysis {
-  id            Int      @id @default(autoincrement())
-  destinationId Int
-  score         Int
-  status        String
-  message       String
-  rawResult     Json
-  createdAt     DateTime @default(now())
-
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-}
-
-model SavedDestination {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  destinationId Int
-  createdAt     DateTime @default(now())
-
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, destinationId])
-}
-
-// SUDAH TIDAK DIPAKAI oleh alur baru ("Tambah ke Rencana" sekarang langsung
-// insert ke ItineraryItem pada itinerary yang dipilih). Dipertahankan di
-// schema supaya migration tidak destruktif terhadap data lama.
-model ItineraryQueue {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  destinationId Int
-  createdAt     DateTime @default(now())
-
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, destinationId])
-}
-
-// DIUBAH: dari "1 user = 1 itinerary aktif" menjadi user bisa punya banyak
-// itinerary. Tambahan: title & tripDate diisi user saat create, status
-// siklus hidup, startLat/startLng/startLabel/startType untuk acuan AI.
-model Itinerary {
-  id              Int                 @id @default(autoincrement())
-  userId          Int
-  title           String              @default("Rencana Perjalananku")
-  tripDate        DateTime?
-  status          ItineraryStatus     @default(draft)
-
-  // Titik awal yang dipakai AI untuk optimasi urutan saat itinerary dibuat
-  startLat        Float?
-  startLng        Float?
-  startLabel      String?             // "Lokasi GPS", "Pusat Kota Bandung", "Jl. Asia Afrika No. 8"
-  startType       StartLocationType?
-
-  totalDistance   Float?
-  estimatedTime   Int?
-  estimatedCost   Int?
-  isAiGenerated   Boolean             @default(false)
-
-  // Diisi saat status berubah jadi "aktif" / "selesai", dipakai untuk
-  // section "Perjalanan Aktif" di halaman Rencana
-  startedAt       DateTime?
-  completedAt     DateTime?
-
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
-
-  user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items ItineraryItem[]
-
-  @@index([userId, status])
-}
-
-model ItineraryItem {
-  id            Int       @id @default(autoincrement())
-  itineraryId   Int
-  destinationId Int
-  order         Int
-  visitTime     String?
-
-  // BARU: progress checkpoint khusus itinerary ini (Perjalanan Aktif),
-  // terpisah dari VisitedPlace (dipakai global untuk syarat boleh mengulas)
-  visited       Boolean   @default(false)
-  visitedAt     DateTime?
-
-  createdAt     DateTime  @default(now())
-
-  itinerary   Itinerary   @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-
-  @@unique([itineraryId, order])
-}
-
-model Review {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  destinationId Int
-  rating        Int
-  comment       String?
-  photoUrl      String?
-  videoUrl      String?
-  helpfulCount  Int      @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, destinationId])
-}
-
-model VisitedPlace {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  destinationId Int
-  visitedAt     DateTime @default(now())
-  checkedIn     Boolean  @default(false)
-
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, destinationId])
-}
-
-// ← BARU: Model untuk tracking kunjungan halaman detail wisata
-model DestinationView {
-  id            Int      @id @default(autoincrement())
-  destinationId Int
-  userId        Int?
-  createdAt     DateTime @default(now())
-
-  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-}
-
-model Event {
-  id            Int  @id @default(autoincrement())
-  ownerId       Int
-  destinationId Int?
-
-  name            String
-  description     String
-  bannerUrl       String?
-  startDate       DateTime
-  endDate         DateTime
-  contact         String?
-  registrationUrl String?
-
-  status    EventStatus @default(pending)
-  isDeleted Boolean     @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  owner       User         @relation(fields: [ownerId], references: [id])
-  destination Destination? @relation(fields: [destinationId], references: [id])
+  gps
+  bandung
+  manual
 }
 
 enum EventStatus {
@@ -315,4 +279,3 @@ enum EventStatus {
   ditolak
   selesai
 }
-

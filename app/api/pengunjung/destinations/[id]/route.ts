@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { calculateDistance } from "@/lib/utils";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -17,7 +19,8 @@ export async function GET(
 
     const lat = parseFloat(searchParams.get("lat") || "0");
     const lng = parseFloat(searchParams.get("lng") || "0");
-    const userId = searchParams.get("userId");
+    const userIdParam = searchParams.get("userId");
+    const userId = userIdParam && userIdParam !== "undefined" && userIdParam !== "null" ? parseInt(userIdParam) : null;
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -33,6 +36,10 @@ export async function GET(
         reviews: {
           include: {
             user: { select: { id: true, name: true, photo: true } },
+            likes: userId ? {
+              where: { userId },
+              select: { id: true }
+            } : undefined,
           },
           orderBy: { createdAt: "desc" },
           take: 10,
@@ -70,7 +77,7 @@ export async function GET(
       const saved = await prisma.savedDestination.findUnique({
         where: {
           userId_destinationId: {
-            userId: parseInt(userId),
+            userId,
             destinationId: id,
           },
         },
@@ -83,10 +90,17 @@ export async function GET(
         ? calculateDistance(lat, lng, destination.latitude, destination.longitude)
         : undefined;
 
+    const formattedReviews = destination.reviews.map((r: any) => {
+      const isLiked = r.likes ? r.likes.length > 0 : false;
+      const { likes, ...rest } = r;
+      return { ...rest, isLiked };
+    });
+
     return NextResponse.json({
       success: true,
       data: {
         ...destination,
+        reviews: formattedReviews,
         averageRating,
         reviewCount: ratings.length,
         distance,

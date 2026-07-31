@@ -69,6 +69,11 @@ export type ItineraryItem = $Result.DefaultSelection<Prisma.$ItineraryItemPayloa
  */
 export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>
 /**
+ * Model ReviewLike
+ * 
+ */
+export type ReviewLike = $Result.DefaultSelection<Prisma.$ReviewLikePayload>
+/**
  * Model VisitedPlace
  * 
  */
@@ -411,6 +416,16 @@ export class PrismaClient<
     * ```
     */
   get review(): Prisma.ReviewDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reviewLike`: Exposes CRUD operations for the **ReviewLike** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReviewLikes
+    * const reviewLikes = await prisma.reviewLike.findMany()
+    * ```
+    */
+  get reviewLike(): Prisma.ReviewLikeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.visitedPlace`: Exposes CRUD operations for the **VisitedPlace** model.
@@ -886,6 +901,7 @@ export namespace Prisma {
     Itinerary: 'Itinerary',
     ItineraryItem: 'ItineraryItem',
     Review: 'Review',
+    ReviewLike: 'ReviewLike',
     VisitedPlace: 'VisitedPlace',
     DestinationView: 'DestinationView',
     Event: 'Event'
@@ -904,7 +920,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis" | "savedDestination" | "itineraryQueue" | "itinerary" | "itineraryItem" | "review" | "visitedPlace" | "destinationView" | "event"
+      modelProps: "user" | "destination" | "category" | "destinationCategory" | "categoryKeyword" | "aiAnalysis" | "savedDestination" | "itineraryQueue" | "itinerary" | "itineraryItem" | "review" | "reviewLike" | "visitedPlace" | "destinationView" | "event"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1722,6 +1738,80 @@ export namespace Prisma {
           }
         }
       }
+      ReviewLike: {
+        payload: Prisma.$ReviewLikePayload<ExtArgs>
+        fields: Prisma.ReviewLikeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReviewLikeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReviewLikeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>
+          }
+          findFirst: {
+            args: Prisma.ReviewLikeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReviewLikeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>
+          }
+          findMany: {
+            args: Prisma.ReviewLikeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>[]
+          }
+          create: {
+            args: Prisma.ReviewLikeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>
+          }
+          createMany: {
+            args: Prisma.ReviewLikeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReviewLikeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>[]
+          }
+          delete: {
+            args: Prisma.ReviewLikeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>
+          }
+          update: {
+            args: Prisma.ReviewLikeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>
+          }
+          deleteMany: {
+            args: Prisma.ReviewLikeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReviewLikeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReviewLikeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>[]
+          }
+          upsert: {
+            args: Prisma.ReviewLikeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviewLikePayload>
+          }
+          aggregate: {
+            args: Prisma.ReviewLikeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReviewLike>
+          }
+          groupBy: {
+            args: Prisma.ReviewLikeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReviewLikeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReviewLikeCountArgs<ExtArgs>
+            result: $Utils.Optional<ReviewLikeCountAggregateOutputType> | number
+          }
+        }
+      }
       VisitedPlace: {
         payload: Prisma.$VisitedPlacePayload<ExtArgs>
         fields: Prisma.VisitedPlaceFieldRefs
@@ -2063,6 +2153,7 @@ export namespace Prisma {
     itinerary?: ItineraryOmit
     itineraryItem?: ItineraryItemOmit
     review?: ReviewOmit
+    reviewLike?: ReviewLikeOmit
     visitedPlace?: VisitedPlaceOmit
     destinationView?: DestinationViewOmit
     event?: EventOmit
@@ -2146,23 +2237,25 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    savedDestinations: number
-    itineraries: number
-    reviews: number
-    visitedPlaces: number
-    itineraryQueue: number
     destinations: number
     events: number
+    itineraries: number
+    itineraryQueue: number
+    reviews: number
+    reviewLikes: number
+    savedDestinations: number
+    visitedPlaces: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    savedDestinations?: boolean | UserCountOutputTypeCountSavedDestinationsArgs
-    itineraries?: boolean | UserCountOutputTypeCountItinerariesArgs
-    reviews?: boolean | UserCountOutputTypeCountReviewsArgs
-    visitedPlaces?: boolean | UserCountOutputTypeCountVisitedPlacesArgs
-    itineraryQueue?: boolean | UserCountOutputTypeCountItineraryQueueArgs
     destinations?: boolean | UserCountOutputTypeCountDestinationsArgs
     events?: boolean | UserCountOutputTypeCountEventsArgs
+    itineraries?: boolean | UserCountOutputTypeCountItinerariesArgs
+    itineraryQueue?: boolean | UserCountOutputTypeCountItineraryQueueArgs
+    reviews?: boolean | UserCountOutputTypeCountReviewsArgs
+    reviewLikes?: boolean | UserCountOutputTypeCountReviewLikesArgs
+    savedDestinations?: boolean | UserCountOutputTypeCountSavedDestinationsArgs
+    visitedPlaces?: boolean | UserCountOutputTypeCountVisitedPlacesArgs
   }
 
   // Custom InputTypes
@@ -2179,8 +2272,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountSavedDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SavedDestinationWhereInput
+  export type UserCountOutputTypeCountDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DestinationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
   }
 
   /**
@@ -2193,8 +2293,29 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountItineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItineraryQueueWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReviewWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReviewLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewLikeWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSavedDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SavedDestinationWhereInput
   }
 
   /**
@@ -2204,54 +2325,33 @@ export namespace Prisma {
     where?: VisitedPlaceWhereInput
   }
 
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountItineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ItineraryQueueWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DestinationWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EventWhereInput
-  }
-
 
   /**
    * Count Type DestinationCountOutputType
    */
 
   export type DestinationCountOutputType = {
-    categories: number
     aiAnalyses: number
-    savedBy: number
-    itineraryItems: number
-    reviews: number
-    visitedBy: number
-    itineraryQueue: number
+    categories: number
     views: number
     events: number
+    itineraryItems: number
+    itineraryQueue: number
+    reviews: number
+    savedBy: number
+    visitedBy: number
   }
 
   export type DestinationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | DestinationCountOutputTypeCountCategoriesArgs
     aiAnalyses?: boolean | DestinationCountOutputTypeCountAiAnalysesArgs
-    savedBy?: boolean | DestinationCountOutputTypeCountSavedByArgs
-    itineraryItems?: boolean | DestinationCountOutputTypeCountItineraryItemsArgs
-    reviews?: boolean | DestinationCountOutputTypeCountReviewsArgs
-    visitedBy?: boolean | DestinationCountOutputTypeCountVisitedByArgs
-    itineraryQueue?: boolean | DestinationCountOutputTypeCountItineraryQueueArgs
+    categories?: boolean | DestinationCountOutputTypeCountCategoriesArgs
     views?: boolean | DestinationCountOutputTypeCountViewsArgs
     events?: boolean | DestinationCountOutputTypeCountEventsArgs
+    itineraryItems?: boolean | DestinationCountOutputTypeCountItineraryItemsArgs
+    itineraryQueue?: boolean | DestinationCountOutputTypeCountItineraryQueueArgs
+    reviews?: boolean | DestinationCountOutputTypeCountReviewsArgs
+    savedBy?: boolean | DestinationCountOutputTypeCountSavedByArgs
+    visitedBy?: boolean | DestinationCountOutputTypeCountVisitedByArgs
   }
 
   // Custom InputTypes
@@ -2268,13 +2368,6 @@ export namespace Prisma {
   /**
    * DestinationCountOutputType without action
    */
-  export type DestinationCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DestinationCategoryWhereInput
-  }
-
-  /**
-   * DestinationCountOutputType without action
-   */
   export type DestinationCountOutputTypeCountAiAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AiAnalysisWhereInput
   }
@@ -2282,36 +2375,8 @@ export namespace Prisma {
   /**
    * DestinationCountOutputType without action
    */
-  export type DestinationCountOutputTypeCountSavedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SavedDestinationWhereInput
-  }
-
-  /**
-   * DestinationCountOutputType without action
-   */
-  export type DestinationCountOutputTypeCountItineraryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ItineraryItemWhereInput
-  }
-
-  /**
-   * DestinationCountOutputType without action
-   */
-  export type DestinationCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReviewWhereInput
-  }
-
-  /**
-   * DestinationCountOutputType without action
-   */
-  export type DestinationCountOutputTypeCountVisitedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: VisitedPlaceWhereInput
-  }
-
-  /**
-   * DestinationCountOutputType without action
-   */
-  export type DestinationCountOutputTypeCountItineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ItineraryQueueWhereInput
+  export type DestinationCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DestinationCategoryWhereInput
   }
 
   /**
@@ -2328,19 +2393,54 @@ export namespace Prisma {
     where?: EventWhereInput
   }
 
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountItineraryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItineraryItemWhereInput
+  }
+
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountItineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItineraryQueueWhereInput
+  }
+
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewWhereInput
+  }
+
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountSavedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SavedDestinationWhereInput
+  }
+
+  /**
+   * DestinationCountOutputType without action
+   */
+  export type DestinationCountOutputTypeCountVisitedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VisitedPlaceWhereInput
+  }
+
 
   /**
    * Count Type CategoryCountOutputType
    */
 
   export type CategoryCountOutputType = {
-    destinations: number
     keywords: number
+    destinations: number
   }
 
   export type CategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    destinations?: boolean | CategoryCountOutputTypeCountDestinationsArgs
     keywords?: boolean | CategoryCountOutputTypeCountKeywordsArgs
+    destinations?: boolean | CategoryCountOutputTypeCountDestinationsArgs
   }
 
   // Custom InputTypes
@@ -2357,15 +2457,15 @@ export namespace Prisma {
   /**
    * CategoryCountOutputType without action
    */
-  export type CategoryCountOutputTypeCountDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DestinationCategoryWhereInput
+  export type CategoryCountOutputTypeCountKeywordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoryKeywordWhereInput
   }
 
   /**
    * CategoryCountOutputType without action
    */
-  export type CategoryCountOutputTypeCountKeywordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CategoryKeywordWhereInput
+  export type CategoryCountOutputTypeCountDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DestinationCategoryWhereInput
   }
 
 
@@ -2397,6 +2497,37 @@ export namespace Prisma {
    */
   export type ItineraryCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ItineraryItemWhereInput
+  }
+
+
+  /**
+   * Count Type ReviewCountOutputType
+   */
+
+  export type ReviewCountOutputType = {
+    likes: number
+  }
+
+  export type ReviewCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    likes?: boolean | ReviewCountOutputTypeCountLikesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ReviewCountOutputType without action
+   */
+  export type ReviewCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewCountOutputType
+     */
+    select?: ReviewCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ReviewCountOutputType without action
+   */
+  export type ReviewCountOutputTypeCountLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewLikeWhereInput
   }
 
 
@@ -2435,9 +2566,9 @@ export namespace Prisma {
     photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    verificationStatus: $Enums.VerificationStatus | null
-    verificationDocument: string | null
     rejectionReason: string | null
+    verificationDocument: string | null
+    verificationStatus: $Enums.VerificationStatus | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2451,9 +2582,9 @@ export namespace Prisma {
     photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    verificationStatus: $Enums.VerificationStatus | null
-    verificationDocument: string | null
     rejectionReason: string | null
+    verificationDocument: string | null
+    verificationStatus: $Enums.VerificationStatus | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2467,9 +2598,9 @@ export namespace Prisma {
     photo: number
     createdAt: number
     updatedAt: number
-    verificationStatus: number
-    verificationDocument: number
     rejectionReason: number
+    verificationDocument: number
+    verificationStatus: number
     _all: number
   }
 
@@ -2493,9 +2624,9 @@ export namespace Prisma {
     photo?: true
     createdAt?: true
     updatedAt?: true
-    verificationStatus?: true
-    verificationDocument?: true
     rejectionReason?: true
+    verificationDocument?: true
+    verificationStatus?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2509,9 +2640,9 @@ export namespace Prisma {
     photo?: true
     createdAt?: true
     updatedAt?: true
-    verificationStatus?: true
-    verificationDocument?: true
     rejectionReason?: true
+    verificationDocument?: true
+    verificationStatus?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2525,9 +2656,9 @@ export namespace Prisma {
     photo?: true
     createdAt?: true
     updatedAt?: true
-    verificationStatus?: true
-    verificationDocument?: true
     rejectionReason?: true
+    verificationDocument?: true
+    verificationStatus?: true
     _all?: true
   }
 
@@ -2628,9 +2759,9 @@ export namespace Prisma {
     photo: string | null
     createdAt: Date
     updatedAt: Date
-    verificationStatus: $Enums.VerificationStatus | null
-    verificationDocument: string | null
     rejectionReason: string | null
+    verificationDocument: string | null
+    verificationStatus: $Enums.VerificationStatus | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2663,16 +2794,17 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    verificationStatus?: boolean
-    verificationDocument?: boolean
     rejectionReason?: boolean
-    savedDestinations?: boolean | User$savedDestinationsArgs<ExtArgs>
-    itineraries?: boolean | User$itinerariesArgs<ExtArgs>
-    reviews?: boolean | User$reviewsArgs<ExtArgs>
-    visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
-    itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
+    verificationDocument?: boolean
+    verificationStatus?: boolean
     destinations?: boolean | User$destinationsArgs<ExtArgs>
     events?: boolean | User$eventsArgs<ExtArgs>
+    itineraries?: boolean | User$itinerariesArgs<ExtArgs>
+    itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
+    reviews?: boolean | User$reviewsArgs<ExtArgs>
+    reviewLikes?: boolean | User$reviewLikesArgs<ExtArgs>
+    savedDestinations?: boolean | User$savedDestinationsArgs<ExtArgs>
+    visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2687,9 +2819,9 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    verificationStatus?: boolean
-    verificationDocument?: boolean
     rejectionReason?: boolean
+    verificationDocument?: boolean
+    verificationStatus?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2703,9 +2835,9 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    verificationStatus?: boolean
-    verificationDocument?: boolean
     rejectionReason?: boolean
+    verificationDocument?: boolean
+    verificationStatus?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2719,20 +2851,21 @@ export namespace Prisma {
     photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    verificationStatus?: boolean
-    verificationDocument?: boolean
     rejectionReason?: boolean
+    verificationDocument?: boolean
+    verificationStatus?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "gender" | "domisili" | "photo" | "createdAt" | "updatedAt" | "verificationStatus" | "verificationDocument" | "rejectionReason", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "gender" | "domisili" | "photo" | "createdAt" | "updatedAt" | "rejectionReason" | "verificationDocument" | "verificationStatus", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    savedDestinations?: boolean | User$savedDestinationsArgs<ExtArgs>
-    itineraries?: boolean | User$itinerariesArgs<ExtArgs>
-    reviews?: boolean | User$reviewsArgs<ExtArgs>
-    visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
-    itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
     destinations?: boolean | User$destinationsArgs<ExtArgs>
     events?: boolean | User$eventsArgs<ExtArgs>
+    itineraries?: boolean | User$itinerariesArgs<ExtArgs>
+    itineraryQueue?: boolean | User$itineraryQueueArgs<ExtArgs>
+    reviews?: boolean | User$reviewsArgs<ExtArgs>
+    reviewLikes?: boolean | User$reviewLikesArgs<ExtArgs>
+    savedDestinations?: boolean | User$savedDestinationsArgs<ExtArgs>
+    visitedPlaces?: boolean | User$visitedPlacesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2741,13 +2874,14 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      savedDestinations: Prisma.$SavedDestinationPayload<ExtArgs>[]
-      itineraries: Prisma.$ItineraryPayload<ExtArgs>[]
-      reviews: Prisma.$ReviewPayload<ExtArgs>[]
-      visitedPlaces: Prisma.$VisitedPlacePayload<ExtArgs>[]
-      itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
       destinations: Prisma.$DestinationPayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
+      itineraries: Prisma.$ItineraryPayload<ExtArgs>[]
+      itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
+      reviews: Prisma.$ReviewPayload<ExtArgs>[]
+      reviewLikes: Prisma.$ReviewLikePayload<ExtArgs>[]
+      savedDestinations: Prisma.$SavedDestinationPayload<ExtArgs>[]
+      visitedPlaces: Prisma.$VisitedPlacePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2760,9 +2894,9 @@ export namespace Prisma {
       photo: string | null
       createdAt: Date
       updatedAt: Date
-      verificationStatus: $Enums.VerificationStatus | null
-      verificationDocument: string | null
       rejectionReason: string | null
+      verificationDocument: string | null
+      verificationStatus: $Enums.VerificationStatus | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3157,13 +3291,14 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    savedDestinations<T extends User$savedDestinationsArgs<ExtArgs> = {}>(args?: Subset<T, User$savedDestinationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    itineraries<T extends User$itinerariesArgs<ExtArgs> = {}>(args?: Subset<T, User$itinerariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    visitedPlaces<T extends User$visitedPlacesArgs<ExtArgs> = {}>(args?: Subset<T, User$visitedPlacesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    itineraryQueue<T extends User$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, User$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     destinations<T extends User$destinationsArgs<ExtArgs> = {}>(args?: Subset<T, User$destinationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends User$eventsArgs<ExtArgs> = {}>(args?: Subset<T, User$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itineraries<T extends User$itinerariesArgs<ExtArgs> = {}>(args?: Subset<T, User$itinerariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itineraryQueue<T extends User$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, User$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviews<T extends User$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviewLikes<T extends User$reviewLikesArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewLikesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    savedDestinations<T extends User$savedDestinationsArgs<ExtArgs> = {}>(args?: Subset<T, User$savedDestinationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    visitedPlaces<T extends User$visitedPlacesArgs<ExtArgs> = {}>(args?: Subset<T, User$visitedPlacesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3203,9 +3338,9 @@ export namespace Prisma {
     readonly photo: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
-    readonly verificationStatus: FieldRef<"User", 'VerificationStatus'>
-    readonly verificationDocument: FieldRef<"User", 'String'>
     readonly rejectionReason: FieldRef<"User", 'String'>
+    readonly verificationDocument: FieldRef<"User", 'String'>
+    readonly verificationStatus: FieldRef<"User", 'VerificationStatus'>
   }
     
 
@@ -3599,126 +3734,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.savedDestinations
-   */
-  export type User$savedDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedDestination
-     */
-    select?: SavedDestinationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedDestination
-     */
-    omit?: SavedDestinationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedDestinationInclude<ExtArgs> | null
-    where?: SavedDestinationWhereInput
-    orderBy?: SavedDestinationOrderByWithRelationInput | SavedDestinationOrderByWithRelationInput[]
-    cursor?: SavedDestinationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SavedDestinationScalarFieldEnum | SavedDestinationScalarFieldEnum[]
-  }
-
-  /**
-   * User.itineraries
-   */
-  export type User$itinerariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Itinerary
-     */
-    select?: ItinerarySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Itinerary
-     */
-    omit?: ItineraryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ItineraryInclude<ExtArgs> | null
-    where?: ItineraryWhereInput
-    orderBy?: ItineraryOrderByWithRelationInput | ItineraryOrderByWithRelationInput[]
-    cursor?: ItineraryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ItineraryScalarFieldEnum | ItineraryScalarFieldEnum[]
-  }
-
-  /**
-   * User.reviews
-   */
-  export type User$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Review
-     */
-    select?: ReviewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Review
-     */
-    omit?: ReviewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReviewInclude<ExtArgs> | null
-    where?: ReviewWhereInput
-    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
-    cursor?: ReviewWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
-  }
-
-  /**
-   * User.visitedPlaces
-   */
-  export type User$visitedPlacesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the VisitedPlace
-     */
-    select?: VisitedPlaceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the VisitedPlace
-     */
-    omit?: VisitedPlaceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: VisitedPlaceInclude<ExtArgs> | null
-    where?: VisitedPlaceWhereInput
-    orderBy?: VisitedPlaceOrderByWithRelationInput | VisitedPlaceOrderByWithRelationInput[]
-    cursor?: VisitedPlaceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: VisitedPlaceScalarFieldEnum | VisitedPlaceScalarFieldEnum[]
-  }
-
-  /**
-   * User.itineraryQueue
-   */
-  export type User$itineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ItineraryQueue
-     */
-    select?: ItineraryQueueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ItineraryQueue
-     */
-    omit?: ItineraryQueueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ItineraryQueueInclude<ExtArgs> | null
-    where?: ItineraryQueueWhereInput
-    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
-    cursor?: ItineraryQueueWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
-  }
-
-  /**
    * User.destinations
    */
   export type User$destinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3767,6 +3782,150 @@ export namespace Prisma {
   }
 
   /**
+   * User.itineraries
+   */
+  export type User$itinerariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Itinerary
+     */
+    select?: ItinerarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Itinerary
+     */
+    omit?: ItineraryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryInclude<ExtArgs> | null
+    where?: ItineraryWhereInput
+    orderBy?: ItineraryOrderByWithRelationInput | ItineraryOrderByWithRelationInput[]
+    cursor?: ItineraryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItineraryScalarFieldEnum | ItineraryScalarFieldEnum[]
+  }
+
+  /**
+   * User.itineraryQueue
+   */
+  export type User$itineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    where?: ItineraryQueueWhereInput
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    cursor?: ItineraryQueueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
+  }
+
+  /**
+   * User.reviews
+   */
+  export type User$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Review
+     */
+    select?: ReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Review
+     */
+    omit?: ReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewInclude<ExtArgs> | null
+    where?: ReviewWhereInput
+    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
+    cursor?: ReviewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
+  }
+
+  /**
+   * User.reviewLikes
+   */
+  export type User$reviewLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    where?: ReviewLikeWhereInput
+    orderBy?: ReviewLikeOrderByWithRelationInput | ReviewLikeOrderByWithRelationInput[]
+    cursor?: ReviewLikeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReviewLikeScalarFieldEnum | ReviewLikeScalarFieldEnum[]
+  }
+
+  /**
+   * User.savedDestinations
+   */
+  export type User$savedDestinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedDestination
+     */
+    select?: SavedDestinationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedDestination
+     */
+    omit?: SavedDestinationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedDestinationInclude<ExtArgs> | null
+    where?: SavedDestinationWhereInput
+    orderBy?: SavedDestinationOrderByWithRelationInput | SavedDestinationOrderByWithRelationInput[]
+    cursor?: SavedDestinationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SavedDestinationScalarFieldEnum | SavedDestinationScalarFieldEnum[]
+  }
+
+  /**
+   * User.visitedPlaces
+   */
+  export type User$visitedPlacesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisitedPlace
+     */
+    select?: VisitedPlaceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisitedPlace
+     */
+    omit?: VisitedPlaceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VisitedPlaceInclude<ExtArgs> | null
+    where?: VisitedPlaceWhereInput
+    orderBy?: VisitedPlaceOrderByWithRelationInput | VisitedPlaceOrderByWithRelationInput[]
+    cursor?: VisitedPlaceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VisitedPlaceScalarFieldEnum | VisitedPlaceScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3801,20 +3960,20 @@ export namespace Prisma {
     id: number | null
     latitude: number | null
     longitude: number | null
-    ownerId: number | null
     ticketPrice: number | null
     maxPrice: number | null
     visitCount: number | null
+    ownerId: number | null
   }
 
   export type DestinationSumAggregateOutputType = {
     id: number | null
     latitude: number | null
     longitude: number | null
-    ownerId: number | null
     ticketPrice: number | null
     maxPrice: number | null
     visitCount: number | null
+    ownerId: number | null
   }
 
   export type DestinationMinAggregateOutputType = {
@@ -3822,16 +3981,10 @@ export namespace Prisma {
     name: string | null
     description: string | null
     address: string | null
-    addressStreet: string | null
-    addressVillage: string | null
-    addressDistrict: string | null
-    addressCity: string | null
-    addressProvince: string | null
     contact: string | null
     latitude: number | null
     longitude: number | null
     imageUrl: string | null
-    ownerId: number | null
     openTime: string | null
     closeTime: string | null
     ticketPrice: number | null
@@ -3843,6 +3996,12 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    ownerId: number | null
+    addressCity: string | null
+    addressDistrict: string | null
+    addressProvince: string | null
+    addressStreet: string | null
+    addressVillage: string | null
   }
 
   export type DestinationMaxAggregateOutputType = {
@@ -3850,16 +4009,10 @@ export namespace Prisma {
     name: string | null
     description: string | null
     address: string | null
-    addressStreet: string | null
-    addressVillage: string | null
-    addressDistrict: string | null
-    addressCity: string | null
-    addressProvince: string | null
     contact: string | null
     latitude: number | null
     longitude: number | null
     imageUrl: string | null
-    ownerId: number | null
     openTime: string | null
     closeTime: string | null
     ticketPrice: number | null
@@ -3871,6 +4024,12 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    ownerId: number | null
+    addressCity: string | null
+    addressDistrict: string | null
+    addressProvince: string | null
+    addressStreet: string | null
+    addressVillage: string | null
   }
 
   export type DestinationCountAggregateOutputType = {
@@ -3878,16 +4037,10 @@ export namespace Prisma {
     name: number
     description: number
     address: number
-    addressStreet: number
-    addressVillage: number
-    addressDistrict: number
-    addressCity: number
-    addressProvince: number
     contact: number
     latitude: number
     longitude: number
     imageUrl: number
-    ownerId: number
     openTime: number
     closeTime: number
     ticketPrice: number
@@ -3899,6 +4052,12 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     updatedAt: number
+    ownerId: number
+    addressCity: number
+    addressDistrict: number
+    addressProvince: number
+    addressStreet: number
+    addressVillage: number
     _all: number
   }
 
@@ -3907,20 +4066,20 @@ export namespace Prisma {
     id?: true
     latitude?: true
     longitude?: true
-    ownerId?: true
     ticketPrice?: true
     maxPrice?: true
     visitCount?: true
+    ownerId?: true
   }
 
   export type DestinationSumAggregateInputType = {
     id?: true
     latitude?: true
     longitude?: true
-    ownerId?: true
     ticketPrice?: true
     maxPrice?: true
     visitCount?: true
+    ownerId?: true
   }
 
   export type DestinationMinAggregateInputType = {
@@ -3928,16 +4087,10 @@ export namespace Prisma {
     name?: true
     description?: true
     address?: true
-    addressStreet?: true
-    addressVillage?: true
-    addressDistrict?: true
-    addressCity?: true
-    addressProvince?: true
     contact?: true
     latitude?: true
     longitude?: true
     imageUrl?: true
-    ownerId?: true
     openTime?: true
     closeTime?: true
     ticketPrice?: true
@@ -3949,6 +4102,12 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    ownerId?: true
+    addressCity?: true
+    addressDistrict?: true
+    addressProvince?: true
+    addressStreet?: true
+    addressVillage?: true
   }
 
   export type DestinationMaxAggregateInputType = {
@@ -3956,16 +4115,10 @@ export namespace Prisma {
     name?: true
     description?: true
     address?: true
-    addressStreet?: true
-    addressVillage?: true
-    addressDistrict?: true
-    addressCity?: true
-    addressProvince?: true
     contact?: true
     latitude?: true
     longitude?: true
     imageUrl?: true
-    ownerId?: true
     openTime?: true
     closeTime?: true
     ticketPrice?: true
@@ -3977,6 +4130,12 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    ownerId?: true
+    addressCity?: true
+    addressDistrict?: true
+    addressProvince?: true
+    addressStreet?: true
+    addressVillage?: true
   }
 
   export type DestinationCountAggregateInputType = {
@@ -3984,16 +4143,10 @@ export namespace Prisma {
     name?: true
     description?: true
     address?: true
-    addressStreet?: true
-    addressVillage?: true
-    addressDistrict?: true
-    addressCity?: true
-    addressProvince?: true
     contact?: true
     latitude?: true
     longitude?: true
     imageUrl?: true
-    ownerId?: true
     openTime?: true
     closeTime?: true
     ticketPrice?: true
@@ -4005,6 +4158,12 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    ownerId?: true
+    addressCity?: true
+    addressDistrict?: true
+    addressProvince?: true
+    addressStreet?: true
+    addressVillage?: true
     _all?: true
   }
 
@@ -4099,16 +4258,10 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet: string | null
-    addressVillage: string | null
-    addressDistrict: string | null
-    addressCity: string | null
-    addressProvince: string | null
     contact: string | null
     latitude: number
     longitude: number
     imageUrl: string | null
-    ownerId: number | null
     openTime: string | null
     closeTime: string | null
     ticketPrice: number | null
@@ -4120,6 +4273,12 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    ownerId: number | null
+    addressCity: string | null
+    addressDistrict: string | null
+    addressProvince: string | null
+    addressStreet: string | null
+    addressVillage: string | null
     _count: DestinationCountAggregateOutputType | null
     _avg: DestinationAvgAggregateOutputType | null
     _sum: DestinationSumAggregateOutputType | null
@@ -4146,16 +4305,10 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     address?: boolean
-    addressStreet?: boolean
-    addressVillage?: boolean
-    addressDistrict?: boolean
-    addressCity?: boolean
-    addressProvince?: boolean
     contact?: boolean
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
-    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -4167,16 +4320,22 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
+    addressCity?: boolean
+    addressDistrict?: boolean
+    addressProvince?: boolean
+    addressStreet?: boolean
+    addressVillage?: boolean
+    aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
     owner?: boolean | Destination$ownerArgs<ExtArgs>
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
-    aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
-    savedBy?: boolean | Destination$savedByArgs<ExtArgs>
-    itineraryItems?: boolean | Destination$itineraryItemsArgs<ExtArgs>
-    reviews?: boolean | Destination$reviewsArgs<ExtArgs>
-    visitedBy?: boolean | Destination$visitedByArgs<ExtArgs>
-    itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
     views?: boolean | Destination$viewsArgs<ExtArgs>
     events?: boolean | Destination$eventsArgs<ExtArgs>
+    itineraryItems?: boolean | Destination$itineraryItemsArgs<ExtArgs>
+    itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
+    reviews?: boolean | Destination$reviewsArgs<ExtArgs>
+    savedBy?: boolean | Destination$savedByArgs<ExtArgs>
+    visitedBy?: boolean | Destination$visitedByArgs<ExtArgs>
     _count?: boolean | DestinationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
@@ -4185,16 +4344,10 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     address?: boolean
-    addressStreet?: boolean
-    addressVillage?: boolean
-    addressDistrict?: boolean
-    addressCity?: boolean
-    addressProvince?: boolean
     contact?: boolean
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
-    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -4206,6 +4359,12 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
+    addressCity?: boolean
+    addressDistrict?: boolean
+    addressProvince?: boolean
+    addressStreet?: boolean
+    addressVillage?: boolean
     owner?: boolean | Destination$ownerArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
@@ -4214,16 +4373,10 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     address?: boolean
-    addressStreet?: boolean
-    addressVillage?: boolean
-    addressDistrict?: boolean
-    addressCity?: boolean
-    addressProvince?: boolean
     contact?: boolean
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
-    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -4235,6 +4388,12 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
+    addressCity?: boolean
+    addressDistrict?: boolean
+    addressProvince?: boolean
+    addressStreet?: boolean
+    addressVillage?: boolean
     owner?: boolean | Destination$ownerArgs<ExtArgs>
   }, ExtArgs["result"]["destination"]>
 
@@ -4243,16 +4402,10 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     address?: boolean
-    addressStreet?: boolean
-    addressVillage?: boolean
-    addressDistrict?: boolean
-    addressCity?: boolean
-    addressProvince?: boolean
     contact?: boolean
     latitude?: boolean
     longitude?: boolean
     imageUrl?: boolean
-    ownerId?: boolean
     openTime?: boolean
     closeTime?: boolean
     ticketPrice?: boolean
@@ -4264,20 +4417,26 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ownerId?: boolean
+    addressCity?: boolean
+    addressDistrict?: boolean
+    addressProvince?: boolean
+    addressStreet?: boolean
+    addressVillage?: boolean
   }
 
-  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "addressStreet" | "addressVillage" | "addressDistrict" | "addressCity" | "addressProvince" | "contact" | "latitude" | "longitude" | "imageUrl" | "ownerId" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["destination"]>
+  export type DestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "address" | "contact" | "latitude" | "longitude" | "imageUrl" | "openTime" | "closeTime" | "ticketPrice" | "maxPrice" | "website" | "visitCount" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt" | "ownerId" | "addressCity" | "addressDistrict" | "addressProvince" | "addressStreet" | "addressVillage", ExtArgs["result"]["destination"]>
   export type DestinationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
     owner?: boolean | Destination$ownerArgs<ExtArgs>
     categories?: boolean | Destination$categoriesArgs<ExtArgs>
-    aiAnalyses?: boolean | Destination$aiAnalysesArgs<ExtArgs>
-    savedBy?: boolean | Destination$savedByArgs<ExtArgs>
-    itineraryItems?: boolean | Destination$itineraryItemsArgs<ExtArgs>
-    reviews?: boolean | Destination$reviewsArgs<ExtArgs>
-    visitedBy?: boolean | Destination$visitedByArgs<ExtArgs>
-    itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
     views?: boolean | Destination$viewsArgs<ExtArgs>
     events?: boolean | Destination$eventsArgs<ExtArgs>
+    itineraryItems?: boolean | Destination$itineraryItemsArgs<ExtArgs>
+    itineraryQueue?: boolean | Destination$itineraryQueueArgs<ExtArgs>
+    reviews?: boolean | Destination$reviewsArgs<ExtArgs>
+    savedBy?: boolean | Destination$savedByArgs<ExtArgs>
+    visitedBy?: boolean | Destination$visitedByArgs<ExtArgs>
     _count?: boolean | DestinationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DestinationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4290,32 +4449,26 @@ export namespace Prisma {
   export type $DestinationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Destination"
     objects: {
+      aiAnalyses: Prisma.$AiAnalysisPayload<ExtArgs>[]
       owner: Prisma.$UserPayload<ExtArgs> | null
       categories: Prisma.$DestinationCategoryPayload<ExtArgs>[]
-      aiAnalyses: Prisma.$AiAnalysisPayload<ExtArgs>[]
-      savedBy: Prisma.$SavedDestinationPayload<ExtArgs>[]
-      itineraryItems: Prisma.$ItineraryItemPayload<ExtArgs>[]
-      reviews: Prisma.$ReviewPayload<ExtArgs>[]
-      visitedBy: Prisma.$VisitedPlacePayload<ExtArgs>[]
-      itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
       views: Prisma.$DestinationViewPayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
+      itineraryItems: Prisma.$ItineraryItemPayload<ExtArgs>[]
+      itineraryQueue: Prisma.$ItineraryQueuePayload<ExtArgs>[]
+      reviews: Prisma.$ReviewPayload<ExtArgs>[]
+      savedBy: Prisma.$SavedDestinationPayload<ExtArgs>[]
+      visitedBy: Prisma.$VisitedPlacePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
       description: string
       address: string
-      addressStreet: string | null
-      addressVillage: string | null
-      addressDistrict: string | null
-      addressCity: string | null
-      addressProvince: string | null
       contact: string | null
       latitude: number
       longitude: number
       imageUrl: string | null
-      ownerId: number | null
       openTime: string | null
       closeTime: string | null
       ticketPrice: number | null
@@ -4327,6 +4480,12 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
+      ownerId: number | null
+      addressCity: string | null
+      addressDistrict: string | null
+      addressProvince: string | null
+      addressStreet: string | null
+      addressVillage: string | null
     }, ExtArgs["result"]["destination"]>
     composites: {}
   }
@@ -4721,16 +4880,16 @@ export namespace Prisma {
    */
   export interface Prisma__DestinationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    aiAnalyses<T extends Destination$aiAnalysesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$aiAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     owner<T extends Destination$ownerArgs<ExtArgs> = {}>(args?: Subset<T, Destination$ownerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     categories<T extends Destination$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    aiAnalyses<T extends Destination$aiAnalysesArgs<ExtArgs> = {}>(args?: Subset<T, Destination$aiAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    savedBy<T extends Destination$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Destination$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    itineraryItems<T extends Destination$itineraryItemsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$itineraryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    reviews<T extends Destination$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    visitedBy<T extends Destination$visitedByArgs<ExtArgs> = {}>(args?: Subset<T, Destination$visitedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    itineraryQueue<T extends Destination$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, Destination$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     views<T extends Destination$viewsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Destination$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itineraryItems<T extends Destination$itineraryItemsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$itineraryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itineraryQueue<T extends Destination$itineraryQueueArgs<ExtArgs> = {}>(args?: Subset<T, Destination$itineraryQueueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItineraryQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviews<T extends Destination$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Destination$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    savedBy<T extends Destination$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Destination$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedDestinationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    visitedBy<T extends Destination$visitedByArgs<ExtArgs> = {}>(args?: Subset<T, Destination$visitedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitedPlacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4764,16 +4923,10 @@ export namespace Prisma {
     readonly name: FieldRef<"Destination", 'String'>
     readonly description: FieldRef<"Destination", 'String'>
     readonly address: FieldRef<"Destination", 'String'>
-    readonly addressStreet: FieldRef<"Destination", 'String'>
-    readonly addressVillage: FieldRef<"Destination", 'String'>
-    readonly addressDistrict: FieldRef<"Destination", 'String'>
-    readonly addressCity: FieldRef<"Destination", 'String'>
-    readonly addressProvince: FieldRef<"Destination", 'String'>
     readonly contact: FieldRef<"Destination", 'String'>
     readonly latitude: FieldRef<"Destination", 'Float'>
     readonly longitude: FieldRef<"Destination", 'Float'>
     readonly imageUrl: FieldRef<"Destination", 'String'>
-    readonly ownerId: FieldRef<"Destination", 'Int'>
     readonly openTime: FieldRef<"Destination", 'String'>
     readonly closeTime: FieldRef<"Destination", 'String'>
     readonly ticketPrice: FieldRef<"Destination", 'Int'>
@@ -4785,6 +4938,12 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"Destination", 'DateTime'>
     readonly createdAt: FieldRef<"Destination", 'DateTime'>
     readonly updatedAt: FieldRef<"Destination", 'DateTime'>
+    readonly ownerId: FieldRef<"Destination", 'Int'>
+    readonly addressCity: FieldRef<"Destination", 'String'>
+    readonly addressDistrict: FieldRef<"Destination", 'String'>
+    readonly addressProvince: FieldRef<"Destination", 'String'>
+    readonly addressStreet: FieldRef<"Destination", 'String'>
+    readonly addressVillage: FieldRef<"Destination", 'String'>
   }
     
 
@@ -5186,6 +5345,30 @@ export namespace Prisma {
   }
 
   /**
+   * Destination.aiAnalyses
+   */
+  export type Destination$aiAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AiAnalysis
+     */
+    select?: AiAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AiAnalysis
+     */
+    omit?: AiAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AiAnalysisInclude<ExtArgs> | null
+    where?: AiAnalysisWhereInput
+    orderBy?: AiAnalysisOrderByWithRelationInput | AiAnalysisOrderByWithRelationInput[]
+    cursor?: AiAnalysisWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AiAnalysisScalarFieldEnum | AiAnalysisScalarFieldEnum[]
+  }
+
+  /**
    * Destination.owner
    */
   export type Destination$ownerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5226,150 +5409,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DestinationCategoryScalarFieldEnum | DestinationCategoryScalarFieldEnum[]
-  }
-
-  /**
-   * Destination.aiAnalyses
-   */
-  export type Destination$aiAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AiAnalysis
-     */
-    select?: AiAnalysisSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AiAnalysis
-     */
-    omit?: AiAnalysisOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AiAnalysisInclude<ExtArgs> | null
-    where?: AiAnalysisWhereInput
-    orderBy?: AiAnalysisOrderByWithRelationInput | AiAnalysisOrderByWithRelationInput[]
-    cursor?: AiAnalysisWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AiAnalysisScalarFieldEnum | AiAnalysisScalarFieldEnum[]
-  }
-
-  /**
-   * Destination.savedBy
-   */
-  export type Destination$savedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedDestination
-     */
-    select?: SavedDestinationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedDestination
-     */
-    omit?: SavedDestinationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedDestinationInclude<ExtArgs> | null
-    where?: SavedDestinationWhereInput
-    orderBy?: SavedDestinationOrderByWithRelationInput | SavedDestinationOrderByWithRelationInput[]
-    cursor?: SavedDestinationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SavedDestinationScalarFieldEnum | SavedDestinationScalarFieldEnum[]
-  }
-
-  /**
-   * Destination.itineraryItems
-   */
-  export type Destination$itineraryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ItineraryItem
-     */
-    select?: ItineraryItemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ItineraryItem
-     */
-    omit?: ItineraryItemOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ItineraryItemInclude<ExtArgs> | null
-    where?: ItineraryItemWhereInput
-    orderBy?: ItineraryItemOrderByWithRelationInput | ItineraryItemOrderByWithRelationInput[]
-    cursor?: ItineraryItemWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ItineraryItemScalarFieldEnum | ItineraryItemScalarFieldEnum[]
-  }
-
-  /**
-   * Destination.reviews
-   */
-  export type Destination$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Review
-     */
-    select?: ReviewSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Review
-     */
-    omit?: ReviewOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReviewInclude<ExtArgs> | null
-    where?: ReviewWhereInput
-    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
-    cursor?: ReviewWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
-  }
-
-  /**
-   * Destination.visitedBy
-   */
-  export type Destination$visitedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the VisitedPlace
-     */
-    select?: VisitedPlaceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the VisitedPlace
-     */
-    omit?: VisitedPlaceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: VisitedPlaceInclude<ExtArgs> | null
-    where?: VisitedPlaceWhereInput
-    orderBy?: VisitedPlaceOrderByWithRelationInput | VisitedPlaceOrderByWithRelationInput[]
-    cursor?: VisitedPlaceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: VisitedPlaceScalarFieldEnum | VisitedPlaceScalarFieldEnum[]
-  }
-
-  /**
-   * Destination.itineraryQueue
-   */
-  export type Destination$itineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ItineraryQueue
-     */
-    select?: ItineraryQueueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ItineraryQueue
-     */
-    omit?: ItineraryQueueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ItineraryQueueInclude<ExtArgs> | null
-    where?: ItineraryQueueWhereInput
-    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
-    cursor?: ItineraryQueueWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
   }
 
   /**
@@ -5418,6 +5457,126 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Destination.itineraryItems
+   */
+  export type Destination$itineraryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryItem
+     */
+    select?: ItineraryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryItem
+     */
+    omit?: ItineraryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryItemInclude<ExtArgs> | null
+    where?: ItineraryItemWhereInput
+    orderBy?: ItineraryItemOrderByWithRelationInput | ItineraryItemOrderByWithRelationInput[]
+    cursor?: ItineraryItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItineraryItemScalarFieldEnum | ItineraryItemScalarFieldEnum[]
+  }
+
+  /**
+   * Destination.itineraryQueue
+   */
+  export type Destination$itineraryQueueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItineraryQueue
+     */
+    select?: ItineraryQueueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItineraryQueue
+     */
+    omit?: ItineraryQueueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItineraryQueueInclude<ExtArgs> | null
+    where?: ItineraryQueueWhereInput
+    orderBy?: ItineraryQueueOrderByWithRelationInput | ItineraryQueueOrderByWithRelationInput[]
+    cursor?: ItineraryQueueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItineraryQueueScalarFieldEnum | ItineraryQueueScalarFieldEnum[]
+  }
+
+  /**
+   * Destination.reviews
+   */
+  export type Destination$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Review
+     */
+    select?: ReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Review
+     */
+    omit?: ReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewInclude<ExtArgs> | null
+    where?: ReviewWhereInput
+    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
+    cursor?: ReviewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
+  }
+
+  /**
+   * Destination.savedBy
+   */
+  export type Destination$savedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedDestination
+     */
+    select?: SavedDestinationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedDestination
+     */
+    omit?: SavedDestinationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedDestinationInclude<ExtArgs> | null
+    where?: SavedDestinationWhereInput
+    orderBy?: SavedDestinationOrderByWithRelationInput | SavedDestinationOrderByWithRelationInput[]
+    cursor?: SavedDestinationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SavedDestinationScalarFieldEnum | SavedDestinationScalarFieldEnum[]
+  }
+
+  /**
+   * Destination.visitedBy
+   */
+  export type Destination$visitedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisitedPlace
+     */
+    select?: VisitedPlaceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisitedPlace
+     */
+    omit?: VisitedPlaceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VisitedPlaceInclude<ExtArgs> | null
+    where?: VisitedPlaceWhereInput
+    orderBy?: VisitedPlaceOrderByWithRelationInput | VisitedPlaceOrderByWithRelationInput[]
+    cursor?: VisitedPlaceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VisitedPlaceScalarFieldEnum | VisitedPlaceScalarFieldEnum[]
   }
 
   /**
@@ -5621,8 +5780,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     createdAt?: boolean
-    destinations?: boolean | Category$destinationsArgs<ExtArgs>
     keywords?: boolean | Category$keywordsArgs<ExtArgs>
+    destinations?: boolean | Category$destinationsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
 
@@ -5646,8 +5805,8 @@ export namespace Prisma {
 
   export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt", ExtArgs["result"]["category"]>
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    destinations?: boolean | Category$destinationsArgs<ExtArgs>
     keywords?: boolean | Category$keywordsArgs<ExtArgs>
+    destinations?: boolean | Category$destinationsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5656,8 +5815,8 @@ export namespace Prisma {
   export type $CategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Category"
     objects: {
-      destinations: Prisma.$DestinationCategoryPayload<ExtArgs>[]
       keywords: Prisma.$CategoryKeywordPayload<ExtArgs>[]
+      destinations: Prisma.$DestinationCategoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6057,8 +6216,8 @@ export namespace Prisma {
    */
   export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    destinations<T extends Category$destinationsArgs<ExtArgs> = {}>(args?: Subset<T, Category$destinationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     keywords<T extends Category$keywordsArgs<ExtArgs> = {}>(args?: Subset<T, Category$keywordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryKeywordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    destinations<T extends Category$destinationsArgs<ExtArgs> = {}>(args?: Subset<T, Category$destinationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DestinationCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6484,30 +6643,6 @@ export namespace Prisma {
   }
 
   /**
-   * Category.destinations
-   */
-  export type Category$destinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DestinationCategory
-     */
-    select?: DestinationCategorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the DestinationCategory
-     */
-    omit?: DestinationCategoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DestinationCategoryInclude<ExtArgs> | null
-    where?: DestinationCategoryWhereInput
-    orderBy?: DestinationCategoryOrderByWithRelationInput | DestinationCategoryOrderByWithRelationInput[]
-    cursor?: DestinationCategoryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DestinationCategoryScalarFieldEnum | DestinationCategoryScalarFieldEnum[]
-  }
-
-  /**
    * Category.keywords
    */
   export type Category$keywordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6529,6 +6664,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CategoryKeywordScalarFieldEnum | CategoryKeywordScalarFieldEnum[]
+  }
+
+  /**
+   * Category.destinations
+   */
+  export type Category$destinationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DestinationCategory
+     */
+    select?: DestinationCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DestinationCategory
+     */
+    omit?: DestinationCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DestinationCategoryInclude<ExtArgs> | null
+    where?: DestinationCategoryWhereInput
+    orderBy?: DestinationCategoryOrderByWithRelationInput | DestinationCategoryOrderByWithRelationInput[]
+    cursor?: DestinationCategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DestinationCategoryScalarFieldEnum | DestinationCategoryScalarFieldEnum[]
   }
 
   /**
@@ -6740,24 +6899,24 @@ export namespace Prisma {
     id?: boolean
     destinationId?: boolean
     categoryId?: boolean
-    destination?: boolean | DestinationDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["destinationCategory"]>
 
   export type DestinationCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     destinationId?: boolean
     categoryId?: boolean
-    destination?: boolean | DestinationDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["destinationCategory"]>
 
   export type DestinationCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     destinationId?: boolean
     categoryId?: boolean
-    destination?: boolean | DestinationDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["destinationCategory"]>
 
   export type DestinationCategorySelectScalar = {
@@ -6768,23 +6927,23 @@ export namespace Prisma {
 
   export type DestinationCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "destinationId" | "categoryId", ExtArgs["result"]["destinationCategory"]>
   export type DestinationCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    destination?: boolean | DestinationDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
   }
   export type DestinationCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    destination?: boolean | DestinationDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
   }
   export type DestinationCategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    destination?: boolean | DestinationDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    destination?: boolean | DestinationDefaultArgs<ExtArgs>
   }
 
   export type $DestinationCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DestinationCategory"
     objects: {
-      destination: Prisma.$DestinationPayload<ExtArgs>
       category: Prisma.$CategoryPayload<ExtArgs>
+      destination: Prisma.$DestinationPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7184,8 +7343,8 @@ export namespace Prisma {
    */
   export interface Prisma__DestinationCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10050,8 +10209,8 @@ export namespace Prisma {
     userId?: boolean
     destinationId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["savedDestination"]>
 
   export type SavedDestinationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10059,8 +10218,8 @@ export namespace Prisma {
     userId?: boolean
     destinationId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["savedDestination"]>
 
   export type SavedDestinationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10068,8 +10227,8 @@ export namespace Prisma {
     userId?: boolean
     destinationId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["savedDestination"]>
 
   export type SavedDestinationSelectScalar = {
@@ -10081,23 +10240,23 @@ export namespace Prisma {
 
   export type SavedDestinationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destinationId" | "createdAt", ExtArgs["result"]["savedDestination"]>
   export type SavedDestinationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type SavedDestinationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type SavedDestinationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $SavedDestinationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SavedDestination"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       destination: Prisma.$DestinationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -10498,8 +10657,8 @@ export namespace Prisma {
    */
   export interface Prisma__SavedDestinationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11150,8 +11309,8 @@ export namespace Prisma {
     userId?: boolean
     destinationId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itineraryQueue"]>
 
   export type ItineraryQueueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11159,8 +11318,8 @@ export namespace Prisma {
     userId?: boolean
     destinationId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itineraryQueue"]>
 
   export type ItineraryQueueSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11168,8 +11327,8 @@ export namespace Prisma {
     userId?: boolean
     destinationId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itineraryQueue"]>
 
   export type ItineraryQueueSelectScalar = {
@@ -11181,23 +11340,23 @@ export namespace Prisma {
 
   export type ItineraryQueueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destinationId" | "createdAt", ExtArgs["result"]["itineraryQueue"]>
   export type ItineraryQueueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ItineraryQueueIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ItineraryQueueIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ItineraryQueuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ItineraryQueue"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       destination: Prisma.$DestinationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -11598,8 +11757,8 @@ export namespace Prisma {
    */
   export interface Prisma__ItineraryQueueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12067,81 +12226,81 @@ export namespace Prisma {
   export type ItineraryAvgAggregateOutputType = {
     id: number | null
     userId: number | null
-    startLat: number | null
-    startLng: number | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
+    startLat: number | null
+    startLng: number | null
   }
 
   export type ItinerarySumAggregateOutputType = {
     id: number | null
     userId: number | null
-    startLat: number | null
-    startLng: number | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
+    startLat: number | null
+    startLng: number | null
   }
 
   export type ItineraryMinAggregateOutputType = {
     id: number | null
     userId: number | null
     title: string | null
-    tripDate: Date | null
-    status: $Enums.ItineraryStatus | null
-    startLat: number | null
-    startLng: number | null
-    startLabel: string | null
-    startType: $Enums.StartLocationType | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
     isAiGenerated: boolean | null
-    startedAt: Date | null
-    completedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    completedAt: Date | null
+    startLabel: string | null
+    startLat: number | null
+    startLng: number | null
+    startType: $Enums.StartLocationType | null
+    startedAt: Date | null
+    status: $Enums.ItineraryStatus | null
+    tripDate: Date | null
   }
 
   export type ItineraryMaxAggregateOutputType = {
     id: number | null
     userId: number | null
     title: string | null
-    tripDate: Date | null
-    status: $Enums.ItineraryStatus | null
-    startLat: number | null
-    startLng: number | null
-    startLabel: string | null
-    startType: $Enums.StartLocationType | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
     isAiGenerated: boolean | null
-    startedAt: Date | null
-    completedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    completedAt: Date | null
+    startLabel: string | null
+    startLat: number | null
+    startLng: number | null
+    startType: $Enums.StartLocationType | null
+    startedAt: Date | null
+    status: $Enums.ItineraryStatus | null
+    tripDate: Date | null
   }
 
   export type ItineraryCountAggregateOutputType = {
     id: number
     userId: number
     title: number
-    tripDate: number
-    status: number
-    startLat: number
-    startLng: number
-    startLabel: number
-    startType: number
     totalDistance: number
     estimatedTime: number
     estimatedCost: number
     isAiGenerated: number
-    startedAt: number
-    completedAt: number
     createdAt: number
     updatedAt: number
+    completedAt: number
+    startLabel: number
+    startLat: number
+    startLng: number
+    startType: number
+    startedAt: number
+    status: number
+    tripDate: number
     _all: number
   }
 
@@ -12149,81 +12308,81 @@ export namespace Prisma {
   export type ItineraryAvgAggregateInputType = {
     id?: true
     userId?: true
-    startLat?: true
-    startLng?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
+    startLat?: true
+    startLng?: true
   }
 
   export type ItinerarySumAggregateInputType = {
     id?: true
     userId?: true
-    startLat?: true
-    startLng?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
+    startLat?: true
+    startLng?: true
   }
 
   export type ItineraryMinAggregateInputType = {
     id?: true
     userId?: true
     title?: true
-    tripDate?: true
-    status?: true
-    startLat?: true
-    startLng?: true
-    startLabel?: true
-    startType?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
     isAiGenerated?: true
-    startedAt?: true
-    completedAt?: true
     createdAt?: true
     updatedAt?: true
+    completedAt?: true
+    startLabel?: true
+    startLat?: true
+    startLng?: true
+    startType?: true
+    startedAt?: true
+    status?: true
+    tripDate?: true
   }
 
   export type ItineraryMaxAggregateInputType = {
     id?: true
     userId?: true
     title?: true
-    tripDate?: true
-    status?: true
-    startLat?: true
-    startLng?: true
-    startLabel?: true
-    startType?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
     isAiGenerated?: true
-    startedAt?: true
-    completedAt?: true
     createdAt?: true
     updatedAt?: true
+    completedAt?: true
+    startLabel?: true
+    startLat?: true
+    startLng?: true
+    startType?: true
+    startedAt?: true
+    status?: true
+    tripDate?: true
   }
 
   export type ItineraryCountAggregateInputType = {
     id?: true
     userId?: true
     title?: true
-    tripDate?: true
-    status?: true
-    startLat?: true
-    startLng?: true
-    startLabel?: true
-    startType?: true
     totalDistance?: true
     estimatedTime?: true
     estimatedCost?: true
     isAiGenerated?: true
-    startedAt?: true
-    completedAt?: true
     createdAt?: true
     updatedAt?: true
+    completedAt?: true
+    startLabel?: true
+    startLat?: true
+    startLng?: true
+    startType?: true
+    startedAt?: true
+    status?: true
+    tripDate?: true
     _all?: true
   }
 
@@ -12317,20 +12476,20 @@ export namespace Prisma {
     id: number
     userId: number
     title: string
-    tripDate: Date | null
-    status: $Enums.ItineraryStatus
-    startLat: number | null
-    startLng: number | null
-    startLabel: string | null
-    startType: $Enums.StartLocationType | null
     totalDistance: number | null
     estimatedTime: number | null
     estimatedCost: number | null
     isAiGenerated: boolean
-    startedAt: Date | null
-    completedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    completedAt: Date | null
+    startLabel: string | null
+    startLat: number | null
+    startLng: number | null
+    startType: $Enums.StartLocationType | null
+    startedAt: Date | null
+    status: $Enums.ItineraryStatus
+    tripDate: Date | null
     _count: ItineraryCountAggregateOutputType | null
     _avg: ItineraryAvgAggregateOutputType | null
     _sum: ItinerarySumAggregateOutputType | null
@@ -12356,20 +12515,20 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
-    tripDate?: boolean
-    status?: boolean
-    startLat?: boolean
-    startLng?: boolean
-    startLabel?: boolean
-    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
-    startedAt?: boolean
-    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    completedAt?: boolean
+    startLabel?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startType?: boolean
+    startedAt?: boolean
+    status?: boolean
+    tripDate?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | Itinerary$itemsArgs<ExtArgs>
     _count?: boolean | ItineraryCountOutputTypeDefaultArgs<ExtArgs>
@@ -12379,20 +12538,20 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
-    tripDate?: boolean
-    status?: boolean
-    startLat?: boolean
-    startLng?: boolean
-    startLabel?: boolean
-    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
-    startedAt?: boolean
-    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    completedAt?: boolean
+    startLabel?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startType?: boolean
+    startedAt?: boolean
+    status?: boolean
+    tripDate?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itinerary"]>
 
@@ -12400,20 +12559,20 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
-    tripDate?: boolean
-    status?: boolean
-    startLat?: boolean
-    startLng?: boolean
-    startLabel?: boolean
-    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
-    startedAt?: boolean
-    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    completedAt?: boolean
+    startLabel?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startType?: boolean
+    startedAt?: boolean
+    status?: boolean
+    tripDate?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itinerary"]>
 
@@ -12421,23 +12580,23 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     title?: boolean
-    tripDate?: boolean
-    status?: boolean
-    startLat?: boolean
-    startLng?: boolean
-    startLabel?: boolean
-    startType?: boolean
     totalDistance?: boolean
     estimatedTime?: boolean
     estimatedCost?: boolean
     isAiGenerated?: boolean
-    startedAt?: boolean
-    completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    completedAt?: boolean
+    startLabel?: boolean
+    startLat?: boolean
+    startLng?: boolean
+    startType?: boolean
+    startedAt?: boolean
+    status?: boolean
+    tripDate?: boolean
   }
 
-  export type ItineraryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "tripDate" | "status" | "startLat" | "startLng" | "startLabel" | "startType" | "totalDistance" | "estimatedTime" | "estimatedCost" | "isAiGenerated" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["itinerary"]>
+  export type ItineraryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "totalDistance" | "estimatedTime" | "estimatedCost" | "isAiGenerated" | "createdAt" | "updatedAt" | "completedAt" | "startLabel" | "startLat" | "startLng" | "startType" | "startedAt" | "status" | "tripDate", ExtArgs["result"]["itinerary"]>
   export type ItineraryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | Itinerary$itemsArgs<ExtArgs>
@@ -12460,20 +12619,20 @@ export namespace Prisma {
       id: number
       userId: number
       title: string
-      tripDate: Date | null
-      status: $Enums.ItineraryStatus
-      startLat: number | null
-      startLng: number | null
-      startLabel: string | null
-      startType: $Enums.StartLocationType | null
       totalDistance: number | null
       estimatedTime: number | null
       estimatedCost: number | null
       isAiGenerated: boolean
-      startedAt: Date | null
-      completedAt: Date | null
       createdAt: Date
       updatedAt: Date
+      completedAt: Date | null
+      startLabel: string | null
+      startLat: number | null
+      startLng: number | null
+      startType: $Enums.StartLocationType | null
+      startedAt: Date | null
+      status: $Enums.ItineraryStatus
+      tripDate: Date | null
     }, ExtArgs["result"]["itinerary"]>
     composites: {}
   }
@@ -12902,20 +13061,20 @@ export namespace Prisma {
     readonly id: FieldRef<"Itinerary", 'Int'>
     readonly userId: FieldRef<"Itinerary", 'Int'>
     readonly title: FieldRef<"Itinerary", 'String'>
-    readonly tripDate: FieldRef<"Itinerary", 'DateTime'>
-    readonly status: FieldRef<"Itinerary", 'ItineraryStatus'>
-    readonly startLat: FieldRef<"Itinerary", 'Float'>
-    readonly startLng: FieldRef<"Itinerary", 'Float'>
-    readonly startLabel: FieldRef<"Itinerary", 'String'>
-    readonly startType: FieldRef<"Itinerary", 'StartLocationType'>
     readonly totalDistance: FieldRef<"Itinerary", 'Float'>
     readonly estimatedTime: FieldRef<"Itinerary", 'Int'>
     readonly estimatedCost: FieldRef<"Itinerary", 'Int'>
     readonly isAiGenerated: FieldRef<"Itinerary", 'Boolean'>
-    readonly startedAt: FieldRef<"Itinerary", 'DateTime'>
-    readonly completedAt: FieldRef<"Itinerary", 'DateTime'>
     readonly createdAt: FieldRef<"Itinerary", 'DateTime'>
     readonly updatedAt: FieldRef<"Itinerary", 'DateTime'>
+    readonly completedAt: FieldRef<"Itinerary", 'DateTime'>
+    readonly startLabel: FieldRef<"Itinerary", 'String'>
+    readonly startLat: FieldRef<"Itinerary", 'Float'>
+    readonly startLng: FieldRef<"Itinerary", 'Float'>
+    readonly startType: FieldRef<"Itinerary", 'StartLocationType'>
+    readonly startedAt: FieldRef<"Itinerary", 'DateTime'>
+    readonly status: FieldRef<"Itinerary", 'ItineraryStatus'>
+    readonly tripDate: FieldRef<"Itinerary", 'DateTime'>
   }
     
 
@@ -13391,9 +13550,9 @@ export namespace Prisma {
     destinationId: number | null
     order: number | null
     visitTime: string | null
+    createdAt: Date | null
     visited: boolean | null
     visitedAt: Date | null
-    createdAt: Date | null
   }
 
   export type ItineraryItemMaxAggregateOutputType = {
@@ -13402,9 +13561,9 @@ export namespace Prisma {
     destinationId: number | null
     order: number | null
     visitTime: string | null
+    createdAt: Date | null
     visited: boolean | null
     visitedAt: Date | null
-    createdAt: Date | null
   }
 
   export type ItineraryItemCountAggregateOutputType = {
@@ -13413,9 +13572,9 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime: number
+    createdAt: number
     visited: number
     visitedAt: number
-    createdAt: number
     _all: number
   }
 
@@ -13440,9 +13599,9 @@ export namespace Prisma {
     destinationId?: true
     order?: true
     visitTime?: true
+    createdAt?: true
     visited?: true
     visitedAt?: true
-    createdAt?: true
   }
 
   export type ItineraryItemMaxAggregateInputType = {
@@ -13451,9 +13610,9 @@ export namespace Prisma {
     destinationId?: true
     order?: true
     visitTime?: true
+    createdAt?: true
     visited?: true
     visitedAt?: true
-    createdAt?: true
   }
 
   export type ItineraryItemCountAggregateInputType = {
@@ -13462,9 +13621,9 @@ export namespace Prisma {
     destinationId?: true
     order?: true
     visitTime?: true
+    createdAt?: true
     visited?: true
     visitedAt?: true
-    createdAt?: true
     _all?: true
   }
 
@@ -13560,9 +13719,9 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime: string | null
+    createdAt: Date
     visited: boolean
     visitedAt: Date | null
-    createdAt: Date
     _count: ItineraryItemCountAggregateOutputType | null
     _avg: ItineraryItemAvgAggregateOutputType | null
     _sum: ItineraryItemSumAggregateOutputType | null
@@ -13590,11 +13749,11 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    createdAt?: boolean
     visited?: boolean
     visitedAt?: boolean
-    createdAt?: boolean
-    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itineraryItem"]>
 
   export type ItineraryItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13603,11 +13762,11 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    createdAt?: boolean
     visited?: boolean
     visitedAt?: boolean
-    createdAt?: boolean
-    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itineraryItem"]>
 
   export type ItineraryItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13616,11 +13775,11 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    createdAt?: boolean
     visited?: boolean
     visitedAt?: boolean
-    createdAt?: boolean
-    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itineraryItem"]>
 
   export type ItineraryItemSelectScalar = {
@@ -13629,30 +13788,30 @@ export namespace Prisma {
     destinationId?: boolean
     order?: boolean
     visitTime?: boolean
+    createdAt?: boolean
     visited?: boolean
     visitedAt?: boolean
-    createdAt?: boolean
   }
 
-  export type ItineraryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itineraryId" | "destinationId" | "order" | "visitTime" | "visited" | "visitedAt" | "createdAt", ExtArgs["result"]["itineraryItem"]>
+  export type ItineraryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itineraryId" | "destinationId" | "order" | "visitTime" | "createdAt" | "visited" | "visitedAt", ExtArgs["result"]["itineraryItem"]>
   export type ItineraryItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
   }
   export type ItineraryItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
   }
   export type ItineraryItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    itinerary?: boolean | ItineraryDefaultArgs<ExtArgs>
   }
 
   export type $ItineraryItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ItineraryItem"
     objects: {
-      itinerary: Prisma.$ItineraryPayload<ExtArgs>
       destination: Prisma.$DestinationPayload<ExtArgs>
+      itinerary: Prisma.$ItineraryPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -13660,9 +13819,9 @@ export namespace Prisma {
       destinationId: number
       order: number
       visitTime: string | null
+      createdAt: Date
       visited: boolean
       visitedAt: Date | null
-      createdAt: Date
     }, ExtArgs["result"]["itineraryItem"]>
     composites: {}
   }
@@ -14057,8 +14216,8 @@ export namespace Prisma {
    */
   export interface Prisma__ItineraryItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    itinerary<T extends ItineraryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ItineraryDefaultArgs<ExtArgs>>): Prisma__ItineraryClient<$Result.GetResult<Prisma.$ItineraryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    itinerary<T extends ItineraryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ItineraryDefaultArgs<ExtArgs>>): Prisma__ItineraryClient<$Result.GetResult<Prisma.$ItineraryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14093,9 +14252,9 @@ export namespace Prisma {
     readonly destinationId: FieldRef<"ItineraryItem", 'Int'>
     readonly order: FieldRef<"ItineraryItem", 'Int'>
     readonly visitTime: FieldRef<"ItineraryItem", 'String'>
+    readonly createdAt: FieldRef<"ItineraryItem", 'DateTime'>
     readonly visited: FieldRef<"ItineraryItem", 'Boolean'>
     readonly visitedAt: FieldRef<"ItineraryItem", 'DateTime'>
-    readonly createdAt: FieldRef<"ItineraryItem", 'DateTime'>
   }
     
 
@@ -14769,8 +14928,10 @@ export namespace Prisma {
     helpfulCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    likes?: boolean | Review$likesArgs<ExtArgs>
+    _count?: boolean | ReviewCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14784,8 +14945,8 @@ export namespace Prisma {
     helpfulCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14799,8 +14960,8 @@ export namespace Prisma {
     helpfulCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectScalar = {
@@ -14818,23 +14979,26 @@ export namespace Prisma {
 
   export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destinationId" | "rating" | "comment" | "photoUrl" | "videoUrl" | "helpfulCount" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    likes?: boolean | Review$likesArgs<ExtArgs>
+    _count?: boolean | ReviewCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Review"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       destination: Prisma.$DestinationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+      likes: Prisma.$ReviewLikePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -15241,8 +15405,9 @@ export namespace Prisma {
    */
   export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    likes<T extends Review$likesArgs<ExtArgs> = {}>(args?: Subset<T, Review$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15683,6 +15848,30 @@ export namespace Prisma {
   }
 
   /**
+   * Review.likes
+   */
+  export type Review$likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    where?: ReviewLikeWhereInput
+    orderBy?: ReviewLikeOrderByWithRelationInput | ReviewLikeOrderByWithRelationInput[]
+    cursor?: ReviewLikeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReviewLikeScalarFieldEnum | ReviewLikeScalarFieldEnum[]
+  }
+
+  /**
    * Review without action
    */
   export type ReviewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15698,6 +15887,1106 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ReviewInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReviewLike
+   */
+
+  export type AggregateReviewLike = {
+    _count: ReviewLikeCountAggregateOutputType | null
+    _avg: ReviewLikeAvgAggregateOutputType | null
+    _sum: ReviewLikeSumAggregateOutputType | null
+    _min: ReviewLikeMinAggregateOutputType | null
+    _max: ReviewLikeMaxAggregateOutputType | null
+  }
+
+  export type ReviewLikeAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    reviewId: number | null
+  }
+
+  export type ReviewLikeSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    reviewId: number | null
+  }
+
+  export type ReviewLikeMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    reviewId: number | null
+    createdAt: Date | null
+  }
+
+  export type ReviewLikeMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    reviewId: number | null
+    createdAt: Date | null
+  }
+
+  export type ReviewLikeCountAggregateOutputType = {
+    id: number
+    userId: number
+    reviewId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ReviewLikeAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    reviewId?: true
+  }
+
+  export type ReviewLikeSumAggregateInputType = {
+    id?: true
+    userId?: true
+    reviewId?: true
+  }
+
+  export type ReviewLikeMinAggregateInputType = {
+    id?: true
+    userId?: true
+    reviewId?: true
+    createdAt?: true
+  }
+
+  export type ReviewLikeMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    reviewId?: true
+    createdAt?: true
+  }
+
+  export type ReviewLikeCountAggregateInputType = {
+    id?: true
+    userId?: true
+    reviewId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ReviewLikeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReviewLike to aggregate.
+     */
+    where?: ReviewLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviewLikes to fetch.
+     */
+    orderBy?: ReviewLikeOrderByWithRelationInput | ReviewLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReviewLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviewLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviewLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReviewLikes
+    **/
+    _count?: true | ReviewLikeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReviewLikeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReviewLikeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReviewLikeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReviewLikeMaxAggregateInputType
+  }
+
+  export type GetReviewLikeAggregateType<T extends ReviewLikeAggregateArgs> = {
+        [P in keyof T & keyof AggregateReviewLike]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReviewLike[P]>
+      : GetScalarType<T[P], AggregateReviewLike[P]>
+  }
+
+
+
+
+  export type ReviewLikeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewLikeWhereInput
+    orderBy?: ReviewLikeOrderByWithAggregationInput | ReviewLikeOrderByWithAggregationInput[]
+    by: ReviewLikeScalarFieldEnum[] | ReviewLikeScalarFieldEnum
+    having?: ReviewLikeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReviewLikeCountAggregateInputType | true
+    _avg?: ReviewLikeAvgAggregateInputType
+    _sum?: ReviewLikeSumAggregateInputType
+    _min?: ReviewLikeMinAggregateInputType
+    _max?: ReviewLikeMaxAggregateInputType
+  }
+
+  export type ReviewLikeGroupByOutputType = {
+    id: number
+    userId: number
+    reviewId: number
+    createdAt: Date
+    _count: ReviewLikeCountAggregateOutputType | null
+    _avg: ReviewLikeAvgAggregateOutputType | null
+    _sum: ReviewLikeSumAggregateOutputType | null
+    _min: ReviewLikeMinAggregateOutputType | null
+    _max: ReviewLikeMaxAggregateOutputType | null
+  }
+
+  type GetReviewLikeGroupByPayload<T extends ReviewLikeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReviewLikeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReviewLikeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReviewLikeGroupByOutputType[P]>
+            : GetScalarType<T[P], ReviewLikeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReviewLikeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    reviewId?: boolean
+    createdAt?: boolean
+    review?: boolean | ReviewDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reviewLike"]>
+
+  export type ReviewLikeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    reviewId?: boolean
+    createdAt?: boolean
+    review?: boolean | ReviewDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reviewLike"]>
+
+  export type ReviewLikeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    reviewId?: boolean
+    createdAt?: boolean
+    review?: boolean | ReviewDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reviewLike"]>
+
+  export type ReviewLikeSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    reviewId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ReviewLikeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "reviewId" | "createdAt", ExtArgs["result"]["reviewLike"]>
+  export type ReviewLikeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    review?: boolean | ReviewDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ReviewLikeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    review?: boolean | ReviewDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ReviewLikeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    review?: boolean | ReviewDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ReviewLikePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReviewLike"
+    objects: {
+      review: Prisma.$ReviewPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      reviewId: number
+      createdAt: Date
+    }, ExtArgs["result"]["reviewLike"]>
+    composites: {}
+  }
+
+  type ReviewLikeGetPayload<S extends boolean | null | undefined | ReviewLikeDefaultArgs> = $Result.GetResult<Prisma.$ReviewLikePayload, S>
+
+  type ReviewLikeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReviewLikeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReviewLikeCountAggregateInputType | true
+    }
+
+  export interface ReviewLikeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReviewLike'], meta: { name: 'ReviewLike' } }
+    /**
+     * Find zero or one ReviewLike that matches the filter.
+     * @param {ReviewLikeFindUniqueArgs} args - Arguments to find a ReviewLike
+     * @example
+     * // Get one ReviewLike
+     * const reviewLike = await prisma.reviewLike.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReviewLikeFindUniqueArgs>(args: SelectSubset<T, ReviewLikeFindUniqueArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReviewLike that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReviewLikeFindUniqueOrThrowArgs} args - Arguments to find a ReviewLike
+     * @example
+     * // Get one ReviewLike
+     * const reviewLike = await prisma.reviewLike.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReviewLikeFindUniqueOrThrowArgs>(args: SelectSubset<T, ReviewLikeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReviewLike that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewLikeFindFirstArgs} args - Arguments to find a ReviewLike
+     * @example
+     * // Get one ReviewLike
+     * const reviewLike = await prisma.reviewLike.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReviewLikeFindFirstArgs>(args?: SelectSubset<T, ReviewLikeFindFirstArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReviewLike that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewLikeFindFirstOrThrowArgs} args - Arguments to find a ReviewLike
+     * @example
+     * // Get one ReviewLike
+     * const reviewLike = await prisma.reviewLike.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReviewLikeFindFirstOrThrowArgs>(args?: SelectSubset<T, ReviewLikeFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReviewLikes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewLikeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReviewLikes
+     * const reviewLikes = await prisma.reviewLike.findMany()
+     * 
+     * // Get first 10 ReviewLikes
+     * const reviewLikes = await prisma.reviewLike.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reviewLikeWithIdOnly = await prisma.reviewLike.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReviewLikeFindManyArgs>(args?: SelectSubset<T, ReviewLikeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReviewLike.
+     * @param {ReviewLikeCreateArgs} args - Arguments to create a ReviewLike.
+     * @example
+     * // Create one ReviewLike
+     * const ReviewLike = await prisma.reviewLike.create({
+     *   data: {
+     *     // ... data to create a ReviewLike
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReviewLikeCreateArgs>(args: SelectSubset<T, ReviewLikeCreateArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReviewLikes.
+     * @param {ReviewLikeCreateManyArgs} args - Arguments to create many ReviewLikes.
+     * @example
+     * // Create many ReviewLikes
+     * const reviewLike = await prisma.reviewLike.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReviewLikeCreateManyArgs>(args?: SelectSubset<T, ReviewLikeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReviewLikes and returns the data saved in the database.
+     * @param {ReviewLikeCreateManyAndReturnArgs} args - Arguments to create many ReviewLikes.
+     * @example
+     * // Create many ReviewLikes
+     * const reviewLike = await prisma.reviewLike.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReviewLikes and only return the `id`
+     * const reviewLikeWithIdOnly = await prisma.reviewLike.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReviewLikeCreateManyAndReturnArgs>(args?: SelectSubset<T, ReviewLikeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReviewLike.
+     * @param {ReviewLikeDeleteArgs} args - Arguments to delete one ReviewLike.
+     * @example
+     * // Delete one ReviewLike
+     * const ReviewLike = await prisma.reviewLike.delete({
+     *   where: {
+     *     // ... filter to delete one ReviewLike
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReviewLikeDeleteArgs>(args: SelectSubset<T, ReviewLikeDeleteArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReviewLike.
+     * @param {ReviewLikeUpdateArgs} args - Arguments to update one ReviewLike.
+     * @example
+     * // Update one ReviewLike
+     * const reviewLike = await prisma.reviewLike.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReviewLikeUpdateArgs>(args: SelectSubset<T, ReviewLikeUpdateArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReviewLikes.
+     * @param {ReviewLikeDeleteManyArgs} args - Arguments to filter ReviewLikes to delete.
+     * @example
+     * // Delete a few ReviewLikes
+     * const { count } = await prisma.reviewLike.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReviewLikeDeleteManyArgs>(args?: SelectSubset<T, ReviewLikeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReviewLikes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewLikeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReviewLikes
+     * const reviewLike = await prisma.reviewLike.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReviewLikeUpdateManyArgs>(args: SelectSubset<T, ReviewLikeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReviewLikes and returns the data updated in the database.
+     * @param {ReviewLikeUpdateManyAndReturnArgs} args - Arguments to update many ReviewLikes.
+     * @example
+     * // Update many ReviewLikes
+     * const reviewLike = await prisma.reviewLike.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReviewLikes and only return the `id`
+     * const reviewLikeWithIdOnly = await prisma.reviewLike.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReviewLikeUpdateManyAndReturnArgs>(args: SelectSubset<T, ReviewLikeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReviewLike.
+     * @param {ReviewLikeUpsertArgs} args - Arguments to update or create a ReviewLike.
+     * @example
+     * // Update or create a ReviewLike
+     * const reviewLike = await prisma.reviewLike.upsert({
+     *   create: {
+     *     // ... data to create a ReviewLike
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReviewLike we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReviewLikeUpsertArgs>(args: SelectSubset<T, ReviewLikeUpsertArgs<ExtArgs>>): Prisma__ReviewLikeClient<$Result.GetResult<Prisma.$ReviewLikePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReviewLikes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewLikeCountArgs} args - Arguments to filter ReviewLikes to count.
+     * @example
+     * // Count the number of ReviewLikes
+     * const count = await prisma.reviewLike.count({
+     *   where: {
+     *     // ... the filter for the ReviewLikes we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReviewLikeCountArgs>(
+      args?: Subset<T, ReviewLikeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReviewLikeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReviewLike.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewLikeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReviewLikeAggregateArgs>(args: Subset<T, ReviewLikeAggregateArgs>): Prisma.PrismaPromise<GetReviewLikeAggregateType<T>>
+
+    /**
+     * Group by ReviewLike.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviewLikeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReviewLikeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReviewLikeGroupByArgs['orderBy'] }
+        : { orderBy?: ReviewLikeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReviewLikeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReviewLikeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReviewLike model
+   */
+  readonly fields: ReviewLikeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReviewLike.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReviewLikeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    review<T extends ReviewDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReviewDefaultArgs<ExtArgs>>): Prisma__ReviewClient<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReviewLike model
+   */
+  interface ReviewLikeFieldRefs {
+    readonly id: FieldRef<"ReviewLike", 'Int'>
+    readonly userId: FieldRef<"ReviewLike", 'Int'>
+    readonly reviewId: FieldRef<"ReviewLike", 'Int'>
+    readonly createdAt: FieldRef<"ReviewLike", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReviewLike findUnique
+   */
+  export type ReviewLikeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviewLike to fetch.
+     */
+    where: ReviewLikeWhereUniqueInput
+  }
+
+  /**
+   * ReviewLike findUniqueOrThrow
+   */
+  export type ReviewLikeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviewLike to fetch.
+     */
+    where: ReviewLikeWhereUniqueInput
+  }
+
+  /**
+   * ReviewLike findFirst
+   */
+  export type ReviewLikeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviewLike to fetch.
+     */
+    where?: ReviewLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviewLikes to fetch.
+     */
+    orderBy?: ReviewLikeOrderByWithRelationInput | ReviewLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReviewLikes.
+     */
+    cursor?: ReviewLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviewLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviewLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReviewLikes.
+     */
+    distinct?: ReviewLikeScalarFieldEnum | ReviewLikeScalarFieldEnum[]
+  }
+
+  /**
+   * ReviewLike findFirstOrThrow
+   */
+  export type ReviewLikeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviewLike to fetch.
+     */
+    where?: ReviewLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviewLikes to fetch.
+     */
+    orderBy?: ReviewLikeOrderByWithRelationInput | ReviewLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReviewLikes.
+     */
+    cursor?: ReviewLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviewLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviewLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReviewLikes.
+     */
+    distinct?: ReviewLikeScalarFieldEnum | ReviewLikeScalarFieldEnum[]
+  }
+
+  /**
+   * ReviewLike findMany
+   */
+  export type ReviewLikeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviewLikes to fetch.
+     */
+    where?: ReviewLikeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviewLikes to fetch.
+     */
+    orderBy?: ReviewLikeOrderByWithRelationInput | ReviewLikeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReviewLikes.
+     */
+    cursor?: ReviewLikeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviewLikes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviewLikes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReviewLikes.
+     */
+    distinct?: ReviewLikeScalarFieldEnum | ReviewLikeScalarFieldEnum[]
+  }
+
+  /**
+   * ReviewLike create
+   */
+  export type ReviewLikeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReviewLike.
+     */
+    data: XOR<ReviewLikeCreateInput, ReviewLikeUncheckedCreateInput>
+  }
+
+  /**
+   * ReviewLike createMany
+   */
+  export type ReviewLikeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReviewLikes.
+     */
+    data: ReviewLikeCreateManyInput | ReviewLikeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReviewLike createManyAndReturn
+   */
+  export type ReviewLikeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReviewLikes.
+     */
+    data: ReviewLikeCreateManyInput | ReviewLikeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReviewLike update
+   */
+  export type ReviewLikeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReviewLike.
+     */
+    data: XOR<ReviewLikeUpdateInput, ReviewLikeUncheckedUpdateInput>
+    /**
+     * Choose, which ReviewLike to update.
+     */
+    where: ReviewLikeWhereUniqueInput
+  }
+
+  /**
+   * ReviewLike updateMany
+   */
+  export type ReviewLikeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReviewLikes.
+     */
+    data: XOR<ReviewLikeUpdateManyMutationInput, ReviewLikeUncheckedUpdateManyInput>
+    /**
+     * Filter which ReviewLikes to update
+     */
+    where?: ReviewLikeWhereInput
+    /**
+     * Limit how many ReviewLikes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReviewLike updateManyAndReturn
+   */
+  export type ReviewLikeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * The data used to update ReviewLikes.
+     */
+    data: XOR<ReviewLikeUpdateManyMutationInput, ReviewLikeUncheckedUpdateManyInput>
+    /**
+     * Filter which ReviewLikes to update
+     */
+    where?: ReviewLikeWhereInput
+    /**
+     * Limit how many ReviewLikes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReviewLike upsert
+   */
+  export type ReviewLikeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReviewLike to update in case it exists.
+     */
+    where: ReviewLikeWhereUniqueInput
+    /**
+     * In case the ReviewLike found by the `where` argument doesn't exist, create a new ReviewLike with this data.
+     */
+    create: XOR<ReviewLikeCreateInput, ReviewLikeUncheckedCreateInput>
+    /**
+     * In case the ReviewLike was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReviewLikeUpdateInput, ReviewLikeUncheckedUpdateInput>
+  }
+
+  /**
+   * ReviewLike delete
+   */
+  export type ReviewLikeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
+    /**
+     * Filter which ReviewLike to delete.
+     */
+    where: ReviewLikeWhereUniqueInput
+  }
+
+  /**
+   * ReviewLike deleteMany
+   */
+  export type ReviewLikeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReviewLikes to delete
+     */
+    where?: ReviewLikeWhereInput
+    /**
+     * Limit how many ReviewLikes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReviewLike without action
+   */
+  export type ReviewLikeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviewLike
+     */
+    select?: ReviewLikeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviewLike
+     */
+    omit?: ReviewLikeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewLikeInclude<ExtArgs> | null
   }
 
 
@@ -15907,8 +17196,8 @@ export namespace Prisma {
     destinationId?: boolean
     visitedAt?: boolean
     checkedIn?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["visitedPlace"]>
 
   export type VisitedPlaceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15917,8 +17206,8 @@ export namespace Prisma {
     destinationId?: boolean
     visitedAt?: boolean
     checkedIn?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["visitedPlace"]>
 
   export type VisitedPlaceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15927,8 +17216,8 @@ export namespace Prisma {
     destinationId?: boolean
     visitedAt?: boolean
     checkedIn?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["visitedPlace"]>
 
   export type VisitedPlaceSelectScalar = {
@@ -15941,23 +17230,23 @@ export namespace Prisma {
 
   export type VisitedPlaceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destinationId" | "visitedAt" | "checkedIn", ExtArgs["result"]["visitedPlace"]>
   export type VisitedPlaceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type VisitedPlaceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type VisitedPlaceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | DestinationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $VisitedPlacePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "VisitedPlace"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       destination: Prisma.$DestinationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -16359,8 +17648,8 @@ export namespace Prisma {
    */
   export interface Prisma__VisitedPlaceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     destination<T extends DestinationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DestinationDefaultArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18184,8 +19473,8 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    owner?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | Event$destinationArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18203,8 +19492,8 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    owner?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | Event$destinationArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18222,8 +19511,8 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    owner?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | Event$destinationArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectScalar = {
@@ -18245,23 +19534,23 @@ export namespace Prisma {
 
   export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ownerId" | "destinationId" | "name" | "description" | "bannerUrl" | "startDate" | "endDate" | "contact" | "registrationUrl" | "status" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    owner?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | Event$destinationArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    owner?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | Event$destinationArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    owner?: boolean | UserDefaultArgs<ExtArgs>
     destination?: boolean | Event$destinationArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $EventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Event"
     objects: {
-      owner: Prisma.$UserPayload<ExtArgs>
       destination: Prisma.$DestinationPayload<ExtArgs> | null
+      owner: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -18672,8 +19961,8 @@ export namespace Prisma {
    */
   export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     destination<T extends Event$destinationArgs<ExtArgs> = {}>(args?: Subset<T, Event$destinationArgs<ExtArgs>>): Prisma__DestinationClient<$Result.GetResult<Prisma.$DestinationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19180,9 +20469,9 @@ export namespace Prisma {
     photo: 'photo',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    verificationStatus: 'verificationStatus',
+    rejectionReason: 'rejectionReason',
     verificationDocument: 'verificationDocument',
-    rejectionReason: 'rejectionReason'
+    verificationStatus: 'verificationStatus'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -19193,16 +20482,10 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     address: 'address',
-    addressStreet: 'addressStreet',
-    addressVillage: 'addressVillage',
-    addressDistrict: 'addressDistrict',
-    addressCity: 'addressCity',
-    addressProvince: 'addressProvince',
     contact: 'contact',
     latitude: 'latitude',
     longitude: 'longitude',
     imageUrl: 'imageUrl',
-    ownerId: 'ownerId',
     openTime: 'openTime',
     closeTime: 'closeTime',
     ticketPrice: 'ticketPrice',
@@ -19213,7 +20496,13 @@ export namespace Prisma {
     isDeleted: 'isDeleted',
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    ownerId: 'ownerId',
+    addressCity: 'addressCity',
+    addressDistrict: 'addressDistrict',
+    addressProvince: 'addressProvince',
+    addressStreet: 'addressStreet',
+    addressVillage: 'addressVillage'
   };
 
   export type DestinationScalarFieldEnum = (typeof DestinationScalarFieldEnum)[keyof typeof DestinationScalarFieldEnum]
@@ -19284,20 +20573,20 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     title: 'title',
-    tripDate: 'tripDate',
-    status: 'status',
-    startLat: 'startLat',
-    startLng: 'startLng',
-    startLabel: 'startLabel',
-    startType: 'startType',
     totalDistance: 'totalDistance',
     estimatedTime: 'estimatedTime',
     estimatedCost: 'estimatedCost',
     isAiGenerated: 'isAiGenerated',
-    startedAt: 'startedAt',
-    completedAt: 'completedAt',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    completedAt: 'completedAt',
+    startLabel: 'startLabel',
+    startLat: 'startLat',
+    startLng: 'startLng',
+    startType: 'startType',
+    startedAt: 'startedAt',
+    status: 'status',
+    tripDate: 'tripDate'
   };
 
   export type ItineraryScalarFieldEnum = (typeof ItineraryScalarFieldEnum)[keyof typeof ItineraryScalarFieldEnum]
@@ -19309,9 +20598,9 @@ export namespace Prisma {
     destinationId: 'destinationId',
     order: 'order',
     visitTime: 'visitTime',
+    createdAt: 'createdAt',
     visited: 'visited',
-    visitedAt: 'visitedAt',
-    createdAt: 'createdAt'
+    visitedAt: 'visitedAt'
   };
 
   export type ItineraryItemScalarFieldEnum = (typeof ItineraryItemScalarFieldEnum)[keyof typeof ItineraryItemScalarFieldEnum]
@@ -19331,6 +20620,16 @@ export namespace Prisma {
   };
 
   export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+  export const ReviewLikeScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    reviewId: 'reviewId',
+    createdAt: 'createdAt'
+  };
+
+  export type ReviewLikeScalarFieldEnum = (typeof ReviewLikeScalarFieldEnum)[keyof typeof ReviewLikeScalarFieldEnum]
 
 
   export const VisitedPlaceScalarFieldEnum: {
@@ -19553,20 +20852,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'ItineraryStatus'
-   */
-  export type EnumItineraryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItineraryStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'ItineraryStatus[]'
-   */
-  export type ListEnumItineraryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItineraryStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'StartLocationType'
    */
   export type EnumStartLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StartLocationType'>
@@ -19577,6 +20862,20 @@ export namespace Prisma {
    * Reference to a field of type 'StartLocationType[]'
    */
   export type ListEnumStartLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StartLocationType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ItineraryStatus'
+   */
+  export type EnumItineraryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItineraryStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ItineraryStatus[]'
+   */
+  export type ListEnumItineraryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItineraryStatus[]'>
     
 
 
@@ -19611,16 +20910,17 @@ export namespace Prisma {
     photo?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    verificationStatus?: EnumVerificationStatusNullableFilter<"User"> | $Enums.VerificationStatus | null
-    verificationDocument?: StringNullableFilter<"User"> | string | null
     rejectionReason?: StringNullableFilter<"User"> | string | null
-    savedDestinations?: SavedDestinationListRelationFilter
-    itineraries?: ItineraryListRelationFilter
-    reviews?: ReviewListRelationFilter
-    visitedPlaces?: VisitedPlaceListRelationFilter
-    itineraryQueue?: ItineraryQueueListRelationFilter
+    verificationDocument?: StringNullableFilter<"User"> | string | null
+    verificationStatus?: EnumVerificationStatusNullableFilter<"User"> | $Enums.VerificationStatus | null
     destinations?: DestinationListRelationFilter
     events?: EventListRelationFilter
+    itineraries?: ItineraryListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
+    reviews?: ReviewListRelationFilter
+    reviewLikes?: ReviewLikeListRelationFilter
+    savedDestinations?: SavedDestinationListRelationFilter
+    visitedPlaces?: VisitedPlaceListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -19634,16 +20934,17 @@ export namespace Prisma {
     photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    verificationStatus?: SortOrderInput | SortOrder
-    verificationDocument?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
-    savedDestinations?: SavedDestinationOrderByRelationAggregateInput
-    itineraries?: ItineraryOrderByRelationAggregateInput
-    reviews?: ReviewOrderByRelationAggregateInput
-    visitedPlaces?: VisitedPlaceOrderByRelationAggregateInput
-    itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
+    verificationDocument?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrderInput | SortOrder
     destinations?: DestinationOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
+    itineraries?: ItineraryOrderByRelationAggregateInput
+    itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
+    reviews?: ReviewOrderByRelationAggregateInput
+    reviewLikes?: ReviewLikeOrderByRelationAggregateInput
+    savedDestinations?: SavedDestinationOrderByRelationAggregateInput
+    visitedPlaces?: VisitedPlaceOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -19660,16 +20961,17 @@ export namespace Prisma {
     photo?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    verificationStatus?: EnumVerificationStatusNullableFilter<"User"> | $Enums.VerificationStatus | null
-    verificationDocument?: StringNullableFilter<"User"> | string | null
     rejectionReason?: StringNullableFilter<"User"> | string | null
-    savedDestinations?: SavedDestinationListRelationFilter
-    itineraries?: ItineraryListRelationFilter
-    reviews?: ReviewListRelationFilter
-    visitedPlaces?: VisitedPlaceListRelationFilter
-    itineraryQueue?: ItineraryQueueListRelationFilter
+    verificationDocument?: StringNullableFilter<"User"> | string | null
+    verificationStatus?: EnumVerificationStatusNullableFilter<"User"> | $Enums.VerificationStatus | null
     destinations?: DestinationListRelationFilter
     events?: EventListRelationFilter
+    itineraries?: ItineraryListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
+    reviews?: ReviewListRelationFilter
+    reviewLikes?: ReviewLikeListRelationFilter
+    savedDestinations?: SavedDestinationListRelationFilter
+    visitedPlaces?: VisitedPlaceListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -19683,9 +20985,9 @@ export namespace Prisma {
     photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    verificationStatus?: SortOrderInput | SortOrder
-    verificationDocument?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
+    verificationDocument?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -19707,9 +21009,9 @@ export namespace Prisma {
     photo?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    verificationStatus?: EnumVerificationStatusNullableWithAggregatesFilter<"User"> | $Enums.VerificationStatus | null
-    verificationDocument?: StringNullableWithAggregatesFilter<"User"> | string | null
     rejectionReason?: StringNullableWithAggregatesFilter<"User"> | string | null
+    verificationDocument?: StringNullableWithAggregatesFilter<"User"> | string | null
+    verificationStatus?: EnumVerificationStatusNullableWithAggregatesFilter<"User"> | $Enums.VerificationStatus | null
   }
 
   export type DestinationWhereInput = {
@@ -19720,16 +21022,10 @@ export namespace Prisma {
     name?: StringFilter<"Destination"> | string
     description?: StringFilter<"Destination"> | string
     address?: StringFilter<"Destination"> | string
-    addressStreet?: StringNullableFilter<"Destination"> | string | null
-    addressVillage?: StringNullableFilter<"Destination"> | string | null
-    addressDistrict?: StringNullableFilter<"Destination"> | string | null
-    addressCity?: StringNullableFilter<"Destination"> | string | null
-    addressProvince?: StringNullableFilter<"Destination"> | string | null
     contact?: StringNullableFilter<"Destination"> | string | null
     latitude?: FloatFilter<"Destination"> | number
     longitude?: FloatFilter<"Destination"> | number
     imageUrl?: StringNullableFilter<"Destination"> | string | null
-    ownerId?: IntNullableFilter<"Destination"> | number | null
     openTime?: StringNullableFilter<"Destination"> | string | null
     closeTime?: StringNullableFilter<"Destination"> | string | null
     ticketPrice?: IntNullableFilter<"Destination"> | number | null
@@ -19741,16 +21037,22 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    ownerId?: IntNullableFilter<"Destination"> | number | null
+    addressCity?: StringNullableFilter<"Destination"> | string | null
+    addressDistrict?: StringNullableFilter<"Destination"> | string | null
+    addressProvince?: StringNullableFilter<"Destination"> | string | null
+    addressStreet?: StringNullableFilter<"Destination"> | string | null
+    addressVillage?: StringNullableFilter<"Destination"> | string | null
+    aiAnalyses?: AiAnalysisListRelationFilter
     owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     categories?: DestinationCategoryListRelationFilter
-    aiAnalyses?: AiAnalysisListRelationFilter
-    savedBy?: SavedDestinationListRelationFilter
-    itineraryItems?: ItineraryItemListRelationFilter
-    reviews?: ReviewListRelationFilter
-    visitedBy?: VisitedPlaceListRelationFilter
-    itineraryQueue?: ItineraryQueueListRelationFilter
     views?: DestinationViewListRelationFilter
     events?: EventListRelationFilter
+    itineraryItems?: ItineraryItemListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
+    reviews?: ReviewListRelationFilter
+    savedBy?: SavedDestinationListRelationFilter
+    visitedBy?: VisitedPlaceListRelationFilter
   }
 
   export type DestinationOrderByWithRelationInput = {
@@ -19758,16 +21060,10 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     address?: SortOrder
-    addressStreet?: SortOrderInput | SortOrder
-    addressVillage?: SortOrderInput | SortOrder
-    addressDistrict?: SortOrderInput | SortOrder
-    addressCity?: SortOrderInput | SortOrder
-    addressProvince?: SortOrderInput | SortOrder
     contact?: SortOrderInput | SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
-    ownerId?: SortOrderInput | SortOrder
     openTime?: SortOrderInput | SortOrder
     closeTime?: SortOrderInput | SortOrder
     ticketPrice?: SortOrderInput | SortOrder
@@ -19779,16 +21075,22 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ownerId?: SortOrderInput | SortOrder
+    addressCity?: SortOrderInput | SortOrder
+    addressDistrict?: SortOrderInput | SortOrder
+    addressProvince?: SortOrderInput | SortOrder
+    addressStreet?: SortOrderInput | SortOrder
+    addressVillage?: SortOrderInput | SortOrder
+    aiAnalyses?: AiAnalysisOrderByRelationAggregateInput
     owner?: UserOrderByWithRelationInput
     categories?: DestinationCategoryOrderByRelationAggregateInput
-    aiAnalyses?: AiAnalysisOrderByRelationAggregateInput
-    savedBy?: SavedDestinationOrderByRelationAggregateInput
-    itineraryItems?: ItineraryItemOrderByRelationAggregateInput
-    reviews?: ReviewOrderByRelationAggregateInput
-    visitedBy?: VisitedPlaceOrderByRelationAggregateInput
-    itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
     views?: DestinationViewOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
+    itineraryItems?: ItineraryItemOrderByRelationAggregateInput
+    itineraryQueue?: ItineraryQueueOrderByRelationAggregateInput
+    reviews?: ReviewOrderByRelationAggregateInput
+    savedBy?: SavedDestinationOrderByRelationAggregateInput
+    visitedBy?: VisitedPlaceOrderByRelationAggregateInput
   }
 
   export type DestinationWhereUniqueInput = Prisma.AtLeast<{
@@ -19799,16 +21101,10 @@ export namespace Prisma {
     name?: StringFilter<"Destination"> | string
     description?: StringFilter<"Destination"> | string
     address?: StringFilter<"Destination"> | string
-    addressStreet?: StringNullableFilter<"Destination"> | string | null
-    addressVillage?: StringNullableFilter<"Destination"> | string | null
-    addressDistrict?: StringNullableFilter<"Destination"> | string | null
-    addressCity?: StringNullableFilter<"Destination"> | string | null
-    addressProvince?: StringNullableFilter<"Destination"> | string | null
     contact?: StringNullableFilter<"Destination"> | string | null
     latitude?: FloatFilter<"Destination"> | number
     longitude?: FloatFilter<"Destination"> | number
     imageUrl?: StringNullableFilter<"Destination"> | string | null
-    ownerId?: IntNullableFilter<"Destination"> | number | null
     openTime?: StringNullableFilter<"Destination"> | string | null
     closeTime?: StringNullableFilter<"Destination"> | string | null
     ticketPrice?: IntNullableFilter<"Destination"> | number | null
@@ -19820,16 +21116,22 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    ownerId?: IntNullableFilter<"Destination"> | number | null
+    addressCity?: StringNullableFilter<"Destination"> | string | null
+    addressDistrict?: StringNullableFilter<"Destination"> | string | null
+    addressProvince?: StringNullableFilter<"Destination"> | string | null
+    addressStreet?: StringNullableFilter<"Destination"> | string | null
+    addressVillage?: StringNullableFilter<"Destination"> | string | null
+    aiAnalyses?: AiAnalysisListRelationFilter
     owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     categories?: DestinationCategoryListRelationFilter
-    aiAnalyses?: AiAnalysisListRelationFilter
-    savedBy?: SavedDestinationListRelationFilter
-    itineraryItems?: ItineraryItemListRelationFilter
-    reviews?: ReviewListRelationFilter
-    visitedBy?: VisitedPlaceListRelationFilter
-    itineraryQueue?: ItineraryQueueListRelationFilter
     views?: DestinationViewListRelationFilter
     events?: EventListRelationFilter
+    itineraryItems?: ItineraryItemListRelationFilter
+    itineraryQueue?: ItineraryQueueListRelationFilter
+    reviews?: ReviewListRelationFilter
+    savedBy?: SavedDestinationListRelationFilter
+    visitedBy?: VisitedPlaceListRelationFilter
   }, "id">
 
   export type DestinationOrderByWithAggregationInput = {
@@ -19837,16 +21139,10 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     address?: SortOrder
-    addressStreet?: SortOrderInput | SortOrder
-    addressVillage?: SortOrderInput | SortOrder
-    addressDistrict?: SortOrderInput | SortOrder
-    addressCity?: SortOrderInput | SortOrder
-    addressProvince?: SortOrderInput | SortOrder
     contact?: SortOrderInput | SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
-    ownerId?: SortOrderInput | SortOrder
     openTime?: SortOrderInput | SortOrder
     closeTime?: SortOrderInput | SortOrder
     ticketPrice?: SortOrderInput | SortOrder
@@ -19858,6 +21154,12 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ownerId?: SortOrderInput | SortOrder
+    addressCity?: SortOrderInput | SortOrder
+    addressDistrict?: SortOrderInput | SortOrder
+    addressProvince?: SortOrderInput | SortOrder
+    addressStreet?: SortOrderInput | SortOrder
+    addressVillage?: SortOrderInput | SortOrder
     _count?: DestinationCountOrderByAggregateInput
     _avg?: DestinationAvgOrderByAggregateInput
     _max?: DestinationMaxOrderByAggregateInput
@@ -19873,16 +21175,10 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Destination"> | string
     description?: StringWithAggregatesFilter<"Destination"> | string
     address?: StringWithAggregatesFilter<"Destination"> | string
-    addressStreet?: StringNullableWithAggregatesFilter<"Destination"> | string | null
-    addressVillage?: StringNullableWithAggregatesFilter<"Destination"> | string | null
-    addressDistrict?: StringNullableWithAggregatesFilter<"Destination"> | string | null
-    addressCity?: StringNullableWithAggregatesFilter<"Destination"> | string | null
-    addressProvince?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     contact?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     latitude?: FloatWithAggregatesFilter<"Destination"> | number
     longitude?: FloatWithAggregatesFilter<"Destination"> | number
     imageUrl?: StringNullableWithAggregatesFilter<"Destination"> | string | null
-    ownerId?: IntNullableWithAggregatesFilter<"Destination"> | number | null
     openTime?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     closeTime?: StringNullableWithAggregatesFilter<"Destination"> | string | null
     ticketPrice?: IntNullableWithAggregatesFilter<"Destination"> | number | null
@@ -19894,6 +21190,12 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Destination"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Destination"> | Date | string
+    ownerId?: IntNullableWithAggregatesFilter<"Destination"> | number | null
+    addressCity?: StringNullableWithAggregatesFilter<"Destination"> | string | null
+    addressDistrict?: StringNullableWithAggregatesFilter<"Destination"> | string | null
+    addressProvince?: StringNullableWithAggregatesFilter<"Destination"> | string | null
+    addressStreet?: StringNullableWithAggregatesFilter<"Destination"> | string | null
+    addressVillage?: StringNullableWithAggregatesFilter<"Destination"> | string | null
   }
 
   export type CategoryWhereInput = {
@@ -19903,16 +21205,16 @@ export namespace Prisma {
     id?: IntFilter<"Category"> | number
     name?: StringFilter<"Category"> | string
     createdAt?: DateTimeFilter<"Category"> | Date | string
-    destinations?: DestinationCategoryListRelationFilter
     keywords?: CategoryKeywordListRelationFilter
+    destinations?: DestinationCategoryListRelationFilter
   }
 
   export type CategoryOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     createdAt?: SortOrder
-    destinations?: DestinationCategoryOrderByRelationAggregateInput
     keywords?: CategoryKeywordOrderByRelationAggregateInput
+    destinations?: DestinationCategoryOrderByRelationAggregateInput
   }
 
   export type CategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -19922,8 +21224,8 @@ export namespace Prisma {
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
     createdAt?: DateTimeFilter<"Category"> | Date | string
-    destinations?: DestinationCategoryListRelationFilter
     keywords?: CategoryKeywordListRelationFilter
+    destinations?: DestinationCategoryListRelationFilter
   }, "id" | "name">
 
   export type CategoryOrderByWithAggregationInput = {
@@ -19953,16 +21255,16 @@ export namespace Prisma {
     id?: IntFilter<"DestinationCategory"> | number
     destinationId?: IntFilter<"DestinationCategory"> | number
     categoryId?: IntFilter<"DestinationCategory"> | number
-    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
   }
 
   export type DestinationCategoryOrderByWithRelationInput = {
     id?: SortOrder
     destinationId?: SortOrder
     categoryId?: SortOrder
-    destination?: DestinationOrderByWithRelationInput
     category?: CategoryOrderByWithRelationInput
+    destination?: DestinationOrderByWithRelationInput
   }
 
   export type DestinationCategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -19973,8 +21275,8 @@ export namespace Prisma {
     NOT?: DestinationCategoryWhereInput | DestinationCategoryWhereInput[]
     destinationId?: IntFilter<"DestinationCategory"> | number
     categoryId?: IntFilter<"DestinationCategory"> | number
-    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
   }, "id" | "destinationId_categoryId">
 
   export type DestinationCategoryOrderByWithAggregationInput = {
@@ -20125,8 +21427,8 @@ export namespace Prisma {
     userId?: IntFilter<"SavedDestination"> | number
     destinationId?: IntFilter<"SavedDestination"> | number
     createdAt?: DateTimeFilter<"SavedDestination"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type SavedDestinationOrderByWithRelationInput = {
@@ -20134,8 +21436,8 @@ export namespace Prisma {
     userId?: SortOrder
     destinationId?: SortOrder
     createdAt?: SortOrder
-    user?: UserOrderByWithRelationInput
     destination?: DestinationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type SavedDestinationWhereUniqueInput = Prisma.AtLeast<{
@@ -20147,8 +21449,8 @@ export namespace Prisma {
     userId?: IntFilter<"SavedDestination"> | number
     destinationId?: IntFilter<"SavedDestination"> | number
     createdAt?: DateTimeFilter<"SavedDestination"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId_destinationId">
 
   export type SavedDestinationOrderByWithAggregationInput = {
@@ -20181,8 +21483,8 @@ export namespace Prisma {
     userId?: IntFilter<"ItineraryQueue"> | number
     destinationId?: IntFilter<"ItineraryQueue"> | number
     createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type ItineraryQueueOrderByWithRelationInput = {
@@ -20190,8 +21492,8 @@ export namespace Prisma {
     userId?: SortOrder
     destinationId?: SortOrder
     createdAt?: SortOrder
-    user?: UserOrderByWithRelationInput
     destination?: DestinationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type ItineraryQueueWhereUniqueInput = Prisma.AtLeast<{
@@ -20203,8 +21505,8 @@ export namespace Prisma {
     userId?: IntFilter<"ItineraryQueue"> | number
     destinationId?: IntFilter<"ItineraryQueue"> | number
     createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId_destinationId">
 
   export type ItineraryQueueOrderByWithAggregationInput = {
@@ -20236,20 +21538,20 @@ export namespace Prisma {
     id?: IntFilter<"Itinerary"> | number
     userId?: IntFilter<"Itinerary"> | number
     title?: StringFilter<"Itinerary"> | string
-    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
-    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
-    startLat?: FloatNullableFilter<"Itinerary"> | number | null
-    startLng?: FloatNullableFilter<"Itinerary"> | number | null
-    startLabel?: StringNullableFilter<"Itinerary"> | string | null
-    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
     totalDistance?: FloatNullableFilter<"Itinerary"> | number | null
     estimatedTime?: IntNullableFilter<"Itinerary"> | number | null
     estimatedCost?: IntNullableFilter<"Itinerary"> | number | null
     isAiGenerated?: BoolFilter<"Itinerary"> | boolean
-    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
-    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
     createdAt?: DateTimeFilter<"Itinerary"> | Date | string
     updatedAt?: DateTimeFilter<"Itinerary"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    startLabel?: StringNullableFilter<"Itinerary"> | string | null
+    startLat?: FloatNullableFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableFilter<"Itinerary"> | number | null
+    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
+    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
+    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: ItineraryItemListRelationFilter
   }
@@ -20258,20 +21560,20 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
-    tripDate?: SortOrderInput | SortOrder
-    status?: SortOrder
-    startLat?: SortOrderInput | SortOrder
-    startLng?: SortOrderInput | SortOrder
-    startLabel?: SortOrderInput | SortOrder
-    startType?: SortOrderInput | SortOrder
     totalDistance?: SortOrderInput | SortOrder
     estimatedTime?: SortOrderInput | SortOrder
     estimatedCost?: SortOrderInput | SortOrder
     isAiGenerated?: SortOrder
-    startedAt?: SortOrderInput | SortOrder
-    completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    startLabel?: SortOrderInput | SortOrder
+    startLat?: SortOrderInput | SortOrder
+    startLng?: SortOrderInput | SortOrder
+    startType?: SortOrderInput | SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    tripDate?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     items?: ItineraryItemOrderByRelationAggregateInput
   }
@@ -20283,20 +21585,20 @@ export namespace Prisma {
     NOT?: ItineraryWhereInput | ItineraryWhereInput[]
     userId?: IntFilter<"Itinerary"> | number
     title?: StringFilter<"Itinerary"> | string
-    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
-    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
-    startLat?: FloatNullableFilter<"Itinerary"> | number | null
-    startLng?: FloatNullableFilter<"Itinerary"> | number | null
-    startLabel?: StringNullableFilter<"Itinerary"> | string | null
-    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
     totalDistance?: FloatNullableFilter<"Itinerary"> | number | null
     estimatedTime?: IntNullableFilter<"Itinerary"> | number | null
     estimatedCost?: IntNullableFilter<"Itinerary"> | number | null
     isAiGenerated?: BoolFilter<"Itinerary"> | boolean
-    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
-    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
     createdAt?: DateTimeFilter<"Itinerary"> | Date | string
     updatedAt?: DateTimeFilter<"Itinerary"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    startLabel?: StringNullableFilter<"Itinerary"> | string | null
+    startLat?: FloatNullableFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableFilter<"Itinerary"> | number | null
+    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
+    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
+    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: ItineraryItemListRelationFilter
   }, "id">
@@ -20305,20 +21607,20 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
-    tripDate?: SortOrderInput | SortOrder
-    status?: SortOrder
-    startLat?: SortOrderInput | SortOrder
-    startLng?: SortOrderInput | SortOrder
-    startLabel?: SortOrderInput | SortOrder
-    startType?: SortOrderInput | SortOrder
     totalDistance?: SortOrderInput | SortOrder
     estimatedTime?: SortOrderInput | SortOrder
     estimatedCost?: SortOrderInput | SortOrder
     isAiGenerated?: SortOrder
-    startedAt?: SortOrderInput | SortOrder
-    completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    startLabel?: SortOrderInput | SortOrder
+    startLat?: SortOrderInput | SortOrder
+    startLng?: SortOrderInput | SortOrder
+    startType?: SortOrderInput | SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    tripDate?: SortOrderInput | SortOrder
     _count?: ItineraryCountOrderByAggregateInput
     _avg?: ItineraryAvgOrderByAggregateInput
     _max?: ItineraryMaxOrderByAggregateInput
@@ -20333,20 +21635,20 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Itinerary"> | number
     userId?: IntWithAggregatesFilter<"Itinerary"> | number
     title?: StringWithAggregatesFilter<"Itinerary"> | string
-    tripDate?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
-    status?: EnumItineraryStatusWithAggregatesFilter<"Itinerary"> | $Enums.ItineraryStatus
-    startLat?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
-    startLng?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
-    startLabel?: StringNullableWithAggregatesFilter<"Itinerary"> | string | null
-    startType?: EnumStartLocationTypeNullableWithAggregatesFilter<"Itinerary"> | $Enums.StartLocationType | null
     totalDistance?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
     estimatedTime?: IntNullableWithAggregatesFilter<"Itinerary"> | number | null
     estimatedCost?: IntNullableWithAggregatesFilter<"Itinerary"> | number | null
     isAiGenerated?: BoolWithAggregatesFilter<"Itinerary"> | boolean
-    startedAt?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
-    completedAt?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Itinerary"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Itinerary"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
+    startLabel?: StringNullableWithAggregatesFilter<"Itinerary"> | string | null
+    startLat?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableWithAggregatesFilter<"Itinerary"> | number | null
+    startType?: EnumStartLocationTypeNullableWithAggregatesFilter<"Itinerary"> | $Enums.StartLocationType | null
+    startedAt?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusWithAggregatesFilter<"Itinerary"> | $Enums.ItineraryStatus
+    tripDate?: DateTimeNullableWithAggregatesFilter<"Itinerary"> | Date | string | null
   }
 
   export type ItineraryItemWhereInput = {
@@ -20358,11 +21660,11 @@ export namespace Prisma {
     destinationId?: IntFilter<"ItineraryItem"> | number
     order?: IntFilter<"ItineraryItem"> | number
     visitTime?: StringNullableFilter<"ItineraryItem"> | string | null
+    createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
     visited?: BoolFilter<"ItineraryItem"> | boolean
     visitedAt?: DateTimeNullableFilter<"ItineraryItem"> | Date | string | null
-    createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
-    itinerary?: XOR<ItineraryScalarRelationFilter, ItineraryWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    itinerary?: XOR<ItineraryScalarRelationFilter, ItineraryWhereInput>
   }
 
   export type ItineraryItemOrderByWithRelationInput = {
@@ -20371,11 +21673,11 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     visited?: SortOrder
     visitedAt?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    itinerary?: ItineraryOrderByWithRelationInput
     destination?: DestinationOrderByWithRelationInput
+    itinerary?: ItineraryOrderByWithRelationInput
   }
 
   export type ItineraryItemWhereUniqueInput = Prisma.AtLeast<{
@@ -20388,11 +21690,11 @@ export namespace Prisma {
     destinationId?: IntFilter<"ItineraryItem"> | number
     order?: IntFilter<"ItineraryItem"> | number
     visitTime?: StringNullableFilter<"ItineraryItem"> | string | null
+    createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
     visited?: BoolFilter<"ItineraryItem"> | boolean
     visitedAt?: DateTimeNullableFilter<"ItineraryItem"> | Date | string | null
-    createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
-    itinerary?: XOR<ItineraryScalarRelationFilter, ItineraryWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    itinerary?: XOR<ItineraryScalarRelationFilter, ItineraryWhereInput>
   }, "id" | "itineraryId_order">
 
   export type ItineraryItemOrderByWithAggregationInput = {
@@ -20401,9 +21703,9 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     visited?: SortOrder
     visitedAt?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
     _count?: ItineraryItemCountOrderByAggregateInput
     _avg?: ItineraryItemAvgOrderByAggregateInput
     _max?: ItineraryItemMaxOrderByAggregateInput
@@ -20420,9 +21722,9 @@ export namespace Prisma {
     destinationId?: IntWithAggregatesFilter<"ItineraryItem"> | number
     order?: IntWithAggregatesFilter<"ItineraryItem"> | number
     visitTime?: StringNullableWithAggregatesFilter<"ItineraryItem"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ItineraryItem"> | Date | string
     visited?: BoolWithAggregatesFilter<"ItineraryItem"> | boolean
     visitedAt?: DateTimeNullableWithAggregatesFilter<"ItineraryItem"> | Date | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"ItineraryItem"> | Date | string
   }
 
   export type ReviewWhereInput = {
@@ -20439,8 +21741,9 @@ export namespace Prisma {
     helpfulCount?: IntFilter<"Review"> | number
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    likes?: ReviewLikeListRelationFilter
   }
 
   export type ReviewOrderByWithRelationInput = {
@@ -20454,8 +21757,9 @@ export namespace Prisma {
     helpfulCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    user?: UserOrderByWithRelationInput
     destination?: DestinationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    likes?: ReviewLikeOrderByRelationAggregateInput
   }
 
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -20473,8 +21777,9 @@ export namespace Prisma {
     helpfulCount?: IntFilter<"Review"> | number
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    likes?: ReviewLikeListRelationFilter
   }, "id" | "userId_destinationId">
 
   export type ReviewOrderByWithAggregationInput = {
@@ -20511,6 +21816,62 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
   }
 
+  export type ReviewLikeWhereInput = {
+    AND?: ReviewLikeWhereInput | ReviewLikeWhereInput[]
+    OR?: ReviewLikeWhereInput[]
+    NOT?: ReviewLikeWhereInput | ReviewLikeWhereInput[]
+    id?: IntFilter<"ReviewLike"> | number
+    userId?: IntFilter<"ReviewLike"> | number
+    reviewId?: IntFilter<"ReviewLike"> | number
+    createdAt?: DateTimeFilter<"ReviewLike"> | Date | string
+    review?: XOR<ReviewScalarRelationFilter, ReviewWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ReviewLikeOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewId?: SortOrder
+    createdAt?: SortOrder
+    review?: ReviewOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ReviewLikeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId_reviewId?: ReviewLikeUserIdReviewIdCompoundUniqueInput
+    AND?: ReviewLikeWhereInput | ReviewLikeWhereInput[]
+    OR?: ReviewLikeWhereInput[]
+    NOT?: ReviewLikeWhereInput | ReviewLikeWhereInput[]
+    userId?: IntFilter<"ReviewLike"> | number
+    reviewId?: IntFilter<"ReviewLike"> | number
+    createdAt?: DateTimeFilter<"ReviewLike"> | Date | string
+    review?: XOR<ReviewScalarRelationFilter, ReviewWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_reviewId">
+
+  export type ReviewLikeOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ReviewLikeCountOrderByAggregateInput
+    _avg?: ReviewLikeAvgOrderByAggregateInput
+    _max?: ReviewLikeMaxOrderByAggregateInput
+    _min?: ReviewLikeMinOrderByAggregateInput
+    _sum?: ReviewLikeSumOrderByAggregateInput
+  }
+
+  export type ReviewLikeScalarWhereWithAggregatesInput = {
+    AND?: ReviewLikeScalarWhereWithAggregatesInput | ReviewLikeScalarWhereWithAggregatesInput[]
+    OR?: ReviewLikeScalarWhereWithAggregatesInput[]
+    NOT?: ReviewLikeScalarWhereWithAggregatesInput | ReviewLikeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ReviewLike"> | number
+    userId?: IntWithAggregatesFilter<"ReviewLike"> | number
+    reviewId?: IntWithAggregatesFilter<"ReviewLike"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ReviewLike"> | Date | string
+  }
+
   export type VisitedPlaceWhereInput = {
     AND?: VisitedPlaceWhereInput | VisitedPlaceWhereInput[]
     OR?: VisitedPlaceWhereInput[]
@@ -20520,8 +21881,8 @@ export namespace Prisma {
     destinationId?: IntFilter<"VisitedPlace"> | number
     visitedAt?: DateTimeFilter<"VisitedPlace"> | Date | string
     checkedIn?: BoolFilter<"VisitedPlace"> | boolean
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type VisitedPlaceOrderByWithRelationInput = {
@@ -20530,8 +21891,8 @@ export namespace Prisma {
     destinationId?: SortOrder
     visitedAt?: SortOrder
     checkedIn?: SortOrder
-    user?: UserOrderByWithRelationInput
     destination?: DestinationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type VisitedPlaceWhereUniqueInput = Prisma.AtLeast<{
@@ -20544,8 +21905,8 @@ export namespace Prisma {
     destinationId?: IntFilter<"VisitedPlace"> | number
     visitedAt?: DateTimeFilter<"VisitedPlace"> | Date | string
     checkedIn?: BoolFilter<"VisitedPlace"> | boolean
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationScalarRelationFilter, DestinationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId_destinationId">
 
   export type VisitedPlaceOrderByWithAggregationInput = {
@@ -20642,8 +22003,8 @@ export namespace Prisma {
     isDeleted?: BoolFilter<"Event"> | boolean
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
-    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationNullableScalarRelationFilter, DestinationWhereInput> | null
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type EventOrderByWithRelationInput = {
@@ -20661,8 +22022,8 @@ export namespace Prisma {
     isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    owner?: UserOrderByWithRelationInput
     destination?: DestinationOrderByWithRelationInput
+    owner?: UserOrderByWithRelationInput
   }
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -20683,8 +22044,8 @@ export namespace Prisma {
     isDeleted?: BoolFilter<"Event"> | boolean
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
-    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     destination?: XOR<DestinationNullableScalarRelationFilter, DestinationWhereInput> | null
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -20739,16 +22100,17 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationCreateNestedManyWithoutOwnerInput
     events?: EventCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -20762,16 +22124,17 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
     events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -20784,16 +22147,17 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUpdateManyWithoutOwnerNestedInput
     events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -20807,16 +22171,17 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
     events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -20830,9 +22195,9 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -20845,9 +22210,9 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -20861,20 +22226,15 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
   }
 
   export type DestinationCreateInput = {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
@@ -20890,16 +22250,21 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateInput = {
@@ -20907,16 +22272,10 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
     imageUrl?: string | null
-    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -20928,26 +22287,27 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -20963,16 +22323,21 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateInput = {
@@ -20980,16 +22345,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21001,15 +22360,21 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationCreateManyInput = {
@@ -21017,16 +22382,10 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
     imageUrl?: string | null
-    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -21038,17 +22397,18 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
   }
 
   export type DestinationUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -21064,6 +22424,11 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DestinationUncheckedUpdateManyInput = {
@@ -21071,16 +22436,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -21092,36 +22451,42 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CategoryCreateInput = {
     name: string
     createdAt?: Date | string
-    destinations?: DestinationCategoryCreateNestedManyWithoutCategoryInput
     keywords?: CategoryKeywordCreateNestedManyWithoutCategoryInput
+    destinations?: DestinationCategoryCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateInput = {
     id?: number
     name: string
     createdAt?: Date | string
-    destinations?: DestinationCategoryUncheckedCreateNestedManyWithoutCategoryInput
     keywords?: CategoryKeywordUncheckedCreateNestedManyWithoutCategoryInput
+    destinations?: DestinationCategoryUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    destinations?: DestinationCategoryUpdateManyWithoutCategoryNestedInput
     keywords?: CategoryKeywordUpdateManyWithoutCategoryNestedInput
+    destinations?: DestinationCategoryUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    destinations?: DestinationCategoryUncheckedUpdateManyWithoutCategoryNestedInput
     keywords?: CategoryKeywordUncheckedUpdateManyWithoutCategoryNestedInput
+    destinations?: DestinationCategoryUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryCreateManyInput = {
@@ -21142,8 +22507,8 @@ export namespace Prisma {
   }
 
   export type DestinationCategoryCreateInput = {
-    destination: DestinationCreateNestedOneWithoutCategoriesInput
     category: CategoryCreateNestedOneWithoutDestinationsInput
+    destination: DestinationCreateNestedOneWithoutCategoriesInput
   }
 
   export type DestinationCategoryUncheckedCreateInput = {
@@ -21153,8 +22518,8 @@ export namespace Prisma {
   }
 
   export type DestinationCategoryUpdateInput = {
-    destination?: DestinationUpdateOneRequiredWithoutCategoriesNestedInput
     category?: CategoryUpdateOneRequiredWithoutDestinationsNestedInput
+    destination?: DestinationUpdateOneRequiredWithoutCategoriesNestedInput
   }
 
   export type DestinationCategoryUncheckedUpdateInput = {
@@ -21292,8 +22657,8 @@ export namespace Prisma {
 
   export type SavedDestinationCreateInput = {
     createdAt?: Date | string
-    user: UserCreateNestedOneWithoutSavedDestinationsInput
     destination: DestinationCreateNestedOneWithoutSavedByInput
+    user: UserCreateNestedOneWithoutSavedDestinationsInput
   }
 
   export type SavedDestinationUncheckedCreateInput = {
@@ -21305,8 +22670,8 @@ export namespace Prisma {
 
   export type SavedDestinationUpdateInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutSavedDestinationsNestedInput
     destination?: DestinationUpdateOneRequiredWithoutSavedByNestedInput
+    user?: UserUpdateOneRequiredWithoutSavedDestinationsNestedInput
   }
 
   export type SavedDestinationUncheckedUpdateInput = {
@@ -21336,8 +22701,8 @@ export namespace Prisma {
 
   export type ItineraryQueueCreateInput = {
     createdAt?: Date | string
-    user: UserCreateNestedOneWithoutItineraryQueueInput
     destination: DestinationCreateNestedOneWithoutItineraryQueueInput
+    user: UserCreateNestedOneWithoutItineraryQueueInput
   }
 
   export type ItineraryQueueUncheckedCreateInput = {
@@ -21349,8 +22714,8 @@ export namespace Prisma {
 
   export type ItineraryQueueUpdateInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutItineraryQueueNestedInput
     destination?: DestinationUpdateOneRequiredWithoutItineraryQueueNestedInput
+    user?: UserUpdateOneRequiredWithoutItineraryQueueNestedInput
   }
 
   export type ItineraryQueueUncheckedUpdateInput = {
@@ -21380,20 +22745,20 @@ export namespace Prisma {
 
   export type ItineraryCreateInput = {
     title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
     user: UserCreateNestedOneWithoutItinerariesInput
     items?: ItineraryItemCreateNestedManyWithoutItineraryInput
   }
@@ -21402,39 +22767,39 @@ export namespace Prisma {
     id?: number
     userId: number
     title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
     items?: ItineraryItemUncheckedCreateNestedManyWithoutItineraryInput
   }
 
   export type ItineraryUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutItinerariesNestedInput
     items?: ItineraryItemUpdateManyWithoutItineraryNestedInput
   }
@@ -21443,20 +22808,20 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: ItineraryItemUncheckedUpdateManyWithoutItineraryNestedInput
   }
 
@@ -21464,68 +22829,68 @@ export namespace Prisma {
     id?: number
     userId: number
     title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
     totalDistance?: number | null
     estimatedTime?: number | null
     estimatedCost?: number | null
     isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
   }
 
   export type ItineraryUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ItineraryUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
     totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
     estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
     estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
     isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ItineraryItemCreateInput = {
     order: number
     visitTime?: string | null
+    createdAt?: Date | string
     visited?: boolean
     visitedAt?: Date | string | null
-    createdAt?: Date | string
-    itinerary: ItineraryCreateNestedOneWithoutItemsInput
     destination: DestinationCreateNestedOneWithoutItineraryItemsInput
+    itinerary: ItineraryCreateNestedOneWithoutItemsInput
   }
 
   export type ItineraryItemUncheckedCreateInput = {
@@ -21534,19 +22899,19 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime?: string | null
+    createdAt?: Date | string
     visited?: boolean
     visitedAt?: Date | string | null
-    createdAt?: Date | string
   }
 
   export type ItineraryItemUpdateInput = {
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visited?: BoolFieldUpdateOperationsInput | boolean
     visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    itinerary?: ItineraryUpdateOneRequiredWithoutItemsNestedInput
     destination?: DestinationUpdateOneRequiredWithoutItineraryItemsNestedInput
+    itinerary?: ItineraryUpdateOneRequiredWithoutItemsNestedInput
   }
 
   export type ItineraryItemUncheckedUpdateInput = {
@@ -21555,9 +22920,9 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visited?: BoolFieldUpdateOperationsInput | boolean
     visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ItineraryItemCreateManyInput = {
@@ -21566,17 +22931,17 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime?: string | null
+    createdAt?: Date | string
     visited?: boolean
     visitedAt?: Date | string | null
-    createdAt?: Date | string
   }
 
   export type ItineraryItemUpdateManyMutationInput = {
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visited?: BoolFieldUpdateOperationsInput | boolean
     visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ItineraryItemUncheckedUpdateManyInput = {
@@ -21585,9 +22950,9 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visited?: BoolFieldUpdateOperationsInput | boolean
     visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewCreateInput = {
@@ -21598,8 +22963,9 @@ export namespace Prisma {
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutReviewsInput
     destination: DestinationCreateNestedOneWithoutReviewsInput
+    user: UserCreateNestedOneWithoutReviewsInput
+    likes?: ReviewLikeCreateNestedManyWithoutReviewInput
   }
 
   export type ReviewUncheckedCreateInput = {
@@ -21613,6 +22979,7 @@ export namespace Prisma {
     helpfulCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    likes?: ReviewLikeUncheckedCreateNestedManyWithoutReviewInput
   }
 
   export type ReviewUpdateInput = {
@@ -21623,8 +22990,9 @@ export namespace Prisma {
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
     destination?: DestinationUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    likes?: ReviewLikeUpdateManyWithoutReviewNestedInput
   }
 
   export type ReviewUncheckedUpdateInput = {
@@ -21638,6 +23006,7 @@ export namespace Prisma {
     helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    likes?: ReviewLikeUncheckedUpdateManyWithoutReviewNestedInput
   }
 
   export type ReviewCreateManyInput = {
@@ -21676,11 +23045,55 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ReviewLikeCreateInput = {
+    createdAt?: Date | string
+    review: ReviewCreateNestedOneWithoutLikesInput
+    user: UserCreateNestedOneWithoutReviewLikesInput
+  }
+
+  export type ReviewLikeUncheckedCreateInput = {
+    id?: number
+    userId: number
+    reviewId: number
+    createdAt?: Date | string
+  }
+
+  export type ReviewLikeUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    review?: ReviewUpdateOneRequiredWithoutLikesNestedInput
+    user?: UserUpdateOneRequiredWithoutReviewLikesNestedInput
+  }
+
+  export type ReviewLikeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    reviewId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewLikeCreateManyInput = {
+    id?: number
+    userId: number
+    reviewId: number
+    createdAt?: Date | string
+  }
+
+  export type ReviewLikeUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewLikeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    reviewId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type VisitedPlaceCreateInput = {
     visitedAt?: Date | string
     checkedIn?: boolean
-    user: UserCreateNestedOneWithoutVisitedPlacesInput
     destination: DestinationCreateNestedOneWithoutVisitedByInput
+    user: UserCreateNestedOneWithoutVisitedPlacesInput
   }
 
   export type VisitedPlaceUncheckedCreateInput = {
@@ -21694,8 +23107,8 @@ export namespace Prisma {
   export type VisitedPlaceUpdateInput = {
     visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     checkedIn?: BoolFieldUpdateOperationsInput | boolean
-    user?: UserUpdateOneRequiredWithoutVisitedPlacesNestedInput
     destination?: DestinationUpdateOneRequiredWithoutVisitedByNestedInput
+    user?: UserUpdateOneRequiredWithoutVisitedPlacesNestedInput
   }
 
   export type VisitedPlaceUncheckedUpdateInput = {
@@ -21784,8 +23197,8 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    owner: UserCreateNestedOneWithoutEventsInput
     destination?: DestinationCreateNestedOneWithoutEventsInput
+    owner: UserCreateNestedOneWithoutEventsInput
   }
 
   export type EventUncheckedCreateInput = {
@@ -21817,8 +23230,8 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneRequiredWithoutEventsNestedInput
     destination?: DestinationUpdateOneWithoutEventsNestedInput
+    owner?: UserUpdateOneRequiredWithoutEventsNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -21959,36 +23372,6 @@ export namespace Prisma {
     not?: NestedEnumVerificationStatusNullableFilter<$PrismaModel> | $Enums.VerificationStatus | null
   }
 
-  export type SavedDestinationListRelationFilter = {
-    every?: SavedDestinationWhereInput
-    some?: SavedDestinationWhereInput
-    none?: SavedDestinationWhereInput
-  }
-
-  export type ItineraryListRelationFilter = {
-    every?: ItineraryWhereInput
-    some?: ItineraryWhereInput
-    none?: ItineraryWhereInput
-  }
-
-  export type ReviewListRelationFilter = {
-    every?: ReviewWhereInput
-    some?: ReviewWhereInput
-    none?: ReviewWhereInput
-  }
-
-  export type VisitedPlaceListRelationFilter = {
-    every?: VisitedPlaceWhereInput
-    some?: VisitedPlaceWhereInput
-    none?: VisitedPlaceWhereInput
-  }
-
-  export type ItineraryQueueListRelationFilter = {
-    every?: ItineraryQueueWhereInput
-    some?: ItineraryQueueWhereInput
-    none?: ItineraryQueueWhereInput
-  }
-
   export type DestinationListRelationFilter = {
     every?: DestinationWhereInput
     some?: DestinationWhereInput
@@ -22001,29 +23384,45 @@ export namespace Prisma {
     none?: EventWhereInput
   }
 
+  export type ItineraryListRelationFilter = {
+    every?: ItineraryWhereInput
+    some?: ItineraryWhereInput
+    none?: ItineraryWhereInput
+  }
+
+  export type ItineraryQueueListRelationFilter = {
+    every?: ItineraryQueueWhereInput
+    some?: ItineraryQueueWhereInput
+    none?: ItineraryQueueWhereInput
+  }
+
+  export type ReviewListRelationFilter = {
+    every?: ReviewWhereInput
+    some?: ReviewWhereInput
+    none?: ReviewWhereInput
+  }
+
+  export type ReviewLikeListRelationFilter = {
+    every?: ReviewLikeWhereInput
+    some?: ReviewLikeWhereInput
+    none?: ReviewLikeWhereInput
+  }
+
+  export type SavedDestinationListRelationFilter = {
+    every?: SavedDestinationWhereInput
+    some?: SavedDestinationWhereInput
+    none?: SavedDestinationWhereInput
+  }
+
+  export type VisitedPlaceListRelationFilter = {
+    every?: VisitedPlaceWhereInput
+    some?: VisitedPlaceWhereInput
+    none?: VisitedPlaceWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
-  }
-
-  export type SavedDestinationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ItineraryOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ReviewOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type VisitedPlaceOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ItineraryQueueOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type DestinationOrderByRelationAggregateInput = {
@@ -22031,6 +23430,30 @@ export namespace Prisma {
   }
 
   export type EventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ItineraryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ItineraryQueueOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReviewOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReviewLikeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SavedDestinationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type VisitedPlaceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22045,9 +23468,9 @@ export namespace Prisma {
     photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    verificationStatus?: SortOrder
-    verificationDocument?: SortOrder
     rejectionReason?: SortOrder
+    verificationDocument?: SortOrder
+    verificationStatus?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -22065,9 +23488,9 @@ export namespace Prisma {
     photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    verificationStatus?: SortOrder
-    verificationDocument?: SortOrder
     rejectionReason?: SortOrder
+    verificationDocument?: SortOrder
+    verificationStatus?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -22081,9 +23504,9 @@ export namespace Prisma {
     photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    verificationStatus?: SortOrder
-    verificationDocument?: SortOrder
     rejectionReason?: SortOrder
+    verificationDocument?: SortOrder
+    verificationStatus?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -22231,6 +23654,12 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type AiAnalysisListRelationFilter = {
+    every?: AiAnalysisWhereInput
+    some?: AiAnalysisWhereInput
+    none?: AiAnalysisWhereInput
+  }
+
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
@@ -22242,10 +23671,10 @@ export namespace Prisma {
     none?: DestinationCategoryWhereInput
   }
 
-  export type AiAnalysisListRelationFilter = {
-    every?: AiAnalysisWhereInput
-    some?: AiAnalysisWhereInput
-    none?: AiAnalysisWhereInput
+  export type DestinationViewListRelationFilter = {
+    every?: DestinationViewWhereInput
+    some?: DestinationViewWhereInput
+    none?: DestinationViewWhereInput
   }
 
   export type ItineraryItemListRelationFilter = {
@@ -22254,25 +23683,19 @@ export namespace Prisma {
     none?: ItineraryItemWhereInput
   }
 
-  export type DestinationViewListRelationFilter = {
-    every?: DestinationViewWhereInput
-    some?: DestinationViewWhereInput
-    none?: DestinationViewWhereInput
+  export type AiAnalysisOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type DestinationCategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type AiAnalysisOrderByRelationAggregateInput = {
+  export type DestinationViewOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type ItineraryItemOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type DestinationViewOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22281,16 +23704,10 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     address?: SortOrder
-    addressStreet?: SortOrder
-    addressVillage?: SortOrder
-    addressDistrict?: SortOrder
-    addressCity?: SortOrder
-    addressProvince?: SortOrder
     contact?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrder
-    ownerId?: SortOrder
     openTime?: SortOrder
     closeTime?: SortOrder
     ticketPrice?: SortOrder
@@ -22302,16 +23719,22 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ownerId?: SortOrder
+    addressCity?: SortOrder
+    addressDistrict?: SortOrder
+    addressProvince?: SortOrder
+    addressStreet?: SortOrder
+    addressVillage?: SortOrder
   }
 
   export type DestinationAvgOrderByAggregateInput = {
     id?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
-    ownerId?: SortOrder
     ticketPrice?: SortOrder
     maxPrice?: SortOrder
     visitCount?: SortOrder
+    ownerId?: SortOrder
   }
 
   export type DestinationMaxOrderByAggregateInput = {
@@ -22319,16 +23742,10 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     address?: SortOrder
-    addressStreet?: SortOrder
-    addressVillage?: SortOrder
-    addressDistrict?: SortOrder
-    addressCity?: SortOrder
-    addressProvince?: SortOrder
     contact?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrder
-    ownerId?: SortOrder
     openTime?: SortOrder
     closeTime?: SortOrder
     ticketPrice?: SortOrder
@@ -22340,6 +23757,12 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ownerId?: SortOrder
+    addressCity?: SortOrder
+    addressDistrict?: SortOrder
+    addressProvince?: SortOrder
+    addressStreet?: SortOrder
+    addressVillage?: SortOrder
   }
 
   export type DestinationMinOrderByAggregateInput = {
@@ -22347,16 +23770,10 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     address?: SortOrder
-    addressStreet?: SortOrder
-    addressVillage?: SortOrder
-    addressDistrict?: SortOrder
-    addressCity?: SortOrder
-    addressProvince?: SortOrder
     contact?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     imageUrl?: SortOrder
-    ownerId?: SortOrder
     openTime?: SortOrder
     closeTime?: SortOrder
     ticketPrice?: SortOrder
@@ -22368,16 +23785,22 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ownerId?: SortOrder
+    addressCity?: SortOrder
+    addressDistrict?: SortOrder
+    addressProvince?: SortOrder
+    addressStreet?: SortOrder
+    addressVillage?: SortOrder
   }
 
   export type DestinationSumOrderByAggregateInput = {
     id?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
-    ownerId?: SortOrder
     ticketPrice?: SortOrder
     maxPrice?: SortOrder
     visitCount?: SortOrder
+    ownerId?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -22480,14 +23903,14 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type DestinationScalarRelationFilter = {
-    is?: DestinationWhereInput
-    isNot?: DestinationWhereInput
-  }
-
   export type CategoryScalarRelationFilter = {
     is?: CategoryWhereInput
     isNot?: CategoryWhereInput
+  }
+
+  export type DestinationScalarRelationFilter = {
+    is?: DestinationWhereInput
+    isNot?: DestinationWhereInput
   }
 
   export type DestinationCategoryDestinationIdCategoryIdCompoundUniqueInput = {
@@ -22731,13 +24154,6 @@ export namespace Prisma {
     destinationId?: SortOrder
   }
 
-  export type EnumItineraryStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumItineraryStatusFilter<$PrismaModel> | $Enums.ItineraryStatus
-  }
-
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -22756,94 +24172,91 @@ export namespace Prisma {
     not?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel> | $Enums.StartLocationType | null
   }
 
+  export type EnumItineraryStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumItineraryStatusFilter<$PrismaModel> | $Enums.ItineraryStatus
+  }
+
   export type ItineraryCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
-    tripDate?: SortOrder
-    status?: SortOrder
-    startLat?: SortOrder
-    startLng?: SortOrder
-    startLabel?: SortOrder
-    startType?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
     isAiGenerated?: SortOrder
-    startedAt?: SortOrder
-    completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    completedAt?: SortOrder
+    startLabel?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
+    startType?: SortOrder
+    startedAt?: SortOrder
+    status?: SortOrder
+    tripDate?: SortOrder
   }
 
   export type ItineraryAvgOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    startLat?: SortOrder
-    startLng?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
   }
 
   export type ItineraryMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
-    tripDate?: SortOrder
-    status?: SortOrder
-    startLat?: SortOrder
-    startLng?: SortOrder
-    startLabel?: SortOrder
-    startType?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
     isAiGenerated?: SortOrder
-    startedAt?: SortOrder
-    completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    completedAt?: SortOrder
+    startLabel?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
+    startType?: SortOrder
+    startedAt?: SortOrder
+    status?: SortOrder
+    tripDate?: SortOrder
   }
 
   export type ItineraryMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
-    tripDate?: SortOrder
-    status?: SortOrder
-    startLat?: SortOrder
-    startLng?: SortOrder
-    startLabel?: SortOrder
-    startType?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
     isAiGenerated?: SortOrder
-    startedAt?: SortOrder
-    completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    completedAt?: SortOrder
+    startLabel?: SortOrder
+    startLat?: SortOrder
+    startLng?: SortOrder
+    startType?: SortOrder
+    startedAt?: SortOrder
+    status?: SortOrder
+    tripDate?: SortOrder
   }
 
   export type ItinerarySumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    startLat?: SortOrder
-    startLng?: SortOrder
     totalDistance?: SortOrder
     estimatedTime?: SortOrder
     estimatedCost?: SortOrder
-  }
-
-  export type EnumItineraryStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ItineraryStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumItineraryStatusFilter<$PrismaModel>
-    _max?: NestedEnumItineraryStatusFilter<$PrismaModel>
+    startLat?: SortOrder
+    startLng?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -22872,6 +24285,16 @@ export namespace Prisma {
     _max?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
   }
 
+  export type EnumItineraryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ItineraryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumItineraryStatusFilter<$PrismaModel>
+    _max?: NestedEnumItineraryStatusFilter<$PrismaModel>
+  }
+
   export type ItineraryScalarRelationFilter = {
     is?: ItineraryWhereInput
     isNot?: ItineraryWhereInput
@@ -22888,9 +24311,9 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrder
+    createdAt?: SortOrder
     visited?: SortOrder
     visitedAt?: SortOrder
-    createdAt?: SortOrder
   }
 
   export type ItineraryItemAvgOrderByAggregateInput = {
@@ -22906,9 +24329,9 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrder
+    createdAt?: SortOrder
     visited?: SortOrder
     visitedAt?: SortOrder
-    createdAt?: SortOrder
   }
 
   export type ItineraryItemMinOrderByAggregateInput = {
@@ -22917,9 +24340,9 @@ export namespace Prisma {
     destinationId?: SortOrder
     order?: SortOrder
     visitTime?: SortOrder
+    createdAt?: SortOrder
     visited?: SortOrder
     visitedAt?: SortOrder
-    createdAt?: SortOrder
   }
 
   export type ItineraryItemSumOrderByAggregateInput = {
@@ -22987,6 +24410,49 @@ export namespace Prisma {
     destinationId?: SortOrder
     rating?: SortOrder
     helpfulCount?: SortOrder
+  }
+
+  export type ReviewScalarRelationFilter = {
+    is?: ReviewWhereInput
+    isNot?: ReviewWhereInput
+  }
+
+  export type ReviewLikeUserIdReviewIdCompoundUniqueInput = {
+    userId: number
+    reviewId: number
+  }
+
+  export type ReviewLikeCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReviewLikeAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewId?: SortOrder
+  }
+
+  export type ReviewLikeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReviewLikeMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReviewLikeSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewId?: SortOrder
   }
 
   export type VisitedPlaceUserIdDestinationIdCompoundUniqueInput = {
@@ -23148,41 +24614,6 @@ export namespace Prisma {
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
-  export type SavedDestinationCreateNestedManyWithoutUserInput = {
-    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
-    createMany?: SavedDestinationCreateManyUserInputEnvelope
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-  }
-
-  export type ItineraryCreateNestedManyWithoutUserInput = {
-    create?: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput> | ItineraryCreateWithoutUserInput[] | ItineraryUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ItineraryCreateOrConnectWithoutUserInput | ItineraryCreateOrConnectWithoutUserInput[]
-    createMany?: ItineraryCreateManyUserInputEnvelope
-    connect?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
-  }
-
-  export type ReviewCreateNestedManyWithoutUserInput = {
-    create?: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput> | ReviewCreateWithoutUserInput[] | ReviewUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutUserInput | ReviewCreateOrConnectWithoutUserInput[]
-    createMany?: ReviewCreateManyUserInputEnvelope
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-  }
-
-  export type VisitedPlaceCreateNestedManyWithoutUserInput = {
-    create?: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput> | VisitedPlaceCreateWithoutUserInput[] | VisitedPlaceUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutUserInput | VisitedPlaceCreateOrConnectWithoutUserInput[]
-    createMany?: VisitedPlaceCreateManyUserInputEnvelope
-    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-  }
-
-  export type ItineraryQueueCreateNestedManyWithoutUserInput = {
-    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
-    createMany?: ItineraryQueueCreateManyUserInputEnvelope
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-  }
-
   export type DestinationCreateNestedManyWithoutOwnerInput = {
     create?: XOR<DestinationCreateWithoutOwnerInput, DestinationUncheckedCreateWithoutOwnerInput> | DestinationCreateWithoutOwnerInput[] | DestinationUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: DestinationCreateOrConnectWithoutOwnerInput | DestinationCreateOrConnectWithoutOwnerInput[]
@@ -23197,39 +24628,46 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
-  export type SavedDestinationUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
-    createMany?: SavedDestinationCreateManyUserInputEnvelope
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-  }
-
-  export type ItineraryUncheckedCreateNestedManyWithoutUserInput = {
+  export type ItineraryCreateNestedManyWithoutUserInput = {
     create?: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput> | ItineraryCreateWithoutUserInput[] | ItineraryUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ItineraryCreateOrConnectWithoutUserInput | ItineraryCreateOrConnectWithoutUserInput[]
     createMany?: ItineraryCreateManyUserInputEnvelope
     connect?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
   }
 
-  export type ReviewUncheckedCreateNestedManyWithoutUserInput = {
+  export type ItineraryQueueCreateNestedManyWithoutUserInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+  }
+
+  export type ReviewCreateNestedManyWithoutUserInput = {
     create?: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput> | ReviewCreateWithoutUserInput[] | ReviewUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ReviewCreateOrConnectWithoutUserInput | ReviewCreateOrConnectWithoutUserInput[]
     createMany?: ReviewCreateManyUserInputEnvelope
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
-  export type VisitedPlaceUncheckedCreateNestedManyWithoutUserInput = {
+  export type ReviewLikeCreateNestedManyWithoutUserInput = {
+    create?: XOR<ReviewLikeCreateWithoutUserInput, ReviewLikeUncheckedCreateWithoutUserInput> | ReviewLikeCreateWithoutUserInput[] | ReviewLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutUserInput | ReviewLikeCreateOrConnectWithoutUserInput[]
+    createMany?: ReviewLikeCreateManyUserInputEnvelope
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+  }
+
+  export type SavedDestinationCreateNestedManyWithoutUserInput = {
+    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
+    createMany?: SavedDestinationCreateManyUserInputEnvelope
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+  }
+
+  export type VisitedPlaceCreateNestedManyWithoutUserInput = {
     create?: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput> | VisitedPlaceCreateWithoutUserInput[] | VisitedPlaceUncheckedCreateWithoutUserInput[]
     connectOrCreate?: VisitedPlaceCreateOrConnectWithoutUserInput | VisitedPlaceCreateOrConnectWithoutUserInput[]
     createMany?: VisitedPlaceCreateManyUserInputEnvelope
     connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-  }
-
-  export type ItineraryQueueUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
-    createMany?: ItineraryQueueCreateManyUserInputEnvelope
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
   }
 
   export type DestinationUncheckedCreateNestedManyWithoutOwnerInput = {
@@ -23244,6 +24682,48 @@ export namespace Prisma {
     connectOrCreate?: EventCreateOrConnectWithoutOwnerInput | EventCreateOrConnectWithoutOwnerInput[]
     createMany?: EventCreateManyOwnerInputEnvelope
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type ItineraryUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput> | ItineraryCreateWithoutUserInput[] | ItineraryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryCreateOrConnectWithoutUserInput | ItineraryCreateOrConnectWithoutUserInput[]
+    createMany?: ItineraryCreateManyUserInputEnvelope
+    connect?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
+  }
+
+  export type ItineraryQueueUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+  }
+
+  export type ReviewUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput> | ReviewCreateWithoutUserInput[] | ReviewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutUserInput | ReviewCreateOrConnectWithoutUserInput[]
+    createMany?: ReviewCreateManyUserInputEnvelope
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+  }
+
+  export type ReviewLikeUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ReviewLikeCreateWithoutUserInput, ReviewLikeUncheckedCreateWithoutUserInput> | ReviewLikeCreateWithoutUserInput[] | ReviewLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutUserInput | ReviewLikeCreateOrConnectWithoutUserInput[]
+    createMany?: ReviewLikeCreateManyUserInputEnvelope
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+  }
+
+  export type SavedDestinationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
+    createMany?: SavedDestinationCreateManyUserInputEnvelope
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+  }
+
+  export type VisitedPlaceUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput> | VisitedPlaceCreateWithoutUserInput[] | VisitedPlaceUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutUserInput | VisitedPlaceCreateOrConnectWithoutUserInput[]
+    createMany?: VisitedPlaceCreateManyUserInputEnvelope
+    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -23268,76 +24748,6 @@ export namespace Prisma {
 
   export type NullableEnumVerificationStatusFieldUpdateOperationsInput = {
     set?: $Enums.VerificationStatus | null
-  }
-
-  export type SavedDestinationUpdateManyWithoutUserNestedInput = {
-    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
-    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutUserInput | SavedDestinationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: SavedDestinationCreateManyUserInputEnvelope
-    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    update?: SavedDestinationUpdateWithWhereUniqueWithoutUserInput | SavedDestinationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: SavedDestinationUpdateManyWithWhereWithoutUserInput | SavedDestinationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
-  }
-
-  export type ItineraryUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput> | ItineraryCreateWithoutUserInput[] | ItineraryUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ItineraryCreateOrConnectWithoutUserInput | ItineraryCreateOrConnectWithoutUserInput[]
-    upsert?: ItineraryUpsertWithWhereUniqueWithoutUserInput | ItineraryUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ItineraryCreateManyUserInputEnvelope
-    set?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
-    disconnect?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
-    delete?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
-    connect?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
-    update?: ItineraryUpdateWithWhereUniqueWithoutUserInput | ItineraryUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ItineraryUpdateManyWithWhereWithoutUserInput | ItineraryUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ItineraryScalarWhereInput | ItineraryScalarWhereInput[]
-  }
-
-  export type ReviewUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput> | ReviewCreateWithoutUserInput[] | ReviewUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutUserInput | ReviewCreateOrConnectWithoutUserInput[]
-    upsert?: ReviewUpsertWithWhereUniqueWithoutUserInput | ReviewUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ReviewCreateManyUserInputEnvelope
-    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    update?: ReviewUpdateWithWhereUniqueWithoutUserInput | ReviewUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ReviewUpdateManyWithWhereWithoutUserInput | ReviewUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-  }
-
-  export type VisitedPlaceUpdateManyWithoutUserNestedInput = {
-    create?: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput> | VisitedPlaceCreateWithoutUserInput[] | VisitedPlaceUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutUserInput | VisitedPlaceCreateOrConnectWithoutUserInput[]
-    upsert?: VisitedPlaceUpsertWithWhereUniqueWithoutUserInput | VisitedPlaceUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: VisitedPlaceCreateManyUserInputEnvelope
-    set?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    disconnect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    delete?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    update?: VisitedPlaceUpdateWithWhereUniqueWithoutUserInput | VisitedPlaceUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: VisitedPlaceUpdateManyWithWhereWithoutUserInput | VisitedPlaceUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
-  }
-
-  export type ItineraryQueueUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
-    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutUserInput | ItineraryQueueUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ItineraryQueueCreateManyUserInputEnvelope
-    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
   }
 
   export type DestinationUpdateManyWithoutOwnerNestedInput = {
@@ -23368,29 +24778,7 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type SavedDestinationUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
-    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutUserInput | SavedDestinationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: SavedDestinationCreateManyUserInputEnvelope
-    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    update?: SavedDestinationUpdateWithWhereUniqueWithoutUserInput | SavedDestinationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: SavedDestinationUpdateManyWithWhereWithoutUserInput | SavedDestinationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
-  }
-
-  export type ItineraryUncheckedUpdateManyWithoutUserNestedInput = {
+  export type ItineraryUpdateManyWithoutUserNestedInput = {
     create?: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput> | ItineraryCreateWithoutUserInput[] | ItineraryUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ItineraryCreateOrConnectWithoutUserInput | ItineraryCreateOrConnectWithoutUserInput[]
     upsert?: ItineraryUpsertWithWhereUniqueWithoutUserInput | ItineraryUpsertWithWhereUniqueWithoutUserInput[]
@@ -23404,7 +24792,21 @@ export namespace Prisma {
     deleteMany?: ItineraryScalarWhereInput | ItineraryScalarWhereInput[]
   }
 
-  export type ReviewUncheckedUpdateManyWithoutUserNestedInput = {
+  export type ItineraryQueueUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutUserInput | ItineraryQueueUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
+  export type ReviewUpdateManyWithoutUserNestedInput = {
     create?: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput> | ReviewCreateWithoutUserInput[] | ReviewUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ReviewCreateOrConnectWithoutUserInput | ReviewCreateOrConnectWithoutUserInput[]
     upsert?: ReviewUpsertWithWhereUniqueWithoutUserInput | ReviewUpsertWithWhereUniqueWithoutUserInput[]
@@ -23418,7 +24820,35 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
-  export type VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput = {
+  export type ReviewLikeUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ReviewLikeCreateWithoutUserInput, ReviewLikeUncheckedCreateWithoutUserInput> | ReviewLikeCreateWithoutUserInput[] | ReviewLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutUserInput | ReviewLikeCreateOrConnectWithoutUserInput[]
+    upsert?: ReviewLikeUpsertWithWhereUniqueWithoutUserInput | ReviewLikeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ReviewLikeCreateManyUserInputEnvelope
+    set?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    disconnect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    delete?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    update?: ReviewLikeUpdateWithWhereUniqueWithoutUserInput | ReviewLikeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ReviewLikeUpdateManyWithWhereWithoutUserInput | ReviewLikeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ReviewLikeScalarWhereInput | ReviewLikeScalarWhereInput[]
+  }
+
+  export type SavedDestinationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
+    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutUserInput | SavedDestinationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SavedDestinationCreateManyUserInputEnvelope
+    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    update?: SavedDestinationUpdateWithWhereUniqueWithoutUserInput | SavedDestinationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SavedDestinationUpdateManyWithWhereWithoutUserInput | SavedDestinationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
+  }
+
+  export type VisitedPlaceUpdateManyWithoutUserNestedInput = {
     create?: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput> | VisitedPlaceCreateWithoutUserInput[] | VisitedPlaceUncheckedCreateWithoutUserInput[]
     connectOrCreate?: VisitedPlaceCreateOrConnectWithoutUserInput | VisitedPlaceCreateOrConnectWithoutUserInput[]
     upsert?: VisitedPlaceUpsertWithWhereUniqueWithoutUserInput | VisitedPlaceUpsertWithWhereUniqueWithoutUserInput[]
@@ -23432,18 +24862,12 @@ export namespace Prisma {
     deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
   }
 
-  export type ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
-    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutUserInput | ItineraryQueueUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ItineraryQueueCreateManyUserInputEnvelope
-    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DestinationUncheckedUpdateManyWithoutOwnerNestedInput = {
@@ -23474,6 +24898,97 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
+  export type ItineraryUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput> | ItineraryCreateWithoutUserInput[] | ItineraryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryCreateOrConnectWithoutUserInput | ItineraryCreateOrConnectWithoutUserInput[]
+    upsert?: ItineraryUpsertWithWhereUniqueWithoutUserInput | ItineraryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ItineraryCreateManyUserInputEnvelope
+    set?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
+    disconnect?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
+    delete?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
+    connect?: ItineraryWhereUniqueInput | ItineraryWhereUniqueInput[]
+    update?: ItineraryUpdateWithWhereUniqueWithoutUserInput | ItineraryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ItineraryUpdateManyWithWhereWithoutUserInput | ItineraryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ItineraryScalarWhereInput | ItineraryScalarWhereInput[]
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput> | ItineraryQueueCreateWithoutUserInput[] | ItineraryQueueUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutUserInput | ItineraryQueueCreateOrConnectWithoutUserInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutUserInput | ItineraryQueueUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ItineraryQueueCreateManyUserInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutUserInput | ItineraryQueueUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutUserInput | ItineraryQueueUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput> | ReviewCreateWithoutUserInput[] | ReviewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutUserInput | ReviewCreateOrConnectWithoutUserInput[]
+    upsert?: ReviewUpsertWithWhereUniqueWithoutUserInput | ReviewUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ReviewCreateManyUserInputEnvelope
+    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    update?: ReviewUpdateWithWhereUniqueWithoutUserInput | ReviewUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ReviewUpdateManyWithWhereWithoutUserInput | ReviewUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+  }
+
+  export type ReviewLikeUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ReviewLikeCreateWithoutUserInput, ReviewLikeUncheckedCreateWithoutUserInput> | ReviewLikeCreateWithoutUserInput[] | ReviewLikeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutUserInput | ReviewLikeCreateOrConnectWithoutUserInput[]
+    upsert?: ReviewLikeUpsertWithWhereUniqueWithoutUserInput | ReviewLikeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ReviewLikeCreateManyUserInputEnvelope
+    set?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    disconnect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    delete?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    update?: ReviewLikeUpdateWithWhereUniqueWithoutUserInput | ReviewLikeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ReviewLikeUpdateManyWithWhereWithoutUserInput | ReviewLikeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ReviewLikeScalarWhereInput | ReviewLikeScalarWhereInput[]
+  }
+
+  export type SavedDestinationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput> | SavedDestinationCreateWithoutUserInput[] | SavedDestinationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutUserInput | SavedDestinationCreateOrConnectWithoutUserInput[]
+    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutUserInput | SavedDestinationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SavedDestinationCreateManyUserInputEnvelope
+    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    update?: SavedDestinationUpdateWithWhereUniqueWithoutUserInput | SavedDestinationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SavedDestinationUpdateManyWithWhereWithoutUserInput | SavedDestinationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
+  }
+
+  export type VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput> | VisitedPlaceCreateWithoutUserInput[] | VisitedPlaceUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutUserInput | VisitedPlaceCreateOrConnectWithoutUserInput[]
+    upsert?: VisitedPlaceUpsertWithWhereUniqueWithoutUserInput | VisitedPlaceUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: VisitedPlaceCreateManyUserInputEnvelope
+    set?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    disconnect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    delete?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    update?: VisitedPlaceUpdateWithWhereUniqueWithoutUserInput | VisitedPlaceUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: VisitedPlaceUpdateManyWithWhereWithoutUserInput | VisitedPlaceUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
+  }
+
+  export type AiAnalysisCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
+    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
+    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutDestinationsInput = {
     create?: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutDestinationsInput
@@ -23485,48 +25000,6 @@ export namespace Prisma {
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
     createMany?: DestinationCategoryCreateManyDestinationInputEnvelope
     connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-  }
-
-  export type AiAnalysisCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
-    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
-    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
-  }
-
-  export type SavedDestinationCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
-    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-  }
-
-  export type ItineraryItemCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
-    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
-    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-  }
-
-  export type ReviewCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
-    createMany?: ReviewCreateManyDestinationInputEnvelope
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-  }
-
-  export type VisitedPlaceCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
-    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
-    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-  }
-
-  export type ItineraryQueueCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
-    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
   }
 
   export type DestinationViewCreateNestedManyWithoutDestinationInput = {
@@ -23543,11 +25016,39 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
-  export type DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
-    createMany?: DestinationCategoryCreateManyDestinationInputEnvelope
-    connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+  export type ItineraryItemCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
+    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
+    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+  }
+
+  export type ItineraryQueueCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+  }
+
+  export type ReviewCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
+    createMany?: ReviewCreateManyDestinationInputEnvelope
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+  }
+
+  export type SavedDestinationCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
+    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+  }
+
+  export type VisitedPlaceCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
+    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
+    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
   }
 
   export type AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput = {
@@ -23557,39 +25058,11 @@ export namespace Prisma {
     connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
   }
 
-  export type SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
-    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-  }
-
-  export type ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
-    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
-    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-  }
-
-  export type ReviewUncheckedCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
-    createMany?: ReviewCreateManyDestinationInputEnvelope
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-  }
-
-  export type VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
-    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
-    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-  }
-
-  export type ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput = {
-    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
-    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+  export type DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
+    createMany?: DestinationCategoryCreateManyDestinationInputEnvelope
+    connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
   }
 
   export type DestinationViewUncheckedCreateNestedManyWithoutDestinationInput = {
@@ -23604,6 +25077,41 @@ export namespace Prisma {
     connectOrCreate?: EventCreateOrConnectWithoutDestinationInput | EventCreateOrConnectWithoutDestinationInput[]
     createMany?: EventCreateManyDestinationInputEnvelope
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
+    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
+    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+  }
+
+  export type ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+  }
+
+  export type ReviewUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
+    createMany?: ReviewCreateManyDestinationInputEnvelope
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+  }
+
+  export type SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
+    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+  }
+
+  export type VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput = {
+    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
+    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
+    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -23634,6 +25142,20 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
+  export type AiAnalysisUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
+    upsert?: AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput | AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
+    set?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    disconnect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    delete?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
+    update?: AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput | AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: AiAnalysisUpdateManyWithWhereWithoutDestinationInput | AiAnalysisUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: AiAnalysisScalarWhereInput | AiAnalysisScalarWhereInput[]
+  }
+
   export type UserUpdateOneWithoutDestinationsNestedInput = {
     create?: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutDestinationsInput
@@ -23656,90 +25178,6 @@ export namespace Prisma {
     update?: DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput | DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput[]
     updateMany?: DestinationCategoryUpdateManyWithWhereWithoutDestinationInput | DestinationCategoryUpdateManyWithWhereWithoutDestinationInput[]
     deleteMany?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
-  }
-
-  export type AiAnalysisUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<AiAnalysisCreateWithoutDestinationInput, AiAnalysisUncheckedCreateWithoutDestinationInput> | AiAnalysisCreateWithoutDestinationInput[] | AiAnalysisUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: AiAnalysisCreateOrConnectWithoutDestinationInput | AiAnalysisCreateOrConnectWithoutDestinationInput[]
-    upsert?: AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput | AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: AiAnalysisCreateManyDestinationInputEnvelope
-    set?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
-    disconnect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
-    delete?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
-    connect?: AiAnalysisWhereUniqueInput | AiAnalysisWhereUniqueInput[]
-    update?: AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput | AiAnalysisUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: AiAnalysisUpdateManyWithWhereWithoutDestinationInput | AiAnalysisUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: AiAnalysisScalarWhereInput | AiAnalysisScalarWhereInput[]
-  }
-
-  export type SavedDestinationUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
-    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput | SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
-    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    update?: SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput | SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: SavedDestinationUpdateManyWithWhereWithoutDestinationInput | SavedDestinationUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
-  }
-
-  export type ItineraryItemUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
-    upsert?: ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput | ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
-    set?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    disconnect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    delete?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    update?: ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput | ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: ItineraryItemUpdateManyWithWhereWithoutDestinationInput | ItineraryItemUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
-  }
-
-  export type ReviewUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
-    upsert?: ReviewUpsertWithWhereUniqueWithoutDestinationInput | ReviewUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: ReviewCreateManyDestinationInputEnvelope
-    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    update?: ReviewUpdateWithWhereUniqueWithoutDestinationInput | ReviewUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: ReviewUpdateManyWithWhereWithoutDestinationInput | ReviewUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-  }
-
-  export type VisitedPlaceUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
-    upsert?: VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
-    set?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    disconnect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    delete?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    update?: VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: VisitedPlaceUpdateManyWithWhereWithoutDestinationInput | VisitedPlaceUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
-  }
-
-  export type ItineraryQueueUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
-    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
-    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    update?: ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutDestinationInput | ItineraryQueueUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
   }
 
   export type DestinationViewUpdateManyWithoutDestinationNestedInput = {
@@ -23770,18 +25208,74 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
-  export type DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
-    upsert?: DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput | DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: DestinationCategoryCreateManyDestinationInputEnvelope
-    set?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-    disconnect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-    delete?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-    connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-    update?: DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput | DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: DestinationCategoryUpdateManyWithWhereWithoutDestinationInput | DestinationCategoryUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
+  export type ItineraryItemUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
+    upsert?: ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput | ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
+    set?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    disconnect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    delete?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    update?: ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput | ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ItineraryItemUpdateManyWithWhereWithoutDestinationInput | ItineraryItemUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
+  }
+
+  export type ItineraryQueueUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutDestinationInput | ItineraryQueueUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
+  export type ReviewUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
+    upsert?: ReviewUpsertWithWhereUniqueWithoutDestinationInput | ReviewUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ReviewCreateManyDestinationInputEnvelope
+    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    update?: ReviewUpdateWithWhereUniqueWithoutDestinationInput | ReviewUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ReviewUpdateManyWithWhereWithoutDestinationInput | ReviewUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+  }
+
+  export type SavedDestinationUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
+    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput | SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
+    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    update?: SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput | SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: SavedDestinationUpdateManyWithWhereWithoutDestinationInput | SavedDestinationUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
+  }
+
+  export type VisitedPlaceUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
+    upsert?: VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
+    set?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    disconnect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    delete?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    update?: VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: VisitedPlaceUpdateManyWithWhereWithoutDestinationInput | VisitedPlaceUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
   }
 
   export type AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput = {
@@ -23798,74 +25292,18 @@ export namespace Prisma {
     deleteMany?: AiAnalysisScalarWhereInput | AiAnalysisScalarWhereInput[]
   }
 
-  export type SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
-    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput | SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
-    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
-    update?: SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput | SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: SavedDestinationUpdateManyWithWhereWithoutDestinationInput | SavedDestinationUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
-  }
-
-  export type ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
-    upsert?: ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput | ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
-    set?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    disconnect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    delete?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
-    update?: ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput | ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: ItineraryItemUpdateManyWithWhereWithoutDestinationInput | ItineraryItemUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
-  }
-
-  export type ReviewUncheckedUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
-    upsert?: ReviewUpsertWithWhereUniqueWithoutDestinationInput | ReviewUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: ReviewCreateManyDestinationInputEnvelope
-    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
-    update?: ReviewUpdateWithWhereUniqueWithoutDestinationInput | ReviewUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: ReviewUpdateManyWithWhereWithoutDestinationInput | ReviewUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-  }
-
-  export type VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
-    upsert?: VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
-    set?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    disconnect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    delete?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
-    update?: VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: VisitedPlaceUpdateManyWithWhereWithoutDestinationInput | VisitedPlaceUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
-  }
-
-  export type ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput = {
-    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
-    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
-    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput[]
-    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
-    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
-    update?: ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput[]
-    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutDestinationInput | ItineraryQueueUpdateManyWithWhereWithoutDestinationInput[]
-    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  export type DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput> | DestinationCategoryCreateWithoutDestinationInput[] | DestinationCategoryUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: DestinationCategoryCreateOrConnectWithoutDestinationInput | DestinationCategoryCreateOrConnectWithoutDestinationInput[]
+    upsert?: DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput | DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: DestinationCategoryCreateManyDestinationInputEnvelope
+    set?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    disconnect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    delete?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    update?: DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput | DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: DestinationCategoryUpdateManyWithWhereWithoutDestinationInput | DestinationCategoryUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
   }
 
   export type DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput = {
@@ -23896,11 +25334,74 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
-  export type DestinationCategoryCreateNestedManyWithoutCategoryInput = {
-    create?: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput> | DestinationCategoryCreateWithoutCategoryInput[] | DestinationCategoryUncheckedCreateWithoutCategoryInput[]
-    connectOrCreate?: DestinationCategoryCreateOrConnectWithoutCategoryInput | DestinationCategoryCreateOrConnectWithoutCategoryInput[]
-    createMany?: DestinationCategoryCreateManyCategoryInputEnvelope
-    connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+  export type ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput> | ItineraryItemCreateWithoutDestinationInput[] | ItineraryItemUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryItemCreateOrConnectWithoutDestinationInput | ItineraryItemCreateOrConnectWithoutDestinationInput[]
+    upsert?: ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput | ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ItineraryItemCreateManyDestinationInputEnvelope
+    set?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    disconnect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    delete?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
+    update?: ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput | ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ItineraryItemUpdateManyWithWhereWithoutDestinationInput | ItineraryItemUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput> | ItineraryQueueCreateWithoutDestinationInput[] | ItineraryQueueUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ItineraryQueueCreateOrConnectWithoutDestinationInput | ItineraryQueueCreateOrConnectWithoutDestinationInput[]
+    upsert?: ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ItineraryQueueCreateManyDestinationInputEnvelope
+    set?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    disconnect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    delete?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    connect?: ItineraryQueueWhereUniqueInput | ItineraryQueueWhereUniqueInput[]
+    update?: ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput | ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ItineraryQueueUpdateManyWithWhereWithoutDestinationInput | ItineraryQueueUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput> | ReviewCreateWithoutDestinationInput[] | ReviewUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutDestinationInput | ReviewCreateOrConnectWithoutDestinationInput[]
+    upsert?: ReviewUpsertWithWhereUniqueWithoutDestinationInput | ReviewUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: ReviewCreateManyDestinationInputEnvelope
+    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    update?: ReviewUpdateWithWhereUniqueWithoutDestinationInput | ReviewUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: ReviewUpdateManyWithWhereWithoutDestinationInput | ReviewUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+  }
+
+  export type SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput> | SavedDestinationCreateWithoutDestinationInput[] | SavedDestinationUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: SavedDestinationCreateOrConnectWithoutDestinationInput | SavedDestinationCreateOrConnectWithoutDestinationInput[]
+    upsert?: SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput | SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: SavedDestinationCreateManyDestinationInputEnvelope
+    set?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    disconnect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    delete?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    connect?: SavedDestinationWhereUniqueInput | SavedDestinationWhereUniqueInput[]
+    update?: SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput | SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: SavedDestinationUpdateManyWithWhereWithoutDestinationInput | SavedDestinationUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
+  }
+
+  export type VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput = {
+    create?: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput> | VisitedPlaceCreateWithoutDestinationInput[] | VisitedPlaceUncheckedCreateWithoutDestinationInput[]
+    connectOrCreate?: VisitedPlaceCreateOrConnectWithoutDestinationInput | VisitedPlaceCreateOrConnectWithoutDestinationInput[]
+    upsert?: VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput[]
+    createMany?: VisitedPlaceCreateManyDestinationInputEnvelope
+    set?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    disconnect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    delete?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    connect?: VisitedPlaceWhereUniqueInput | VisitedPlaceWhereUniqueInput[]
+    update?: VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput | VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput[]
+    updateMany?: VisitedPlaceUpdateManyWithWhereWithoutDestinationInput | VisitedPlaceUpdateManyWithWhereWithoutDestinationInput[]
+    deleteMany?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
   }
 
   export type CategoryKeywordCreateNestedManyWithoutCategoryInput = {
@@ -23910,7 +25411,7 @@ export namespace Prisma {
     connect?: CategoryKeywordWhereUniqueInput | CategoryKeywordWhereUniqueInput[]
   }
 
-  export type DestinationCategoryUncheckedCreateNestedManyWithoutCategoryInput = {
+  export type DestinationCategoryCreateNestedManyWithoutCategoryInput = {
     create?: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput> | DestinationCategoryCreateWithoutCategoryInput[] | DestinationCategoryUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutCategoryInput | DestinationCategoryCreateOrConnectWithoutCategoryInput[]
     createMany?: DestinationCategoryCreateManyCategoryInputEnvelope
@@ -23924,18 +25425,11 @@ export namespace Prisma {
     connect?: CategoryKeywordWhereUniqueInput | CategoryKeywordWhereUniqueInput[]
   }
 
-  export type DestinationCategoryUpdateManyWithoutCategoryNestedInput = {
+  export type DestinationCategoryUncheckedCreateNestedManyWithoutCategoryInput = {
     create?: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput> | DestinationCategoryCreateWithoutCategoryInput[] | DestinationCategoryUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutCategoryInput | DestinationCategoryCreateOrConnectWithoutCategoryInput[]
-    upsert?: DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput | DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput[]
     createMany?: DestinationCategoryCreateManyCategoryInputEnvelope
-    set?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-    disconnect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-    delete?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
     connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
-    update?: DestinationCategoryUpdateWithWhereUniqueWithoutCategoryInput | DestinationCategoryUpdateWithWhereUniqueWithoutCategoryInput[]
-    updateMany?: DestinationCategoryUpdateManyWithWhereWithoutCategoryInput | DestinationCategoryUpdateManyWithWhereWithoutCategoryInput[]
-    deleteMany?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
   }
 
   export type CategoryKeywordUpdateManyWithoutCategoryNestedInput = {
@@ -23952,7 +25446,7 @@ export namespace Prisma {
     deleteMany?: CategoryKeywordScalarWhereInput | CategoryKeywordScalarWhereInput[]
   }
 
-  export type DestinationCategoryUncheckedUpdateManyWithoutCategoryNestedInput = {
+  export type DestinationCategoryUpdateManyWithoutCategoryNestedInput = {
     create?: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput> | DestinationCategoryCreateWithoutCategoryInput[] | DestinationCategoryUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: DestinationCategoryCreateOrConnectWithoutCategoryInput | DestinationCategoryCreateOrConnectWithoutCategoryInput[]
     upsert?: DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput | DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput[]
@@ -23980,10 +25474,18 @@ export namespace Prisma {
     deleteMany?: CategoryKeywordScalarWhereInput | CategoryKeywordScalarWhereInput[]
   }
 
-  export type DestinationCreateNestedOneWithoutCategoriesInput = {
-    create?: XOR<DestinationCreateWithoutCategoriesInput, DestinationUncheckedCreateWithoutCategoriesInput>
-    connectOrCreate?: DestinationCreateOrConnectWithoutCategoriesInput
-    connect?: DestinationWhereUniqueInput
+  export type DestinationCategoryUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput> | DestinationCategoryCreateWithoutCategoryInput[] | DestinationCategoryUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: DestinationCategoryCreateOrConnectWithoutCategoryInput | DestinationCategoryCreateOrConnectWithoutCategoryInput[]
+    upsert?: DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput | DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: DestinationCategoryCreateManyCategoryInputEnvelope
+    set?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    disconnect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    delete?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    connect?: DestinationCategoryWhereUniqueInput | DestinationCategoryWhereUniqueInput[]
+    update?: DestinationCategoryUpdateWithWhereUniqueWithoutCategoryInput | DestinationCategoryUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: DestinationCategoryUpdateManyWithWhereWithoutCategoryInput | DestinationCategoryUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
   }
 
   export type CategoryCreateNestedOneWithoutDestinationsInput = {
@@ -23992,12 +25494,10 @@ export namespace Prisma {
     connect?: CategoryWhereUniqueInput
   }
 
-  export type DestinationUpdateOneRequiredWithoutCategoriesNestedInput = {
+  export type DestinationCreateNestedOneWithoutCategoriesInput = {
     create?: XOR<DestinationCreateWithoutCategoriesInput, DestinationUncheckedCreateWithoutCategoriesInput>
     connectOrCreate?: DestinationCreateOrConnectWithoutCategoriesInput
-    upsert?: DestinationUpsertWithoutCategoriesInput
     connect?: DestinationWhereUniqueInput
-    update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutCategoriesInput, DestinationUpdateWithoutCategoriesInput>, DestinationUncheckedUpdateWithoutCategoriesInput>
   }
 
   export type CategoryUpdateOneRequiredWithoutDestinationsNestedInput = {
@@ -24006,6 +25506,14 @@ export namespace Prisma {
     upsert?: CategoryUpsertWithoutDestinationsInput
     connect?: CategoryWhereUniqueInput
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutDestinationsInput, CategoryUpdateWithoutDestinationsInput>, CategoryUncheckedUpdateWithoutDestinationsInput>
+  }
+
+  export type DestinationUpdateOneRequiredWithoutCategoriesNestedInput = {
+    create?: XOR<DestinationCreateWithoutCategoriesInput, DestinationUncheckedCreateWithoutCategoriesInput>
+    connectOrCreate?: DestinationCreateOrConnectWithoutCategoriesInput
+    upsert?: DestinationUpsertWithoutCategoriesInput
+    connect?: DestinationWhereUniqueInput
+    update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutCategoriesInput, DestinationUpdateWithoutCategoriesInput>, DestinationUncheckedUpdateWithoutCategoriesInput>
   }
 
   export type CategoryCreateNestedOneWithoutKeywordsInput = {
@@ -24036,24 +25544,16 @@ export namespace Prisma {
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutAiAnalysesInput, DestinationUpdateWithoutAiAnalysesInput>, DestinationUncheckedUpdateWithoutAiAnalysesInput>
   }
 
-  export type UserCreateNestedOneWithoutSavedDestinationsInput = {
-    create?: XOR<UserCreateWithoutSavedDestinationsInput, UserUncheckedCreateWithoutSavedDestinationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSavedDestinationsInput
-    connect?: UserWhereUniqueInput
-  }
-
   export type DestinationCreateNestedOneWithoutSavedByInput = {
     create?: XOR<DestinationCreateWithoutSavedByInput, DestinationUncheckedCreateWithoutSavedByInput>
     connectOrCreate?: DestinationCreateOrConnectWithoutSavedByInput
     connect?: DestinationWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutSavedDestinationsNestedInput = {
+  export type UserCreateNestedOneWithoutSavedDestinationsInput = {
     create?: XOR<UserCreateWithoutSavedDestinationsInput, UserUncheckedCreateWithoutSavedDestinationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutSavedDestinationsInput
-    upsert?: UserUpsertWithoutSavedDestinationsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSavedDestinationsInput, UserUpdateWithoutSavedDestinationsInput>, UserUncheckedUpdateWithoutSavedDestinationsInput>
   }
 
   export type DestinationUpdateOneRequiredWithoutSavedByNestedInput = {
@@ -24064,10 +25564,12 @@ export namespace Prisma {
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutSavedByInput, DestinationUpdateWithoutSavedByInput>, DestinationUncheckedUpdateWithoutSavedByInput>
   }
 
-  export type UserCreateNestedOneWithoutItineraryQueueInput = {
-    create?: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
-    connectOrCreate?: UserCreateOrConnectWithoutItineraryQueueInput
+  export type UserUpdateOneRequiredWithoutSavedDestinationsNestedInput = {
+    create?: XOR<UserCreateWithoutSavedDestinationsInput, UserUncheckedCreateWithoutSavedDestinationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSavedDestinationsInput
+    upsert?: UserUpsertWithoutSavedDestinationsInput
     connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSavedDestinationsInput, UserUpdateWithoutSavedDestinationsInput>, UserUncheckedUpdateWithoutSavedDestinationsInput>
   }
 
   export type DestinationCreateNestedOneWithoutItineraryQueueInput = {
@@ -24076,12 +25578,10 @@ export namespace Prisma {
     connect?: DestinationWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutItineraryQueueNestedInput = {
+  export type UserCreateNestedOneWithoutItineraryQueueInput = {
     create?: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
     connectOrCreate?: UserCreateOrConnectWithoutItineraryQueueInput
-    upsert?: UserUpsertWithoutItineraryQueueInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutItineraryQueueInput, UserUpdateWithoutItineraryQueueInput>, UserUncheckedUpdateWithoutItineraryQueueInput>
   }
 
   export type DestinationUpdateOneRequiredWithoutItineraryQueueNestedInput = {
@@ -24090,6 +25590,14 @@ export namespace Prisma {
     upsert?: DestinationUpsertWithoutItineraryQueueInput
     connect?: DestinationWhereUniqueInput
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutItineraryQueueInput, DestinationUpdateWithoutItineraryQueueInput>, DestinationUncheckedUpdateWithoutItineraryQueueInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutItineraryQueueNestedInput = {
+    create?: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
+    connectOrCreate?: UserCreateOrConnectWithoutItineraryQueueInput
+    upsert?: UserUpsertWithoutItineraryQueueInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutItineraryQueueInput, UserUpdateWithoutItineraryQueueInput>, UserUncheckedUpdateWithoutItineraryQueueInput>
   }
 
   export type UserCreateNestedOneWithoutItinerariesInput = {
@@ -24112,10 +25620,6 @@ export namespace Prisma {
     connect?: ItineraryItemWhereUniqueInput | ItineraryItemWhereUniqueInput[]
   }
 
-  export type EnumItineraryStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ItineraryStatus
-  }
-
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -24126,6 +25630,10 @@ export namespace Prisma {
 
   export type NullableEnumStartLocationTypeFieldUpdateOperationsInput = {
     set?: $Enums.StartLocationType | null
+  }
+
+  export type EnumItineraryStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ItineraryStatus
   }
 
   export type UserUpdateOneRequiredWithoutItinerariesNestedInput = {
@@ -24164,24 +25672,16 @@ export namespace Prisma {
     deleteMany?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
   }
 
-  export type ItineraryCreateNestedOneWithoutItemsInput = {
-    create?: XOR<ItineraryCreateWithoutItemsInput, ItineraryUncheckedCreateWithoutItemsInput>
-    connectOrCreate?: ItineraryCreateOrConnectWithoutItemsInput
-    connect?: ItineraryWhereUniqueInput
-  }
-
   export type DestinationCreateNestedOneWithoutItineraryItemsInput = {
     create?: XOR<DestinationCreateWithoutItineraryItemsInput, DestinationUncheckedCreateWithoutItineraryItemsInput>
     connectOrCreate?: DestinationCreateOrConnectWithoutItineraryItemsInput
     connect?: DestinationWhereUniqueInput
   }
 
-  export type ItineraryUpdateOneRequiredWithoutItemsNestedInput = {
+  export type ItineraryCreateNestedOneWithoutItemsInput = {
     create?: XOR<ItineraryCreateWithoutItemsInput, ItineraryUncheckedCreateWithoutItemsInput>
     connectOrCreate?: ItineraryCreateOrConnectWithoutItemsInput
-    upsert?: ItineraryUpsertWithoutItemsInput
     connect?: ItineraryWhereUniqueInput
-    update?: XOR<XOR<ItineraryUpdateToOneWithWhereWithoutItemsInput, ItineraryUpdateWithoutItemsInput>, ItineraryUncheckedUpdateWithoutItemsInput>
   }
 
   export type DestinationUpdateOneRequiredWithoutItineraryItemsNestedInput = {
@@ -24192,10 +25692,12 @@ export namespace Prisma {
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutItineraryItemsInput, DestinationUpdateWithoutItineraryItemsInput>, DestinationUncheckedUpdateWithoutItineraryItemsInput>
   }
 
-  export type UserCreateNestedOneWithoutReviewsInput = {
-    create?: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutReviewsInput
-    connect?: UserWhereUniqueInput
+  export type ItineraryUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<ItineraryCreateWithoutItemsInput, ItineraryUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ItineraryCreateOrConnectWithoutItemsInput
+    upsert?: ItineraryUpsertWithoutItemsInput
+    connect?: ItineraryWhereUniqueInput
+    update?: XOR<XOR<ItineraryUpdateToOneWithWhereWithoutItemsInput, ItineraryUpdateWithoutItemsInput>, ItineraryUncheckedUpdateWithoutItemsInput>
   }
 
   export type DestinationCreateNestedOneWithoutReviewsInput = {
@@ -24204,12 +25706,24 @@ export namespace Prisma {
     connect?: DestinationWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
+  export type UserCreateNestedOneWithoutReviewsInput = {
     create?: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
     connectOrCreate?: UserCreateOrConnectWithoutReviewsInput
-    upsert?: UserUpsertWithoutReviewsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewsInput, UserUpdateWithoutReviewsInput>, UserUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type ReviewLikeCreateNestedManyWithoutReviewInput = {
+    create?: XOR<ReviewLikeCreateWithoutReviewInput, ReviewLikeUncheckedCreateWithoutReviewInput> | ReviewLikeCreateWithoutReviewInput[] | ReviewLikeUncheckedCreateWithoutReviewInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutReviewInput | ReviewLikeCreateOrConnectWithoutReviewInput[]
+    createMany?: ReviewLikeCreateManyReviewInputEnvelope
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+  }
+
+  export type ReviewLikeUncheckedCreateNestedManyWithoutReviewInput = {
+    create?: XOR<ReviewLikeCreateWithoutReviewInput, ReviewLikeUncheckedCreateWithoutReviewInput> | ReviewLikeCreateWithoutReviewInput[] | ReviewLikeUncheckedCreateWithoutReviewInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutReviewInput | ReviewLikeCreateOrConnectWithoutReviewInput[]
+    createMany?: ReviewLikeCreateManyReviewInputEnvelope
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
   }
 
   export type DestinationUpdateOneRequiredWithoutReviewsNestedInput = {
@@ -24220,10 +25734,68 @@ export namespace Prisma {
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutReviewsInput, DestinationUpdateWithoutReviewsInput>, DestinationUncheckedUpdateWithoutReviewsInput>
   }
 
-  export type UserCreateNestedOneWithoutVisitedPlacesInput = {
-    create?: XOR<UserCreateWithoutVisitedPlacesInput, UserUncheckedCreateWithoutVisitedPlacesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutVisitedPlacesInput
+  export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
+    create?: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewsInput
+    upsert?: UserUpsertWithoutReviewsInput
     connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewsInput, UserUpdateWithoutReviewsInput>, UserUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type ReviewLikeUpdateManyWithoutReviewNestedInput = {
+    create?: XOR<ReviewLikeCreateWithoutReviewInput, ReviewLikeUncheckedCreateWithoutReviewInput> | ReviewLikeCreateWithoutReviewInput[] | ReviewLikeUncheckedCreateWithoutReviewInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutReviewInput | ReviewLikeCreateOrConnectWithoutReviewInput[]
+    upsert?: ReviewLikeUpsertWithWhereUniqueWithoutReviewInput | ReviewLikeUpsertWithWhereUniqueWithoutReviewInput[]
+    createMany?: ReviewLikeCreateManyReviewInputEnvelope
+    set?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    disconnect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    delete?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    update?: ReviewLikeUpdateWithWhereUniqueWithoutReviewInput | ReviewLikeUpdateWithWhereUniqueWithoutReviewInput[]
+    updateMany?: ReviewLikeUpdateManyWithWhereWithoutReviewInput | ReviewLikeUpdateManyWithWhereWithoutReviewInput[]
+    deleteMany?: ReviewLikeScalarWhereInput | ReviewLikeScalarWhereInput[]
+  }
+
+  export type ReviewLikeUncheckedUpdateManyWithoutReviewNestedInput = {
+    create?: XOR<ReviewLikeCreateWithoutReviewInput, ReviewLikeUncheckedCreateWithoutReviewInput> | ReviewLikeCreateWithoutReviewInput[] | ReviewLikeUncheckedCreateWithoutReviewInput[]
+    connectOrCreate?: ReviewLikeCreateOrConnectWithoutReviewInput | ReviewLikeCreateOrConnectWithoutReviewInput[]
+    upsert?: ReviewLikeUpsertWithWhereUniqueWithoutReviewInput | ReviewLikeUpsertWithWhereUniqueWithoutReviewInput[]
+    createMany?: ReviewLikeCreateManyReviewInputEnvelope
+    set?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    disconnect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    delete?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    connect?: ReviewLikeWhereUniqueInput | ReviewLikeWhereUniqueInput[]
+    update?: ReviewLikeUpdateWithWhereUniqueWithoutReviewInput | ReviewLikeUpdateWithWhereUniqueWithoutReviewInput[]
+    updateMany?: ReviewLikeUpdateManyWithWhereWithoutReviewInput | ReviewLikeUpdateManyWithWhereWithoutReviewInput[]
+    deleteMany?: ReviewLikeScalarWhereInput | ReviewLikeScalarWhereInput[]
+  }
+
+  export type ReviewCreateNestedOneWithoutLikesInput = {
+    create?: XOR<ReviewCreateWithoutLikesInput, ReviewUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: ReviewCreateOrConnectWithoutLikesInput
+    connect?: ReviewWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReviewLikesInput = {
+    create?: XOR<UserCreateWithoutReviewLikesInput, UserUncheckedCreateWithoutReviewLikesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewLikesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ReviewUpdateOneRequiredWithoutLikesNestedInput = {
+    create?: XOR<ReviewCreateWithoutLikesInput, ReviewUncheckedCreateWithoutLikesInput>
+    connectOrCreate?: ReviewCreateOrConnectWithoutLikesInput
+    upsert?: ReviewUpsertWithoutLikesInput
+    connect?: ReviewWhereUniqueInput
+    update?: XOR<XOR<ReviewUpdateToOneWithWhereWithoutLikesInput, ReviewUpdateWithoutLikesInput>, ReviewUncheckedUpdateWithoutLikesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReviewLikesNestedInput = {
+    create?: XOR<UserCreateWithoutReviewLikesInput, UserUncheckedCreateWithoutReviewLikesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewLikesInput
+    upsert?: UserUpsertWithoutReviewLikesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewLikesInput, UserUpdateWithoutReviewLikesInput>, UserUncheckedUpdateWithoutReviewLikesInput>
   }
 
   export type DestinationCreateNestedOneWithoutVisitedByInput = {
@@ -24232,12 +25804,10 @@ export namespace Prisma {
     connect?: DestinationWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutVisitedPlacesNestedInput = {
+  export type UserCreateNestedOneWithoutVisitedPlacesInput = {
     create?: XOR<UserCreateWithoutVisitedPlacesInput, UserUncheckedCreateWithoutVisitedPlacesInput>
     connectOrCreate?: UserCreateOrConnectWithoutVisitedPlacesInput
-    upsert?: UserUpsertWithoutVisitedPlacesInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVisitedPlacesInput, UserUpdateWithoutVisitedPlacesInput>, UserUncheckedUpdateWithoutVisitedPlacesInput>
   }
 
   export type DestinationUpdateOneRequiredWithoutVisitedByNestedInput = {
@@ -24246,6 +25816,14 @@ export namespace Prisma {
     upsert?: DestinationUpsertWithoutVisitedByInput
     connect?: DestinationWhereUniqueInput
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutVisitedByInput, DestinationUpdateWithoutVisitedByInput>, DestinationUncheckedUpdateWithoutVisitedByInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutVisitedPlacesNestedInput = {
+    create?: XOR<UserCreateWithoutVisitedPlacesInput, UserUncheckedCreateWithoutVisitedPlacesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVisitedPlacesInput
+    upsert?: UserUpsertWithoutVisitedPlacesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVisitedPlacesInput, UserUpdateWithoutVisitedPlacesInput>, UserUncheckedUpdateWithoutVisitedPlacesInput>
   }
 
   export type DestinationCreateNestedOneWithoutViewsInput = {
@@ -24262,28 +25840,20 @@ export namespace Prisma {
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutViewsInput, DestinationUpdateWithoutViewsInput>, DestinationUncheckedUpdateWithoutViewsInput>
   }
 
-  export type UserCreateNestedOneWithoutEventsInput = {
-    create?: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutEventsInput
-    connect?: UserWhereUniqueInput
-  }
-
   export type DestinationCreateNestedOneWithoutEventsInput = {
     create?: XOR<DestinationCreateWithoutEventsInput, DestinationUncheckedCreateWithoutEventsInput>
     connectOrCreate?: DestinationCreateOrConnectWithoutEventsInput
     connect?: DestinationWhereUniqueInput
   }
 
-  export type EnumEventStatusFieldUpdateOperationsInput = {
-    set?: $Enums.EventStatus
-  }
-
-  export type UserUpdateOneRequiredWithoutEventsNestedInput = {
+  export type UserCreateNestedOneWithoutEventsInput = {
     create?: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
     connectOrCreate?: UserCreateOrConnectWithoutEventsInput
-    upsert?: UserUpsertWithoutEventsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventsInput, UserUpdateWithoutEventsInput>, UserUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type EnumEventStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EventStatus
   }
 
   export type DestinationUpdateOneWithoutEventsNestedInput = {
@@ -24294,6 +25864,14 @@ export namespace Prisma {
     delete?: DestinationWhereInput | boolean
     connect?: DestinationWhereUniqueInput
     update?: XOR<XOR<DestinationUpdateToOneWithWhereWithoutEventsInput, DestinationUpdateWithoutEventsInput>, DestinationUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventsInput
+    upsert?: UserUpsertWithoutEventsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventsInput, UserUpdateWithoutEventsInput>, UserUncheckedUpdateWithoutEventsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -24604,13 +26182,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedEnumItineraryStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumItineraryStatusFilter<$PrismaModel> | $Enums.ItineraryStatus
-  }
-
   export type NestedEnumStartLocationTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.StartLocationType | EnumStartLocationTypeFieldRefInput<$PrismaModel> | null
     in?: $Enums.StartLocationType[] | ListEnumStartLocationTypeFieldRefInput<$PrismaModel> | null
@@ -24618,14 +26189,11 @@ export namespace Prisma {
     not?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel> | $Enums.StartLocationType | null
   }
 
-  export type NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  export type NestedEnumItineraryStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ItineraryStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumItineraryStatusFilter<$PrismaModel>
-    _max?: NestedEnumItineraryStatusFilter<$PrismaModel>
+    not?: NestedEnumItineraryStatusFilter<$PrismaModel> | $Enums.ItineraryStatus
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -24654,6 +26222,16 @@ export namespace Prisma {
     _max?: NestedEnumStartLocationTypeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ItineraryStatus | EnumItineraryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ItineraryStatus[] | ListEnumItineraryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumItineraryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ItineraryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumItineraryStatusFilter<$PrismaModel>
+    _max?: NestedEnumItineraryStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
@@ -24671,162 +26249,10 @@ export namespace Prisma {
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
-  export type SavedDestinationCreateWithoutUserInput = {
-    createdAt?: Date | string
-    destination: DestinationCreateNestedOneWithoutSavedByInput
-  }
-
-  export type SavedDestinationUncheckedCreateWithoutUserInput = {
-    id?: number
-    destinationId: number
-    createdAt?: Date | string
-  }
-
-  export type SavedDestinationCreateOrConnectWithoutUserInput = {
-    where: SavedDestinationWhereUniqueInput
-    create: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput>
-  }
-
-  export type SavedDestinationCreateManyUserInputEnvelope = {
-    data: SavedDestinationCreateManyUserInput | SavedDestinationCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ItineraryCreateWithoutUserInput = {
-    title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
-    totalDistance?: number | null
-    estimatedTime?: number | null
-    estimatedCost?: number | null
-    isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    items?: ItineraryItemCreateNestedManyWithoutItineraryInput
-  }
-
-  export type ItineraryUncheckedCreateWithoutUserInput = {
-    id?: number
-    title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
-    totalDistance?: number | null
-    estimatedTime?: number | null
-    estimatedCost?: number | null
-    isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    items?: ItineraryItemUncheckedCreateNestedManyWithoutItineraryInput
-  }
-
-  export type ItineraryCreateOrConnectWithoutUserInput = {
-    where: ItineraryWhereUniqueInput
-    create: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput>
-  }
-
-  export type ItineraryCreateManyUserInputEnvelope = {
-    data: ItineraryCreateManyUserInput | ItineraryCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ReviewCreateWithoutUserInput = {
-    rating: number
-    comment?: string | null
-    photoUrl?: string | null
-    videoUrl?: string | null
-    helpfulCount?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    destination: DestinationCreateNestedOneWithoutReviewsInput
-  }
-
-  export type ReviewUncheckedCreateWithoutUserInput = {
-    id?: number
-    destinationId: number
-    rating: number
-    comment?: string | null
-    photoUrl?: string | null
-    videoUrl?: string | null
-    helpfulCount?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ReviewCreateOrConnectWithoutUserInput = {
-    where: ReviewWhereUniqueInput
-    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
-  }
-
-  export type ReviewCreateManyUserInputEnvelope = {
-    data: ReviewCreateManyUserInput | ReviewCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type VisitedPlaceCreateWithoutUserInput = {
-    visitedAt?: Date | string
-    checkedIn?: boolean
-    destination: DestinationCreateNestedOneWithoutVisitedByInput
-  }
-
-  export type VisitedPlaceUncheckedCreateWithoutUserInput = {
-    id?: number
-    destinationId: number
-    visitedAt?: Date | string
-    checkedIn?: boolean
-  }
-
-  export type VisitedPlaceCreateOrConnectWithoutUserInput = {
-    where: VisitedPlaceWhereUniqueInput
-    create: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput>
-  }
-
-  export type VisitedPlaceCreateManyUserInputEnvelope = {
-    data: VisitedPlaceCreateManyUserInput | VisitedPlaceCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ItineraryQueueCreateWithoutUserInput = {
-    createdAt?: Date | string
-    destination: DestinationCreateNestedOneWithoutItineraryQueueInput
-  }
-
-  export type ItineraryQueueUncheckedCreateWithoutUserInput = {
-    id?: number
-    destinationId: number
-    createdAt?: Date | string
-  }
-
-  export type ItineraryQueueCreateOrConnectWithoutUserInput = {
-    where: ItineraryQueueWhereUniqueInput
-    create: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput>
-  }
-
-  export type ItineraryQueueCreateManyUserInputEnvelope = {
-    data: ItineraryQueueCreateManyUserInput | ItineraryQueueCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type DestinationCreateWithoutOwnerInput = {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
@@ -24842,15 +26268,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
     aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutOwnerInput = {
@@ -24858,11 +26289,6 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
@@ -24878,15 +26304,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutOwnerInput = {
@@ -24940,154 +26371,174 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SavedDestinationUpsertWithWhereUniqueWithoutUserInput = {
-    where: SavedDestinationWhereUniqueInput
-    update: XOR<SavedDestinationUpdateWithoutUserInput, SavedDestinationUncheckedUpdateWithoutUserInput>
-    create: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput>
+  export type ItineraryCreateWithoutUserInput = {
+    title?: string
+    totalDistance?: number | null
+    estimatedTime?: number | null
+    estimatedCost?: number | null
+    isAiGenerated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
+    items?: ItineraryItemCreateNestedManyWithoutItineraryInput
   }
 
-  export type SavedDestinationUpdateWithWhereUniqueWithoutUserInput = {
-    where: SavedDestinationWhereUniqueInput
-    data: XOR<SavedDestinationUpdateWithoutUserInput, SavedDestinationUncheckedUpdateWithoutUserInput>
+  export type ItineraryUncheckedCreateWithoutUserInput = {
+    id?: number
+    title?: string
+    totalDistance?: number | null
+    estimatedTime?: number | null
+    estimatedCost?: number | null
+    isAiGenerated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
+    items?: ItineraryItemUncheckedCreateNestedManyWithoutItineraryInput
   }
 
-  export type SavedDestinationUpdateManyWithWhereWithoutUserInput = {
-    where: SavedDestinationScalarWhereInput
-    data: XOR<SavedDestinationUpdateManyMutationInput, SavedDestinationUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type SavedDestinationScalarWhereInput = {
-    AND?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
-    OR?: SavedDestinationScalarWhereInput[]
-    NOT?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
-    id?: IntFilter<"SavedDestination"> | number
-    userId?: IntFilter<"SavedDestination"> | number
-    destinationId?: IntFilter<"SavedDestination"> | number
-    createdAt?: DateTimeFilter<"SavedDestination"> | Date | string
-  }
-
-  export type ItineraryUpsertWithWhereUniqueWithoutUserInput = {
+  export type ItineraryCreateOrConnectWithoutUserInput = {
     where: ItineraryWhereUniqueInput
-    update: XOR<ItineraryUpdateWithoutUserInput, ItineraryUncheckedUpdateWithoutUserInput>
     create: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput>
   }
 
-  export type ItineraryUpdateWithWhereUniqueWithoutUserInput = {
-    where: ItineraryWhereUniqueInput
-    data: XOR<ItineraryUpdateWithoutUserInput, ItineraryUncheckedUpdateWithoutUserInput>
+  export type ItineraryCreateManyUserInputEnvelope = {
+    data: ItineraryCreateManyUserInput | ItineraryCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
-  export type ItineraryUpdateManyWithWhereWithoutUserInput = {
-    where: ItineraryScalarWhereInput
-    data: XOR<ItineraryUpdateManyMutationInput, ItineraryUncheckedUpdateManyWithoutUserInput>
+  export type ItineraryQueueCreateWithoutUserInput = {
+    createdAt?: Date | string
+    destination: DestinationCreateNestedOneWithoutItineraryQueueInput
   }
 
-  export type ItineraryScalarWhereInput = {
-    AND?: ItineraryScalarWhereInput | ItineraryScalarWhereInput[]
-    OR?: ItineraryScalarWhereInput[]
-    NOT?: ItineraryScalarWhereInput | ItineraryScalarWhereInput[]
-    id?: IntFilter<"Itinerary"> | number
-    userId?: IntFilter<"Itinerary"> | number
-    title?: StringFilter<"Itinerary"> | string
-    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
-    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
-    startLat?: FloatNullableFilter<"Itinerary"> | number | null
-    startLng?: FloatNullableFilter<"Itinerary"> | number | null
-    startLabel?: StringNullableFilter<"Itinerary"> | string | null
-    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
-    totalDistance?: FloatNullableFilter<"Itinerary"> | number | null
-    estimatedTime?: IntNullableFilter<"Itinerary"> | number | null
-    estimatedCost?: IntNullableFilter<"Itinerary"> | number | null
-    isAiGenerated?: BoolFilter<"Itinerary"> | boolean
-    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
-    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
-    createdAt?: DateTimeFilter<"Itinerary"> | Date | string
-    updatedAt?: DateTimeFilter<"Itinerary"> | Date | string
+  export type ItineraryQueueUncheckedCreateWithoutUserInput = {
+    id?: number
+    destinationId: number
+    createdAt?: Date | string
   }
 
-  export type ReviewUpsertWithWhereUniqueWithoutUserInput = {
-    where: ReviewWhereUniqueInput
-    update: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
-    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
-  }
-
-  export type ReviewUpdateWithWhereUniqueWithoutUserInput = {
-    where: ReviewWhereUniqueInput
-    data: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ReviewUpdateManyWithWhereWithoutUserInput = {
-    where: ReviewScalarWhereInput
-    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type ReviewScalarWhereInput = {
-    AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-    OR?: ReviewScalarWhereInput[]
-    NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
-    id?: IntFilter<"Review"> | number
-    userId?: IntFilter<"Review"> | number
-    destinationId?: IntFilter<"Review"> | number
-    rating?: IntFilter<"Review"> | number
-    comment?: StringNullableFilter<"Review"> | string | null
-    photoUrl?: StringNullableFilter<"Review"> | string | null
-    videoUrl?: StringNullableFilter<"Review"> | string | null
-    helpfulCount?: IntFilter<"Review"> | number
-    createdAt?: DateTimeFilter<"Review"> | Date | string
-    updatedAt?: DateTimeFilter<"Review"> | Date | string
-  }
-
-  export type VisitedPlaceUpsertWithWhereUniqueWithoutUserInput = {
-    where: VisitedPlaceWhereUniqueInput
-    update: XOR<VisitedPlaceUpdateWithoutUserInput, VisitedPlaceUncheckedUpdateWithoutUserInput>
-    create: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput>
-  }
-
-  export type VisitedPlaceUpdateWithWhereUniqueWithoutUserInput = {
-    where: VisitedPlaceWhereUniqueInput
-    data: XOR<VisitedPlaceUpdateWithoutUserInput, VisitedPlaceUncheckedUpdateWithoutUserInput>
-  }
-
-  export type VisitedPlaceUpdateManyWithWhereWithoutUserInput = {
-    where: VisitedPlaceScalarWhereInput
-    data: XOR<VisitedPlaceUpdateManyMutationInput, VisitedPlaceUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type VisitedPlaceScalarWhereInput = {
-    AND?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
-    OR?: VisitedPlaceScalarWhereInput[]
-    NOT?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
-    id?: IntFilter<"VisitedPlace"> | number
-    userId?: IntFilter<"VisitedPlace"> | number
-    destinationId?: IntFilter<"VisitedPlace"> | number
-    visitedAt?: DateTimeFilter<"VisitedPlace"> | Date | string
-    checkedIn?: BoolFilter<"VisitedPlace"> | boolean
-  }
-
-  export type ItineraryQueueUpsertWithWhereUniqueWithoutUserInput = {
+  export type ItineraryQueueCreateOrConnectWithoutUserInput = {
     where: ItineraryQueueWhereUniqueInput
-    update: XOR<ItineraryQueueUpdateWithoutUserInput, ItineraryQueueUncheckedUpdateWithoutUserInput>
     create: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput>
   }
 
-  export type ItineraryQueueUpdateWithWhereUniqueWithoutUserInput = {
-    where: ItineraryQueueWhereUniqueInput
-    data: XOR<ItineraryQueueUpdateWithoutUserInput, ItineraryQueueUncheckedUpdateWithoutUserInput>
+  export type ItineraryQueueCreateManyUserInputEnvelope = {
+    data: ItineraryQueueCreateManyUserInput | ItineraryQueueCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
-  export type ItineraryQueueUpdateManyWithWhereWithoutUserInput = {
-    where: ItineraryQueueScalarWhereInput
-    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyWithoutUserInput>
+  export type ReviewCreateWithoutUserInput = {
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    destination: DestinationCreateNestedOneWithoutReviewsInput
+    likes?: ReviewLikeCreateNestedManyWithoutReviewInput
   }
 
-  export type ItineraryQueueScalarWhereInput = {
-    AND?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
-    OR?: ItineraryQueueScalarWhereInput[]
-    NOT?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
-    id?: IntFilter<"ItineraryQueue"> | number
-    userId?: IntFilter<"ItineraryQueue"> | number
-    destinationId?: IntFilter<"ItineraryQueue"> | number
-    createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
+  export type ReviewUncheckedCreateWithoutUserInput = {
+    id?: number
+    destinationId: number
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    likes?: ReviewLikeUncheckedCreateNestedManyWithoutReviewInput
+  }
+
+  export type ReviewCreateOrConnectWithoutUserInput = {
+    where: ReviewWhereUniqueInput
+    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReviewCreateManyUserInputEnvelope = {
+    data: ReviewCreateManyUserInput | ReviewCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReviewLikeCreateWithoutUserInput = {
+    createdAt?: Date | string
+    review: ReviewCreateNestedOneWithoutLikesInput
+  }
+
+  export type ReviewLikeUncheckedCreateWithoutUserInput = {
+    id?: number
+    reviewId: number
+    createdAt?: Date | string
+  }
+
+  export type ReviewLikeCreateOrConnectWithoutUserInput = {
+    where: ReviewLikeWhereUniqueInput
+    create: XOR<ReviewLikeCreateWithoutUserInput, ReviewLikeUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReviewLikeCreateManyUserInputEnvelope = {
+    data: ReviewLikeCreateManyUserInput | ReviewLikeCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SavedDestinationCreateWithoutUserInput = {
+    createdAt?: Date | string
+    destination: DestinationCreateNestedOneWithoutSavedByInput
+  }
+
+  export type SavedDestinationUncheckedCreateWithoutUserInput = {
+    id?: number
+    destinationId: number
+    createdAt?: Date | string
+  }
+
+  export type SavedDestinationCreateOrConnectWithoutUserInput = {
+    where: SavedDestinationWhereUniqueInput
+    create: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput>
+  }
+
+  export type SavedDestinationCreateManyUserInputEnvelope = {
+    data: SavedDestinationCreateManyUserInput | SavedDestinationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type VisitedPlaceCreateWithoutUserInput = {
+    visitedAt?: Date | string
+    checkedIn?: boolean
+    destination: DestinationCreateNestedOneWithoutVisitedByInput
+  }
+
+  export type VisitedPlaceUncheckedCreateWithoutUserInput = {
+    id?: number
+    destinationId: number
+    visitedAt?: Date | string
+    checkedIn?: boolean
+  }
+
+  export type VisitedPlaceCreateOrConnectWithoutUserInput = {
+    where: VisitedPlaceWhereUniqueInput
+    create: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput>
+  }
+
+  export type VisitedPlaceCreateManyUserInputEnvelope = {
+    data: VisitedPlaceCreateManyUserInput | VisitedPlaceCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type DestinationUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -25114,16 +26565,10 @@ export namespace Prisma {
     name?: StringFilter<"Destination"> | string
     description?: StringFilter<"Destination"> | string
     address?: StringFilter<"Destination"> | string
-    addressStreet?: StringNullableFilter<"Destination"> | string | null
-    addressVillage?: StringNullableFilter<"Destination"> | string | null
-    addressDistrict?: StringNullableFilter<"Destination"> | string | null
-    addressCity?: StringNullableFilter<"Destination"> | string | null
-    addressProvince?: StringNullableFilter<"Destination"> | string | null
     contact?: StringNullableFilter<"Destination"> | string | null
     latitude?: FloatFilter<"Destination"> | number
     longitude?: FloatFilter<"Destination"> | number
     imageUrl?: StringNullableFilter<"Destination"> | string | null
-    ownerId?: IntNullableFilter<"Destination"> | number | null
     openTime?: StringNullableFilter<"Destination"> | string | null
     closeTime?: StringNullableFilter<"Destination"> | string | null
     ticketPrice?: IntNullableFilter<"Destination"> | number | null
@@ -25135,6 +26580,12 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Destination"> | Date | string | null
     createdAt?: DateTimeFilter<"Destination"> | Date | string
     updatedAt?: DateTimeFilter<"Destination"> | Date | string
+    ownerId?: IntNullableFilter<"Destination"> | number | null
+    addressCity?: StringNullableFilter<"Destination"> | string | null
+    addressDistrict?: StringNullableFilter<"Destination"> | string | null
+    addressProvince?: StringNullableFilter<"Destination"> | string | null
+    addressStreet?: StringNullableFilter<"Destination"> | string | null
+    addressVillage?: StringNullableFilter<"Destination"> | string | null
   }
 
   export type EventUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -25173,71 +26624,180 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Event"> | Date | string
   }
 
-  export type UserCreateWithoutDestinationsInput = {
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role | null
-    gender?: $Enums.Gender | null
-    domisili?: string | null
-    photo?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
-    rejectionReason?: string | null
-    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
-    events?: EventCreateNestedManyWithoutOwnerInput
+  export type ItineraryUpsertWithWhereUniqueWithoutUserInput = {
+    where: ItineraryWhereUniqueInput
+    update: XOR<ItineraryUpdateWithoutUserInput, ItineraryUncheckedUpdateWithoutUserInput>
+    create: XOR<ItineraryCreateWithoutUserInput, ItineraryUncheckedCreateWithoutUserInput>
   }
 
-  export type UserUncheckedCreateWithoutDestinationsInput = {
-    id?: number
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role | null
-    gender?: $Enums.Gender | null
-    domisili?: string | null
-    photo?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
-    rejectionReason?: string | null
-    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
-    events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+  export type ItineraryUpdateWithWhereUniqueWithoutUserInput = {
+    where: ItineraryWhereUniqueInput
+    data: XOR<ItineraryUpdateWithoutUserInput, ItineraryUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserCreateOrConnectWithoutDestinationsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
+  export type ItineraryUpdateManyWithWhereWithoutUserInput = {
+    where: ItineraryScalarWhereInput
+    data: XOR<ItineraryUpdateManyMutationInput, ItineraryUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type DestinationCategoryCreateWithoutDestinationInput = {
-    category: CategoryCreateNestedOneWithoutDestinationsInput
+  export type ItineraryScalarWhereInput = {
+    AND?: ItineraryScalarWhereInput | ItineraryScalarWhereInput[]
+    OR?: ItineraryScalarWhereInput[]
+    NOT?: ItineraryScalarWhereInput | ItineraryScalarWhereInput[]
+    id?: IntFilter<"Itinerary"> | number
+    userId?: IntFilter<"Itinerary"> | number
+    title?: StringFilter<"Itinerary"> | string
+    totalDistance?: FloatNullableFilter<"Itinerary"> | number | null
+    estimatedTime?: IntNullableFilter<"Itinerary"> | number | null
+    estimatedCost?: IntNullableFilter<"Itinerary"> | number | null
+    isAiGenerated?: BoolFilter<"Itinerary"> | boolean
+    createdAt?: DateTimeFilter<"Itinerary"> | Date | string
+    updatedAt?: DateTimeFilter<"Itinerary"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    startLabel?: StringNullableFilter<"Itinerary"> | string | null
+    startLat?: FloatNullableFilter<"Itinerary"> | number | null
+    startLng?: FloatNullableFilter<"Itinerary"> | number | null
+    startType?: EnumStartLocationTypeNullableFilter<"Itinerary"> | $Enums.StartLocationType | null
+    startedAt?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
+    status?: EnumItineraryStatusFilter<"Itinerary"> | $Enums.ItineraryStatus
+    tripDate?: DateTimeNullableFilter<"Itinerary"> | Date | string | null
   }
 
-  export type DestinationCategoryUncheckedCreateWithoutDestinationInput = {
-    id?: number
-    categoryId: number
+  export type ItineraryQueueUpsertWithWhereUniqueWithoutUserInput = {
+    where: ItineraryQueueWhereUniqueInput
+    update: XOR<ItineraryQueueUpdateWithoutUserInput, ItineraryQueueUncheckedUpdateWithoutUserInput>
+    create: XOR<ItineraryQueueCreateWithoutUserInput, ItineraryQueueUncheckedCreateWithoutUserInput>
   }
 
-  export type DestinationCategoryCreateOrConnectWithoutDestinationInput = {
-    where: DestinationCategoryWhereUniqueInput
-    create: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput>
+  export type ItineraryQueueUpdateWithWhereUniqueWithoutUserInput = {
+    where: ItineraryQueueWhereUniqueInput
+    data: XOR<ItineraryQueueUpdateWithoutUserInput, ItineraryQueueUncheckedUpdateWithoutUserInput>
   }
 
-  export type DestinationCategoryCreateManyDestinationInputEnvelope = {
-    data: DestinationCategoryCreateManyDestinationInput | DestinationCategoryCreateManyDestinationInput[]
-    skipDuplicates?: boolean
+  export type ItineraryQueueUpdateManyWithWhereWithoutUserInput = {
+    where: ItineraryQueueScalarWhereInput
+    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ItineraryQueueScalarWhereInput = {
+    AND?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+    OR?: ItineraryQueueScalarWhereInput[]
+    NOT?: ItineraryQueueScalarWhereInput | ItineraryQueueScalarWhereInput[]
+    id?: IntFilter<"ItineraryQueue"> | number
+    userId?: IntFilter<"ItineraryQueue"> | number
+    destinationId?: IntFilter<"ItineraryQueue"> | number
+    createdAt?: DateTimeFilter<"ItineraryQueue"> | Date | string
+  }
+
+  export type ReviewUpsertWithWhereUniqueWithoutUserInput = {
+    where: ReviewWhereUniqueInput
+    update: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
+    create: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReviewUpdateWithWhereUniqueWithoutUserInput = {
+    where: ReviewWhereUniqueInput
+    data: XOR<ReviewUpdateWithoutUserInput, ReviewUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ReviewUpdateManyWithWhereWithoutUserInput = {
+    where: ReviewScalarWhereInput
+    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ReviewScalarWhereInput = {
+    AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+    OR?: ReviewScalarWhereInput[]
+    NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+    id?: IntFilter<"Review"> | number
+    userId?: IntFilter<"Review"> | number
+    destinationId?: IntFilter<"Review"> | number
+    rating?: IntFilter<"Review"> | number
+    comment?: StringNullableFilter<"Review"> | string | null
+    photoUrl?: StringNullableFilter<"Review"> | string | null
+    videoUrl?: StringNullableFilter<"Review"> | string | null
+    helpfulCount?: IntFilter<"Review"> | number
+    createdAt?: DateTimeFilter<"Review"> | Date | string
+    updatedAt?: DateTimeFilter<"Review"> | Date | string
+  }
+
+  export type ReviewLikeUpsertWithWhereUniqueWithoutUserInput = {
+    where: ReviewLikeWhereUniqueInput
+    update: XOR<ReviewLikeUpdateWithoutUserInput, ReviewLikeUncheckedUpdateWithoutUserInput>
+    create: XOR<ReviewLikeCreateWithoutUserInput, ReviewLikeUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReviewLikeUpdateWithWhereUniqueWithoutUserInput = {
+    where: ReviewLikeWhereUniqueInput
+    data: XOR<ReviewLikeUpdateWithoutUserInput, ReviewLikeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ReviewLikeUpdateManyWithWhereWithoutUserInput = {
+    where: ReviewLikeScalarWhereInput
+    data: XOR<ReviewLikeUpdateManyMutationInput, ReviewLikeUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ReviewLikeScalarWhereInput = {
+    AND?: ReviewLikeScalarWhereInput | ReviewLikeScalarWhereInput[]
+    OR?: ReviewLikeScalarWhereInput[]
+    NOT?: ReviewLikeScalarWhereInput | ReviewLikeScalarWhereInput[]
+    id?: IntFilter<"ReviewLike"> | number
+    userId?: IntFilter<"ReviewLike"> | number
+    reviewId?: IntFilter<"ReviewLike"> | number
+    createdAt?: DateTimeFilter<"ReviewLike"> | Date | string
+  }
+
+  export type SavedDestinationUpsertWithWhereUniqueWithoutUserInput = {
+    where: SavedDestinationWhereUniqueInput
+    update: XOR<SavedDestinationUpdateWithoutUserInput, SavedDestinationUncheckedUpdateWithoutUserInput>
+    create: XOR<SavedDestinationCreateWithoutUserInput, SavedDestinationUncheckedCreateWithoutUserInput>
+  }
+
+  export type SavedDestinationUpdateWithWhereUniqueWithoutUserInput = {
+    where: SavedDestinationWhereUniqueInput
+    data: XOR<SavedDestinationUpdateWithoutUserInput, SavedDestinationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SavedDestinationUpdateManyWithWhereWithoutUserInput = {
+    where: SavedDestinationScalarWhereInput
+    data: XOR<SavedDestinationUpdateManyMutationInput, SavedDestinationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SavedDestinationScalarWhereInput = {
+    AND?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
+    OR?: SavedDestinationScalarWhereInput[]
+    NOT?: SavedDestinationScalarWhereInput | SavedDestinationScalarWhereInput[]
+    id?: IntFilter<"SavedDestination"> | number
+    userId?: IntFilter<"SavedDestination"> | number
+    destinationId?: IntFilter<"SavedDestination"> | number
+    createdAt?: DateTimeFilter<"SavedDestination"> | Date | string
+  }
+
+  export type VisitedPlaceUpsertWithWhereUniqueWithoutUserInput = {
+    where: VisitedPlaceWhereUniqueInput
+    update: XOR<VisitedPlaceUpdateWithoutUserInput, VisitedPlaceUncheckedUpdateWithoutUserInput>
+    create: XOR<VisitedPlaceCreateWithoutUserInput, VisitedPlaceUncheckedCreateWithoutUserInput>
+  }
+
+  export type VisitedPlaceUpdateWithWhereUniqueWithoutUserInput = {
+    where: VisitedPlaceWhereUniqueInput
+    data: XOR<VisitedPlaceUpdateWithoutUserInput, VisitedPlaceUncheckedUpdateWithoutUserInput>
+  }
+
+  export type VisitedPlaceUpdateManyWithWhereWithoutUserInput = {
+    where: VisitedPlaceScalarWhereInput
+    data: XOR<VisitedPlaceUpdateManyMutationInput, VisitedPlaceUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type VisitedPlaceScalarWhereInput = {
+    AND?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
+    OR?: VisitedPlaceScalarWhereInput[]
+    NOT?: VisitedPlaceScalarWhereInput | VisitedPlaceScalarWhereInput[]
+    id?: IntFilter<"VisitedPlace"> | number
+    userId?: IntFilter<"VisitedPlace"> | number
+    destinationId?: IntFilter<"VisitedPlace"> | number
+    visitedAt?: DateTimeFilter<"VisitedPlace"> | Date | string
+    checkedIn?: BoolFilter<"VisitedPlace"> | boolean
   }
 
   export type AiAnalysisCreateWithoutDestinationInput = {
@@ -25267,130 +26827,72 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SavedDestinationCreateWithoutDestinationInput = {
-    createdAt?: Date | string
-    user: UserCreateNestedOneWithoutSavedDestinationsInput
-  }
-
-  export type SavedDestinationUncheckedCreateWithoutDestinationInput = {
-    id?: number
-    userId: number
-    createdAt?: Date | string
-  }
-
-  export type SavedDestinationCreateOrConnectWithoutDestinationInput = {
-    where: SavedDestinationWhereUniqueInput
-    create: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput>
-  }
-
-  export type SavedDestinationCreateManyDestinationInputEnvelope = {
-    data: SavedDestinationCreateManyDestinationInput | SavedDestinationCreateManyDestinationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ItineraryItemCreateWithoutDestinationInput = {
-    order: number
-    visitTime?: string | null
-    visited?: boolean
-    visitedAt?: Date | string | null
-    createdAt?: Date | string
-    itinerary: ItineraryCreateNestedOneWithoutItemsInput
-  }
-
-  export type ItineraryItemUncheckedCreateWithoutDestinationInput = {
-    id?: number
-    itineraryId: number
-    order: number
-    visitTime?: string | null
-    visited?: boolean
-    visitedAt?: Date | string | null
-    createdAt?: Date | string
-  }
-
-  export type ItineraryItemCreateOrConnectWithoutDestinationInput = {
-    where: ItineraryItemWhereUniqueInput
-    create: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput>
-  }
-
-  export type ItineraryItemCreateManyDestinationInputEnvelope = {
-    data: ItineraryItemCreateManyDestinationInput | ItineraryItemCreateManyDestinationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ReviewCreateWithoutDestinationInput = {
-    rating: number
-    comment?: string | null
-    photoUrl?: string | null
-    videoUrl?: string | null
-    helpfulCount?: number
+  export type UserCreateWithoutDestinationsInput = {
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutReviewsInput
+    rejectionReason?: string | null
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
+    events?: EventCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
   }
 
-  export type ReviewUncheckedCreateWithoutDestinationInput = {
+  export type UserUncheckedCreateWithoutDestinationsInput = {
     id?: number
-    userId: number
-    rating: number
-    comment?: string | null
-    photoUrl?: string | null
-    videoUrl?: string | null
-    helpfulCount?: number
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    rejectionReason?: string | null
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
+    events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type ReviewCreateOrConnectWithoutDestinationInput = {
-    where: ReviewWhereUniqueInput
-    create: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput>
+  export type UserCreateOrConnectWithoutDestinationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
   }
 
-  export type ReviewCreateManyDestinationInputEnvelope = {
-    data: ReviewCreateManyDestinationInput | ReviewCreateManyDestinationInput[]
-    skipDuplicates?: boolean
+  export type DestinationCategoryCreateWithoutDestinationInput = {
+    category: CategoryCreateNestedOneWithoutDestinationsInput
   }
 
-  export type VisitedPlaceCreateWithoutDestinationInput = {
-    visitedAt?: Date | string
-    checkedIn?: boolean
-    user: UserCreateNestedOneWithoutVisitedPlacesInput
-  }
-
-  export type VisitedPlaceUncheckedCreateWithoutDestinationInput = {
+  export type DestinationCategoryUncheckedCreateWithoutDestinationInput = {
     id?: number
-    userId: number
-    visitedAt?: Date | string
-    checkedIn?: boolean
+    categoryId: number
   }
 
-  export type VisitedPlaceCreateOrConnectWithoutDestinationInput = {
-    where: VisitedPlaceWhereUniqueInput
-    create: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput>
+  export type DestinationCategoryCreateOrConnectWithoutDestinationInput = {
+    where: DestinationCategoryWhereUniqueInput
+    create: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput>
   }
 
-  export type VisitedPlaceCreateManyDestinationInputEnvelope = {
-    data: VisitedPlaceCreateManyDestinationInput | VisitedPlaceCreateManyDestinationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ItineraryQueueCreateWithoutDestinationInput = {
-    createdAt?: Date | string
-    user: UserCreateNestedOneWithoutItineraryQueueInput
-  }
-
-  export type ItineraryQueueUncheckedCreateWithoutDestinationInput = {
-    id?: number
-    userId: number
-    createdAt?: Date | string
-  }
-
-  export type ItineraryQueueCreateOrConnectWithoutDestinationInput = {
-    where: ItineraryQueueWhereUniqueInput
-    create: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput>
-  }
-
-  export type ItineraryQueueCreateManyDestinationInputEnvelope = {
-    data: ItineraryQueueCreateManyDestinationInput | ItineraryQueueCreateManyDestinationInput[]
+  export type DestinationCategoryCreateManyDestinationInputEnvelope = {
+    data: DestinationCategoryCreateManyDestinationInput | DestinationCategoryCreateManyDestinationInput[]
     skipDuplicates?: boolean
   }
 
@@ -25456,83 +26958,133 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutDestinationsInput = {
-    update: XOR<UserUpdateWithoutDestinationsInput, UserUncheckedUpdateWithoutDestinationsInput>
-    create: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
-    where?: UserWhereInput
+  export type ItineraryItemCreateWithoutDestinationInput = {
+    order: number
+    visitTime?: string | null
+    createdAt?: Date | string
+    visited?: boolean
+    visitedAt?: Date | string | null
+    itinerary: ItineraryCreateNestedOneWithoutItemsInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutDestinationsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutDestinationsInput, UserUncheckedUpdateWithoutDestinationsInput>
+  export type ItineraryItemUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    itineraryId: number
+    order: number
+    visitTime?: string | null
+    createdAt?: Date | string
+    visited?: boolean
+    visitedAt?: Date | string | null
   }
 
-  export type UserUpdateWithoutDestinationsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
-    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    domisili?: NullableStringFieldUpdateOperationsInput | string | null
-    photo?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
-    events?: EventUpdateManyWithoutOwnerNestedInput
+  export type ItineraryItemCreateOrConnectWithoutDestinationInput = {
+    where: ItineraryItemWhereUniqueInput
+    create: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput>
   }
 
-  export type UserUncheckedUpdateWithoutDestinationsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
-    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    domisili?: NullableStringFieldUpdateOperationsInput | string | null
-    photo?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
-    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
-    events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
+  export type ItineraryItemCreateManyDestinationInputEnvelope = {
+    data: ItineraryItemCreateManyDestinationInput | ItineraryItemCreateManyDestinationInput[]
+    skipDuplicates?: boolean
   }
 
-  export type DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput = {
-    where: DestinationCategoryWhereUniqueInput
-    update: XOR<DestinationCategoryUpdateWithoutDestinationInput, DestinationCategoryUncheckedUpdateWithoutDestinationInput>
-    create: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput>
+  export type ItineraryQueueCreateWithoutDestinationInput = {
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutItineraryQueueInput
   }
 
-  export type DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput = {
-    where: DestinationCategoryWhereUniqueInput
-    data: XOR<DestinationCategoryUpdateWithoutDestinationInput, DestinationCategoryUncheckedUpdateWithoutDestinationInput>
+  export type ItineraryQueueUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    userId: number
+    createdAt?: Date | string
   }
 
-  export type DestinationCategoryUpdateManyWithWhereWithoutDestinationInput = {
-    where: DestinationCategoryScalarWhereInput
-    data: XOR<DestinationCategoryUpdateManyMutationInput, DestinationCategoryUncheckedUpdateManyWithoutDestinationInput>
+  export type ItineraryQueueCreateOrConnectWithoutDestinationInput = {
+    where: ItineraryQueueWhereUniqueInput
+    create: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput>
   }
 
-  export type DestinationCategoryScalarWhereInput = {
-    AND?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
-    OR?: DestinationCategoryScalarWhereInput[]
-    NOT?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
-    id?: IntFilter<"DestinationCategory"> | number
-    destinationId?: IntFilter<"DestinationCategory"> | number
-    categoryId?: IntFilter<"DestinationCategory"> | number
+  export type ItineraryQueueCreateManyDestinationInputEnvelope = {
+    data: ItineraryQueueCreateManyDestinationInput | ItineraryQueueCreateManyDestinationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReviewCreateWithoutDestinationInput = {
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutReviewsInput
+    likes?: ReviewLikeCreateNestedManyWithoutReviewInput
+  }
+
+  export type ReviewUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    userId: number
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    likes?: ReviewLikeUncheckedCreateNestedManyWithoutReviewInput
+  }
+
+  export type ReviewCreateOrConnectWithoutDestinationInput = {
+    where: ReviewWhereUniqueInput
+    create: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type ReviewCreateManyDestinationInputEnvelope = {
+    data: ReviewCreateManyDestinationInput | ReviewCreateManyDestinationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SavedDestinationCreateWithoutDestinationInput = {
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutSavedDestinationsInput
+  }
+
+  export type SavedDestinationUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    userId: number
+    createdAt?: Date | string
+  }
+
+  export type SavedDestinationCreateOrConnectWithoutDestinationInput = {
+    where: SavedDestinationWhereUniqueInput
+    create: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type SavedDestinationCreateManyDestinationInputEnvelope = {
+    data: SavedDestinationCreateManyDestinationInput | SavedDestinationCreateManyDestinationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type VisitedPlaceCreateWithoutDestinationInput = {
+    visitedAt?: Date | string
+    checkedIn?: boolean
+    user: UserCreateNestedOneWithoutVisitedPlacesInput
+  }
+
+  export type VisitedPlaceUncheckedCreateWithoutDestinationInput = {
+    id?: number
+    userId: number
+    visitedAt?: Date | string
+    checkedIn?: boolean
+  }
+
+  export type VisitedPlaceCreateOrConnectWithoutDestinationInput = {
+    where: VisitedPlaceWhereUniqueInput
+    create: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type VisitedPlaceCreateManyDestinationInputEnvelope = {
+    data: VisitedPlaceCreateManyDestinationInput | VisitedPlaceCreateManyDestinationInput[]
+    skipDuplicates?: boolean
   }
 
   export type AiAnalysisUpsertWithWhereUniqueWithoutDestinationInput = {
@@ -25564,98 +27116,85 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"AiAnalysis"> | Date | string
   }
 
-  export type SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput = {
-    where: SavedDestinationWhereUniqueInput
-    update: XOR<SavedDestinationUpdateWithoutDestinationInput, SavedDestinationUncheckedUpdateWithoutDestinationInput>
-    create: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput>
+  export type UserUpsertWithoutDestinationsInput = {
+    update: XOR<UserUpdateWithoutDestinationsInput, UserUncheckedUpdateWithoutDestinationsInput>
+    create: XOR<UserCreateWithoutDestinationsInput, UserUncheckedCreateWithoutDestinationsInput>
+    where?: UserWhereInput
   }
 
-  export type SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput = {
-    where: SavedDestinationWhereUniqueInput
-    data: XOR<SavedDestinationUpdateWithoutDestinationInput, SavedDestinationUncheckedUpdateWithoutDestinationInput>
+  export type UserUpdateToOneWithWhereWithoutDestinationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDestinationsInput, UserUncheckedUpdateWithoutDestinationsInput>
   }
 
-  export type SavedDestinationUpdateManyWithWhereWithoutDestinationInput = {
-    where: SavedDestinationScalarWhereInput
-    data: XOR<SavedDestinationUpdateManyMutationInput, SavedDestinationUncheckedUpdateManyWithoutDestinationInput>
+  export type UserUpdateWithoutDestinationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
   }
 
-  export type ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput = {
-    where: ItineraryItemWhereUniqueInput
-    update: XOR<ItineraryItemUpdateWithoutDestinationInput, ItineraryItemUncheckedUpdateWithoutDestinationInput>
-    create: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput>
+  export type UserUncheckedUpdateWithoutDestinationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput = {
-    where: ItineraryItemWhereUniqueInput
-    data: XOR<ItineraryItemUpdateWithoutDestinationInput, ItineraryItemUncheckedUpdateWithoutDestinationInput>
+  export type DestinationCategoryUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: DestinationCategoryWhereUniqueInput
+    update: XOR<DestinationCategoryUpdateWithoutDestinationInput, DestinationCategoryUncheckedUpdateWithoutDestinationInput>
+    create: XOR<DestinationCategoryCreateWithoutDestinationInput, DestinationCategoryUncheckedCreateWithoutDestinationInput>
   }
 
-  export type ItineraryItemUpdateManyWithWhereWithoutDestinationInput = {
-    where: ItineraryItemScalarWhereInput
-    data: XOR<ItineraryItemUpdateManyMutationInput, ItineraryItemUncheckedUpdateManyWithoutDestinationInput>
+  export type DestinationCategoryUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: DestinationCategoryWhereUniqueInput
+    data: XOR<DestinationCategoryUpdateWithoutDestinationInput, DestinationCategoryUncheckedUpdateWithoutDestinationInput>
   }
 
-  export type ItineraryItemScalarWhereInput = {
-    AND?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
-    OR?: ItineraryItemScalarWhereInput[]
-    NOT?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
-    id?: IntFilter<"ItineraryItem"> | number
-    itineraryId?: IntFilter<"ItineraryItem"> | number
-    destinationId?: IntFilter<"ItineraryItem"> | number
-    order?: IntFilter<"ItineraryItem"> | number
-    visitTime?: StringNullableFilter<"ItineraryItem"> | string | null
-    visited?: BoolFilter<"ItineraryItem"> | boolean
-    visitedAt?: DateTimeNullableFilter<"ItineraryItem"> | Date | string | null
-    createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
+  export type DestinationCategoryUpdateManyWithWhereWithoutDestinationInput = {
+    where: DestinationCategoryScalarWhereInput
+    data: XOR<DestinationCategoryUpdateManyMutationInput, DestinationCategoryUncheckedUpdateManyWithoutDestinationInput>
   }
 
-  export type ReviewUpsertWithWhereUniqueWithoutDestinationInput = {
-    where: ReviewWhereUniqueInput
-    update: XOR<ReviewUpdateWithoutDestinationInput, ReviewUncheckedUpdateWithoutDestinationInput>
-    create: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput>
-  }
-
-  export type ReviewUpdateWithWhereUniqueWithoutDestinationInput = {
-    where: ReviewWhereUniqueInput
-    data: XOR<ReviewUpdateWithoutDestinationInput, ReviewUncheckedUpdateWithoutDestinationInput>
-  }
-
-  export type ReviewUpdateManyWithWhereWithoutDestinationInput = {
-    where: ReviewScalarWhereInput
-    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutDestinationInput>
-  }
-
-  export type VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput = {
-    where: VisitedPlaceWhereUniqueInput
-    update: XOR<VisitedPlaceUpdateWithoutDestinationInput, VisitedPlaceUncheckedUpdateWithoutDestinationInput>
-    create: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput>
-  }
-
-  export type VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput = {
-    where: VisitedPlaceWhereUniqueInput
-    data: XOR<VisitedPlaceUpdateWithoutDestinationInput, VisitedPlaceUncheckedUpdateWithoutDestinationInput>
-  }
-
-  export type VisitedPlaceUpdateManyWithWhereWithoutDestinationInput = {
-    where: VisitedPlaceScalarWhereInput
-    data: XOR<VisitedPlaceUpdateManyMutationInput, VisitedPlaceUncheckedUpdateManyWithoutDestinationInput>
-  }
-
-  export type ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput = {
-    where: ItineraryQueueWhereUniqueInput
-    update: XOR<ItineraryQueueUpdateWithoutDestinationInput, ItineraryQueueUncheckedUpdateWithoutDestinationInput>
-    create: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput>
-  }
-
-  export type ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput = {
-    where: ItineraryQueueWhereUniqueInput
-    data: XOR<ItineraryQueueUpdateWithoutDestinationInput, ItineraryQueueUncheckedUpdateWithoutDestinationInput>
-  }
-
-  export type ItineraryQueueUpdateManyWithWhereWithoutDestinationInput = {
-    where: ItineraryQueueScalarWhereInput
-    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyWithoutDestinationInput>
+  export type DestinationCategoryScalarWhereInput = {
+    AND?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
+    OR?: DestinationCategoryScalarWhereInput[]
+    NOT?: DestinationCategoryScalarWhereInput | DestinationCategoryScalarWhereInput[]
+    id?: IntFilter<"DestinationCategory"> | number
+    destinationId?: IntFilter<"DestinationCategory"> | number
+    categoryId?: IntFilter<"DestinationCategory"> | number
   }
 
   export type DestinationViewUpsertWithWhereUniqueWithoutDestinationInput = {
@@ -25700,23 +27239,98 @@ export namespace Prisma {
     data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutDestinationInput>
   }
 
-  export type DestinationCategoryCreateWithoutCategoryInput = {
-    destination: DestinationCreateNestedOneWithoutCategoriesInput
+  export type ItineraryItemUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: ItineraryItemWhereUniqueInput
+    update: XOR<ItineraryItemUpdateWithoutDestinationInput, ItineraryItemUncheckedUpdateWithoutDestinationInput>
+    create: XOR<ItineraryItemCreateWithoutDestinationInput, ItineraryItemUncheckedCreateWithoutDestinationInput>
   }
 
-  export type DestinationCategoryUncheckedCreateWithoutCategoryInput = {
-    id?: number
-    destinationId: number
+  export type ItineraryItemUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: ItineraryItemWhereUniqueInput
+    data: XOR<ItineraryItemUpdateWithoutDestinationInput, ItineraryItemUncheckedUpdateWithoutDestinationInput>
   }
 
-  export type DestinationCategoryCreateOrConnectWithoutCategoryInput = {
-    where: DestinationCategoryWhereUniqueInput
-    create: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput>
+  export type ItineraryItemUpdateManyWithWhereWithoutDestinationInput = {
+    where: ItineraryItemScalarWhereInput
+    data: XOR<ItineraryItemUpdateManyMutationInput, ItineraryItemUncheckedUpdateManyWithoutDestinationInput>
   }
 
-  export type DestinationCategoryCreateManyCategoryInputEnvelope = {
-    data: DestinationCategoryCreateManyCategoryInput | DestinationCategoryCreateManyCategoryInput[]
-    skipDuplicates?: boolean
+  export type ItineraryItemScalarWhereInput = {
+    AND?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
+    OR?: ItineraryItemScalarWhereInput[]
+    NOT?: ItineraryItemScalarWhereInput | ItineraryItemScalarWhereInput[]
+    id?: IntFilter<"ItineraryItem"> | number
+    itineraryId?: IntFilter<"ItineraryItem"> | number
+    destinationId?: IntFilter<"ItineraryItem"> | number
+    order?: IntFilter<"ItineraryItem"> | number
+    visitTime?: StringNullableFilter<"ItineraryItem"> | string | null
+    createdAt?: DateTimeFilter<"ItineraryItem"> | Date | string
+    visited?: BoolFilter<"ItineraryItem"> | boolean
+    visitedAt?: DateTimeNullableFilter<"ItineraryItem"> | Date | string | null
+  }
+
+  export type ItineraryQueueUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: ItineraryQueueWhereUniqueInput
+    update: XOR<ItineraryQueueUpdateWithoutDestinationInput, ItineraryQueueUncheckedUpdateWithoutDestinationInput>
+    create: XOR<ItineraryQueueCreateWithoutDestinationInput, ItineraryQueueUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type ItineraryQueueUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: ItineraryQueueWhereUniqueInput
+    data: XOR<ItineraryQueueUpdateWithoutDestinationInput, ItineraryQueueUncheckedUpdateWithoutDestinationInput>
+  }
+
+  export type ItineraryQueueUpdateManyWithWhereWithoutDestinationInput = {
+    where: ItineraryQueueScalarWhereInput
+    data: XOR<ItineraryQueueUpdateManyMutationInput, ItineraryQueueUncheckedUpdateManyWithoutDestinationInput>
+  }
+
+  export type ReviewUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: ReviewWhereUniqueInput
+    update: XOR<ReviewUpdateWithoutDestinationInput, ReviewUncheckedUpdateWithoutDestinationInput>
+    create: XOR<ReviewCreateWithoutDestinationInput, ReviewUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type ReviewUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: ReviewWhereUniqueInput
+    data: XOR<ReviewUpdateWithoutDestinationInput, ReviewUncheckedUpdateWithoutDestinationInput>
+  }
+
+  export type ReviewUpdateManyWithWhereWithoutDestinationInput = {
+    where: ReviewScalarWhereInput
+    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutDestinationInput>
+  }
+
+  export type SavedDestinationUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: SavedDestinationWhereUniqueInput
+    update: XOR<SavedDestinationUpdateWithoutDestinationInput, SavedDestinationUncheckedUpdateWithoutDestinationInput>
+    create: XOR<SavedDestinationCreateWithoutDestinationInput, SavedDestinationUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type SavedDestinationUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: SavedDestinationWhereUniqueInput
+    data: XOR<SavedDestinationUpdateWithoutDestinationInput, SavedDestinationUncheckedUpdateWithoutDestinationInput>
+  }
+
+  export type SavedDestinationUpdateManyWithWhereWithoutDestinationInput = {
+    where: SavedDestinationScalarWhereInput
+    data: XOR<SavedDestinationUpdateManyMutationInput, SavedDestinationUncheckedUpdateManyWithoutDestinationInput>
+  }
+
+  export type VisitedPlaceUpsertWithWhereUniqueWithoutDestinationInput = {
+    where: VisitedPlaceWhereUniqueInput
+    update: XOR<VisitedPlaceUpdateWithoutDestinationInput, VisitedPlaceUncheckedUpdateWithoutDestinationInput>
+    create: XOR<VisitedPlaceCreateWithoutDestinationInput, VisitedPlaceUncheckedCreateWithoutDestinationInput>
+  }
+
+  export type VisitedPlaceUpdateWithWhereUniqueWithoutDestinationInput = {
+    where: VisitedPlaceWhereUniqueInput
+    data: XOR<VisitedPlaceUpdateWithoutDestinationInput, VisitedPlaceUncheckedUpdateWithoutDestinationInput>
+  }
+
+  export type VisitedPlaceUpdateManyWithWhereWithoutDestinationInput = {
+    where: VisitedPlaceScalarWhereInput
+    data: XOR<VisitedPlaceUpdateManyMutationInput, VisitedPlaceUncheckedUpdateManyWithoutDestinationInput>
   }
 
   export type CategoryKeywordCreateWithoutCategoryInput = {
@@ -25740,20 +27354,23 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput = {
+  export type DestinationCategoryCreateWithoutCategoryInput = {
+    destination: DestinationCreateNestedOneWithoutCategoriesInput
+  }
+
+  export type DestinationCategoryUncheckedCreateWithoutCategoryInput = {
+    id?: number
+    destinationId: number
+  }
+
+  export type DestinationCategoryCreateOrConnectWithoutCategoryInput = {
     where: DestinationCategoryWhereUniqueInput
-    update: XOR<DestinationCategoryUpdateWithoutCategoryInput, DestinationCategoryUncheckedUpdateWithoutCategoryInput>
     create: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput>
   }
 
-  export type DestinationCategoryUpdateWithWhereUniqueWithoutCategoryInput = {
-    where: DestinationCategoryWhereUniqueInput
-    data: XOR<DestinationCategoryUpdateWithoutCategoryInput, DestinationCategoryUncheckedUpdateWithoutCategoryInput>
-  }
-
-  export type DestinationCategoryUpdateManyWithWhereWithoutCategoryInput = {
-    where: DestinationCategoryScalarWhereInput
-    data: XOR<DestinationCategoryUpdateManyMutationInput, DestinationCategoryUncheckedUpdateManyWithoutCategoryInput>
+  export type DestinationCategoryCreateManyCategoryInputEnvelope = {
+    data: DestinationCategoryCreateManyCategoryInput | DestinationCategoryCreateManyCategoryInput[]
+    skipDuplicates?: boolean
   }
 
   export type CategoryKeywordUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -25782,80 +27399,20 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CategoryKeyword"> | Date | string
   }
 
-  export type DestinationCreateWithoutCategoriesInput = {
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner?: UserCreateNestedOneWithoutDestinationsInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewCreateNestedManyWithoutDestinationInput
-    events?: EventCreateNestedManyWithoutDestinationInput
+  export type DestinationCategoryUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: DestinationCategoryWhereUniqueInput
+    update: XOR<DestinationCategoryUpdateWithoutCategoryInput, DestinationCategoryUncheckedUpdateWithoutCategoryInput>
+    create: XOR<DestinationCategoryCreateWithoutCategoryInput, DestinationCategoryUncheckedCreateWithoutCategoryInput>
   }
 
-  export type DestinationUncheckedCreateWithoutCategoriesInput = {
-    id?: number
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    ownerId?: number | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
-    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+  export type DestinationCategoryUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: DestinationCategoryWhereUniqueInput
+    data: XOR<DestinationCategoryUpdateWithoutCategoryInput, DestinationCategoryUncheckedUpdateWithoutCategoryInput>
   }
 
-  export type DestinationCreateOrConnectWithoutCategoriesInput = {
-    where: DestinationWhereUniqueInput
-    create: XOR<DestinationCreateWithoutCategoriesInput, DestinationUncheckedCreateWithoutCategoriesInput>
+  export type DestinationCategoryUpdateManyWithWhereWithoutCategoryInput = {
+    where: DestinationCategoryScalarWhereInput
+    data: XOR<DestinationCategoryUpdateManyMutationInput, DestinationCategoryUncheckedUpdateManyWithoutCategoryInput>
   }
 
   export type CategoryCreateWithoutDestinationsInput = {
@@ -25876,86 +27433,80 @@ export namespace Prisma {
     create: XOR<CategoryCreateWithoutDestinationsInput, CategoryUncheckedCreateWithoutDestinationsInput>
   }
 
-  export type DestinationUpsertWithoutCategoriesInput = {
-    update: XOR<DestinationUpdateWithoutCategoriesInput, DestinationUncheckedUpdateWithoutCategoriesInput>
+  export type DestinationCreateWithoutCategoriesInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    owner?: UserCreateNestedOneWithoutDestinationsInput
+    views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutCategoriesInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutCategoriesInput = {
+    where: DestinationWhereUniqueInput
     create: XOR<DestinationCreateWithoutCategoriesInput, DestinationUncheckedCreateWithoutCategoriesInput>
-    where?: DestinationWhereInput
-  }
-
-  export type DestinationUpdateToOneWithWhereWithoutCategoriesInput = {
-    where?: DestinationWhereInput
-    data: XOR<DestinationUpdateWithoutCategoriesInput, DestinationUncheckedUpdateWithoutCategoriesInput>
-  }
-
-  export type DestinationUpdateWithoutCategoriesInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneWithoutDestinationsNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
-    events?: EventUpdateManyWithoutDestinationNestedInput
-  }
-
-  export type DestinationUncheckedUpdateWithoutCategoriesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
-    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type CategoryUpsertWithoutDestinationsInput = {
@@ -25980,6 +27531,88 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     keywords?: CategoryKeywordUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type DestinationUpsertWithoutCategoriesInput = {
+    update: XOR<DestinationUpdateWithoutCategoriesInput, DestinationUncheckedUpdateWithoutCategoriesInput>
+    create: XOR<DestinationCreateWithoutCategoriesInput, DestinationUncheckedCreateWithoutCategoriesInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutCategoriesInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutCategoriesInput, DestinationUncheckedUpdateWithoutCategoriesInput>
+  }
+
+  export type DestinationUpdateWithoutCategoriesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
+    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutCategoriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type CategoryCreateWithoutKeywordsInput = {
@@ -26028,11 +27661,6 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
@@ -26048,15 +27676,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutAiAnalysesInput = {
@@ -26064,16 +27697,10 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
     imageUrl?: string | null
-    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -26085,14 +27712,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
     categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutAiAnalysesInput = {
@@ -26115,11 +27748,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -26135,15 +27763,20 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutAiAnalysesInput = {
@@ -26151,16 +27784,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -26172,14 +27799,96 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
     categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationCreateWithoutSavedByInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    owner?: UserCreateNestedOneWithoutDestinationsInput
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutSavedByInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutSavedByInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutSavedByInput, DestinationUncheckedCreateWithoutSavedByInput>
   }
 
   export type UserCreateWithoutSavedDestinationsInput = {
@@ -26192,15 +27901,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    itineraries?: ItineraryCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationCreateNestedManyWithoutOwnerInput
     events?: EventCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSavedDestinationsInput = {
@@ -26214,15 +27924,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
     events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSavedDestinationsInput = {
@@ -26230,80 +27941,86 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutSavedDestinationsInput, UserUncheckedCreateWithoutSavedDestinationsInput>
   }
 
-  export type DestinationCreateWithoutSavedByInput = {
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner?: UserCreateNestedOneWithoutDestinationsInput
-    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewCreateNestedManyWithoutDestinationInput
-    events?: EventCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationUncheckedCreateWithoutSavedByInput = {
-    id?: number
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    ownerId?: number | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
-    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationCreateOrConnectWithoutSavedByInput = {
-    where: DestinationWhereUniqueInput
+  export type DestinationUpsertWithoutSavedByInput = {
+    update: XOR<DestinationUpdateWithoutSavedByInput, DestinationUncheckedUpdateWithoutSavedByInput>
     create: XOR<DestinationCreateWithoutSavedByInput, DestinationUncheckedCreateWithoutSavedByInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutSavedByInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutSavedByInput, DestinationUncheckedUpdateWithoutSavedByInput>
+  }
+
+  export type DestinationUpdateWithoutSavedByInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutSavedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserUpsertWithoutSavedDestinationsInput = {
@@ -26327,15 +28044,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUpdateManyWithoutOwnerNestedInput
     events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSavedDestinationsInput = {
@@ -26349,97 +28067,92 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
     events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type DestinationUpsertWithoutSavedByInput = {
-    update: XOR<DestinationUpdateWithoutSavedByInput, DestinationUncheckedUpdateWithoutSavedByInput>
-    create: XOR<DestinationCreateWithoutSavedByInput, DestinationUncheckedCreateWithoutSavedByInput>
-    where?: DestinationWhereInput
+  export type DestinationCreateWithoutItineraryQueueInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    owner?: UserCreateNestedOneWithoutDestinationsInput
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
   }
 
-  export type DestinationUpdateToOneWithWhereWithoutSavedByInput = {
-    where?: DestinationWhereInput
-    data: XOR<DestinationUpdateWithoutSavedByInput, DestinationUncheckedUpdateWithoutSavedByInput>
+  export type DestinationUncheckedCreateWithoutItineraryQueueInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
   }
 
-  export type DestinationUpdateWithoutSavedByInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneWithoutDestinationsNestedInput
-    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
-    events?: EventUpdateManyWithoutDestinationNestedInput
-  }
-
-  export type DestinationUncheckedUpdateWithoutSavedByInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
-    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+  export type DestinationCreateOrConnectWithoutItineraryQueueInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutItineraryQueueInput, DestinationUncheckedCreateWithoutItineraryQueueInput>
   }
 
   export type UserCreateWithoutItineraryQueueInput = {
@@ -26452,15 +28165,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationCreateNestedManyWithoutOwnerInput
     events?: EventCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutItineraryQueueInput = {
@@ -26474,15 +28188,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
     events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutItineraryQueueInput = {
@@ -26490,80 +28205,86 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutItineraryQueueInput, UserUncheckedCreateWithoutItineraryQueueInput>
   }
 
-  export type DestinationCreateWithoutItineraryQueueInput = {
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner?: UserCreateNestedOneWithoutDestinationsInput
-    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewCreateNestedManyWithoutDestinationInput
-    events?: EventCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationUncheckedCreateWithoutItineraryQueueInput = {
-    id?: number
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    ownerId?: number | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
-    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationCreateOrConnectWithoutItineraryQueueInput = {
-    where: DestinationWhereUniqueInput
+  export type DestinationUpsertWithoutItineraryQueueInput = {
+    update: XOR<DestinationUpdateWithoutItineraryQueueInput, DestinationUncheckedUpdateWithoutItineraryQueueInput>
     create: XOR<DestinationCreateWithoutItineraryQueueInput, DestinationUncheckedCreateWithoutItineraryQueueInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutItineraryQueueInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutItineraryQueueInput, DestinationUncheckedUpdateWithoutItineraryQueueInput>
+  }
+
+  export type DestinationUpdateWithoutItineraryQueueInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutItineraryQueueInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserUpsertWithoutItineraryQueueInput = {
@@ -26587,15 +28308,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUpdateManyWithoutOwnerNestedInput
     events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutItineraryQueueInput = {
@@ -26609,97 +28331,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
     events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
-  }
-
-  export type DestinationUpsertWithoutItineraryQueueInput = {
-    update: XOR<DestinationUpdateWithoutItineraryQueueInput, DestinationUncheckedUpdateWithoutItineraryQueueInput>
-    create: XOR<DestinationCreateWithoutItineraryQueueInput, DestinationUncheckedCreateWithoutItineraryQueueInput>
-    where?: DestinationWhereInput
-  }
-
-  export type DestinationUpdateToOneWithWhereWithoutItineraryQueueInput = {
-    where?: DestinationWhereInput
-    data: XOR<DestinationUpdateWithoutItineraryQueueInput, DestinationUncheckedUpdateWithoutItineraryQueueInput>
-  }
-
-  export type DestinationUpdateWithoutItineraryQueueInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneWithoutDestinationsNestedInput
-    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
-    events?: EventUpdateManyWithoutDestinationNestedInput
-  }
-
-  export type DestinationUncheckedUpdateWithoutItineraryQueueInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
-    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutItinerariesInput = {
@@ -26712,15 +28353,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationCreateNestedManyWithoutOwnerInput
     events?: EventCreateNestedManyWithoutOwnerInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutItinerariesInput = {
@@ -26734,15 +28376,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
     events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutItinerariesInput = {
@@ -26753,9 +28396,9 @@ export namespace Prisma {
   export type ItineraryItemCreateWithoutItineraryInput = {
     order: number
     visitTime?: string | null
+    createdAt?: Date | string
     visited?: boolean
     visitedAt?: Date | string | null
-    createdAt?: Date | string
     destination: DestinationCreateNestedOneWithoutItineraryItemsInput
   }
 
@@ -26764,9 +28407,9 @@ export namespace Prisma {
     destinationId: number
     order: number
     visitTime?: string | null
+    createdAt?: Date | string
     visited?: boolean
     visitedAt?: Date | string | null
-    createdAt?: Date | string
   }
 
   export type ItineraryItemCreateOrConnectWithoutItineraryInput = {
@@ -26800,15 +28443,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUpdateManyWithoutOwnerNestedInput
     events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutItinerariesInput = {
@@ -26822,15 +28466,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
     events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ItineraryItemUpsertWithWhereUniqueWithoutItineraryInput = {
@@ -26849,59 +28494,10 @@ export namespace Prisma {
     data: XOR<ItineraryItemUpdateManyMutationInput, ItineraryItemUncheckedUpdateManyWithoutItineraryInput>
   }
 
-  export type ItineraryCreateWithoutItemsInput = {
-    title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
-    totalDistance?: number | null
-    estimatedTime?: number | null
-    estimatedCost?: number | null
-    isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutItinerariesInput
-  }
-
-  export type ItineraryUncheckedCreateWithoutItemsInput = {
-    id?: number
-    userId: number
-    title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
-    totalDistance?: number | null
-    estimatedTime?: number | null
-    estimatedCost?: number | null
-    isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ItineraryCreateOrConnectWithoutItemsInput = {
-    where: ItineraryWhereUniqueInput
-    create: XOR<ItineraryCreateWithoutItemsInput, ItineraryUncheckedCreateWithoutItemsInput>
-  }
-
   export type DestinationCreateWithoutItineraryItemsInput = {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
@@ -26917,15 +28513,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     views?: DestinationViewCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutItineraryItemsInput = {
@@ -26933,16 +28534,10 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
     imageUrl?: string | null
-    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -26954,14 +28549,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutItineraryItemsInput = {
@@ -26969,54 +28570,48 @@ export namespace Prisma {
     create: XOR<DestinationCreateWithoutItineraryItemsInput, DestinationUncheckedCreateWithoutItineraryItemsInput>
   }
 
-  export type ItineraryUpsertWithoutItemsInput = {
-    update: XOR<ItineraryUpdateWithoutItemsInput, ItineraryUncheckedUpdateWithoutItemsInput>
+  export type ItineraryCreateWithoutItemsInput = {
+    title?: string
+    totalDistance?: number | null
+    estimatedTime?: number | null
+    estimatedCost?: number | null
+    isAiGenerated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
+    user: UserCreateNestedOneWithoutItinerariesInput
+  }
+
+  export type ItineraryUncheckedCreateWithoutItemsInput = {
+    id?: number
+    userId: number
+    title?: string
+    totalDistance?: number | null
+    estimatedTime?: number | null
+    estimatedCost?: number | null
+    isAiGenerated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
+  }
+
+  export type ItineraryCreateOrConnectWithoutItemsInput = {
+    where: ItineraryWhereUniqueInput
     create: XOR<ItineraryCreateWithoutItemsInput, ItineraryUncheckedCreateWithoutItemsInput>
-    where?: ItineraryWhereInput
-  }
-
-  export type ItineraryUpdateToOneWithWhereWithoutItemsInput = {
-    where?: ItineraryWhereInput
-    data: XOR<ItineraryUpdateWithoutItemsInput, ItineraryUncheckedUpdateWithoutItemsInput>
-  }
-
-  export type ItineraryUpdateWithoutItemsInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
-    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
-    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
-    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
-    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutItinerariesNestedInput
-  }
-
-  export type ItineraryUncheckedUpdateWithoutItemsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
-    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
-    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
-    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
-    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DestinationUpsertWithoutItineraryItemsInput = {
@@ -27034,11 +28629,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -27054,15 +28644,20 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutItineraryItemsInput = {
@@ -27070,16 +28665,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27091,14 +28680,146 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type ItineraryUpsertWithoutItemsInput = {
+    update: XOR<ItineraryUpdateWithoutItemsInput, ItineraryUncheckedUpdateWithoutItemsInput>
+    create: XOR<ItineraryCreateWithoutItemsInput, ItineraryUncheckedCreateWithoutItemsInput>
+    where?: ItineraryWhereInput
+  }
+
+  export type ItineraryUpdateToOneWithWhereWithoutItemsInput = {
+    where?: ItineraryWhereInput
+    data: XOR<ItineraryUpdateWithoutItemsInput, ItineraryUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type ItineraryUpdateWithoutItemsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
+    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutItinerariesNestedInput
+  }
+
+  export type ItineraryUncheckedUpdateWithoutItemsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
+    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DestinationCreateWithoutReviewsInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    owner?: UserCreateNestedOneWithoutDestinationsInput
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutReviewsInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutReviewsInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutReviewsInput, DestinationUncheckedCreateWithoutReviewsInput>
   }
 
   export type UserCreateWithoutReviewsInput = {
@@ -27111,15 +28832,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationCreateNestedManyWithoutOwnerInput
     events?: EventCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -27133,15 +28855,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
     events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -27149,80 +28872,107 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
   }
 
-  export type DestinationCreateWithoutReviewsInput = {
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
+  export type ReviewLikeCreateWithoutReviewInput = {
     createdAt?: Date | string
-    updatedAt?: Date | string
-    owner?: UserCreateNestedOneWithoutDestinationsInput
-    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewCreateNestedManyWithoutDestinationInput
-    events?: EventCreateNestedManyWithoutDestinationInput
+    user: UserCreateNestedOneWithoutReviewLikesInput
   }
 
-  export type DestinationUncheckedCreateWithoutReviewsInput = {
+  export type ReviewLikeUncheckedCreateWithoutReviewInput = {
     id?: number
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    ownerId?: number | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
+    userId: number
     createdAt?: Date | string
-    updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
-    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
   }
 
-  export type DestinationCreateOrConnectWithoutReviewsInput = {
-    where: DestinationWhereUniqueInput
+  export type ReviewLikeCreateOrConnectWithoutReviewInput = {
+    where: ReviewLikeWhereUniqueInput
+    create: XOR<ReviewLikeCreateWithoutReviewInput, ReviewLikeUncheckedCreateWithoutReviewInput>
+  }
+
+  export type ReviewLikeCreateManyReviewInputEnvelope = {
+    data: ReviewLikeCreateManyReviewInput | ReviewLikeCreateManyReviewInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DestinationUpsertWithoutReviewsInput = {
+    update: XOR<DestinationUpdateWithoutReviewsInput, DestinationUncheckedUpdateWithoutReviewsInput>
     create: XOR<DestinationCreateWithoutReviewsInput, DestinationUncheckedCreateWithoutReviewsInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutReviewsInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutReviewsInput, DestinationUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type DestinationUpdateWithoutReviewsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutReviewsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserUpsertWithoutReviewsInput = {
@@ -27246,15 +28996,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUpdateManyWithoutOwnerNestedInput
     events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -27268,97 +29019,280 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
     events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type DestinationUpsertWithoutReviewsInput = {
-    update: XOR<DestinationUpdateWithoutReviewsInput, DestinationUncheckedUpdateWithoutReviewsInput>
-    create: XOR<DestinationCreateWithoutReviewsInput, DestinationUncheckedCreateWithoutReviewsInput>
-    where?: DestinationWhereInput
+  export type ReviewLikeUpsertWithWhereUniqueWithoutReviewInput = {
+    where: ReviewLikeWhereUniqueInput
+    update: XOR<ReviewLikeUpdateWithoutReviewInput, ReviewLikeUncheckedUpdateWithoutReviewInput>
+    create: XOR<ReviewLikeCreateWithoutReviewInput, ReviewLikeUncheckedCreateWithoutReviewInput>
   }
 
-  export type DestinationUpdateToOneWithWhereWithoutReviewsInput = {
-    where?: DestinationWhereInput
-    data: XOR<DestinationUpdateWithoutReviewsInput, DestinationUncheckedUpdateWithoutReviewsInput>
+  export type ReviewLikeUpdateWithWhereUniqueWithoutReviewInput = {
+    where: ReviewLikeWhereUniqueInput
+    data: XOR<ReviewLikeUpdateWithoutReviewInput, ReviewLikeUncheckedUpdateWithoutReviewInput>
   }
 
-  export type DestinationUpdateWithoutReviewsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  export type ReviewLikeUpdateManyWithWhereWithoutReviewInput = {
+    where: ReviewLikeScalarWhereInput
+    data: XOR<ReviewLikeUpdateManyMutationInput, ReviewLikeUncheckedUpdateManyWithoutReviewInput>
+  }
+
+  export type ReviewCreateWithoutLikesInput = {
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    destination: DestinationCreateNestedOneWithoutReviewsInput
+    user: UserCreateNestedOneWithoutReviewsInput
+  }
+
+  export type ReviewUncheckedCreateWithoutLikesInput = {
+    id?: number
+    userId: number
+    destinationId: number
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReviewCreateOrConnectWithoutLikesInput = {
+    where: ReviewWhereUniqueInput
+    create: XOR<ReviewCreateWithoutLikesInput, ReviewUncheckedCreateWithoutLikesInput>
+  }
+
+  export type UserCreateWithoutReviewLikesInput = {
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    rejectionReason?: string | null
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
+    destinations?: DestinationCreateNestedManyWithoutOwnerInput
+    events?: EventCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewLikesInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role | null
+    gender?: $Enums.Gender | null
+    domisili?: string | null
+    photo?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    rejectionReason?: string | null
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
+    destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
+    events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewLikesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReviewLikesInput, UserUncheckedCreateWithoutReviewLikesInput>
+  }
+
+  export type ReviewUpsertWithoutLikesInput = {
+    update: XOR<ReviewUpdateWithoutLikesInput, ReviewUncheckedUpdateWithoutLikesInput>
+    create: XOR<ReviewCreateWithoutLikesInput, ReviewUncheckedCreateWithoutLikesInput>
+    where?: ReviewWhereInput
+  }
+
+  export type ReviewUpdateToOneWithWhereWithoutLikesInput = {
+    where?: ReviewWhereInput
+    data: XOR<ReviewUpdateWithoutLikesInput, ReviewUncheckedUpdateWithoutLikesInput>
+  }
+
+  export type ReviewUpdateWithoutLikesInput = {
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneWithoutDestinationsNestedInput
-    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
-    events?: EventUpdateManyWithoutDestinationNestedInput
+    destination?: DestinationUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
   }
 
-  export type DestinationUncheckedUpdateWithoutReviewsInput = {
+  export type ReviewUncheckedUpdateWithoutLikesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutReviewLikesInput = {
+    update: XOR<UserUpdateWithoutReviewLikesInput, UserUncheckedUpdateWithoutReviewLikesInput>
+    create: XOR<UserCreateWithoutReviewLikesInput, UserUncheckedCreateWithoutReviewLikesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReviewLikesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReviewLikesInput, UserUncheckedUpdateWithoutReviewLikesInput>
+  }
+
+  export type UserUpdateWithoutReviewLikesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    destinations?: DestinationUpdateManyWithoutOwnerNestedInput
+    events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReviewLikesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    domisili?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
-    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
+    destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
+    events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type DestinationCreateWithoutVisitedByInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    owner?: UserCreateNestedOneWithoutDestinationsInput
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutVisitedByInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutVisitedByInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutVisitedByInput, DestinationUncheckedCreateWithoutVisitedByInput>
   }
 
   export type UserCreateWithoutVisitedPlacesInput = {
@@ -27371,15 +29305,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationCreateNestedManyWithoutOwnerInput
     events?: EventCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitedPlacesInput = {
@@ -27393,15 +29328,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
     events?: EventUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitedPlacesInput = {
@@ -27409,80 +29345,86 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutVisitedPlacesInput, UserUncheckedCreateWithoutVisitedPlacesInput>
   }
 
-  export type DestinationCreateWithoutVisitedByInput = {
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner?: UserCreateNestedOneWithoutDestinationsInput
-    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewCreateNestedManyWithoutDestinationInput
-    events?: EventCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationUncheckedCreateWithoutVisitedByInput = {
-    id?: number
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    ownerId?: number | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
-    events?: EventUncheckedCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationCreateOrConnectWithoutVisitedByInput = {
-    where: DestinationWhereUniqueInput
+  export type DestinationUpsertWithoutVisitedByInput = {
+    update: XOR<DestinationUpdateWithoutVisitedByInput, DestinationUncheckedUpdateWithoutVisitedByInput>
     create: XOR<DestinationCreateWithoutVisitedByInput, DestinationUncheckedCreateWithoutVisitedByInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutVisitedByInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutVisitedByInput, DestinationUncheckedUpdateWithoutVisitedByInput>
+  }
+
+  export type DestinationUpdateWithoutVisitedByInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutVisitedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserUpsertWithoutVisitedPlacesInput = {
@@ -27506,15 +29448,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUpdateManyWithoutOwnerNestedInput
     events?: EventUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitedPlacesInput = {
@@ -27528,108 +29471,22 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
     events?: EventUncheckedUpdateManyWithoutOwnerNestedInput
-  }
-
-  export type DestinationUpsertWithoutVisitedByInput = {
-    update: XOR<DestinationUpdateWithoutVisitedByInput, DestinationUncheckedUpdateWithoutVisitedByInput>
-    create: XOR<DestinationCreateWithoutVisitedByInput, DestinationUncheckedCreateWithoutVisitedByInput>
-    where?: DestinationWhereInput
-  }
-
-  export type DestinationUpdateToOneWithWhereWithoutVisitedByInput = {
-    where?: DestinationWhereInput
-    data: XOR<DestinationUpdateWithoutVisitedByInput, DestinationUncheckedUpdateWithoutVisitedByInput>
-  }
-
-  export type DestinationUpdateWithoutVisitedByInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneWithoutDestinationsNestedInput
-    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
-    events?: EventUpdateManyWithoutDestinationNestedInput
-  }
-
-  export type DestinationUncheckedUpdateWithoutVisitedByInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
-    events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DestinationCreateWithoutViewsInput = {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
@@ -27645,15 +29502,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
     owner?: UserCreateNestedOneWithoutDestinationsInput
     categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
     events?: EventCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationUncheckedCreateWithoutViewsInput = {
@@ -27661,16 +29523,10 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
     imageUrl?: string | null
-    ownerId?: number | null
     openTime?: string | null
     closeTime?: string | null
     ticketPrice?: number | null
@@ -27682,14 +29538,20 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
     aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
     events?: EventUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
   }
 
   export type DestinationCreateOrConnectWithoutViewsInput = {
@@ -27712,11 +29574,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -27732,15 +29589,20 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
     owner?: UserUpdateOneWithoutDestinationsNestedInput
     categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutViewsInput = {
@@ -27748,16 +29610,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
     openTime?: NullableStringFieldUpdateOperationsInput | string | null
     closeTime?: NullableStringFieldUpdateOperationsInput | string | null
     ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
@@ -27769,14 +29625,96 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationCreateWithoutEventsInput = {
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
+    owner?: UserCreateNestedOneWithoutDestinationsInput
+    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationUncheckedCreateWithoutEventsInput = {
+    id?: number
+    name: string
+    description: string
+    address: string
+    contact?: string | null
+    latitude: number
+    longitude: number
+    imageUrl?: string | null
+    openTime?: string | null
+    closeTime?: string | null
+    ticketPrice?: number | null
+    maxPrice?: number | null
+    website?: string | null
+    visitCount?: number
+    status?: $Enums.DestinationStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownerId?: number | null
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
+    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
+    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
+    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
+    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
+    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
+  }
+
+  export type DestinationCreateOrConnectWithoutEventsInput = {
+    where: DestinationWhereUniqueInput
+    create: XOR<DestinationCreateWithoutEventsInput, DestinationUncheckedCreateWithoutEventsInput>
   }
 
   export type UserCreateWithoutEventsInput = {
@@ -27789,15 +29727,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryCreateNestedManyWithoutUserInput
-    reviews?: ReviewCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEventsInput = {
@@ -27811,15 +29750,16 @@ export namespace Prisma {
     photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    verificationStatus?: $Enums.VerificationStatus | null
-    verificationDocument?: string | null
     rejectionReason?: string | null
-    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
-    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
-    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    verificationDocument?: string | null
+    verificationStatus?: $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedCreateNestedManyWithoutOwnerInput
+    itineraries?: ItineraryUncheckedCreateNestedManyWithoutUserInput
+    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewLikes?: ReviewLikeUncheckedCreateNestedManyWithoutUserInput
+    savedDestinations?: SavedDestinationUncheckedCreateNestedManyWithoutUserInput
+    visitedPlaces?: VisitedPlaceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEventsInput = {
@@ -27827,80 +29767,86 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
   }
 
-  export type DestinationCreateWithoutEventsInput = {
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    owner?: UserCreateNestedOneWithoutDestinationsInput
-    categories?: DestinationCategoryCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationUncheckedCreateWithoutEventsInput = {
-    id?: number
-    name: string
-    description: string
-    address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
-    contact?: string | null
-    latitude: number
-    longitude: number
-    imageUrl?: string | null
-    ownerId?: number | null
-    openTime?: string | null
-    closeTime?: string | null
-    ticketPrice?: number | null
-    maxPrice?: number | null
-    website?: string | null
-    visitCount?: number
-    status?: $Enums.DestinationStatus
-    isDeleted?: boolean
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    categories?: DestinationCategoryUncheckedCreateNestedManyWithoutDestinationInput
-    aiAnalyses?: AiAnalysisUncheckedCreateNestedManyWithoutDestinationInput
-    savedBy?: SavedDestinationUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryItems?: ItineraryItemUncheckedCreateNestedManyWithoutDestinationInput
-    reviews?: ReviewUncheckedCreateNestedManyWithoutDestinationInput
-    visitedBy?: VisitedPlaceUncheckedCreateNestedManyWithoutDestinationInput
-    itineraryQueue?: ItineraryQueueUncheckedCreateNestedManyWithoutDestinationInput
-    views?: DestinationViewUncheckedCreateNestedManyWithoutDestinationInput
-  }
-
-  export type DestinationCreateOrConnectWithoutEventsInput = {
-    where: DestinationWhereUniqueInput
+  export type DestinationUpsertWithoutEventsInput = {
+    update: XOR<DestinationUpdateWithoutEventsInput, DestinationUncheckedUpdateWithoutEventsInput>
     create: XOR<DestinationCreateWithoutEventsInput, DestinationUncheckedCreateWithoutEventsInput>
+    where?: DestinationWhereInput
+  }
+
+  export type DestinationUpdateToOneWithWhereWithoutEventsInput = {
+    where?: DestinationWhereInput
+    data: XOR<DestinationUpdateWithoutEventsInput, DestinationUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type DestinationUpdateWithoutEventsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
+    owner?: UserUpdateOneWithoutDestinationsNestedInput
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
+  }
+
+  export type DestinationUncheckedUpdateWithoutEventsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    visitCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
+    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type UserUpsertWithoutEventsInput = {
@@ -27924,15 +29870,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUpdateManyWithoutOwnerNestedInput
+    itineraries?: ItineraryUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsInput = {
@@ -27946,147 +29893,16 @@ export namespace Prisma {
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
-    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
-    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
-    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    verificationDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: NullableEnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus | null
     destinations?: DestinationUncheckedUpdateManyWithoutOwnerNestedInput
-  }
-
-  export type DestinationUpsertWithoutEventsInput = {
-    update: XOR<DestinationUpdateWithoutEventsInput, DestinationUncheckedUpdateWithoutEventsInput>
-    create: XOR<DestinationCreateWithoutEventsInput, DestinationUncheckedCreateWithoutEventsInput>
-    where?: DestinationWhereInput
-  }
-
-  export type DestinationUpdateToOneWithWhereWithoutEventsInput = {
-    where?: DestinationWhereInput
-    data: XOR<DestinationUpdateWithoutEventsInput, DestinationUncheckedUpdateWithoutEventsInput>
-  }
-
-  export type DestinationUpdateWithoutEventsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    owner?: UserUpdateOneWithoutDestinationsNestedInput
-    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUpdateManyWithoutDestinationNestedInput
-  }
-
-  export type DestinationUncheckedUpdateWithoutEventsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: FloatFieldUpdateOperationsInput | number
-    longitude?: FloatFieldUpdateOperationsInput | number
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    ownerId?: NullableIntFieldUpdateOperationsInput | number | null
-    openTime?: NullableStringFieldUpdateOperationsInput | string | null
-    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
-    ticketPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    maxPrice?: NullableIntFieldUpdateOperationsInput | number | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    visitCount?: IntFieldUpdateOperationsInput | number
-    status?: EnumDestinationStatusFieldUpdateOperationsInput | $Enums.DestinationStatus
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
-    aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
-    views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
-  }
-
-  export type SavedDestinationCreateManyUserInput = {
-    id?: number
-    destinationId: number
-    createdAt?: Date | string
-  }
-
-  export type ItineraryCreateManyUserInput = {
-    id?: number
-    title?: string
-    tripDate?: Date | string | null
-    status?: $Enums.ItineraryStatus
-    startLat?: number | null
-    startLng?: number | null
-    startLabel?: string | null
-    startType?: $Enums.StartLocationType | null
-    totalDistance?: number | null
-    estimatedTime?: number | null
-    estimatedCost?: number | null
-    isAiGenerated?: boolean
-    startedAt?: Date | string | null
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ReviewCreateManyUserInput = {
-    id?: number
-    destinationId: number
-    rating: number
-    comment?: string | null
-    photoUrl?: string | null
-    videoUrl?: string | null
-    helpfulCount?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type VisitedPlaceCreateManyUserInput = {
-    id?: number
-    destinationId: number
-    visitedAt?: Date | string
-    checkedIn?: boolean
-  }
-
-  export type ItineraryQueueCreateManyUserInput = {
-    id?: number
-    destinationId: number
-    createdAt?: Date | string
+    itineraries?: ItineraryUncheckedUpdateManyWithoutUserNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewLikes?: ReviewLikeUncheckedUpdateManyWithoutUserNestedInput
+    savedDestinations?: SavedDestinationUncheckedUpdateManyWithoutUserNestedInput
+    visitedPlaces?: VisitedPlaceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DestinationCreateManyOwnerInput = {
@@ -28094,11 +29910,6 @@ export namespace Prisma {
     name: string
     description: string
     address: string
-    addressStreet?: string | null
-    addressVillage?: string | null
-    addressDistrict?: string | null
-    addressCity?: string | null
-    addressProvince?: string | null
     contact?: string | null
     latitude: number
     longitude: number
@@ -28114,6 +29925,11 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    addressCity?: string | null
+    addressDistrict?: string | null
+    addressProvince?: string | null
+    addressStreet?: string | null
+    addressVillage?: string | null
   }
 
   export type EventCreateManyOwnerInput = {
@@ -28132,162 +29948,66 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SavedDestinationUpdateWithoutUserInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    destination?: DestinationUpdateOneRequiredWithoutSavedByNestedInput
+  export type ItineraryCreateManyUserInput = {
+    id?: number
+    title?: string
+    totalDistance?: number | null
+    estimatedTime?: number | null
+    estimatedCost?: number | null
+    isAiGenerated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    startLabel?: string | null
+    startLat?: number | null
+    startLng?: number | null
+    startType?: $Enums.StartLocationType | null
+    startedAt?: Date | string | null
+    status?: $Enums.ItineraryStatus
+    tripDate?: Date | string | null
   }
 
-  export type SavedDestinationUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type ItineraryQueueCreateManyUserInput = {
+    id?: number
+    destinationId: number
+    createdAt?: Date | string
   }
 
-  export type SavedDestinationUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type ReviewCreateManyUserInput = {
+    id?: number
+    destinationId: number
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ItineraryUpdateWithoutUserInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
-    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
-    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
-    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
-    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    items?: ItineraryItemUpdateManyWithoutItineraryNestedInput
+  export type ReviewLikeCreateManyUserInput = {
+    id?: number
+    reviewId: number
+    createdAt?: Date | string
   }
 
-  export type ItineraryUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
-    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
-    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
-    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
-    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    items?: ItineraryItemUncheckedUpdateManyWithoutItineraryNestedInput
+  export type SavedDestinationCreateManyUserInput = {
+    id?: number
+    destinationId: number
+    createdAt?: Date | string
   }
 
-  export type ItineraryUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
-    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
-    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
-    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
-    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
-    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
-    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
-    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUpdateWithoutUserInput = {
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    helpfulCount?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    destination?: DestinationUpdateOneRequiredWithoutReviewsNestedInput
-  }
-
-  export type ReviewUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    helpfulCount?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    helpfulCount?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type VisitedPlaceUpdateWithoutUserInput = {
-    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkedIn?: BoolFieldUpdateOperationsInput | boolean
-    destination?: DestinationUpdateOneRequiredWithoutVisitedByNestedInput
-  }
-
-  export type VisitedPlaceUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkedIn?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type VisitedPlaceUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkedIn?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type ItineraryQueueUpdateWithoutUserInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    destination?: DestinationUpdateOneRequiredWithoutItineraryQueueNestedInput
-  }
-
-  export type ItineraryQueueUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ItineraryQueueUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type VisitedPlaceCreateManyUserInput = {
+    id?: number
+    destinationId: number
+    visitedAt?: Date | string
+    checkedIn?: boolean
   }
 
   export type DestinationUpdateWithoutOwnerInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -28303,15 +30023,20 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
     aiAnalyses?: AiAnalysisUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUpdateManyWithoutDestinationNestedInput
     events?: EventUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateWithoutOwnerInput = {
@@ -28319,11 +30044,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -28339,15 +30059,20 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
     aiAnalyses?: AiAnalysisUncheckedUpdateManyWithoutDestinationNestedInput
-    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
-    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
-    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
-    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    categories?: DestinationCategoryUncheckedUpdateManyWithoutDestinationNestedInput
     views?: DestinationViewUncheckedUpdateManyWithoutDestinationNestedInput
     events?: EventUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryItems?: ItineraryItemUncheckedUpdateManyWithoutDestinationNestedInput
+    itineraryQueue?: ItineraryQueueUncheckedUpdateManyWithoutDestinationNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutDestinationNestedInput
+    savedBy?: SavedDestinationUncheckedUpdateManyWithoutDestinationNestedInput
+    visitedBy?: VisitedPlaceUncheckedUpdateManyWithoutDestinationNestedInput
   }
 
   export type DestinationUncheckedUpdateManyWithoutOwnerInput = {
@@ -28355,11 +30080,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
-    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
-    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
-    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
@@ -28375,6 +30095,11 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addressCity?: NullableStringFieldUpdateOperationsInput | string | null
+    addressDistrict?: NullableStringFieldUpdateOperationsInput | string | null
+    addressProvince?: NullableStringFieldUpdateOperationsInput | string | null
+    addressStreet?: NullableStringFieldUpdateOperationsInput | string | null
+    addressVillage?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EventUpdateWithoutOwnerInput = {
@@ -28424,9 +30149,170 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type DestinationCategoryCreateManyDestinationInput = {
-    id?: number
-    categoryId: number
+  export type ItineraryUpdateWithoutUserInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
+    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    items?: ItineraryItemUpdateManyWithoutItineraryNestedInput
+  }
+
+  export type ItineraryUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
+    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    items?: ItineraryItemUncheckedUpdateManyWithoutItineraryNestedInput
+  }
+
+  export type ItineraryUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    totalDistance?: NullableFloatFieldUpdateOperationsInput | number | null
+    estimatedTime?: NullableIntFieldUpdateOperationsInput | number | null
+    estimatedCost?: NullableIntFieldUpdateOperationsInput | number | null
+    isAiGenerated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    startLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    startLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    startType?: NullableEnumStartLocationTypeFieldUpdateOperationsInput | $Enums.StartLocationType | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumItineraryStatusFieldUpdateOperationsInput | $Enums.ItineraryStatus
+    tripDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ItineraryQueueUpdateWithoutUserInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    destination?: DestinationUpdateOneRequiredWithoutItineraryQueueNestedInput
+  }
+
+  export type ItineraryQueueUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewUpdateWithoutUserInput = {
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    destination?: DestinationUpdateOneRequiredWithoutReviewsNestedInput
+    likes?: ReviewLikeUpdateManyWithoutReviewNestedInput
+  }
+
+  export type ReviewUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    likes?: ReviewLikeUncheckedUpdateManyWithoutReviewNestedInput
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewLikeUpdateWithoutUserInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    review?: ReviewUpdateOneRequiredWithoutLikesNestedInput
+  }
+
+  export type ReviewLikeUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    reviewId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewLikeUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    reviewId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedDestinationUpdateWithoutUserInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    destination?: DestinationUpdateOneRequiredWithoutSavedByNestedInput
+  }
+
+  export type SavedDestinationUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedDestinationUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisitedPlaceUpdateWithoutUserInput = {
+    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkedIn?: BoolFieldUpdateOperationsInput | boolean
+    destination?: DestinationUpdateOneRequiredWithoutVisitedByNestedInput
+  }
+
+  export type VisitedPlaceUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkedIn?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type VisitedPlaceUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkedIn?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AiAnalysisCreateManyDestinationInput = {
@@ -28438,45 +30324,9 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type SavedDestinationCreateManyDestinationInput = {
+  export type DestinationCategoryCreateManyDestinationInput = {
     id?: number
-    userId: number
-    createdAt?: Date | string
-  }
-
-  export type ItineraryItemCreateManyDestinationInput = {
-    id?: number
-    itineraryId: number
-    order: number
-    visitTime?: string | null
-    visited?: boolean
-    visitedAt?: Date | string | null
-    createdAt?: Date | string
-  }
-
-  export type ReviewCreateManyDestinationInput = {
-    id?: number
-    userId: number
-    rating: number
-    comment?: string | null
-    photoUrl?: string | null
-    videoUrl?: string | null
-    helpfulCount?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type VisitedPlaceCreateManyDestinationInput = {
-    id?: number
-    userId: number
-    visitedAt?: Date | string
-    checkedIn?: boolean
-  }
-
-  export type ItineraryQueueCreateManyDestinationInput = {
-    id?: number
-    userId: number
-    createdAt?: Date | string
+    categoryId: number
   }
 
   export type DestinationViewCreateManyDestinationInput = {
@@ -28501,18 +30351,45 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type DestinationCategoryUpdateWithoutDestinationInput = {
-    category?: CategoryUpdateOneRequiredWithoutDestinationsNestedInput
+  export type ItineraryItemCreateManyDestinationInput = {
+    id?: number
+    itineraryId: number
+    order: number
+    visitTime?: string | null
+    createdAt?: Date | string
+    visited?: boolean
+    visitedAt?: Date | string | null
   }
 
-  export type DestinationCategoryUncheckedUpdateWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    categoryId?: IntFieldUpdateOperationsInput | number
+  export type ItineraryQueueCreateManyDestinationInput = {
+    id?: number
+    userId: number
+    createdAt?: Date | string
   }
 
-  export type DestinationCategoryUncheckedUpdateManyWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    categoryId?: IntFieldUpdateOperationsInput | number
+  export type ReviewCreateManyDestinationInput = {
+    id?: number
+    userId: number
+    rating: number
+    comment?: string | null
+    photoUrl?: string | null
+    videoUrl?: string | null
+    helpfulCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SavedDestinationCreateManyDestinationInput = {
+    id?: number
+    userId: number
+    createdAt?: Date | string
+  }
+
+  export type VisitedPlaceCreateManyDestinationInput = {
+    id?: number
+    userId: number
+    visitedAt?: Date | string
+    checkedIn?: boolean
   }
 
   export type AiAnalysisUpdateWithoutDestinationInput = {
@@ -28541,122 +30418,18 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SavedDestinationUpdateWithoutDestinationInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutSavedDestinationsNestedInput
+  export type DestinationCategoryUpdateWithoutDestinationInput = {
+    category?: CategoryUpdateOneRequiredWithoutDestinationsNestedInput
   }
 
-  export type SavedDestinationUncheckedUpdateWithoutDestinationInput = {
+  export type DestinationCategoryUncheckedUpdateWithoutDestinationInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type SavedDestinationUncheckedUpdateManyWithoutDestinationInput = {
+  export type DestinationCategoryUncheckedUpdateManyWithoutDestinationInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ItineraryItemUpdateWithoutDestinationInput = {
-    order?: IntFieldUpdateOperationsInput | number
-    visitTime?: NullableStringFieldUpdateOperationsInput | string | null
-    visited?: BoolFieldUpdateOperationsInput | boolean
-    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    itinerary?: ItineraryUpdateOneRequiredWithoutItemsNestedInput
-  }
-
-  export type ItineraryItemUncheckedUpdateWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    itineraryId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    visitTime?: NullableStringFieldUpdateOperationsInput | string | null
-    visited?: BoolFieldUpdateOperationsInput | boolean
-    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ItineraryItemUncheckedUpdateManyWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    itineraryId?: IntFieldUpdateOperationsInput | number
-    order?: IntFieldUpdateOperationsInput | number
-    visitTime?: NullableStringFieldUpdateOperationsInput | string | null
-    visited?: BoolFieldUpdateOperationsInput | boolean
-    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUpdateWithoutDestinationInput = {
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    helpfulCount?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
-  }
-
-  export type ReviewUncheckedUpdateWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    helpfulCount?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReviewUncheckedUpdateManyWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: NullableStringFieldUpdateOperationsInput | string | null
-    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    helpfulCount?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type VisitedPlaceUpdateWithoutDestinationInput = {
-    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkedIn?: BoolFieldUpdateOperationsInput | boolean
-    user?: UserUpdateOneRequiredWithoutVisitedPlacesNestedInput
-  }
-
-  export type VisitedPlaceUncheckedUpdateWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkedIn?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type VisitedPlaceUncheckedUpdateManyWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkedIn?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type ItineraryQueueUpdateWithoutDestinationInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutItineraryQueueNestedInput
-  }
-
-  export type ItineraryQueueUncheckedUpdateWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ItineraryQueueUncheckedUpdateManyWithoutDestinationInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryId?: IntFieldUpdateOperationsInput | number
   }
 
   export type DestinationViewUpdateWithoutDestinationInput = {
@@ -28723,9 +30496,124 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type DestinationCategoryCreateManyCategoryInput = {
-    id?: number
-    destinationId: number
+  export type ItineraryItemUpdateWithoutDestinationInput = {
+    order?: IntFieldUpdateOperationsInput | number
+    visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    itinerary?: ItineraryUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type ItineraryItemUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    itineraryId?: IntFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ItineraryItemUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    itineraryId?: IntFieldUpdateOperationsInput | number
+    order?: IntFieldUpdateOperationsInput | number
+    visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    visited?: BoolFieldUpdateOperationsInput | boolean
+    visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ItineraryQueueUpdateWithoutDestinationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutItineraryQueueNestedInput
+  }
+
+  export type ItineraryQueueUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItineraryQueueUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewUpdateWithoutDestinationInput = {
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    likes?: ReviewLikeUpdateManyWithoutReviewNestedInput
+  }
+
+  export type ReviewUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    likes?: ReviewLikeUncheckedUpdateManyWithoutReviewNestedInput
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedDestinationUpdateWithoutDestinationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSavedDestinationsNestedInput
+  }
+
+  export type SavedDestinationUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedDestinationUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisitedPlaceUpdateWithoutDestinationInput = {
+    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkedIn?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutVisitedPlacesNestedInput
+  }
+
+  export type VisitedPlaceUncheckedUpdateWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkedIn?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type VisitedPlaceUncheckedUpdateManyWithoutDestinationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    visitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkedIn?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CategoryKeywordCreateManyCategoryInput = {
@@ -28734,18 +30622,9 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type DestinationCategoryUpdateWithoutCategoryInput = {
-    destination?: DestinationUpdateOneRequiredWithoutCategoriesNestedInput
-  }
-
-  export type DestinationCategoryUncheckedUpdateWithoutCategoryInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type DestinationCategoryUncheckedUpdateManyWithoutCategoryInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    destinationId?: IntFieldUpdateOperationsInput | number
+  export type DestinationCategoryCreateManyCategoryInput = {
+    id?: number
+    destinationId: number
   }
 
   export type CategoryKeywordUpdateWithoutCategoryInput = {
@@ -28765,22 +30644,36 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DestinationCategoryUpdateWithoutCategoryInput = {
+    destination?: DestinationUpdateOneRequiredWithoutCategoriesNestedInput
+  }
+
+  export type DestinationCategoryUncheckedUpdateWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type DestinationCategoryUncheckedUpdateManyWithoutCategoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    destinationId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type ItineraryItemCreateManyItineraryInput = {
     id?: number
     destinationId: number
     order: number
     visitTime?: string | null
+    createdAt?: Date | string
     visited?: boolean
     visitedAt?: Date | string | null
-    createdAt?: Date | string
   }
 
   export type ItineraryItemUpdateWithoutItineraryInput = {
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visited?: BoolFieldUpdateOperationsInput | boolean
     visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     destination?: DestinationUpdateOneRequiredWithoutItineraryItemsNestedInput
   }
 
@@ -28789,9 +30682,9 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visited?: BoolFieldUpdateOperationsInput | boolean
     visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ItineraryItemUncheckedUpdateManyWithoutItineraryInput = {
@@ -28799,8 +30692,31 @@ export namespace Prisma {
     destinationId?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     visitTime?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     visited?: BoolFieldUpdateOperationsInput | boolean
     visitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReviewLikeCreateManyReviewInput = {
+    id?: number
+    userId: number
+    createdAt?: Date | string
+  }
+
+  export type ReviewLikeUpdateWithoutReviewInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReviewLikesNestedInput
+  }
+
+  export type ReviewLikeUncheckedUpdateWithoutReviewInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewLikeUncheckedUpdateManyWithoutReviewInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -58,6 +58,7 @@ export default function ItineraryDetailPage() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [loading, setLoading] = useState(true);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dragEnabled, setDragEnabled] = useState<number | null>(null);
   const [summary, setSummary] = useState({ distance: 0, time: 0, cost: 0 });
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
@@ -324,14 +325,22 @@ export default function ItineraryDetailPage() {
             {[...itinerary.items].sort((a, b) => a.order - b.order).map((item, idx) => {
               const open = isOpenNow(item.destination.openTime, item.destination.closeTime);
               return (
-                <div key={item.id} draggable
+                <div key={item.id} draggable={dragEnabled === idx}
                   onDragStart={() => handleDragStart(idx)}
                   onDragOver={(e) => handleDragOver(e, idx)}
                   onDragEnd={handleDragEnd}
-                  className={`bg-white rounded-2xl border border-gray-100 flex gap-3 p-4 shadow-sm cursor-grab active:cursor-grabbing transition-all ${dragIdx === idx ? "opacity-40 scale-95" : "hover:shadow-md"}`}>
+                  className={`bg-white rounded-2xl border border-gray-100 flex gap-3 p-4 shadow-sm transition-all ${dragIdx === idx ? "opacity-40 scale-95" : "hover:shadow-md"}`}>
                   <div className="flex flex-col items-center gap-1 shrink-0">
-                    <GripVertical size={15} className="text-gray-200" />
-                    <div className={`w-7 h-7 rounded-full text-white text-xs font-bold flex items-center justify-center ${item.visited ? "bg-green-500" : "bg-[#f97316]"}`}>
+                    <div 
+                      className="p-2 cursor-grab active:cursor-grabbing hover:bg-gray-50 rounded-lg"
+                      onMouseEnter={() => setDragEnabled(idx)}
+                      onMouseLeave={() => setDragEnabled(null)}
+                      onTouchStart={() => setDragEnabled(idx)}
+                      onTouchEnd={() => setDragEnabled(null)}
+                    >
+                      <GripVertical size={24} className="text-gray-400" />
+                    </div>
+                    <div className={`w-7 h-7 rounded-full text-white text-xs font-bold flex items-center justify-center mt-1 ${item.visited ? "bg-green-500" : "bg-[#f97316]"}`}>
                       {item.visited ? <Check size={13} /> : idx + 1}
                     </div>
                     {idx < itinerary.items.length - 1 && <div className="w-px flex-1 bg-gray-100 my-0.5" />}
@@ -346,8 +355,8 @@ export default function ItineraryDetailPage() {
                         className="font-bold text-gray-900 text-sm hover:text-[#006837] transition-colors line-clamp-1">
                         {item.destination.name}
                       </Link>
-                      <button onClick={() => handleDeleteItem(item.id)} className="p-1.5 rounded-lg hover:bg-red-50 hover:text-red-500 transition-colors shrink-0">
-                        <Trash2 size={13} className="text-gray-300" />
+                      <button onClick={() => handleDeleteItem(item.id)} className="p-2 -mr-2 rounded-lg hover:bg-red-50 hover:text-red-500 transition-colors shrink-0" title="Hapus dari rencana">
+                        <Trash2 size={20} className="text-gray-400 group-hover:text-red-500" />
                       </button>
                     </div>
                     <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1 line-clamp-1"><MapPin size={10} />{item.destination.address}</p>
@@ -357,7 +366,9 @@ export default function ItineraryDetailPage() {
                           <Clock size={10} />{item.visitTime}
                         </span>
                       )}
-                      <span className={`text-xs font-medium ${open ? "text-green-600" : "text-red-400"}`}>{open ? "• Buka" : "• Tutup"}</span>
+                      <span className={`text-xs font-medium ${open ? "text-green-600" : "text-red-400"}`}>
+                        {open ? "• Buka" : "• Tutup"}
+                      </span>
                       {item.destination.ticketPrice !== null && (
                         <span className="text-xs text-gray-400">
                           {item.destination.ticketPrice === 0 ? "Gratis" : `Rp ${item.destination.ticketPrice.toLocaleString("id-ID")}`}
@@ -429,7 +440,7 @@ export default function ItineraryDetailPage() {
               </div>
               <MapViewClient
                 destinations={itinerary.items.map((i) => ({ ...i.destination, visitCount: 0 }))}
-                userLocation={location} height="240px" showHeatmap={false}
+                userLocation={location} height="240px"
                 activeCategories={["Wisata Alam","Wisata Budaya","Wisata Kuliner","Wisata Edukasi","Wisata Hiburan","Wisata Belanja","Wisata Religi"]}
                 showRouteOrder={true} routeItems={routeItemsForMap}
               />

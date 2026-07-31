@@ -13,7 +13,7 @@ import {
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 
 // Radius "Terdekat" — sama dengan konstanta di beranda
-const NEARBY_RADIUS_KM = 15;
+const NEARBY_RADIUS_KM = 5;
 
 export default function KategoriPage() {
   const { categories: dbCategories, loading: catLoading } = useCategories();

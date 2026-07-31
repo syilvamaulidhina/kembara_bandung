@@ -82,6 +82,7 @@ export default function KategoriDetailPage() {
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [showFilter, setShowFilter] = useState(false);
+  const [enableLocation, setEnableLocation] = useState(true);
 
   // Filter — maxDistance default 15 km untuk "terdekat", 50 km untuk lainnya
   const [maxDistance, setMaxDistance] = useState(
@@ -109,12 +110,12 @@ export default function KategoriDetailPage() {
         // Search lintas kategori
         ...(searchQuery && { search: searchQuery }),
         // Koordinat GPS — wajib ada agar jarak dihitung dari posisi user
-        ...(location && { lat: String(location.lat), lng: String(location.lng) }),
+        ...(location && enableLocation && { lat: String(location.lat), lng: String(location.lng) }),
         // nearby=true → aktifkan filter+sort jarak di API (kompatibel dengan API asli)
-        // Kirim nearby hanya kalau GPS aktif DAN bukan slug semua/populer
-        ...(location && !isAll && !isPopuler && { nearby: "true" }),
+        // Kirim nearby kalau GPS aktif DAN bukan slug "semua"
+        ...(location && enableLocation && !isAll && { nearby: "true" }),
         // maxDistance — nilai slider dari panel filter, default 50 km
-        ...(location && !isAll && !isPopuler && { maxDistance: String(maxDistance) }),
+        ...(location && enableLocation && !isAll && { maxDistance: String(maxDistance) }),
         ...(maxBudget < 500000 && { maxPrice: String(maxBudget) }),
         ...(minRating > 0 && { minRating: String(minRating) }),
         ...(user && { userId: String(user.id) }),
@@ -147,6 +148,7 @@ export default function KategoriDetailPage() {
     isNearby,
     isAll,
     catLoading,
+    enableLocation,
   ]);
 
   useEffect(() => {
@@ -382,38 +384,60 @@ export default function KategoriDetailPage() {
 
               {/* Filter Jarak — hanya aktif kalau GPS ada */}
               <div className="mb-5">
-                <label className="text-sm font-medium text-gray-700 block mb-1">
-                  Jarak Maksimal
-                </label>
-                {location ? (
-                  <>
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
-                      <span>1 km</span>
-                      <span className="font-semibold text-[#006837]">
-                        {maxDistance} km dari lokasimu
-                      </span>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-sm font-semibold text-gray-700">
+                    Filter Berdasarkan Jarak
+                  </label>
+                </div>
+                <div className="flex bg-gray-100 p-1.5 rounded-xl mb-4">
+                  <button 
+                    onClick={() => setEnableLocation(true)}
+                    className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${enableLocation ? 'bg-white text-[#006837] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    Aktif
+                  </button>
+                  <button 
+                    onClick={() => setEnableLocation(false)}
+                    className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${!enableLocation ? 'bg-white text-gray-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    Semua Lokasi
+                  </button>
+                </div>
+                {enableLocation ? (
+                  location ? (
+                    <>
+                      <div className="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>1 km</span>
+                        <span className="font-semibold text-[#006837]">
+                          {maxDistance} km dari lokasimu
+                        </span>
+                      </div>
+                      <input
+                        type="range"
+                        min={1}
+                        max={100}
+                        value={maxDistance}
+                        onChange={(e) => setMaxDistance(parseInt(e.target.value))}
+                        className="w-full accent-[#006837]"
+                      />
+                      <p className="text-xs text-gray-400 mt-1">
+                        Koordinat GPS aktif ✓
+                      </p>
+                    </>
+                  ) : (
+                    <div className="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2">
+                      GPS belum aktif. Filter jarak tidak tersedia.
+                      <button
+                        onClick={requestLocation}
+                        className="block mt-1 underline font-medium"
+                      >
+                        Aktifkan GPS
+                      </button>
                     </div>
-                    <input
-                      type="range"
-                      min={1}
-                      max={100}
-                      value={maxDistance}
-                      onChange={(e) => setMaxDistance(parseInt(e.target.value))}
-                      className="w-full accent-[#006837]"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">
-                      Koordinat GPS aktif ✓
-                    </p>
-                  </>
+                  )
                 ) : (
-                  <div className="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2">
-                    GPS belum aktif. Filter jarak tidak tersedia.
-                    <button
-                      onClick={requestLocation}
-                      className="block mt-1 underline font-medium"
-                    >
-                      Aktifkan GPS
-                    </button>
+                  <div className="text-xs text-gray-400 bg-gray-50 rounded-lg px-3 py-2">
+                    Filter jarak dimatikan. Semua destinasi ditampilkan.
                   </div>
                 )}
               </div>
@@ -484,6 +508,7 @@ export default function KategoriDetailPage() {
               {/* Reset */}
               <button
                 onClick={() => {
+                  setEnableLocation(true);
                   setMaxDistance(isNearby ? NEARBY_RADIUS_KM : 50);
                   setMaxBudget(500000);
                   setMinRating(0);

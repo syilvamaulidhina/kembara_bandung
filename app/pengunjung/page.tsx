@@ -134,13 +134,9 @@ export default function BerandaPage() {
     const noFilterActive =
       !isPopulerActive && !isTerdekatActive && activeCatNames.length === 0;
 
-    // Default state: kalau GPS ada, tampilkan radius 5 km otomatis.
-    // Kalau GPS belum ada, tampilkan semua yang sudah di-fetch.
+    // Default state: kalau tidak ada filter yang aktif, jangan tampilkan marker
     if (noFilterActive) {
-      if (location) {
-        return allDests.filter((d) => d.distance !== undefined && d.distance <= NEARBY_RADIUS_KM);
-      }
-      return allDests;
+      return [];
     }
 
     const resultMap = new Map<number, Destination>();
@@ -273,7 +269,6 @@ export default function BerandaPage() {
             destinations={mapMarkers}
             userLocation={location}
             height="420px"
-            showHeatmap={activeCategoryNamesForMap.length > 0}
             activeCategories={activeCategoryNamesForMap}
           />
         </div>

@@ -4,9 +4,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import dynamic from "next/dynamic";
-import { ArrowLeft, Navigation, Loader2, MapPin, Clock, DollarSign } from "lucide-react";
+import { ArrowLeft, Loader2, MapPin, Clock, DollarSign } from "lucide-react";
 import { useLocalUser } from "@/lib/hooks/useLocalUser";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 import { formatRupiah, isOpenNow, getImageUrl } from "@/lib/utils";
@@ -43,12 +43,10 @@ interface ItineraryItem {
 export default function PetaRutePage() {
   const { user } = useLocalUser();
   const { location } = useGeolocation(true);
-  const router = useRouter();
   const [items, setItems] = useState<ItineraryItem[]>([]);
   const [currentItineraryId, setCurrentItineraryId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const [startingNav, setStartingNav] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -77,25 +75,7 @@ export default function PetaRutePage() {
     }
   }, [user]);
 
-  const handleStartNavigation = async () => {
-    if (!currentItineraryId) return;
-    setStartingNav(true);
-    try {
-      await fetch(`/api/pengunjung/itinerary/${currentItineraryId}/start`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          useCurrentLocation: true,
-          currentLat: location?.lat,
-          currentLng: location?.lng,
-        }),
-      });
-      router.push("/pengunjung/navigasi");
-    } catch (e) {
-      console.error(e);
-      setStartingNav(false);
-    }
-  };
+
 
   if (loading) return (
     <div className="h-screen flex items-center justify-center bg-gray-50">
@@ -118,7 +98,7 @@ export default function PetaRutePage() {
   return (
     <div className="h-screen flex flex-col bg-gray-900">
       {/* Top bar */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3 flex items-center gap-3 z-10 shrink-0">
+      <div className="relative z-[500] bg-white border-b border-gray-100 px-4 py-3 flex items-center gap-3 shrink-0">
         <Link href="/pengunjung/rencana" className="p-2 rounded-xl hover:bg-gray-100 transition-colors">
           <ArrowLeft size={20} className="text-gray-600" />
         </Link>
@@ -126,14 +106,6 @@ export default function PetaRutePage() {
           <h1 className="font-bold text-gray-900 text-base">Rute Perjalanan</h1>
           <p className="text-xs text-gray-500">{items.length} destinasi · klik marker untuk detail</p>
         </div>
-        <button
-          onClick={handleStartNavigation}
-          disabled={startingNav}
-          className="ml-auto flex items-center gap-2 px-4 py-2.5 bg-[#f97316] text-white rounded-xl text-sm font-bold hover:bg-[#ea6a0a] transition-colors shadow-md disabled:opacity-60"
-        >
-          {startingNav ? <Loader2 size={16} className="animate-spin" /> : <Navigation size={16} />}
-          Mulai Navigasi
-        </button>
       </div>
 
       {/* Main: map + sidebar */}
@@ -193,17 +165,6 @@ export default function PetaRutePage() {
             );
           })}
 
-          {/* CTA */}
-          <div className="p-4">
-            <button 
-              onClick={handleStartNavigation}
-              disabled={startingNav}
-              className="flex items-center justify-center gap-2 w-full py-3 bg-[#f97316] text-white rounded-xl font-bold text-sm hover:bg-[#ea6a0a] transition-colors disabled:opacity-60"
-            >
-              {startingNav ? <Loader2 size={15} className="animate-spin" /> : <Navigation size={15} />}
-              Mulai Navigasi Sekarang
-            </button>
-          </div>
         </div>
       </div>
     </div>
