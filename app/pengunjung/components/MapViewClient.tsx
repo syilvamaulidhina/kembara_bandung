@@ -7,7 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Map as LeafletMap, LayerGroup, Marker } from "leaflet";
-import { CATEGORIES } from "@/lib/types";
+import { getCategoryStyle } from "@/lib/hooks/useCategories";
 
 interface Destination {
   id: number;
@@ -25,7 +25,7 @@ interface MapViewClientProps {
   destinations: Destination[];
   userLocation?: { lat: number; lng: number } | null;
   height?: string;
-  showHeatmap?: boolean;
+
   activeCategories?: string[];   // kategori aktif dari luar
   onMarkerClick?: (id: number) => void;
   showRouteOrder?: boolean;
@@ -33,10 +33,7 @@ interface MapViewClientProps {
 }
 
 const getCategoryColor = (categoryName: string) => {
-  return (
-    CATEGORIES.find(c => c.name === categoryName)?.color ||
-    "#1a6b3c"
-  );
+  return getCategoryStyle(categoryName).color;
 };
 
 // Batas wilayah yang ditampilkan
@@ -48,7 +45,7 @@ export default function MapViewClient({
   destinations,
   userLocation,
   height = "500px",
-  showHeatmap = true,
+
   activeCategories = [],
   onMarkerClick,
   showRouteOrder = false,
@@ -57,7 +54,7 @@ export default function MapViewClient({
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const markersRef = useRef<LayerGroup | null>(null);
-  const heatLayersRef = useRef<any[]>([]);
+
   const routeLineRef = useRef<any>(null);
   // TAMBAHAN: ref khusus untuk marker lokasi user, terpisah dari markersRef
   // (markersRef di-clear setiap kali filter kategori berubah, marker user TIDAK boleh ikut hilang)
@@ -131,24 +128,25 @@ export default function MapViewClient({
 
     markersRef.current.clearLayers();
 
-    heatLayersRef.current.forEach(l => mapRef.current?.removeLayer(l));
-    heatLayersRef.current = [];
+
 
     if (routeLineRef.current) {
       mapRef.current.removeLayer(routeLineRef.current);
       routeLineRef.current = null;
     }
 
-    const filtered = activeCategories.length === 0
-      ? []
-      : destinations.filter(d =>
-          d.categories?.some(c =>
-            activeCategories.includes(c.category.name)
-          )
-        );
+    const filtered = destinations;
 
     filtered.forEach(dest => {
-      const catName = dest.categories?.[0]?.category?.name || "Wisata Alam";
+      let catName = dest.categories?.[0]?.category?.name || "Wisata Alam";
+      if (activeCategories && activeCategories.length > 0) {
+        const matchedActiveCat = activeCategories.find(activeCat => 
+          dest.categories?.some(c => c.category?.name === activeCat)
+        );
+        if (matchedActiveCat) {
+          catName = matchedActiveCat;
+        }
+      }
       const color = getCategoryColor(catName);
 
       const orderItem = routeItems.find(r => r.destinationId === dest.id);
@@ -196,20 +194,7 @@ export default function MapViewClient({
       marker.on("click", () => onMarkerClick?.(dest.id));
     });
 
-    if (showHeatmap && filtered.length > 0) {
-      filtered.forEach(dest => {
-        const intensity = Math.min(dest.visitCount / 500, 1);
-        const radius = 400 + intensity * 600;
-        const color = intensity > 0.6 ? "#ef4444" : intensity > 0.3 ? "#f97316" : "#22c55e";
-        const layer = L.circle([dest.latitude, dest.longitude], {
-          radius,
-          color: "transparent",
-          fillColor: color,
-          fillOpacity: 0.05 + intensity * 0.1,
-        }).addTo(mapRef.current!);
-        heatLayersRef.current.push(layer);
-      });
-    }
+
 
     if (showRouteOrder && routeItems.length > 1) {
       const ordered = routeItems
@@ -227,7 +212,7 @@ export default function MapViewClient({
         }).addTo(mapRef.current);
       }
     }
-  }, [activeCategories, destinations, showHeatmap, showRouteOrder, routeItems]);
+  }, [activeCategories, destinations, showRouteOrder, routeItems]);
 
   // DIUBAH: dulu cuma setView, sekarang gambar/update marker user juga.
   // Ini yang fix bug "titik lokasi saya tidak muncul kalau GPS resolve belakangan".

@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import {
   ArrowLeft, Star, MapPin, Phone, Clock, DollarSign,
   Heart, Navigation, Plus, Globe, Share2, Thermometer,
-  Droplets, Wind, Loader2, ChevronLeft, ChevronRight, CheckCircle2, ThumbsUp, Calendar
+  Droplets, Wind, Loader2, ChevronLeft, ChevronRight, CheckCircle2, ThumbsUp, Calendar, X
 } from "lucide-react";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 import { useLocalUser } from "@/lib/hooks/useLocalUser";
@@ -90,23 +90,42 @@ export default function DestinationDetailPage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [likedReviews, setLikedReviews] = useState<Set<number>>(new Set());
   const [showItinModal, setShowItinModal] = useState(false);
+  const [lightboxMedia, setLightboxMedia] = useState<{url: string, type: 'image' | 'video'} | null>(null);
 
   const handleHelpful = async (reviewId: number) => {
-    if (likedReviews.has(reviewId)) return;
-    setLikedReviews((prev) => new Set([...prev, reviewId]));
+    if (!user) {
+      alert("Silakan masuk (login) terlebih dahulu untuk menyukai ulasan.");
+      router.push(`/auth/login?redirect=/pengunjung/destinasi/${id}`);
+      return;
+    }
+
+    const isLiked = likedReviews.has(reviewId);
+
+    setLikedReviews((prev) => {
+      const next = new Set(prev);
+      if (isLiked) next.delete(reviewId);
+      else next.add(reviewId);
+      return next;
+    });
+
     setDestination((prev) => {
       if (!prev) return prev;
       return {
         ...prev,
         reviews: prev.reviews.map((r) =>
-          r.id === reviewId ? { ...r, helpfulCount: r.helpfulCount + 1 } : r
+          r.id === reviewId ? { ...r, helpfulCount: isLiked ? r.helpfulCount - 1 : r.helpfulCount + 1 } : r
         ),
       };
     });
+
     try {
-      await fetch(`/api/pengunjung/reviews/${reviewId}/helpful`, { method: "PATCH" });
+      await fetch(`/api/pengunjung/reviews/${reviewId}/helpful`, { 
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: isLiked ? "unlike" : "like", userId: user.id })
+      });
     } catch (e) {
-      console.error("Gagal menyukai ulasan", e);
+      console.error("Gagal mengubah like ulasan", e);
     }
   };
 
@@ -116,6 +135,7 @@ export default function DestinationDetailPage() {
         const qParams = new URLSearchParams({
           ...(location && { lat: String(location.lat), lng: String(location.lng) }),
           ...(user && { userId: String(user.id) }),
+          t: String(Date.now()),
         });
 
         const res = await fetch(`/api/pengunjung/destinations/${id}?${qParams}`);
@@ -124,6 +144,17 @@ export default function DestinationDetailPage() {
         if (json.success) {
           setDestination(json.data);
           setSaved(json.data.isSaved);
+
+          // Populate likedReviews from backend
+          if (json.data.reviews) {
+            const initialLiked = new Set<number>();
+            json.data.reviews.forEach((r: any) => {
+              if (r.isLiked) {
+                initialLiked.add(r.id);
+              }
+            });
+            setLikedReviews(initialLiked);
+          }
 
           // ← BARU: catat kunjungan saat halaman detail dibuka
           fetch("/api/wisatawan/view", {
@@ -474,20 +505,31 @@ export default function DestinationDetailPage() {
                         </div>
                         {review.comment && <p className="text-gray-600 text-sm">{review.comment}</p>}
                         {review.photoUrl && (
-                          <img src={review.photoUrl} alt="review" className="mt-2 h-24 rounded-lg object-cover" />
+                          <img 
+                            src={review.photoUrl} 
+                            alt="review" 
+                            className="mt-2 h-24 rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity" 
+                            onClick={() => setLightboxMedia({ url: review.photoUrl!, type: 'image' })}
+                          />
                         )}
                         {review.videoUrl && (
-                          <video
-                            src={review.videoUrl}
-                            controls
-                            className="mt-2 h-24 rounded-lg object-cover"
-                          />
+                          <div className="relative inline-block mt-2 h-24">
+                            <video
+                              src={review.videoUrl}
+                              className="h-full rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                              onClick={() => setLightboxMedia({ url: review.videoUrl!, type: 'video' })}
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                               <div className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center">
+                                 <div className="w-0 h-0 border-t-4 border-t-transparent border-l-[6px] border-l-white border-b-4 border-b-transparent ml-1"></div>
+                               </div>
+                            </div>
+                          </div>
                         )}
                         
                         <div className="mt-3 flex items-center gap-4 border-t border-gray-50 pt-3">
                           <button
                             onClick={() => handleHelpful(review.id)}
-                            disabled={likedReviews.has(review.id)}
                             className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
                               likedReviews.has(review.id)
                                 ? "text-[#006837]"
@@ -495,7 +537,7 @@ export default function DestinationDetailPage() {
                             }`}
                           >
                             <ThumbsUp size={14} className={likedReviews.has(review.id) ? "fill-[#006837]" : ""} />
-                            {likedReviews.has(review.id) ? "Membantu" : "Membantu?"} ({review.helpfulCount})
+                            {likedReviews.has(review.id) ? "Batal Suka" : "Membantu?"} ({review.helpfulCount})
                           </button>
                         </div>
                       </div>
@@ -574,6 +616,20 @@ export default function DestinationDetailPage() {
         destinationId={destination.id}
         destinationName={destination.name}
       />
+
+      {/* Lightbox for review media */}
+      {lightboxMedia && (
+        <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 99999, backgroundColor: 'rgba(0,0,0,0.9)' }} onClick={() => setLightboxMedia(null)}>
+          <button className="absolute top-4 right-4 text-white hover:text-gray-300 z-10" onClick={() => setLightboxMedia(null)}>
+            <X size={32} />
+          </button>
+          {lightboxMedia.type === 'image' ? (
+            <img src={lightboxMedia.url} alt="Review Media" className="max-w-full max-h-full object-contain relative z-20" onClick={(e) => e.stopPropagation()} />
+          ) : (
+            <video src={lightboxMedia.url} controls autoPlay className="max-w-full max-h-[80vh] relative z-20" onClick={(e) => e.stopPropagation()} />
+          )}
+        </div>
+      )}
     </div>
   );
 }
