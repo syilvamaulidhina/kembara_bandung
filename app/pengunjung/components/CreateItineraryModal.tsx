@@ -178,7 +178,7 @@ export default function CreateItineraryModal({ open, onClose }: CreateItineraryM
 
   return (
     <>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-4">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 px-4">
         <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
           <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 sticky top-0 bg-white">
             {step === "ai-detail" && (
