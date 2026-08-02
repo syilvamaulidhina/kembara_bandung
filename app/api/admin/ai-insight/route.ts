@@ -57,15 +57,6 @@ export async function POST(req: NextRequest) {
     // Where clause dasar (tanpa filter kategori/waktu) untuk statistik global
     const baseWhere = { isDeleted: false };
 
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #1 — QUERY DATA ASLI DARI DATABASE
-    // Kemungkinan ditanya: "Coba tunjukkan mana bagian yang membuktikan
-    // AI tidak mengarang data sendiri."
-    // Jawaban: Seluruh angka di bawah ini (total wisata, status aktif,
-    // dst) diambil LANGSUNG dari database PostgreSQL lewat Prisma ORM,
-    // SEBELUM AI sama sekali dilibatkan. AI tidak pernah menyentuh
-    // proses penghitungan angka ini.
-    // ============================================================
     const totalWisata = await prisma.destination.count({ where: baseWhere });
     const wisataAktif = await prisma.destination.count({
       where: { ...baseWhere, status: "aktif" },
@@ -86,15 +77,6 @@ export async function POST(req: NextRequest) {
 
     // Rating rata-rata GLOBAL (seluruh destinasi aktif), dipakai sebagai
     // benchmark pembanding untuk insight rule-based / fallback.
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #2 — RATING RATA-RATA GLOBAL (BENCHMARK)
-    // Kemungkinan ditanya: "Bagaimana AI bisa bilang 'rating kategori
-    // ini di atas rata-rata'? Dari mana pembandingnya?"
-    // Jawaban: Sistem menghitung dulu rata-rata rating GLOBAL di sisi
-    // kode/database, baru nilai ini dikirim sebagai pembanding ke AI.
-    // Perbandingan "di atas/di bawah rata-rata" berbasis angka
-    // matematis asli, bukan estimasi AI.
-    // ============================================================
     const globalReviews = await prisma.review.findMany({
       where: { destination: baseWhere },
       select: { rating: true },
@@ -105,15 +87,6 @@ export async function POST(req: NextRequest) {
         : 0;
 
     // Where clause khusus untuk data yang DIANALISIS, sesuai filter admin
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #3 — FILTER KATEGORI (RELASI MANY-TO-MANY)
-    // Kemungkinan ditanya: "Kenapa satu destinasi bisa punya lebih dari
-    // satu kategori? Bagaimana skema database-nya?"
-    // Jawaban: Relasi Destination-Category itu many-to-many, dijembatani
-    // tabel DestinationCategory — satu destinasi bisa masuk beberapa
-    // kategori sekaligus. .some() artinya: ambil destinasi yang minimal
-    // SALAH SATU kategorinya cocok dengan filter admin.
-    // ============================================================
     const filteredWhere: any = { isDeleted: false };
     if (kategoriId !== "ALL") {
       filteredWhere.categories = { some: { categoryId: kategoriIdForQuery } };
@@ -132,20 +105,6 @@ export async function POST(req: NextRequest) {
 
     // Distribusi kategori dihitung dari data yang SUDAH difilter.
     //
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #4 — BUG YANG PERNAH DIPERBAIKI (⚠️ agak
-    // berisiko kalau penguji teliti baca komentar "FIX" di bawah ini)
-    // Kemungkinan ditanya: "Ada komentar 'FIX' di sini, berarti pernah
-    // ada bug? Bug apa?"
-    // Jawaban (jawab jujur, jangan panik): "Betul, sebelumnya sistem
-    // saya mengambil kategori PERTAMA yang menempel pada suatu destinasi
-    // untuk menentukan label distribusi. Karena satu destinasi bisa
-    // punya lebih dari satu kategori, ini menyebabkan distribusi kadang
-    // salah label. Saya temukan ini saat pengujian mandiri terhadap
-    // fitur filter, lalu perbaiki dengan mencari kategori yang BENAR-
-    // BENAR cocok dengan filter yang dipilih." — ini nilai plus kalau
-    // dijelaskan santai, karena membuktikan kamu debugging mandiri.
-    // ============================================================
     // FIX: Sebelumnya kode selalu ambil categories[0] (kategori pertama yang
     // nempel di destinasi) untuk menentukan label kategori. Ini salah kalau
     // satu destinasi punya lebih dari satu kategori sekaligus (relasi
@@ -273,17 +232,6 @@ export async function POST(req: NextRequest) {
       globalAvgRating,
     };
 
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #5 — CONTEXT: DATA TERSTRUKTUR KE AI
-    // (PALING PENTING — ini bukti utama "AI tidak menganalisis bebas")
-    // Kemungkinan ditanya: "Bagian mana yang menunjukkan AI tidak
-    // menganalisis bebas?"
-    // Jawaban: Semua angka yang sudah dihitung di kode (Bagian #1-#4)
-    // disusun jadi TEKS TERSTRUKTUR di sini, baru dikirim ke AI. AI
-    // tidak pernah diberi akses langsung ke database — dia cuma
-    // menerima teks yang sudah "difilter dan diringkas" oleh kode,
-    // sehingga tidak mungkin mengarang angka yang tidak ada di sini.
-    // ============================================================
     const context = `Data Kembara Bandung (FILTER AKTIF: ${filterLabel}):
 
 STATISTIK GLOBAL (seluruh sistem, tidak terpengaruh filter):
@@ -305,15 +253,6 @@ ${topRated.length > 0
   ? topRated.map((w, i) => `${i + 1}. ${w.nama} - ${w.kategori} - Rating: ${w.rating} (${w.jumlahReview} review)`).join("\n")
   : "Belum ada wisata dengan review pada hasil filter ini"}`;
 
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #6 — SYSTEM PROMPT: LARANGAN EKSPLISIT MENGARANG
-    // Kemungkinan ditanya: "Bagaimana kamu mencegah AI berhalusinasi/
-    // mengarang klaim yang tidak sesuai data?"
-    // Jawaban: Ada instruksi eksplisit "PENTING" berulang di system
-    // prompt yang melarang AI membuat klaim tertentu kalau kondisi
-    // datanya tidak mendukung. Ini lapis pencegahan PERTAMA, sebelum
-    // lapis kedua di Bagian #9 (filter ulang setelah AI menjawab).
-    // ============================================================
     const systemPrompt = `Kamu adalah AI Analyst untuk platform wisata Kembara Bandung.
 Admin sedang menganalisis data dengan FILTER AKTIF: ${filterLabel}.
 Fokuskan seluruh insight HANYA pada data hasil filter tersebut, bukan data global, kecuali diminta membandingkan.
@@ -346,35 +285,9 @@ Nilai type hanya boleh salah satu dari: opportunity, warning, trend, recommendat
 Gunakan data spesifik dari context, bahasa Indonesia profesional.
 PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
 
-    // NOTE: Model diganti dari "llama3-8b-8192" (sudah decommissioned per pesan
-    // error Groq: "model_decommissioned") ke "openai/gpt-oss-20b", yang saat
-    // ini direkomendasikan Groq sebagai pengganti model ringan/cepat serupa.
-    // Groq cukup sering memperbarui daftar model aktifnya — kalau di kemudian
-    // hari model ini juga error "decommissioned", cek daftar model terbaru di
-    // console.groq.com/docs/models sebelum sidang/demo.
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #7 — NAMA MODEL AI
-    // ⚠️⚠️⚠️ PALING PENTING DISIAPKAN — INI FAKTA, BUKAN KEMUNGKINAN ⚠️⚠️⚠️
-    // Naskah skripsi masih menyebut model "llama3-8b-8192", tapi kode
-    // ini sekarang pakai "openai/gpt-oss-20b". Kalau penguji sempat
-    // cross-check naskah vs kode/demo, INI YANG PALING GAMPANG KETAHUAN.
-    //
-    // Kemungkinan ditanya: "Di skripsi tertulis llama3-8b-8192, tapi di
-    // kode ini modelnya openai/gpt-oss-20b. Kenapa beda?"
-    //
-    // Jawaban WAJIB DIHAFAL (inti, boleh dirangkai bebas):
-    // "Model llama3-8b-8192 yang saya tuliskan di skripsi adalah model
-    // yang saya gunakan pada saat penelitian dan penulisan dilakukan,
-    // dan itu akurat pada waktu itu. Namun Groq sebagai penyedia API
-    // pihak ketiga secara berkala memperbarui dan menghentikan dukungan
-    // model-model lamanya — model tersebut kini sudah decommissioned
-    // oleh Groq. Untuk menjaga sistem tetap berfungsi, saya perbarui ke
-    // model pengganti yang direkomendasikan Groq, yaitu openai/gpt-oss-
-    // 20b, tanpa mengubah logika/arsitektur sistem lainnya. Ini
-    // menunjukkan risiko nyata mengandalkan layanan AI pihak ketiga,
-    // sekaligus membuktikan sistem saya cukup fleksibel beradaptasi
-    // tanpa perlu dibangun ulang dari awal."
-    // ============================================================
+    // NOTE: kalau ternyata modelnya deprecated, ganti string "llama3-8b-8192"
+    // di bawah ini dengan nama model aktif sesuai daftar terbaru di
+    // console.groq.com
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -392,16 +305,6 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
       }),
     });
 
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #8 — FALLBACK SAAT GROQ API GAGAL TOTAL
-    // Kemungkinan ditanya: "Apa yang terjadi kalau API AI-nya down
-    // atau error?"
-    // Jawaban: Sistem TIDAK menampilkan halaman error ke admin. Kalau
-    // pemanggilan Groq gagal (limit, koneksi, model bermasalah), sistem
-    // otomatis beralih ke getFallbackInsights() — fungsi yang
-    // menghasilkan insight rule-based dari data asli, bukan dari AI.
-    // Ini bentuk fault tolerance di desain sistem saya.
-    // ============================================================
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Groq API error (status " + response.status + "):", errorText);
@@ -417,17 +320,6 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
     const aiData = await response.json();
     const aiContent = aiData.choices?.[0]?.message?.content || "";
 
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #9 — VALIDASI ULANG HASIL AI (LAPIS KEDUA)
-    // Kemungkinan ditanya: "Kalaupun AI-nya jawab, bagaimana kalau
-    // isinya tetap salah walau formatnya benar?"
-    // Jawaban: Setelah AI menjawab, hasilnya tetap DIFILTER ULANG
-    // secara otomatis di kode (insights.filter(...) di bawah) — kalau
-    // AI tetap menyebut sesuatu yang tidak sesuai kondisi data riil
-    // (mis. "foto belum lengkap" padahal tanpaFoto === 0), insight itu
-    // otomatis dibuang sebelum ditampilkan ke admin. Ini lapis validasi
-    // KEDUA, di luar instruksi prompt di Bagian #6.
-    // ============================================================
     let insights: any[] = [];
     let insightSource: "groq-llm" | "fallback-rule-based" = "groq-llm";
     try {
@@ -459,15 +351,6 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
       insightSource = "fallback-rule-based";
     }
 
-    // ============================================================
-    // 🎯 CATATAN PENGUJI #10 — PENANDA SUMBER INSIGHT (SOURCE TAGGING)
-    // Kemungkinan ditanya: "Bagaimana kamu tahu insight yang tampil itu
-    // dari AI atau dari fallback?"
-    // Jawaban: Field "source" di response API ini sengaja ditambahkan
-    // untuk transparansi — untuk kebutuhan debugging/monitoring saya
-    // sendiri selama pengembangan, supaya saya bisa memastikan sumber
-    // insight yang tampil ke pengguna tanpa harus menebak-nebak.
-    // ============================================================
     return NextResponse.json({
       insights,
       data: realData,
@@ -503,19 +386,6 @@ PENTING: Respons hanya JSON array saja, tidak ada penjelasan atau teks lain.`;
 }
 
 /**
- * ============================================================
- * 🎯 CATATAN PENGUJI #11 — FUNGSI FALLBACK RULE-BASED (BUKAN AI)
- * Kemungkinan ditanya: "Kalau fallback ini bukan AI, berarti ini
- * rule-based biasa? Apa bedanya sama sistem tanpa AI sama sekali?"
- * Jawaban: Betul, fungsi ini murni logika terprogram (if-else
- * berdasarkan ambang batas angka), bukan AI. Bedanya: fungsi ini
- * hanya berperan sebagai JARING PENGAMAN (safety net) kalau AI gagal
- * dipanggil — bukan pengganti permanen. Saat AI berhasil dipanggil
- * (kondisi normal), sistem tetap pakai hasil LLM yang punya kemampuan
- * menyusun narasi lebih variatif dan menangkap pola lintas-variabel
- * yang sulit ditangani logika if-else biasa.
- * ============================================================
- *
  * Menghasilkan insight rule-based yang dihitung LANGSUNG dari data hasil
  * filter (bukan teks statis) — dipakai sebagai pengganti saat Groq API
  * gagal dipanggil, supaya admin tetap dapat insight yang masuk akal dan
