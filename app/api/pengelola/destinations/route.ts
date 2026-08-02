@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/lib/generated/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 function getUserFromCookie(req: NextRequest) {
@@ -173,9 +174,75 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		const coveragePolygon = body.coveragePolygon ?? null;
+
+		if (coveragePolygon !== null) {
+			if (
+				coveragePolygon.type !== "Polygon" ||
+				!Array.isArray(coveragePolygon.coordinates) ||
+				!Array.isArray(coveragePolygon.coordinates[0])
+			) {
+				return NextResponse.json(
+				{ message: "Format cakupan wilayah tidak valid." },
+				{ status: 400 }
+				);
+			}
+
+			const ring = coveragePolygon.coordinates[0];
+
+			if (ring.length < 4) {
+				return NextResponse.json(
+				{ message: "Cakupan wilayah minimal harus memiliki 3 titik." },
+				{ status: 400 }
+				);
+			}
+
+			if (ring.length > 31) {
+				return NextResponse.json(
+				{ message: "Cakupan wilayah maksimal terdiri dari 30 titik." },
+				{ status: 400 }
+				);
+			}
+
+			const coordinatesValid = ring.every(
+				(point: unknown) =>
+				Array.isArray(point) &&
+				point.length === 2 &&
+				typeof point[0] === "number" &&
+				typeof point[1] === "number" &&
+				Number.isFinite(point[0]) &&
+				Number.isFinite(point[1])
+			);
+
+			if (!coordinatesValid) {
+				return NextResponse.json(
+				{ message: "Koordinat cakupan wilayah tidak valid." },
+				{ status: 400 }
+				);
+			}
+
+			const firstPoint = ring[0];
+			const lastPoint = ring[ring.length - 1];
+
+			const isClosed =
+				firstPoint[0] === lastPoint[0] &&
+				firstPoint[1] === lastPoint[1];
+
+			if (!isClosed) {
+				return NextResponse.json(
+				{ message: "Polygon cakupan wilayah harus tertutup." },
+				{ status: 400 }
+				);
+			}
+		}
+
 		const destination = await prisma.destination.create({
 			data: {
-				ownerId: Number(user.id),
+				owner: {
+					connect: {
+					id: Number(user.id),
+					},
+				},
 
 				name: body.name,
 				description: body.description,
@@ -190,6 +257,12 @@ export async function POST(req: NextRequest) {
 				contact: body.contact || null,
 				latitude: Number(body.latitude),
 				longitude: Number(body.longitude),
+
+				coveragePolygon: Prisma.DbNull,
+				pendingCoveragePolygon:
+					coveragePolygon !== null ? coveragePolygon : Prisma.DbNull,
+				coveragePolygonChanged: coveragePolygon !== null,
+				
 				imageUrl: body.imageUrl || null,
 
 				openTime: body.openTime || null,

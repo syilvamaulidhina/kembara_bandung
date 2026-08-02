@@ -10,6 +10,16 @@ export interface DbCategory {
   _count: { destinations: number };
 }
 
+// Fungsi hash string untuk menghasilkan warna yang konsisten
+function stringToColor(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const color = Math.floor(Math.abs(Math.sin(hash) * 16777215)).toString(16);
+  return "#" + color.padStart(6, "0");
+}
+
 // Mapping nama kategori → warna & icon (fallback kalau tidak ada di DB config)
 // Tambahkan entri baru di sini kalau admin buat kategori dengan nama baru
 const CATEGORY_STYLE_MAP: Record<
@@ -17,32 +27,32 @@ const CATEGORY_STYLE_MAP: Record<
   { color: string; icon: string; bgImage: string }
 > = {
   "Wisata Alam": {
-    color: "#16a34a",
+    color: "#16a34a", // Hijau
     icon: "🌿",
     bgImage: "/images/categories/alam.jpg",
   },
   "Wisata Budaya": {
-    color: "#7c3aed",
+    color: "#7c3aed", // Ungu
     icon: "🏛️",
     bgImage: "/images/categories/budaya.jpg",
   },
   "Wisata Kuliner": {
-    color: "#ea580c",
+    color: "#ea580c", // Oranye
     icon: "🍜",
     bgImage: "/images/categories/kuliner.jpg",
   },
   "Wisata Belanja": {
-    color: "#0284c7",
+    color: "#ec4899", // Pink
     icon: "🛍️",
     bgImage: "/images/categories/belanja.jpg",
   },
   "Wisata Religi": {
-    color: "#ca8a04",
+    color: "#0ea5e9", // Biru
     icon: "🕌",
     bgImage: "/images/categories/religi.jpg",
   },
   "Wisata Edukasi": {
-    color: "#0891b2",
+    color: "#eab308", // Kuning
     icon: "📚",
     bgImage: "/images/categories/edukasi.jpg",
   },
@@ -52,12 +62,12 @@ const CATEGORY_STYLE_MAP: Record<
     bgImage: "/images/categories/petualangan.jpg",
   },
   "Wisata Hiburan": {
-    color: "#ec4899",
+    color: "#ef4444", // Merah
     icon: "🎢",
     bgImage: "/images/categories/hiburan.jpg",
   },
   "Hiburan": {
-    color: "#ec4899",
+    color: "#ef4444",
     icon: "🎢",
     bgImage: "/images/categories/hiburan.jpg",
   },
@@ -78,7 +88,14 @@ export function categoryNameToSlug(name: string): string {
 }
 
 export function getCategoryStyle(name: string) {
-  return CATEGORY_STYLE_MAP[name] ?? CATEGORY_STYLE_MAP["default"];
+  if (CATEGORY_STYLE_MAP[name]) {
+    return CATEGORY_STYLE_MAP[name];
+  }
+  // Dinamis berdasar kategori baru
+  return {
+    ...CATEGORY_STYLE_MAP["default"],
+    color: stringToColor(name),
+  };
 }
 
 export function useCategories() {
