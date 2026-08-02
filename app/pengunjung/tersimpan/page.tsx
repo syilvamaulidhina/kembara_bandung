@@ -3,6 +3,8 @@
 // SIMPLIFIED: Tidak perlu tombol "Tambah ke Rencana" yang rumit.
 // Semua destinasi tersimpan langsung bisa dipilih di halaman rencana.
 // Klik card -> detail destinasi.
+// UPDATE: Kategori tab sekarang diambil dari database (/api/pengunjung/categories)
+// agar kategori baru yang diinput admin otomatis muncul di sini.
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -13,19 +15,19 @@ import {
 import { useLocalUser } from "@/lib/hooks/useLocalUser";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 import { formatDistance, getImageUrl, isOpenNow } from "@/lib/utils";
-import { CATEGORIES } from "@/lib/types";
+import { getCategoryStyle } from "@/lib/hooks/useCategories";
 import AddToItineraryModal from "../components/AddToItineraryModal";
 
-const CATEGORY_TABS = [
-  { label: "Semua", value: "semua" },
-  { label: "Wisata Alam", value: "wisata alam" },
-  { label: "Wisata Budaya", value: "wisata budaya" },
-  { label: "Wisata Kuliner", value: "wisata kuliner" },
-  { label: "Wisata Edukasi", value: "wisata edukasi" },
-  { label: "Wisata Hiburan", value: "wisata hiburan" },
-  { label: "Wisata Belanja", value: "wisata belanja" },
-  { label: "Wisata Religi", value: "wisata religi" },
-];
+interface CategoryTab {
+  label: string;
+  value: string;
+}
+
+interface CategoryFromDB {
+  id: number;
+  name: string;
+  _count?: { destinations: number };
+}
 
 interface SavedDest {
   savedId: number;
@@ -51,6 +53,36 @@ export default function TersimpanPage() {
   const [activeTab, setActiveTab] = useState("semua");
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [addToItinDest, setAddToItinDest] = useState<{ id: number; name: string } | null>(null);
+
+  // Kategori tab: default cuma "Semua", nanti diisi dari DB
+  const [categoryTabs, setCategoryTabs] = useState<CategoryTab[]>([
+    { label: "Semua", value: "semua" },
+  ]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+
+  // Fetch daftar kategori dari database
+  const fetchCategories = useCallback(async () => {
+    setCategoriesLoading(true);
+    try {
+      const res = await fetch("/api/pengunjung/categories");
+      const json = await res.json();
+      if (json.success) {
+        const dynamicTabs: CategoryTab[] = json.data.map((cat: CategoryFromDB) => ({
+          label: cat.name,
+          value: cat.name.toLowerCase(),
+        }));
+        setCategoryTabs([{ label: "Semua", value: "semua" }, ...dynamicTabs]);
+      }
+    } catch (e) {
+      console.error("Gagal fetch kategori:", e);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const fetchSaved = useCallback(async () => {
     if (!user) return;
@@ -160,14 +192,23 @@ export default function TersimpanPage() {
       )}
 
       <div className="flex gap-1 border-b border-gray-200 mb-6 overflow-x-auto scrollbar-none">
-        {CATEGORY_TABS.map((tab) => (
-          <button key={tab.value} onClick={() => setActiveTab(tab.value)}
-            className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 -mb-px transition-colors ${
-              activeTab === tab.value ? "border-[#f97316] text-[#f97316]" : "border-transparent text-gray-500 hover:text-gray-800"
-            }`}>
-            {tab.label}
-          </button>
-        ))}
+        {categoriesLoading ? (
+          // Skeleton kecil selagi kategori masih di-fetch, biar gak "loncat"
+          <div className="flex gap-2 py-2.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-4 w-16 bg-gray-100 rounded animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          categoryTabs.map((tab) => (
+            <button key={tab.value} onClick={() => setActiveTab(tab.value)}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 -mb-px transition-colors ${
+                activeTab === tab.value ? "border-[#f97316] text-[#f97316]" : "border-transparent text-gray-500 hover:text-gray-800"
+              }`}>
+              {tab.label}
+            </button>
+          ))
+        )}
       </div>
 
       {loading ? (
@@ -204,7 +245,7 @@ export default function TersimpanPage() {
                 catName = matchedCat.category.name;
               }
             }
-            const catInfo = CATEGORIES.find((c) => c.name.toLowerCase() === catName?.toLowerCase());
+            const categoryColor = catName ? getCategoryStyle(catName).color : "#006837";
             return (
               <Link key={dest.id} href={`/pengunjung/destinasi/${dest.id}`}
                 className="block bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all group">
@@ -217,7 +258,7 @@ export default function TersimpanPage() {
                   />
                   {catName && (
                     <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-white text-xs font-bold"
-                      style={{ backgroundColor: catInfo?.color || "#006837" }}>
+                      style={{ backgroundColor: categoryColor }}>
                       {catName}
                     </div>
                   )}

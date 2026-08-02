@@ -173,8 +173,8 @@ export default function ItineraryDetailPage() {
     const gpsDifferent =
       hasStartPoint && location
         ? isLocationSignificantlyDifferent(
-            itinerary.startLat!, itinerary.startLng!, location.lat, location.lng
-          )
+          itinerary.startLat!, itinerary.startLng!, location.lat, location.lng
+        )
         : false;
 
     if (hasStartPoint && location && gpsDifferent) {
@@ -331,7 +331,7 @@ export default function ItineraryDetailPage() {
                   onDragEnd={handleDragEnd}
                   className={`bg-white rounded-2xl border border-gray-100 flex gap-3 p-4 shadow-sm transition-all ${dragIdx === idx ? "opacity-40 scale-95" : "hover:shadow-md"}`}>
                   <div className="flex flex-col items-center gap-1 shrink-0">
-                    <div 
+                    <div
                       className="p-2 cursor-grab active:cursor-grabbing hover:bg-gray-50 rounded-lg"
                       onMouseEnter={() => setDragEnabled(idx)}
                       onMouseLeave={() => setDragEnabled(null)}
@@ -441,7 +441,7 @@ export default function ItineraryDetailPage() {
               <MapViewClient
                 destinations={itinerary.items.map((i) => ({ ...i.destination, visitCount: 0 }))}
                 userLocation={location} height="240px"
-                activeCategories={["Wisata Alam","Wisata Budaya","Wisata Kuliner","Wisata Edukasi","Wisata Hiburan","Wisata Belanja","Wisata Religi"]}
+                activeCategories={["Wisata Alam", "Wisata Budaya", "Wisata Kuliner", "Wisata Edukasi", "Wisata Hiburan", "Wisata Belanja", "Wisata Religi"]}
                 showRouteOrder={true} routeItems={routeItemsForMap}
               />
             </div>

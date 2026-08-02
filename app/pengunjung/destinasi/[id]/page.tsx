@@ -14,6 +14,7 @@ import { useLocalUser } from "@/lib/hooks/useLocalUser";
 import {
   formatDistance, isOpenNow, formatOperationalHours, getImageUrl
 } from "@/lib/utils";
+import { getCategoryStyle } from "@/lib/hooks/useCategories";
 import AddToItineraryModal from "../../components/AddToItineraryModal";
 
 const MiniMapClient = dynamic(() => import("../../components/MiniMapClient"), {
@@ -264,6 +265,7 @@ export default function DestinationDetailPage() {
 
   const open = isOpenNow(destination.openTime, destination.closeTime);
   const categoryName = destination.categories[0]?.category?.name;
+  const categoryColor = categoryName ? getCategoryStyle(categoryName).color : "#f97316";
   const galleryImages = [destination.imageUrl].filter(Boolean) as string[];
 
   return (
@@ -308,7 +310,10 @@ export default function DestinationDetailPage() {
               />
             </div>
             {categoryName && (
-              <div className="absolute top-4 left-4 px-3 py-1.5 bg-[#f97316] text-white text-xs font-bold rounded-full">
+              <div
+                className="absolute top-4 left-4 px-3 py-1.5 text-white text-xs font-bold rounded-full"
+                style={{ backgroundColor: categoryColor }}
+              >
                 {categoryName}
               </div>
             )}
