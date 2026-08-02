@@ -49,22 +49,37 @@ export default function LoginPage() {
         return;
       }
 
-      const role = data.user.role;
+      console.log("LOGIN RESPONSE:", data);
+      console.log("ROLE:", data.user?.role);
+      console.log("STATUS:", data.user?.verificationStatus);
 
-      // Simpan user ke localStorage
+      const role = data.user.role;
+      const verificationStatus = data.user.verificationStatus;
+
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Redirect berdasarkan role
       if (role === "ADMIN") {
-        window.location.href = "/admin/dashboard";
-      } else if (role === "PENGELOLA") {
-        window.location.href = "/pengelola";
-      } else if (role === "WISATAWAN") {
-        window.location.href = "/pengunjung";
-      } else {
-        // role null → belum pilih role
-        window.location.href = "/select-role";
+        window.location.assign("/admin/dashboard");
+        return;
       }
+
+      if (role === "PENGELOLA") {
+        if (verificationStatus === "APPROVED") {
+          window.location.assign("/pengelola/dashboard");
+          return;
+        }
+
+        window.location.assign("/pengelola/verifikasi");
+        return;
+      }
+
+      if (role === "WISATAWAN") {
+        window.location.assign("/pengunjung");
+        return;
+      }
+
+      window.location.assign("/select-role");
+      return;
 
     } catch (err) {
       console.error(err);
@@ -144,7 +159,7 @@ export default function LoginPage() {
 
           {/* Lupa Password */}
           <div className="mb-6 flex justify-end">
-            <a href="/forgot-password" className="text-sm text-primary font-semibold hover:underline">
+            <a href="/forgot-password" className="text-sm font-semibold hover:underline" style={{ color: "#130F6A" }}>
               Lupa Password?
             </a>
           </div>
@@ -153,14 +168,15 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full bg-primary py-3 text-white text-sm font-semibold hover:bg-blue-600 transition disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{ backgroundColor: "#130F6A" }}
+            className="w-full rounded-full py-3 text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Memproses..." : "Login"}
           </button>
 
           <p className="mt-5 text-center text-sm text-gray-600">
             Belum punya akun?{" "}
-            <a href="/register" className="text-primary font-semibold">
+            <a href="/register" className="font-semibold" style={{ color: "#130F6A" }}>
               Daftar
             </a>
           </p>

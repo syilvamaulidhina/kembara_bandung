@@ -1,64 +1,94 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MapPin, Search, Edit2, Trash2, X, Save, ClipboardCheck } from "lucide-react";
+import { MapPin, Search, Edit2, Trash2, X, Save, ClipboardCheck, Filter } from "lucide-react";
 
 type Wisata = {
   id: number;
   nama: string;
   kategori: string;
   lokasi: string;
-  rating: number;
-  status: "Aktif" | "Nonaktif";
+  status: string;
 };
 
-const initialWisata: Wisata[] = [
-  { id: 1, nama: "Kawah Putih", kategori: "Wisata Alam", lokasi: "Ciwidey, Bandung", rating: 4.8, status: "Aktif" },
-  { id: 2, nama: "Farm House Lembang", kategori: "Wisata Hiburan", lokasi: "Lembang, Bandung", rating: 4.6, status: "Aktif" },
-  { id: 3, nama: "Orchid Forest", kategori: "Wisata Alam", lokasi: "Lembang, Bandung", rating: 4.7, status: "Aktif" },
-  { id: 4, nama: "Trans Studio Bandung", kategori: "Wisata Hiburan", lokasi: "Bandung Kota", rating: 4.5, status: "Aktif" },
-  { id: 5, nama: "Saung Angklung Udjo", kategori: "Wisata Edukasi", lokasi: "Padasuka, Bandung", rating: 4.7, status: "Aktif" },
-  { id: 6, nama: "Floating Market Lembang", kategori: "Wisata Kuliner", lokasi: "Lembang, Bandung", rating: 4.4, status: "Aktif" },
-  { id: 7, nama: "De'Ranch Lembang", kategori: "Wisata Hiburan", lokasi: "Lembang, Bandung", rating: 4.3, status: "Nonaktif" },
-  { id: 8, nama: "Tebing Keraton", kategori: "Wisata Alam", lokasi: "Cimenyan, Bandung", rating: 4.6, status: "Aktif" },
-];
-
-const KATEGORI = ["Wisata Alam", "Wisata Kuliner", "Wisata Edukasi", "Wisata Hiburan"];
+const KATEGORI = ["Wisata Alam", "Wisata Kuliner", "Wisata Edukasi", "Wisata Hiburan", "Wisata Budaya", "Wisata Belanja", "Wisata Religi"];
 
 export default function KelolaWisataPage() {
   const [wisataList, setWisataList] = useState<Wisata[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [filterStatus, setFilterStatus] = useState("Semua");
   const [editWisata, setEditWisata] = useState<Wisata | null>(null);
   const [deleteWisata, setDeleteWisata] = useState<Wisata | null>(null);
+  const [saving, setSaving] = useState(false);
 
-  // Hindari hydration mismatch dengan load data di client
-  useEffect(() => {
-    setWisataList(initialWisata);
-  }, []);
-
-  const filtered = wisataList.filter(
-    (w) =>
-      w.nama.toLowerCase().includes(search.toLowerCase()) ||
-      w.kategori.toLowerCase().includes(search.toLowerCase()) ||
-      w.lokasi.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleEdit = () => {
-    if (!editWisata) return;
-    setWisataList(wisataList.map((w) => (w.id === editWisata.id ? editWisata : w)));
-    setEditWisata(null);
+  const fetchWisata = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/wisata");
+      const data = await res.json();
+      setWisataList(data.wisata || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = () => {
+  useEffect(() => {
+    fetchWisata();
+  }, []);
+
+  const filtered = wisataList.filter((w) => {
+    const matchSearch =
+      w.nama.toLowerCase().includes(search.toLowerCase()) ||
+      w.kategori.toLowerCase().includes(search.toLowerCase()) ||
+      w.lokasi.toLowerCase().includes(search.toLowerCase());
+    const matchStatus =
+      filterStatus === "Semua" || w.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
+
+  const handleEdit = async () => {
+    if (!editWisata) return;
+    setSaving(true);
+    try {
+      await fetch("/api/admin/wisata", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editWisata.id,
+          nama: editWisata.nama,
+          lokasi: editWisata.lokasi,
+          status: editWisata.status,
+        }),
+      });
+      await fetchWisata();
+      setEditWisata(null);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
     if (!deleteWisata) return;
-    setWisataList(wisataList.filter((w) => w.id !== deleteWisata.id));
-    setDeleteWisata(null);
+    try {
+      await fetch("/api/admin/wisata", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: deleteWisata.id }),
+      });
+      await fetchWisata();
+      setDeleteWisata(null);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             <MapPin size={22} className="text-primary" />
@@ -68,7 +98,8 @@ export default function KelolaWisataPage() {
         </div>
         <a
           href="/admin/approval-wisata"
-          className="flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition"
+          style={{ backgroundColor: "#130F6A" }}
+          className="flex items-center gap-2 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:opacity-90 transition shrink-0"
         >
           <ClipboardCheck size={16} /> Approval Wisata
         </a>
@@ -76,17 +107,36 @@ export default function KelolaWisataPage() {
 
       {/* Table */}
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-        <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="font-bold text-gray-800">Daftar Wisata</h2>
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Cari wisata..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary w-48"
-            />
+        <div className="p-5 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="font-bold text-gray-800">
+            Daftar Wisata{" "}
+            <span className="text-sm font-normal text-gray-400">({filtered.length})</span>
+          </h2>
+          <div className="flex items-center gap-2">
+            {/* Filter Status */}
+            <div className="relative">
+              <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="pl-8 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary appearance-none bg-white cursor-pointer"
+              >
+                <option value="Semua">Semua</option>
+                <option value="Aktif">Aktif</option>
+                <option value="Nonaktif">Nonaktif</option>
+              </select>
+            </div>
+            {/* Search */}
+            <div className="relative">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Cari wisata..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary w-48"
+              />
+            </div>
           </div>
         </div>
 
@@ -98,34 +148,54 @@ export default function KelolaWisataPage() {
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Nama Wisata</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Kategori</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Lokasi</th>
-                <th className="text-left px-6 py-3 text-gray-500 font-medium">Rating</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Status</th>
                 <th className="text-left px-6 py-3 text-gray-500 font-medium">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {wisataList.length === 0 ? (
+              {loading ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-10 text-gray-400">Memuat data...</td>
+                  <td colSpan={6} className="text-center py-10 text-gray-400">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      Memuat data...
+                    </div>
+                  </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-10 text-gray-400">Tidak ada wisata ditemukan</td>
+                  <td colSpan={6} className="text-center py-10 text-gray-400">
+                    {search || filterStatus !== "Semua"
+                      ? "Tidak ada wisata ditemukan"
+                      : "Belum ada data wisata"}
+                  </td>
                 </tr>
               ) : (
                 filtered.map((w) => (
-                  <tr key={w.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 text-gray-500 font-mono">{String(w.id).padStart(5, "0")}</td>
-                    <td className="px-6 py-4 font-medium text-gray-800">{w.nama}</td>
-                    <td className="px-6 py-4 text-gray-500">{w.kategori}</td>
-                    <td className="px-6 py-4 text-gray-500">{w.lokasi}</td>
-                    <td className="px-6 py-4">
-                      <span className="text-yellow-500 font-medium">★ {w.rating}</span>
+                  <tr
+                    key={w.id}
+                    className={`transition ${
+                      w.status === "Nonaktif"
+                        ? "bg-gray-50 opacity-60"
+                        : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <td className="px-6 py-4 text-gray-500 font-mono">
+                      {String(w.id).padStart(5, "0")}
                     </td>
+                    <td className={`px-6 py-4 font-medium ${w.status === "Nonaktif" ? "text-gray-400" : "text-gray-800"}`}>
+                      {w.nama}
+                    </td>
+                    <td className="px-6 py-4 text-gray-400">{w.kategori}</td>
+                    <td className="px-6 py-4 text-gray-400">{w.lokasi}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        w.status === "Aktif" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-                      }`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          w.status === "Aktif"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-200 text-gray-500"
+                        }`}
+                      >
                         {w.status}
                       </span>
                     </td>
@@ -196,11 +266,11 @@ export default function KelolaWisataPage() {
                 <label className="text-sm font-medium text-gray-700 mb-1 block">Status</label>
                 <select
                   value={editWisata.status}
-                  onChange={(e) => setEditWisata({ ...editWisata, status: e.target.value as "Aktif" | "Nonaktif" })}
+                  onChange={(e) => setEditWisata({ ...editWisata, status: e.target.value })}
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option>Aktif</option>
-                  <option>Nonaktif</option>
+                  <option value="Aktif">Aktif</option>
+                  <option value="Nonaktif">Nonaktif</option>
                 </select>
               </div>
             </div>
@@ -213,9 +283,16 @@ export default function KelolaWisataPage() {
               </button>
               <button
                 onClick={handleEdit}
-                className="flex-1 bg-primary text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 flex items-center justify-center gap-2"
+                disabled={saving}
+                style={{ backgroundColor: "#130F6A" }}
+                className="flex-1 text-white rounded-xl py-2.5 text-sm font-medium hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                <Save size={15} /> Simpan
+                {saving ? (
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Save size={15} />
+                )}
+                Simpan
               </button>
             </div>
           </div>

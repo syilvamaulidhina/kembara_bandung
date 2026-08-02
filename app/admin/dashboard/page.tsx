@@ -7,30 +7,11 @@ import {
 } from "recharts";
 import { MapPin, LayoutGrid, Users, TrendingUp, CheckCircle } from "lucide-react";
 
-const visitData = [
-  { bulan: "Jan", kunjungan: 3000 },
-  { bulan: "Feb", kunjungan: 4000 },
-  { bulan: "Mar", kunjungan: 5200 },
-  { bulan: "Apr", kunjungan: 2400 },
-  { bulan: "Mei", kunjungan: 3600 },
-  { bulan: "Jun", kunjungan: 4100 },
-];
-
-const kategoriData = [
-  { name: "Wisata Alam", value: 40, color: "#F59E0B" },
-  { name: "Wisata Kuliner", value: 20, color: "#10B981" },
-  { name: "Wisata Edukasi", value: 20, color: "#EF4444" },
-  { name: "Wisata Hiburan", value: 20, color: "#8B5CF6" },
-];
-
-// Data wisata dummy — nanti diganti real setelah merge role pengelola
-const wisataDataDummy = [
-  { id: 1, nama: "Kawah Putih", kategori: "Wisata Alam", lokasi: "Ciwidey, Bandung", lat: -7.1664, lng: 107.4024 },
-  { id: 2, nama: "Farm House Lembang", kategori: "Wisata Hiburan", lokasi: "Lembang, Bandung", lat: -6.8145, lng: 107.6095 },
-  { id: 3, nama: "Orchid Forest Cikole", kategori: "Wisata Alam", lokasi: "Lembang, Bandung", lat: -6.8003, lng: 107.6256 },
-  { id: 4, nama: "Tebing Keraton", kategori: "Wisata Alam", lokasi: "Bandung", lat: -6.8523, lng: 107.6612 },
-  { id: 5, nama: "Museum Geologi", kategori: "Wisata Edukasi", lokasi: "Bandung", lat: -6.9022, lng: 107.6188 },
-  { id: 6, nama: "Dusun Bambu", kategori: "Wisata Alam", lokasi: "Lembang, Bandung", lat: -6.8272, lng: 107.5797 },
+const DEFAULT_VISIT_DATA = [
+  { bulan: "Minggu 1", kunjungan: 0 },
+  { bulan: "Minggu 2", kunjungan: 0 },
+  { bulan: "Minggu 3", kunjungan: 0 },
+  { bulan: "Minggu 4", kunjungan: 0 },
 ];
 
 function SIGMap() {
@@ -38,6 +19,16 @@ function SIGMap() {
   const mapInstanceRef = useRef<any>(null);
   const [mapReady, setMapReady] = useState(false);
   const [selected, setSelected] = useState<any>(null);
+  const [wisataData, setWisataData] = useState<any[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/wisata")
+      .then((res) => res.json())
+      .then((data) => setWisataData(data.wisata || []))
+      .catch(() => setWisataData([]))
+      .finally(() => setLoadingData(false));
+  }, []);
 
   useEffect(() => {
     if (mapInstanceRef.current) return;
@@ -99,23 +90,6 @@ function SIGMap() {
         document.head.appendChild(ts);
       }
 
-      const redDotIcon = L.divIcon({
-        className: "",
-        html: `<div style="width:14px;height:14px;background:#EF4444;border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 0 3px rgba(239,68,68,0.25),0 2px 8px rgba(0,0,0,0.25);animation:pulse-red 1.8s ease-in-out infinite;"></div>`,
-        iconSize: [14, 14],
-        iconAnchor: [7, 7],
-      });
-
-      wisataDataDummy.forEach((w) => {
-        const marker = L.marker([w.lat, w.lng], { icon: redDotIcon }).addTo(map);
-        marker.on("click", () => setSelected(w));
-        marker.bindTooltip(
-          `<div style="font-size:12px;font-weight:600;color:#1F2937;">${w.nama}</div>
-           <div style="font-size:11px;color:#6B7280;">${w.kategori}</div>`,
-          { direction: "top", offset: [0, -8], className: "sig-tooltip" }
-        );
-      });
-
       mapInstanceRef.current = map;
       setMapReady(true);
     };
@@ -130,6 +104,33 @@ function SIGMap() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!mapReady || !mapInstanceRef.current || wisataData.length === 0) return;
+
+    const L = (window as any).L;
+    const map = mapInstanceRef.current;
+
+    const redDotIcon = L.divIcon({
+      className: "",
+      html: `<div style="width:14px;height:14px;background:#EF4444;border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 0 3px rgba(239,68,68,0.25),0 2px 8px rgba(0,0,0,0.25);animation:pulse-red 1.8s ease-in-out infinite;"></div>`,
+      iconSize: [14, 14],
+      iconAnchor: [7, 7],
+    });
+
+    wisataData.forEach((w: any) => {
+      if (!w.lat || !w.lng) return;
+      const marker = L.marker([w.lat, w.lng], { icon: redDotIcon }).addTo(map);
+      marker.on("click", () => setSelected(w));
+      marker.bindTooltip(
+        `<div style="font-size:12px;font-weight:600;color:#1F2937;">${w.nama}</div>
+         <div style="font-size:11px;color:#6B7280;">${w.kategori}</div>`,
+        { direction: "top", offset: [0, -8], className: "sig-tooltip" }
+      );
+    });
+  }, [mapReady, wisataData]);
+
+  const withCoords = wisataData.filter((w) => w.lat && w.lng);
+
   return (
     <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
       <div className="p-5 border-b border-gray-100">
@@ -143,19 +144,23 @@ function SIGMap() {
               Titik merah = lokasi wisata yang sudah terdaftar di sistem
             </p>
           </div>
-          <span className="flex items-center gap-1.5 text-xs text-gray-500">
-            <span className="w-3 h-3 rounded-full bg-red-500 inline-block shadow-sm" />
-            Terdaftar ({wisataDataDummy.length})
-          </span>
+          <div className="flex items-center gap-4 text-xs text-gray-500">
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-red-500 inline-block shadow-sm" />
+              Terdaftar ({withCoords.length})
+            </span>
+          </div>
         </div>
       </div>
 
       <div className="px-5 pb-5 pt-4">
         <div className="relative rounded-xl overflow-hidden border border-gray-100" style={{ height: "380px" }}>
           <div ref={mapRef} style={{ height: "100%", width: "100%" }} />
-          {!mapReady && (
+          {(!mapReady || loadingData) && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
-              <div className="text-sm text-gray-400 animate-pulse">Memuat peta...</div>
+              <div className="text-sm text-gray-400 animate-pulse">
+                {loadingData ? "Memuat data wisata..." : "Memuat peta..."}
+              </div>
             </div>
           )}
           {selected && (
@@ -170,6 +175,13 @@ function SIGMap() {
               </div>
               <div className="space-y-1 text-xs text-gray-500">
                 <p><span className="text-gray-400">Lokasi:</span> <span className="font-medium text-gray-700">{selected.lokasi}</span></p>
+                {selected.deskripsi && <p className="text-gray-400 line-clamp-2">{selected.deskripsi}</p>}
+                <p>
+                  <span className="text-gray-400">Koordinat:</span>{" "}
+                  <span className="font-medium text-gray-700">
+                    {Number(selected.lat).toFixed(4)}, {Number(selected.lng).toFixed(4)}
+                  </span>
+                </p>
               </div>
             </div>
           )}
@@ -180,18 +192,24 @@ function SIGMap() {
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
           Wisata Terdaftar di Peta
         </p>
-        <div className="space-y-2">
-          {wisataDataDummy.slice(0, 4).map((w) => (
-            <div key={w.id} className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
-                <span className="text-gray-700 font-medium">{w.nama}</span>
-                <span className="text-gray-400 text-xs hidden sm:inline">· {w.lokasi}</span>
+        {loadingData ? (
+          <p className="text-xs text-gray-400 animate-pulse">Memuat data...</p>
+        ) : withCoords.length === 0 ? (
+          <p className="text-xs text-gray-400">Belum ada wisata dengan koordinat.</p>
+        ) : (
+          <div className="space-y-2">
+            {withCoords.slice(0, 4).map((w: any) => (
+              <div key={w.id} className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">{w.nama}</span>
+                  <span className="text-gray-400 text-xs hidden sm:inline">· {w.lokasi}</span>
+                </div>
+                <span className="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded-full font-medium">Terdaftar</span>
               </div>
-              <span className="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded-full font-medium">Terdaftar</span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -199,10 +217,16 @@ function SIGMap() {
 
 export default function DashboardPage() {
   const [user, setUser] = useState<{ name: string } | null>(null);
-  const [period, setPeriod] = useState("6 Bulan Terakhir");
 
-  // ✅ Total pengguna dari DB (yang bisa real sekarang)
-  const [totalPengguna, setTotalPengguna] = useState<number | null>(null);
+  const [dbStats, setDbStats] = useState({
+    totalWisata: 0,
+    totalPengguna: 0,
+    totalKategori: 0,
+  });
+  const [kategoriData, setKategoriData] = useState<any[]>([]);
+  const [visitData, setVisitData] = useState<{ bulan: string; kunjungan: number }[]>(DEFAULT_VISIT_DATA);
+  const [availableMonths, setAvailableMonths] = useState<{ value: string; label: string }[]>([]);
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
@@ -210,17 +234,45 @@ export default function DashboardPage() {
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
-  useEffect(() => {
-    fetch("/api/admin/dashboard")
+  const fetchDashboard = (month: string) => {
+    setLoadingStats(true);
+    const url = month
+      ? `/api/admin/dashboard?month=${month}`
+      : "/api/admin/dashboard";
+
+    fetch(url)
       .then((res) => res.json())
-      .then((data) => setTotalPengguna(data.totalPengguna || 0))
-      .catch(() => setTotalPengguna(0))
+      .then((data) => {
+        setDbStats({
+          totalWisata: data.totalWisata || 0,
+          totalPengguna: data.totalPengguna || 0,
+          totalKategori: data.totalKategori || 0,
+        });
+        setKategoriData(data.kategoriData || []);
+        setVisitData(
+          data.kunjunganData?.length > 0 ? data.kunjunganData : DEFAULT_VISIT_DATA
+        );
+        if (data.availableMonths) setAvailableMonths(data.availableMonths);
+        if (data.selectedMonth && !selectedMonth) setSelectedMonth(data.selectedMonth);
+      })
+      .catch(console.error)
       .finally(() => setLoadingStats(false));
+  };
+
+  useEffect(() => {
+    fetchDashboard("");
   }, []);
+
+  const handleMonthChange = (value: string) => {
+    setSelectedMonth(value);
+    fetchDashboard(value);
+  };
+
+  const currentMonthLabel =
+    availableMonths.find((m) => m.value === selectedMonth)?.label || "";
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
@@ -242,34 +294,37 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Wisata Terdaftar - dummy dulu */}
         <div className="bg-white rounded-2xl p-5 shadow-sm">
           <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-3">
             <MapPin size={20} className="text-red-500" />
           </div>
-          <p className="text-3xl font-bold text-gray-800">–</p>
+          <p className="text-3xl font-bold text-gray-800">
+            {loadingStats ? "..." : dbStats.totalWisata.toLocaleString()}
+          </p>
           <p className="text-sm text-gray-500 mt-1">Wisata Terdaftar</p>
-          <p className="text-xs text-gray-400 mt-2">Tersedia setelah merge pengelola</p>
+          <p className="text-xs text-green-500 mt-2 flex items-center gap-1">
+            <TrendingUp size={12} />
+            Data real dari database
+          </p>
         </div>
 
-        {/* Total Kategori - dummy dulu */}
         <div className="bg-white rounded-2xl p-5 shadow-sm">
           <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center mb-3">
             <LayoutGrid size={20} className="text-orange-500" />
           </div>
-          <p className="text-3xl font-bold text-gray-800">4</p>
+          <p className="text-3xl font-bold text-gray-800">
+            {loadingStats ? "..." : dbStats.totalKategori}
+          </p>
           <p className="text-sm text-gray-500 mt-1">Total Kategori Wisata</p>
         </div>
 
-        {/* Total Pengguna - real dari DB */}
         <div className="bg-white rounded-2xl p-5 shadow-sm">
           <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-3">
             <Users size={20} className="text-green-500" />
           </div>
           <p className="text-3xl font-bold text-gray-800">
-            {loadingStats ? "..." : totalPengguna?.toLocaleString()}
+            {loadingStats ? "..." : dbStats.totalPengguna.toLocaleString()}
           </p>
           <p className="text-sm text-gray-500 mt-1">Pengguna Wisatawan</p>
           <p className="text-xs text-green-500 mt-2 flex items-center gap-1">
@@ -279,62 +334,77 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
             <div>
               <h2 className="font-bold text-gray-800">Statistik Kunjungan</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Data dummy</p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Jumlah kunjungan per minggu — {currentMonthLabel}
+              </p>
             </div>
             <select
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
+              value={selectedMonth}
+              onChange={(e) => handleMonthChange(e.target.value)}
               className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none"
             >
-              <option>6 Bulan Terakhir</option>
-              <option>3 Bulan Terakhir</option>
-              <option>1 Tahun Terakhir</option>
+              {availableMonths.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
             </select>
           </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={visitData} barSize={32}>
-              <XAxis dataKey="bulan" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-              <Tooltip
-                contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
-                cursor={{ fill: "#F4F6FB" }}
-              />
-              <Bar dataKey="kunjungan" fill="#3B4FD8" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          {loadingStats ? (
+            <div className="h-[220px] flex items-center justify-center text-gray-400 text-sm animate-pulse">
+              Memuat data...
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={visitData} barSize={48}>
+                <XAxis dataKey="bulan" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
+                  cursor={{ fill: "#F4F6FB" }}
+                  formatter={(value: any) => [value, "Kunjungan"]}
+                />
+                <Bar dataKey="kunjungan" fill="#3B4FD8" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         <div className="bg-white rounded-2xl p-5 shadow-sm">
           <h2 className="font-bold text-gray-800 mb-4">Kategori Wisata</h2>
-          <div className="flex items-center gap-4">
-            <ResponsiveContainer width="55%" height={200}>
-              <PieChart>
-                <Pie data={kategoriData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
-                  {kategoriData.map((entry, index) => (
-                    <Cell key={index} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="space-y-2 flex-1">
-              {kategoriData.map((item) => (
-                <div key={item.name} className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
-                  <span className="text-xs text-gray-600">{item.value}% {item.name}</span>
-                </div>
-              ))}
+          {loadingStats ? (
+            <p className="text-sm text-gray-400 animate-pulse">Memuat data...</p>
+          ) : kategoriData.length === 0 ? (
+            <p className="text-sm text-gray-400">Belum ada data kategori.</p>
+          ) : (
+            <div className="flex items-center gap-4">
+              <ResponsiveContainer width="55%" height={200}>
+                <PieChart>
+                  <Pie data={kategoriData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
+                    {kategoriData.map((entry: any, index: number) => (
+                      <Cell key={index} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="space-y-2 flex-1">
+                {kategoriData.map((item: any) => (
+                  <div key={item.name} className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                    <span className="text-xs text-gray-600">{item.value}% {item.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Peta SIG */}
       <SIGMap />
     </div>
   );

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import {
   Sparkles,
   TrendingUp,
-  TrendingDown,
   AlertCircle,
   Lightbulb,
   Target,
@@ -13,6 +12,7 @@ import {
   Star,
   RefreshCw,
   CheckCircle2,
+  ImageOff,
 } from "lucide-react";
 
 type Insight = {
@@ -21,21 +21,34 @@ type Insight = {
   title: string;
   description: string;
   impact: "high" | "medium" | "low";
-  icon: string;
 };
 
-type DashboardData = {
-  visitData: { bulan: string; kunjungan: number }[];
-  kategoriData: { name: string; value: number }[];
-  topWisata: { nama: string; pengunjung: string }[];
-  stats: { label: string; value: string }[];
+type RealData = {
+  totalWisata: number;
+  totalPengguna: number;
+  wisataAktif: number;
+  wisataNonAktif: number;
+  tanpaKoordinat: number;
+  tanpaFoto: number;
+  kategoriSummary: {
+    kategori: string;
+    jumlah: number;
+    persentase: number;
+    avgRating: number;
+  }[];
+  topRated: {
+    nama: string;
+    kategori: string;
+    rating: number;
+    lokasi: string;
+  }[];
 };
 
 export default function AIInsightPage() {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<RealData | null>(null);
 
   const fetchInsights = async () => {
     setLoading(true);
@@ -69,14 +82,10 @@ export default function AIInsightPage() {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "bg-red-100 text-red-700 border-red-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      case "low":
-        return "bg-green-100 text-green-700 border-green-200";
-      default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
+      case "high": return "bg-red-100 text-red-700 border-red-200";
+      case "medium": return "bg-yellow-100 text-yellow-700 border-yellow-200";
+      case "low": return "bg-green-100 text-green-700 border-green-200";
+      default: return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
@@ -132,7 +141,7 @@ export default function AIInsightPage() {
         <div className="flex items-center justify-center py-20">
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-500 text-sm">Menganalisis data...</p>
+            <p className="text-gray-500 text-sm">Menganalisis data real dari database...</p>
           </div>
         </div>
       </div>
@@ -141,7 +150,6 @@ export default function AIInsightPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
@@ -162,43 +170,89 @@ export default function AIInsightPage() {
         </button>
       </div>
 
-      {/* Summary Stats */}
       {data && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2 text-gray-500 text-xs mb-2">
-              <TrendingUp size={14} />
-              Total Kunjungan (6 bulan)
-            </div>
-            <p className="text-2xl font-bold text-gray-800">
-              {data.visitData.reduce((acc, d) => acc + d.kunjungan, 0).toLocaleString("id-ID")}
-            </p>
-          </div>
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2 text-gray-500 text-xs mb-2">
               <MapPin size={14} />
               Wisata Terdaftar
             </div>
-            <p className="text-2xl font-bold text-gray-800">{data.stats[0]?.value || "-"}</p>
+            <p className="text-2xl font-bold text-gray-800">{data.totalWisata}</p>
+            <p className="text-xs text-green-500 mt-1">{data.wisataAktif} aktif</p>
           </div>
+
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2 text-gray-500 text-xs mb-2">
               <Users size={14} />
               Total Pengguna
             </div>
-            <p className="text-2xl font-bold text-gray-800">{data.stats[2]?.value || "-"}</p>
+            <p className="text-2xl font-bold text-gray-800">{data.totalPengguna}</p>
+            <p className="text-xs text-gray-400 mt-1">Wisatawan terdaftar</p>
           </div>
+
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2 text-gray-500 text-xs mb-2">
-              <Star size={14} />
-              Kategori Aktif
+              <MapPin size={14} className="text-red-400" />
+              Belum Ada Koordinat
             </div>
-            <p className="text-2xl font-bold text-gray-800">{data.stats[1]?.value || "-"}</p>
+            <p className="text-2xl font-bold text-gray-800">{data.tanpaKoordinat}</p>
+            <p className="text-xs text-red-400 mt-1">Tidak muncul di peta</p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-2 text-gray-500 text-xs mb-2">
+              <ImageOff size={14} className="text-yellow-500" />
+              Belum Ada Foto
+            </div>
+            <p className="text-2xl font-bold text-gray-800">{data.tanpaFoto}</p>
+            <p className="text-xs text-yellow-500 mt-1">Perlu dilengkapi</p>
           </div>
         </div>
       )}
 
-      {/* Insights Grid */}
+      {data && (data.kategoriSummary?.length ?? 0) > 0 && (
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <Star size={16} className="text-primary" />
+            Distribusi Kategori Wisata
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {data.kategoriSummary.map((k) => (
+              <div key={k.kategori} className="bg-gray-50 rounded-xl p-3">
+                <p className="text-xs text-gray-500 mb-1">{k.kategori}</p>
+                <p className="text-xl font-bold text-gray-800">{k.jumlah}</p>
+                <p className="text-xs text-gray-400">{k.persentase}% · ⭐ {k.avgRating}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {data && (data.topRated?.length ?? 0) > 0 && (
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <Star size={16} className="text-yellow-500" />
+            Top 3 Wisata Rating Tertinggi
+          </h3>
+          <div className="space-y-3">
+            {data.topRated.map((w, i) => (
+              <div key={i} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    {i + 1}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">{w.nama}</p>
+                    <p className="text-xs text-gray-400">{w.kategori} · {w.lokasi}</p>
+                  </div>
+                </div>
+                <span className="text-sm font-bold text-yellow-500">⭐ {w.rating}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {insights.map((insight) => {
           const config = getTypeConfig(insight.type);
@@ -227,7 +281,6 @@ export default function AIInsightPage() {
         })}
       </div>
 
-      {/* Action Items */}
       {insights.some((i) => i.type === "recommendation") && (
         <div className="bg-gradient-to-br from-primary/5 to-indigo-50 rounded-2xl p-6 border border-primary/20">
           <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
@@ -254,13 +307,9 @@ export default function AIInsightPage() {
 
 function impactLabel(impact: string) {
   switch (impact) {
-    case "high":
-      return "Dampak Tinggi";
-    case "medium":
-      return "Dampak Sedang";
-    case "low":
-      return "Dampak Rendah";
-    default:
-      return impact;
+    case "high": return "Dampak Tinggi";
+    case "medium": return "Dampak Sedang";
+    case "low": return "Dampak Rendah";
+    default: return impact;
   }
 }

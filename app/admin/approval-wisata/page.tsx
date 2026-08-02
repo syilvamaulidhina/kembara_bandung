@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ClipboardCheck, Check, X, MapPin, Star, Calendar, User } from "lucide-react";
+import { ClipboardCheck, Check, X, MapPin, Calendar, User, ArrowLeft } from "lucide-react";
 
 type RequestWisata = {
   id: number;
@@ -9,79 +9,34 @@ type RequestWisata = {
   kategori: string;
   lokasi: string;
   deskripsi: string;
-  rating: number;
   pengaju: string;
   tanggalPengajuan: string;
   status: "Pending" | "Disetujui" | "Ditolak";
+  imageUrl: string | null;
 };
-
-const initialRequests: RequestWisata[] = [
-  {
-    id: 1,
-    nama: "Guru Bumi Lembang",
-    kategori: "Wisata Edukasi",
-    lokasi: "Lembang, Bandung Barat",
-    deskripsi: "Wisata edukasi pertanian dan alam dengan berbagai aktivitas seperti petik strawberry, menanam sayuran organik, dan belajar tentang ekosistem alam.",
-    rating: 0,
-    pengaju: "Budi Santoso",
-    tanggalPengajuan: "2026-04-20",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    nama: "Ranca Upas Ciwidey",
-    kategori: "Wisata Alam",
-    lokasi: "Ciwidey, Bandung",
-    deskripsi: "Kawasan camping ground dengan pemandangan danau dan hutan pinus. Cocok untuk aktivitas outdoor dan fotografi.",
-    rating: 0,
-    pengaju: "Siti Aminah",
-    tanggalPengajuan: "2026-04-19",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    nama: "Paris Van Java",
-    kategori: "Wisata Hiburan",
-    lokasi: "Cihampelas, Bandung",
-    deskripsi: "Pusat perbelanjaan dengan konsep outdoor shopping mall pertama di Bandung. Menyajikan pengalaman belanja yang unik dengan suasana terbuka.",
-    rating: 0,
-    pengaju: "Ahmad Rizki",
-    tanggalPengajuan: "2026-04-18",
-    status: "Pending",
-  },
-  {
-    id: 4,
-    nama: "Curug Malela",
-    kategori: "Wisata Alam",
-    lokasi: "Cikalongwetan, Bandung Barat",
-    deskripsi: "Air terjun setinggi 70 meter dengan pemandangan spektakuler. Dijuluki sebagai Niagara van Bandung.",
-    rating: 0,
-    pengaju: "Dewi Lestari",
-    tanggalPengajuan: "2026-04-15",
-    status: "Ditolak",
-  },
-  {
-    id: 5,
-    nama: "Kampung Gajah Wonderland",
-    kategori: "Wisata Hiburan",
-    lokasi: "Sariwangi, Bandung Barat",
-    deskripsi: "Taman hiburan keluarga dengan berbagai wahana permainan dan spot foto instagramable.",
-    rating: 4.5,
-    pengaju: "Eko Prasetyo",
-    tanggalPengajuan: "2026-04-10",
-    status: "Disetujui",
-  },
-];
-
-const KATEGORI = ["Wisata Alam", "Wisata Kuliner", "Wisata Edukasi", "Wisata Hiburan"];
 
 export default function ApprovalWisataPage() {
   const [requests, setRequests] = useState<RequestWisata[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedRequest, setSelectedRequest] = useState<RequestWisata | null>(null);
-  const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("pending");
+  const [filter, setFilter] = useState<"pending" | "approved" | "rejected">("pending");
+  const [processing, setProcessing] = useState(false);
+
+  const fetchRequests = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/approval-wisata");
+      const data = await res.json();
+      setRequests(data.requests || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setRequests(initialRequests);
+    fetchRequests();
   }, []);
 
   const filtered = requests.filter((r) => {
@@ -91,74 +46,94 @@ export default function ApprovalWisataPage() {
     return true;
   });
 
-  const handleApprove = (id: number) => {
-    setRequests(requests.map((r) => (r.id === id ? { ...r, status: "Disetujui", rating: 4.5 } : r)));
-    setSelectedRequest(null);
+  const handleApprove = async (id: number) => {
+    setProcessing(true);
+    try {
+      await fetch("/api/admin/approval-wisata", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action: "approve" }),
+      });
+      await fetchRequests();
+      setSelectedRequest(null);
+    } finally {
+      setProcessing(false);
+    }
   };
 
-  const handleReject = (id: number) => {
-    setRequests(requests.map((r) => (r.id === id ? { ...r, status: "Ditolak" } : r)));
-    setSelectedRequest(null);
+  const handleReject = async (id: number) => {
+    setProcessing(true);
+    try {
+      await fetch("/api/admin/approval-wisata", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action: "reject" }),
+      });
+      await fetchRequests();
+      setSelectedRequest(null);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   const pendingCount = requests.filter((r) => r.status === "Pending").length;
+
+  const tabs = [
+    { key: "pending", label: "Pending", count: requests.filter((r) => r.status === "Pending").length, activeStyle: { backgroundColor: "#130F6A" }, activeClass: "text-white" },
+    { key: "approved", label: "Disetujui", count: requests.filter((r) => r.status === "Disetujui").length, activeStyle: { backgroundColor: "#22c55e" }, activeClass: "text-white" },
+    { key: "rejected", label: "Ditolak", count: requests.filter((r) => r.status === "Ditolak").length, activeStyle: { backgroundColor: "#ef4444" }, activeClass: "text-white" },
+  ];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <ClipboardCheck size={22} className="text-primary" />
-            Approval Wisata
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">Kelola permintaan penambahan tempat wisata baru</p>
+        <div className="flex items-center gap-3">
+          <a href="/admin/kelola-wisata" className="p-2 rounded-xl hover:bg-gray-100 text-gray-500">
+            <ArrowLeft size={18} />
+          </a>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+              <ClipboardCheck size={22} className="text-primary" />
+              Approval Wisata
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Kelola permintaan penambahan tempat wisata baru
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
-            {pendingCount} Pending
-          </span>
-        </div>
+        <span className="px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
+          {pendingCount} Pending
+        </span>
       </div>
 
       {/* Filter Tabs */}
       <div className="flex gap-2">
-        <button
-          onClick={() => setFilter("pending")}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-            filter === "pending"
-              ? "bg-primary text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-          }`}
-        >
-          Pending ({requests.filter((r) => r.status === "Pending").length})
-        </button>
-        <button
-          onClick={() => setFilter("approved")}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-            filter === "approved"
-              ? "bg-green-500 text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-          }`}
-        >
-          Disetujui ({requests.filter((r) => r.status === "Disetujui").length})
-        </button>
-        <button
-          onClick={() => setFilter("rejected")}
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-            filter === "rejected"
-              ? "bg-red-500 text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-          }`}
-        >
-          Ditolak ({requests.filter((r) => r.status === "Ditolak").length})
-        </button>
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setFilter(tab.key as any)}
+            style={filter === tab.key ? tab.activeStyle : {}}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+              filter === tab.key
+                ? tab.activeClass
+                : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+            }`}
+          >
+            {tab.label} ({tab.count})
+          </button>
+        ))}
       </div>
 
-      {/* Requests List */}
+      {/* List */}
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="divide-y divide-gray-50">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center gap-2 py-10 text-gray-400 text-sm">
+              <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              Memuat data...
+            </div>
+          ) : filtered.length === 0 ? (
             <div className="p-10 text-center">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <ClipboardCheck size={32} className="text-gray-400" />
@@ -172,49 +147,29 @@ export default function ApprovalWisataPage() {
             </div>
           ) : (
             filtered.map((r) => (
-              <div
-                key={r.id}
-                className="p-5 hover:bg-gray-50 transition cursor-pointer"
-                onClick={() => setSelectedRequest(r)}
-              >
+              <div key={r.id} className="p-5 hover:bg-gray-50 transition cursor-pointer" onClick={() => setSelectedRequest(r)}>
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <h3 className="font-bold text-gray-800">{r.nama}</h3>
-                      <span
-                        className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          r.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : r.status === "Disetujui"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
-                      >
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        r.status === "Pending" ? "bg-yellow-100 text-yellow-700"
+                        : r.status === "Disetujui" ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                      }`}>
                         {r.status}
                       </span>
                     </div>
                     <p className="text-sm text-gray-500 mt-1 flex items-center gap-4">
-                      <span className="flex items-center gap-1">
-                        <MapPin size={12} />
-                        {r.lokasi}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <User size={12} />
-                        {r.pengaju}
-                      </span>
+                      <span className="flex items-center gap-1"><MapPin size={12} /> {r.lokasi}</span>
+                      <span className="flex items-center gap-1"><User size={12} /> {r.pengaju}</span>
                       <span className="flex items-center gap-1">
                         <Calendar size={12} />
-                        {new Date(r.tanggalPengajuan).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
+                        {new Date(r.tanggalPengajuan).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                       </span>
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400">Klik untuk detail</span>
-                  </div>
+                  <span className="text-xs text-gray-400">Klik untuk detail</span>
                 </div>
               </div>
             ))
@@ -233,12 +188,15 @@ export default function ApprovalWisataPage() {
               </button>
             </div>
 
+            {selectedRequest.imageUrl && (
+              <img src={selectedRequest.imageUrl} alt={selectedRequest.nama} className="w-full h-48 object-cover rounded-xl mb-5" />
+            )}
+
             <div className="space-y-4">
               <div>
                 <label className="text-xs font-medium text-gray-500 uppercase">Nama Wisata</label>
                 <p className="text-gray-800 font-medium mt-1">{selectedRequest.nama}</p>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-medium text-gray-500 uppercase">Kategori</label>
@@ -247,79 +205,51 @@ export default function ApprovalWisataPage() {
                 <div>
                   <label className="text-xs font-medium text-gray-500 uppercase">Status</label>
                   <p className="mt-1">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        selectedRequest.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : selectedRequest.status === "Disetujui"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      selectedRequest.status === "Pending" ? "bg-yellow-100 text-yellow-700"
+                      : selectedRequest.status === "Disetujui" ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                    }`}>
                       {selectedRequest.status}
                     </span>
                   </p>
                 </div>
               </div>
-
               <div>
                 <label className="text-xs font-medium text-gray-500 uppercase">Lokasi</label>
                 <p className="text-gray-800 font-medium mt-1 flex items-center gap-2">
-                  <MapPin size={16} className="text-gray-400" />
-                  {selectedRequest.lokasi}
+                  <MapPin size={16} className="text-gray-400" /> {selectedRequest.lokasi}
                 </p>
               </div>
-
               <div>
                 <label className="text-xs font-medium text-gray-500 uppercase">Deskripsi</label>
                 <p className="text-gray-600 text-sm mt-1 leading-relaxed">{selectedRequest.deskripsi}</p>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-medium text-gray-500 uppercase">Pengaju</label>
                   <p className="text-gray-800 font-medium mt-1 flex items-center gap-2">
-                    <User size={16} className="text-gray-400" />
-                    {selectedRequest.pengaju}
+                    <User size={16} className="text-gray-400" /> {selectedRequest.pengaju}
                   </p>
                 </div>
                 <div>
                   <label className="text-xs font-medium text-gray-500 uppercase">Tanggal Pengajuan</label>
                   <p className="text-gray-800 font-medium mt-1 flex items-center gap-2">
                     <Calendar size={16} className="text-gray-400" />
-                    {new Date(selectedRequest.tanggalPengajuan).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
+                    {new Date(selectedRequest.tanggalPengajuan).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                   </p>
                 </div>
               </div>
-
-              {selectedRequest.rating > 0 && (
-                <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase">Rating</label>
-                  <p className="text-gray-800 font-medium mt-1 flex items-center gap-2">
-                    <Star size={16} className="text-yellow-500 fill-yellow-500" />
-                    {selectedRequest.rating}
-                  </p>
-                </div>
-              )}
             </div>
 
             {selectedRequest.status === "Pending" && (
               <div className="flex gap-3 mt-6 pt-4 border-t border-gray-100">
-                <button
-                  onClick={() => handleReject(selectedRequest.id)}
-                  className="flex-1 border border-red-200 text-red-600 rounded-xl py-2.5 text-sm font-medium hover:bg-red-50 flex items-center justify-center gap-2"
-                >
-                  <X size={16} /> Tolak Request
+                <button onClick={() => handleReject(selectedRequest.id)} disabled={processing} className="flex-1 border border-red-200 text-red-600 rounded-xl py-2.5 text-sm font-medium hover:bg-red-50 flex items-center justify-center gap-2 disabled:opacity-60">
+                  <X size={16} /> Tolak
                 </button>
-                <button
-                  onClick={() => handleApprove(selectedRequest.id)}
-                  className="flex-1 bg-primary text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 flex items-center justify-center gap-2"
-                >
-                  <Check size={16} /> Setujui & Tambahkan
+                <button onClick={() => handleApprove(selectedRequest.id)} disabled={processing} style={{ backgroundColor: "#130F6A" }} className="flex-1 text-white rounded-xl py-2.5 text-sm font-medium hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-60">
+                  {processing ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Check size={16} />}
+                  Setujui
                 </button>
               </div>
             )}

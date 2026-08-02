@@ -12,13 +12,18 @@ import {
   Menu,
   X,
   ChevronRight,
-  AlertTriangle,
+  Tags,
+  ShieldCheck,
+  CalendarCheck,
 } from "lucide-react";
 
 const menuItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/kelola-wisata", label: "Manajemen Wisata", icon: MapPin },
   { href: "/admin/kelola-pengguna", label: "Kelola Pengguna", icon: Users },
+  { href: "/admin/kategori", label: "Kelola Kategori", icon: Tags },
+  { href: "/admin/verifikasi-pengelola", label: "Verifikasi Pengelola", icon: ShieldCheck },
+  { href: "/admin/verifikasi-event", label: "Verifikasi Event", icon: CalendarCheck },
   { href: "/admin/ai-insight", label: "AI Insight", icon: Sparkles },
 ];
 
@@ -61,7 +66,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-[#F4F6FB] flex">
-      {/* Overlay mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-20 md:hidden"
@@ -69,31 +73,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         />
       )}
 
-      {/* LOGOUT CONFIRMATION DIALOG */}
       {showLogoutDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowLogoutDialog(false)}
           />
-
-          {/* Dialog */}
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 flex flex-col items-center gap-4 animate-[fadeScaleIn_0.2s_ease-out]">
-            {/* Icon */}
             <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
               <LogOut size={26} className="text-red-500" />
             </div>
-
-            {/* Text */}
             <div className="text-center">
               <h2 className="text-lg font-semibold text-gray-800">Keluar dari Akun?</h2>
               <p className="text-sm text-gray-500 mt-1">
                 Kamu akan keluar dari sesi ini. Pastikan semua perubahan sudah tersimpan.
               </p>
             </div>
-
-            {/* Buttons */}
             <div className="flex gap-3 w-full mt-1">
               <button
                 onClick={() => setShowLogoutDialog(false)}
@@ -118,8 +113,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
-          <img src="/images/logo.svg" alt="logo" className="w-25 h-25 align-center" />
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
+          <img src="/images/logo.svg" alt="logo" className="w-32 h-auto" />
           <button
             className="ml-auto md:hidden text-gray-400"
             onClick={() => setSidebarOpen(false)}
@@ -129,7 +124,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* Menu */}
-        <nav className="flex-1 px-4 py-6 space-y-1">
+        <nav className="flex-1 px-4 py-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
@@ -140,7 +135,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   active
-                    ? "bg-primary text-white shadow-sm"
+                    ? "bg-blue-50 text-blue-600 font-semibold"
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-800"
                 }`}
               >
@@ -152,10 +147,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        {/* User + Logout */}
+        {/* User & Logout */}
         <div className="px-4 py-4 border-t border-gray-100">
           <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 mb-2">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">
+            {/* ← fix: pakai style inline supaya warna muncul */}
+            <div
+              style={{ backgroundColor: "#130F6A" }}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+            >
               {user ? getInitials(user.name) : "A"}
             </div>
             <div className="flex-1 min-w-0">
@@ -176,8 +175,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* MAIN */}
-      <div className="flex-1 md:ml-64 flex flex-col min-h-screen">
-        {/* Topbar mobile */}
+      <div className="flex-1 md:ml-64 flex flex-col min-h-screen overflow-x-hidden">
         <header className="md:hidden flex items-center gap-3 bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
           <button onClick={() => setSidebarOpen(true)} className="text-gray-600">
             <Menu size={22} />
@@ -186,10 +184,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <span className="font-bold text-gray-800 text-sm">Kembara Bandung</span>
         </header>
 
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6 overflow-x-hidden">{children}</main>
       </div>
 
-      {/* Keyframe animation */}
       <style>{`
         @keyframes fadeScaleIn {
           from { opacity: 0; transform: scale(0.95); }
