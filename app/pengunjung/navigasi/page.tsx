@@ -76,7 +76,7 @@ function NavigasiContent() {
   const { user } = useLocalUser();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { location, loading: gpsLoading, requestLocation } = useGeolocation(true);
+  const { location, loading: gpsLoading, requestLocation } = useGeolocation(true, true);
 
   // Query params untuk navigasi langsung
   const directId = searchParams.get("destId");
@@ -221,9 +221,22 @@ function NavigasiContent() {
     fetchRouteInfo();
   }, [fetchRouteInfo]);
 
-  // CATATAN: geofencing auto check-in (50m) SUDAH DIHAPUS sesuai requirement.
-  // Checkin sekarang HARUS selalu manual lewat tombol "Sudah Sampai" supaya
-  // konsisten dengan syarat pengiriman ulasan.
+  // Auto check-in (50m)
+  useEffect(() => {
+    if (!location || !currentDest || checkedIn.has(currentDest.id) || checkingIn) return;
+    
+    const dist = calculateDistance(
+      location.lat,
+      location.lng,
+      currentDest.latitude,
+      currentDest.longitude
+    );
+    
+    // Jika jarak kurang dari 50 meter (0.05 km), lakukan checkin otomatis
+    if (dist <= 0.05) {
+      doCheckin(currentDest.id);
+    }
+  }, [location, currentDest, checkedIn, checkingIn]);
 
   const doCheckin = async (destId: number) => {
     if (checkedIn.has(destId) || checkingIn) return;
@@ -318,7 +331,7 @@ function NavigasiContent() {
   return (
     <div className="h-screen flex flex-col bg-[#0f1a14] overflow-hidden">
       {/* TOP BAR */}
-      <div className="bg-[#0a120e]/95 backdrop-blur-sm text-white px-4 py-3 flex items-center gap-3 shrink-0 z-20 border-b border-white/5">
+      <div className="relative z-[500] bg-[#0a120e]/95 backdrop-blur-sm text-white px-4 py-3 flex items-center gap-3 shrink-0 border-b border-white/5">
         <Link
           href={
             navMode === "direct"
@@ -390,7 +403,7 @@ function NavigasiContent() {
 
       {/* TURN INSTRUCTION */}
       {routeInfo && !checkedIn.has(currentDest?.id || -1) && (
-        <div className="bg-white px-4 py-3 flex items-center gap-3 shrink-0 z-20 shadow-lg">
+        <div className="relative z-[500] bg-white px-4 py-3 flex items-center gap-3 shrink-0 shadow-lg">
           <div className="w-10 h-10 rounded-xl bg-[#006837] flex items-center justify-center shrink-0">
             <ChevronRight size={20} className="text-white" />
           </div>

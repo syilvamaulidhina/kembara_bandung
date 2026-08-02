@@ -101,6 +101,7 @@ export async function GET(request: NextRequest) {
         include: {
           categories: { include: { category: true } },
           reviews: { select: { rating: true } },
+          savedBy: { select: { id: true } },
         },
         orderBy,
         ...(fetchTake !== undefined && { take: fetchTake }),
@@ -123,12 +124,17 @@ export async function GET(request: NextRequest) {
           ? calculateDistance(lat, lng, dest.latitude, dest.longitude)
           : undefined;
 
+      const savedCount = dest.savedBy ? dest.savedBy.length : 0;
+      const popularityScore = (dest.visitCount * 1) + (savedCount * 3) + (reviewRatings.length * 5) + ((averageRating || 0) * 10);
+
       return {
         ...dest,
         reviews: undefined, // bersihkan dari response
+        savedBy: undefined, // bersihkan dari response
         averageRating,
         reviewCount: reviewRatings.length,
         distance,
+        popularityScore,
         isSaved: savedIds.has(dest.id),
       };
     });
@@ -156,7 +162,7 @@ export async function GET(request: NextRequest) {
 
     // Sort & paginate popular
     if (popular) {
-      enriched.sort((a: any, b: any) => b.visitCount - a.visitCount);
+      enriched.sort((a: any, b: any) => b.popularityScore - a.popularityScore);
     }
 
     // Pagination manual kalau filter jarak atau popular aktif

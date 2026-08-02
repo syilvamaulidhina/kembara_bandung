@@ -197,7 +197,13 @@ export default function TersimpanPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {filtered.map((dest) => {
             const open = isOpenNow(dest.openTime, dest.closeTime);
-            const catName = dest.categories[0]?.category?.name;
+            let catName = dest.categories[0]?.category?.name;
+            if (activeTab !== "semua") {
+              const matchedCat = dest.categories.find(c => c.category?.name.toLowerCase() === activeTab.toLowerCase());
+              if (matchedCat) {
+                catName = matchedCat.category.name;
+              }
+            }
             const catInfo = CATEGORIES.find((c) => c.name.toLowerCase() === catName?.toLowerCase());
             return (
               <Link key={dest.id} href={`/pengunjung/destinasi/${dest.id}`}

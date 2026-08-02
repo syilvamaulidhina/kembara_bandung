@@ -52,6 +52,7 @@ export default function UlasanPage() {
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [lightboxMedia, setLightboxMedia] = useState<{url: string, type: 'image' | 'video'} | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -59,7 +60,7 @@ export default function UlasanPage() {
     if (!user) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/pengunjung/reviews?userId=${user.id}`);
+      const res = await fetch(`/api/pengunjung/reviews?userId=${user.id}&t=${Date.now()}`);
       const json = await res.json();
       if (json.success) {
         setVisitedPlaces(json.data.visitedPlaces);
@@ -482,10 +483,26 @@ export default function UlasanPage() {
                     </div>
                     {review.comment && <p className="text-sm text-gray-600 leading-relaxed">{review.comment}</p>}
                     {review.photoUrl && (
-                      <img src={review.photoUrl} alt="review" className="mt-3 h-28 rounded-xl object-cover" />
+                      <img 
+                        src={review.photoUrl} 
+                        alt="review" 
+                        className="mt-3 h-28 rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity" 
+                        onClick={() => setLightboxMedia({ url: review.photoUrl!, type: 'image' })}
+                      />
                     )}
                     {review.videoUrl && (
-                      <video src={review.videoUrl} controls className="mt-3 h-28 rounded-xl object-cover" />
+                      <div className="relative inline-block mt-3 h-28">
+                        <video 
+                          src={review.videoUrl} 
+                          className="h-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity" 
+                          onClick={() => setLightboxMedia({ url: review.videoUrl!, type: 'video' })}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                           <div className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center">
+                             <div className="w-0 h-0 border-t-4 border-t-transparent border-l-[6px] border-l-white border-b-4 border-b-transparent ml-1"></div>
+                           </div>
+                        </div>
+                      </div>
                     )}
                     <div className="mt-2 flex items-center gap-3 text-xs text-gray-400">
                       <span>👍 {review.helpfulCount} membantu</span>
@@ -498,6 +515,20 @@ export default function UlasanPage() {
             ))}
           </div>
         </section>
+      )}
+
+      {/* Lightbox for review media */}
+      {lightboxMedia && (
+        <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 99999, backgroundColor: 'rgba(0,0,0,0.9)' }} onClick={() => setLightboxMedia(null)}>
+          <button className="absolute top-4 right-4 text-white hover:text-gray-300 z-10" onClick={() => setLightboxMedia(null)}>
+            <X size={32} />
+          </button>
+          {lightboxMedia.type === 'image' ? (
+            <img src={lightboxMedia.url} alt="Review Media" className="max-w-full max-h-full object-contain relative z-20" onClick={(e) => e.stopPropagation()} />
+          ) : (
+            <video src={lightboxMedia.url} controls autoPlay className="max-w-full max-h-[80vh] relative z-20" onClick={(e) => e.stopPropagation()} />
+          )}
+        </div>
       )}
     </div>
   );

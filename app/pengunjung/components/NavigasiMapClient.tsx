@@ -61,9 +61,9 @@ export default function NavigasiMapClient({
         attributionControl: false,
       });
 
-      // Dark tile style untuk navigasi
+      // Terang (Voyager) tile style untuk navigasi (konsisten dengan peta utama)
       L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
         { maxZoom: 19 }
       ).addTo(map);
 

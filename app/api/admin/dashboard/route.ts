@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
     const weekSize = Math.ceil(daysInMonth / 4);
 
     // Buat struktur data: weekBuckets[weekIndex][kategoriName] = count
-    const weekLabels = ["Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"];
+    const weekLabels = ["M1", "M2", "M3", "M4"];
     const kategoriNames = categories.map((c) => c.name);
 
     // Init semua minggu dengan 0 per kategori
