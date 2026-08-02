@@ -10,10 +10,10 @@ import { MapPin, LayoutGrid, Users, TrendingUp, CheckCircle } from "lucide-react
 const colors = ["#F59E0B", "#10B981", "#EF4444", "#8B5CF6", "#3B82F6", "#EC4899"];
 
 const DEFAULT_VISIT_DATA = [
-  { bulan: "Minggu 1", kunjungan: 0 },
-  { bulan: "Minggu 2", kunjungan: 0 },
-  { bulan: "Minggu 3", kunjungan: 0 },
-  { bulan: "Minggu 4", kunjungan: 0 },
+  { bulan: "M1", kunjungan: 0 },
+  { bulan: "M2", kunjungan: 0 },
+  { bulan: "M3", kunjungan: 0 },
+  { bulan: "M4", kunjungan: 0 },
 ];
 
 function SIGMap() {
@@ -378,16 +378,15 @@ export default function DashboardPage() {
     width={65}
   />
               <Tooltip
-                  contentStyle={{
-                    borderRadius: "12px",
-                    border: "none",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                  }}
-                  cursor={{ fill: "#F4F6FB" }}
-                />
-                <Legend
-                  wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }}
-                />
+  contentStyle={{
+    borderRadius: "12px",
+    border: "none",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+    zIndex: 9999,
+  }}
+  wrapperStyle={{ zIndex: 9999 }}
+  cursor={{ fill: "#F4F6FB" }}
+/>
                 {kategoriNames.length > 0 ? (
                   kategoriNames.map((nama, i) => (
                     <Bar
