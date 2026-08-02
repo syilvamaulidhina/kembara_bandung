@@ -878,7 +878,7 @@ export default function EditDestinasiPage() {
 				  disabled={isCheckingAI}
 				  className="min-w-[120px] rounded-2xl bg-[#F09A43] px-6 py-3 font-semibold text-white shadow-sm hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
 				>
-				  {isCheckingAI ? "Checking..." : "Check AI"}
+				  {isCheckingAI ? "Checking..." : "Check Kualitas Data"}
 				</button>
 
 				<button
